@@ -1,0 +1,9 @@
+.linkContainer {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 2rem;
+}
+
+.link {
+  margin: 1rem;
+}
