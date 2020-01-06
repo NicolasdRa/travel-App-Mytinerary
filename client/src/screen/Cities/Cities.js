@@ -1,29 +1,23 @@
 import React from 'react';
 import 'typeface-roboto';
-import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import CityGallery from '../CityGallery/CityGallery';
 import TextField from '@material-ui/core/TextField';
 import './Cities.css';
-// import SearchBar from '../../Components/SearchBar/SearchBar';
+import { connect } from 'react-redux';
+import { fetchCities } from '../../store/actions/cityActions';
 
-export default class Cities extends React.Component {
+class Cities extends React.Component {
 
   state = {
     cities: [],
     string: ""
    }
   
-  // fetches cities from DB
-  componentDidMount() {
-  axios.get('http://localhost:5000/cities/all')
-    .then(res => { 
-      this.setState({
-        cities: res.data
-      })
-    })  
-  }
-
+  // // fetches cities from DB
+  // componentDidMount(() => {
+  //   dispatch(fetchCities);});
+  
   handleChange = (e) => {
   
   // updates string in state
@@ -36,10 +30,14 @@ export default class Cities extends React.Component {
   e.preventDefault()  
     };
 
-  render() {  
+ render() {
+
+ const { cities } = this.props
+
+ console.log(this.props)  
 
   // filter function    
-  let filteredCities = [...this.state.cities.filter(city => { 
+  let filteredCities = [...cities.filter(city => { 
   return city.name.toLowerCase().startsWith(this.state.string)    
   })]
 
@@ -58,4 +56,16 @@ export default class Cities extends React.Component {
     }
   }
 
-//'https://mern-ubiqum-v2.herokuapp.com/cities/all' // MERN DB para desarrollo solo frontend
+const mapStateToProps = (state) => {
+  return {
+  cities: state.cities
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  fetchCities: cities => dispatch(fetchCities(cities))  
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cities, fetchCities)
