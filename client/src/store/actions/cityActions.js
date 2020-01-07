@@ -7,6 +7,7 @@ export const fetchCities = () => async dispatch => {
     try {
     const res = await fetch('http://localhost:5000/cities/all');
     const cities = await res.json();
+    // console.log(cities)
     dispatch({
         type: FETCH_CITIES,
         payload: cities
@@ -26,31 +27,3 @@ export const setLoading = () => {
         type: SET_LOADING
     };
 };
-
-
-
-// // fetches cities from DB option 1 for this section
-// export const fetchCities = () => {
-//     return async (dispatch, getState) => {
-//         setLoading();
-//         const res = await fetch ('http://localhost:5000/cities/all');
-//         const cities = await res.json();
-//         dispatch({
-//             type: FETCH_CITIES,
-//             payload: cities
-//         })
-//     }
-// }
-
-
-
-
-//   // fetches cities from DB from the cities component *working perfectly
-//   componentDidMount() {
-//     axios.get('http://localhost:5000/cities/all')
-//       .then(res => { 
-//         this.setState({
-//           cities: res.data
-//         })
-//       })  
-//     }

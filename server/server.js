@@ -19,7 +19,8 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 
 // initializes (imports) routes
-app.use('/cities', require('./routes/cityRoutes'))
+app.use('/cities', require('./routes/cityRoutes'));
+app.use('/itineraries', require('./routes/itineraryRoutes'));
 
 // requires keys to DB
 const db = require('./keys').mongoURI;

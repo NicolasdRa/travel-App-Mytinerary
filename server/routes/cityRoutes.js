@@ -12,6 +12,18 @@ router.get('/all',
             .catch(err => console.log(err));
     });
 
+// // /*gets ONE city by name*/
+// router.get('/:name',
+// 	(req, res) => {
+//   		let cityRequested = req.params.name;
+//   		cityModel.findOne({ name: cityRequested })
+// 			.then(city => {
+// 				res.send(city)
+// 			})
+// 			.catch(err => console.log(err));
+// });
+
+
 // adds a new city in the DB
 router.post('/', (req, res) => {
     if (req.body.name != cityModel.find({

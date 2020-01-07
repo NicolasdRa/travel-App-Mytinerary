@@ -1,6 +1,6 @@
 import React from 'react';
 import 'typeface-roboto';
-import { Grid } from '@material-ui/core';
+import { Grid, LinearProgress } from '@material-ui/core';
 import CityGallery from '../CityGallery/CityGallery';
 import TextField from '@material-ui/core/TextField';
 import './Cities.css';
@@ -10,13 +10,14 @@ import { fetchCities } from '../../store/actions/cityActions';
 class Cities extends React.Component {
 
   state = {
-    cities: [],
+    filteredCities: null,
     string: ""
    }
   
-  // // fetches cities from DB
-  // componentDidMount(() => {
-  //   dispatch(fetchCities);});
+  // fetches cities from DB
+  componentDidMount(){
+    this.props.fetchCities()
+  };
   
   handleChange = (e) => {
   
@@ -25,47 +26,59 @@ class Cities extends React.Component {
   string: e.target.value.toLowerCase()
     })
   };
-  
+
   handleSubmit = (e) => {
   e.preventDefault()  
-    };
+  };
 
+    
  render() {
 
- const { cities } = this.props
+ const cities = this.props.cities
 
- console.log(this.props)  
+  //filter function  
+  if (cities !== null){
 
-  // filter function    
-  let filteredCities = [...cities.filter(city => { 
-  return city.name.toLowerCase().startsWith(this.state.string)    
-  })]
+        let filteredCities = [...cities.filter(city => { 
+          return city.name.toLowerCase().startsWith(this.state.string)    
+          })]
 
-   return (
-       <Grid item xs={12}>
-         <div>
-            <form onSubmit={this.handleSubmit}>
-               <TextField id="standard-name" label="Search City"
-                  defaultValue={""}
-                  onChange={this.handleChange} />
-          </form> 
-        </div>
-        <CityGallery cities={filteredCities} />
-       </Grid>
-      );
+          return (
+            <Grid item xs={12}>
+              <div>
+                <form onSubmit={this.handleSubmit}>
+                    <TextField id="standard-name" label="Search City"
+                      defaultValue={""}
+                      onChange={this.handleChange} />
+              </form> 
+            </div>
+            
+            <CityGallery cities={filteredCities} />
+            </Grid>
+          );
+          
+    } else{
+          return (
+            <div>
+            <LinearProgress color="secondary" />
+                  {/* <p>loading...</p> */}
+                  </div>
+                  )
+          }
     }
   }
 
-const mapStateToProps = (state) => {
-  return {
-  cities: state.cities
+  const mapStateToProps = (state) => {
+    return {
+    cities: state.cities.cities
+    // string: state.string
+    }
   }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  fetchCities: cities => dispatch(fetchCities(cities))  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+    fetchCities: cities => dispatch(fetchCities(cities))  
+    }
   }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cities, fetchCities)
+export default connect(mapStateToProps, mapDispatchToProps)(Cities)
