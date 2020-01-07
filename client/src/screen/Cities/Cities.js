@@ -30,13 +30,12 @@ class Cities extends React.Component {
   handleSubmit = (e) => {
   e.preventDefault()  
   };
-
     
  render() {
 
  const cities = this.props.cities
 
-  //filter function  
+ // filter function  
   if (cities !== null){
 
         let filteredCities = [...cities.filter(city => { 
@@ -61,11 +60,10 @@ class Cities extends React.Component {
           return (
             <div>
             <LinearProgress color="secondary" />
-                  {/* <p>loading...</p> */}
                   </div>
-                  )
+                )
           }
-    }
+      }
   }
 
   const mapStateToProps = (state) => {

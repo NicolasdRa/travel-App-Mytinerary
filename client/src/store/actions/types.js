@@ -1,4 +1,5 @@
 export const FETCH_CITIES = 'FETCH_CITIES';
+export const FETCH_ITINERARIES = 'FETCH_ITINERARIES';
 export const SET_LOADING = 'SET_LOADING';
 export const LOADING_ERROR = 'LOADING_ERROR';
 

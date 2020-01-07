@@ -25,4 +25,5 @@ router.get('/:city',
 			.catch(err => console.log(err));
 });
 
+
 module.exports = router
