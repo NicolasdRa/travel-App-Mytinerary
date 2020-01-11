@@ -9,8 +9,8 @@ import {
   Button,
   Typography
 } from '@material-ui/core'
-import './CityCard.css'
-import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { fetchItineraries } from '../../store/actions/itineraryActions'
 
 const useStyles = makeStyles({
   card: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   }
 })
 
-const CityCard = props => {
+const ItineraryCard = props => {
   const classes = useStyles()
 
   return (
@@ -29,17 +29,25 @@ const CityCard = props => {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={props.city.img}
-          title={props.city.name}
+          image={props.itinerary.img}
+          title={props.itinerary.city}
         />{' '}
         <CardContent>
           <Typography gutterBottom variant='h5' component='h2'>
             {' '}
-            {props.city.name}{' '}
+            {props.itinerary.title}{' '}
           </Typography>{' '}
           <Typography variant='body2' color='textSecondary' component='p'>
             {' '}
-            {props.city.country}{' '}
+            {props.itinerary.hashtags}{' '}
+          </Typography>{' '}
+          <Typography variant='body2' color='textSecondary' component='p'>
+            {' '}
+            {props.itinerary.price}{' '}
+          </Typography>{' '}
+          <Typography variant='body2' color='textSecondary' component='p'>
+            {' '}
+            {props.itinerary.rating}{' '}
           </Typography>{' '}
         </CardContent>{' '}
       </CardActionArea>{' '}
@@ -48,14 +56,24 @@ const CityCard = props => {
           Share{' '}
         </Button>{' '}
         <Button size='small' color='primary'>
-          <Link to={'/itineraries/' + props.city.name}>
-            {' '}
-            Go to Itineraries{' '}
-          </Link>{' '}
+          Learn More{' '}
         </Button>{' '}
       </CardActions>{' '}
     </Card>
   )
 }
 
-export default CityCard
+const mapStateToProps = state => {
+  return {
+    cities: state.cities.cities
+    // string: state.string
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchItineraries: cities => dispatch(fetchItineraries(cities))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItineraryCard)
