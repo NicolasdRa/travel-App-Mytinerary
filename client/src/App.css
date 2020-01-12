@@ -1,4 +1,16 @@
-.App {
+.topNav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.main {
   display: flex;
   text-align: center;
   }
+
+.bottomNav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}

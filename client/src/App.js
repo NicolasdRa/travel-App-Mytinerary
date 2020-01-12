@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import TopNav from '../src/Components/TopNav/TopNav'
+import TopNav from './screen/TopNav/TopNav'
 import Landing from './screen/Landing/Landing'
 import Signup from './screen/Signup/Signup'
 import Login from './screen/Login/Login'
 import Cities from './screen/Cities/Cities'
 import Itinerary from './screen/Itinerary/Itinerary'
-import BottomNav from '../src/Components/BottomNav/BottomNav'
+import BottomNav from './screen/BottomNav/BottomNav'
 import './App.css'
 import 'typeface-roboto'
 
@@ -15,8 +15,8 @@ export default class App extends Component {
   render () {
     return (
       <BrowserRouter>
-        <TopNav />
-        <div className='App'>
+        <TopNav className='topNav' />
+        <div className='main'>
           <Switch>
             <Route exact path='/' component={Landing} />
             <Route exact path='/signup' component={Signup} />
@@ -25,7 +25,7 @@ export default class App extends Component {
             <Route exact path='/itineraries/:city_name' component={Itinerary} />
           </Switch>
         </div>
-        <BottomNav />
+        <BottomNav className='bottomNav' />
       </BrowserRouter>
     )
   }

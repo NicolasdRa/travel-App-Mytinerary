@@ -60,7 +60,7 @@ class Itinerary extends Component {
                 title={selectedCity}
               />
             </Card>
-            <Typography>{cityName}</Typography>
+            <Typography className='cityTitle'>{cityName}</Typography>
             <ItineraryGallery itineraries={itineraries} />
           </div>
         </Grid>
