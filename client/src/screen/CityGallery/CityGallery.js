@@ -3,10 +3,16 @@ import 'typeface-roboto'
 import CityCard from '../CityCard/CityCard'
 import './CityGallery.css'
 
-const CitiGallery = props => {
+const CityGallery = props => {
   const { cities } = props
 
-  return cities.map(city => <CityCard city={city} key={city._id} />)
+  return (
+    <div className='gallery'>
+      {cities.map(city => (
+        <CityCard city={city} key={city._id} />
+      ))}
+    </div>
+  )
 }
 
-export default CitiGallery
+export default CityGallery

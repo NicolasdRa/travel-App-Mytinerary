@@ -1,19 +1,29 @@
-import React from 'react';
-import { Box, Typography, Link } from '@material-ui/core';
+import React from 'react'
+import { MemoryRouter as Router } from 'react-router'
+import { Link } from 'react-router-dom'
+import { Button } from '@material-ui/core'
+import './Links.css'
+// import Signup from './../Signup/Signup'
+// import Login from './../Login/Login'
+
+// const LinkBehavior = React.forwardRef((props, ref) => (
+//     <RouterLink ref={ref} to="/getting-started/installation/" {...props} />
+//   ));
 
 const Links = () => {
-    return (
-        <Box className='linkContainer'>
-            <Typography className='linkContainer'>
-                <Link href="#" className='link'>
-                    Log in
-                </Link>
-                <Link href="#" className='link'>
-                    Create Account
-                </Link>
-            </Typography>
-        </Box>
-    );
+  return (
+    <Router>
+      <div className='linkContainer'>
+        <Button color='primary' component={Link} to='/login'>
+          Log in
+        </Button>
+        <br />
+        <Button color='primary' component={Link} to='/signup'>
+          Create Account
+        </Button>
+      </div>
+    </Router>
+  )
 }
 
-export default Links;
+export default Links

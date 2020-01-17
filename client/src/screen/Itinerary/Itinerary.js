@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import 'typeface-roboto'
-import {
-  Grid,
-  LinearProgress,
-  Typography,
-  Card,
-  CardMedia
-} from '@material-ui/core'
+import { Grid, LinearProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import ItineraryGallery from './ItineraryGallery'
 import { fetchCities } from '../../store/actions/cityActions'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
+import ItineraryHeader from './ItineraryHeader'
+import './Itinerary.css'
 
 class Itinerary extends Component {
   state = {
@@ -50,18 +46,17 @@ class Itinerary extends Component {
     if (itineraries !== null) {
       return (
         <Grid item xs={12}>
-          <div>
-            <Card>
-              <CardMedia
-                component='img'
-                alt='City Header'
-                height='140'
-                image={cityImg}
-                title={selectedCity}
-              />
-            </Card>
-            <Typography className='cityTitle'>{cityName}</Typography>
-            <ItineraryGallery itineraries={itineraries} />
+          <div className='itinerary_container'>
+            <ItineraryHeader
+              itineraries={itineraries}
+              cityName={cityName}
+              cityImg={cityImg}
+              selectedCity={selectedCity}
+            />
+            <ItineraryGallery
+              className='itinerary_gallery'
+              itineraries={itineraries}
+            />
           </div>
         </Grid>
       )

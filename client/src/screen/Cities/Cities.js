@@ -1,8 +1,7 @@
 import React from 'react'
 import 'typeface-roboto'
-import { Grid, LinearProgress } from '@material-ui/core'
+import { Grid, LinearProgress, TextField } from '@material-ui/core'
 import CityGallery from '../CityGallery/CityGallery'
-import TextField from '@material-ui/core/TextField'
 import './Cities.css'
 import { connect } from 'react-redux'
 import { fetchCities } from '../../store/actions/cityActions'
@@ -45,14 +44,16 @@ class Cities extends React.Component {
           <div>
             <form onSubmit={this.handleSubmit}>
               <TextField
-                id='standard-name'
+                id='outlined-helperText'
                 label='Search City'
-                defaultValue={''}
+                defaultValue=''
+                variant='outlined'
                 onChange={this.handleChange}
+                color='primary'
+                style={{ margin: '2rem 0 0.5rem 0', width: '95%' }}
               />
             </form>
           </div>
-
           <CityGallery cities={filteredCities} />
         </Grid>
       )

@@ -1,65 +1,79 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+// import ActivityGallery from '../Activities/ActivityGallery'
+
 import {
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
+  // Card,
+  // CardActionArea,
+  // CardActions,
+  // CardContent,
   CardMedia,
-  Button,
+  // Button,
   Typography
 } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 500
+    maxWidth: 200
   },
   media: {
-    height: 300
+    height: 'auto',
+    width: '98%'
+  },
+
+  root: {
+    width: '100%'
+  },
+
+  content: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+
+  heading: {
+    fontSize: theme.typography.pxToRem(15)
+  },
+
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary
   }
-})
+}))
 
 const ItineraryCard = props => {
   const classes = useStyles()
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
+    <ExpansionPanel>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls='panel1a-content'
+        id='panel1a-header'
+        classes={{ content: classes.content }}
+      >
+        <Typography className={classes.heading}>
+          {props.itinerary.title}
+        </Typography>
+        <Typography className={classes.secondaryHeading}>
+          Likes:
+          {props.itinerary.likes}
+        </Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
         <CardMedia
           className={classes.media}
           image={props.itinerary.img}
           title={props.itinerary.city}
-        />{' '}
-        <CardContent>
-          <Typography gutterBottom variant='h5' component='h2'>
-            {' '}
-            {props.itinerary.title}{' '}
-          </Typography>{' '}
-          <Typography variant='body2' color='textSecondary' component='p'>
-            {' '}
-            {props.itinerary.hashtags}{' '}
-          </Typography>{' '}
-          <Typography variant='body2' color='textSecondary' component='p'>
-            {' '}
-            {props.itinerary.price}{' '}
-          </Typography>{' '}
-          <Typography variant='body2' color='textSecondary' component='p'>
-            {' '}
-            {props.itinerary.rating}{' '}
-          </Typography>{' '}
-        </CardContent>{' '}
-      </CardActionArea>{' '}
-      <CardActions>
-        <Button size='small' color='primary'>
-          Share{' '}
-        </Button>{' '}
-        <Button size='small' color='primary'>
-          Learn More{' '}
-        </Button>{' '}
-      </CardActions>{' '}
-    </Card>
+        />
+        {/* <ActivityGallery activities={props.itinerary.activities} /> */}
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
   )
 }
 

@@ -1,6 +1,16 @@
-.cityTitle {
-    font-size: medium;
-    color: white;
-    font-weight: 400;
-    margin-top: -5rem;
+.itinerary_container {
+display: flex;
+flex-direction: column;
+justify-self: center;
+width: 99%;
+margin-top: 1.8rem;
+}
+
+.itinerary_gallery {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    width: 99%;
+    margin-top: 0.5rem;
+
 }
