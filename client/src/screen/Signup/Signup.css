@@ -1,0 +1,15 @@
+.signup_form{
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.signup_input_field{
+    margin:1rem;
+}
+
+.signup_form_buttons{
+    display: flex;
+    justify-content: space-evenly;
+
+}

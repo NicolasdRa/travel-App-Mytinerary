@@ -1,0 +1,16 @@
+.itinerary_info{
+    display: flex;
+    flex-direction: column;
+}
+
+.itinerary_info_summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.itinerary_info_summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

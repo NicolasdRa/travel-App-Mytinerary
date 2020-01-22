@@ -1,0 +1,16 @@
+.login_form{
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.input_field{
+    margin:1rem;
+}
+
+.form_buttons{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+

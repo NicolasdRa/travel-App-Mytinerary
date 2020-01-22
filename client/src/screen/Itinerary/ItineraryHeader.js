@@ -28,7 +28,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function ItineraryHeader (props) {
   const classes = useStyles()
-  //const theme = useTheme()
   const { itineraries, cityName, cityImg, selectedCity } = props
   const itineraryNumber = itineraries.length
   const country = selectedCity[0].country
@@ -36,7 +35,7 @@ export default function ItineraryHeader (props) {
     <Card className={classes.card}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <Typography component='h5' variant='h5'>
+          <Typography component='h4' variant='h4'>
             {cityName}
           </Typography>
           <Typography variant='subtitle1' color='textSecondary'>

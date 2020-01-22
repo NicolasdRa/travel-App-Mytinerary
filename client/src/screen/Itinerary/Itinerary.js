@@ -36,8 +36,6 @@ class Itinerary extends Component {
   }
 
   render () {
-    console.log(this.state)
-
     const { itineraries } = this.props.itineraries
     const { cityImg } = this.state
     const { selectedCity } = this.state
@@ -55,7 +53,9 @@ class Itinerary extends Component {
             />
             <ItineraryGallery
               className='itinerary_gallery'
-              itineraries={itineraries}
+              itineraries={itineraries.sort((a, b) =>
+                a.likes > b.likes ? -1 : 1
+              )}
             />
           </div>
         </Grid>
@@ -71,8 +71,6 @@ class Itinerary extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state :', state)
-
   return {
     itineraries: state.itineraries,
     activities: state.activities,
