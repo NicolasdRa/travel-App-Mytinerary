@@ -5,7 +5,7 @@ export const fetchCities = () => async dispatch => {
   setLoading()
 
   try {
-    const res = await fetch('http://localhost:5000/cities/all')
+    const res = await fetch('http://localhost:5000/api/cities/all')
     const cities = await res.json()
     // console.log(cities)
     dispatch({

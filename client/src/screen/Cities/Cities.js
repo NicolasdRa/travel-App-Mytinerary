@@ -50,7 +50,7 @@ class Cities extends React.Component {
                 variant='outlined'
                 onChange={this.handleChange}
                 color='primary'
-                style={{ margin: '2rem 0 0.5rem 0', width: '95%' }}
+                style={{ margin: '2rem 0 0.2rem 0', width: '95%' }}
               />
             </form>
           </div>

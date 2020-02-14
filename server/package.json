@@ -10,14 +10,21 @@
   "author": "Nicolás di Rago",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
+    "bcrypt": "^3.0.7",
     "bcryptjs": "^2.4.3",
     "config": "^3.2.4",
+    "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-validator": "^6.3.0",
+    "express-validator": "^6.3.1",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
     "request": "^2.88.0"
   },
   "devDependencies": {

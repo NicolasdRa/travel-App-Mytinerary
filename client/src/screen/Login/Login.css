@@ -14,3 +14,19 @@
 
 }
 
+.google_button{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 1rem;
+
+}
+
+.login_links{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2rem;
+    font-size: small;
+
+}
+

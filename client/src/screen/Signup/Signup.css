@@ -1,7 +1,9 @@
 .signup_form{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 4rem;
+    flex-wrap: nowrap;
+    margin-top: 3rem;
 }
 
 .signup_input_field{
@@ -11,5 +13,11 @@
 .signup_form_buttons{
     display: flex;
     justify-content: space-evenly;
+    padding: 0 3rem
+}
 
+.avatar {
+    display: flex;
+    justify-content: center;
+    padding-left: 0.5rem;
 }

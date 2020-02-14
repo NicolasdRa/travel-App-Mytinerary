@@ -2,31 +2,15 @@ import React, { Component } from 'react'
 import 'typeface-roboto'
 import { Typography, Button, TextField, Container } from '@material-ui/core'
 import './Login.css'
+// import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loginUser } from '../../store/actions/authActions'
-import { Link } from 'react-router-dom'
-import { Alert } from 'reactstrap'
-import uuid from 'react-uuid'
-import { clearErrors } from '../../store/actions/errorActions'
 
 class Login extends Component {
   state = {
     email: '',
     password: '',
-    img: '',
-    isAuthenticated: false,
-    msg: null
-  }
-
-  componentDidUpdate (prevProps) {
-    const { errors } = this.props
-    if (errors !== prevProps.errors)
-      if (errors.id === 'LOGIN_FAIL') {
-        // Check for login Errors
-        this.setState({ msg: errors.msg.msg })
-      } else {
-        this.setState({ msg: null })
-      }
+    img: ''
   }
 
   handleChange = e => {
@@ -36,17 +20,9 @@ class Login extends Component {
   }
 
   handleSubmit = e => {
-    clearErrors()
     e.preventDefault()
-
-    const { email, password, isAuthenticated } = this.state
-
-    const user = {
-      email,
-      password
-    }
-
-    this.props.loginUser(user)
+    console.log(this.state)
+    this.props.loginUser(this.state)
   }
 
   clearState = e => {
@@ -54,29 +30,30 @@ class Login extends Component {
     this.setState({
       [e.target.id]: ''
     })
+    console.log(this.state)
   }
 
   render () {
-    const errors = this.state.msg
-
     return (
       <Container className='login_form'>
         <form onSubmit={this.handleSubmit}>
           <Typography variant='h4' align='center'>
             Log in
           </Typography>
-          {errors
-            ? errors.map(error => (
-                <div key={uuid()}>
-                  <Alert
-                    color='danger'
-                    style={{ color: 'red', margin: '1.5rem' }}
-                  >
-                    {error.msg}
-                  </Alert>
-                </div>
-              ))
-            : null}
+          <div className={classes.root}>
+            <Button variant='outlined' onClick={handleClick}>
+              Open success snackbar
+            </Button>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity='success'>
+                This is a success message!
+              </Alert>
+            </Snackbar>
+            <Alert severity='error'>This is an error message!</Alert>
+            <Alert severity='warning'>This is a warning message!</Alert>
+            <Alert severity='info'>This is an information message!</Alert>
+            <Alert severity='success'>This is a success message!</Alert>
+          </div>
           <div className='input_field'>
             <TextField
               required
@@ -90,7 +67,6 @@ class Login extends Component {
           <div className='input_field'>
             <TextField
               required
-              minLength='6'
               id='password'
               type='password'
               label='Password'
@@ -116,14 +92,11 @@ class Login extends Component {
               variant='contained'
               color='secondary'
               // component={Link}
-              // to='api/auth/google'
-              href='http://localhost:5000/api/auth/google'
+              // to='auth/google'
+              href='http://localhost:5000/auth/google'
             >
               Log in with Google
             </Button>
-          </div>
-          <div className='login_links'>
-            <Link to='/signup'>"Don't have an account? Sign Up"</Link>
           </div>
         </form>
       </Container>
@@ -134,16 +107,13 @@ class Login extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated,
-    errors: state.errors
+    authError: state.auth.autherror
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginUser: user => dispatch(loginUser(user)),
-    clearErrors: () => dispatch(clearErrors())
+    loginUser: user => dispatch(loginUser(user))
   }
 }
 

@@ -10,9 +10,13 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ITINERARIES:
+      const { itineraries, cityName } = action.payload
       return {
         ...state,
-        itineraries: action.payload,
+        itineraries: {
+          ...state.itineraries,
+          [cityName]: itineraries
+        },
         loading: false
       }
 

@@ -5,12 +5,12 @@ export const fetchItineraries = cityName => async dispatch => {
   setLoading()
 
   try {
-    const res = await fetch('http://localhost:5000/itineraries/' + cityName)
+    const res = await fetch('http://localhost:5000/api/itineraries/' + cityName)
     const itineraries = await res.json()
 
     dispatch({
       type: FETCH_ITINERARIES,
-      payload: itineraries
+      payload: { itineraries, cityName }
     })
   } catch (error) {
     dispatch({
