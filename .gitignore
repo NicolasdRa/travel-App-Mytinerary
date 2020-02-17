@@ -1,4 +1,4 @@
 node_modules/
 /resources
 /server/keys.js
-
+/server/.env

@@ -25,7 +25,6 @@ class Itinerary extends Component {
     const selectedCity = cities.filter(city => city.name === cityName)
     const cityImg = selectedCity[0].img
 
-    // here there should be a condition to control the functions below and fetch only if the itineraries are not in the store.
     this.props.fetchItineraries(cityName)
     this.props.fetchCities()
 
@@ -41,7 +40,7 @@ class Itinerary extends Component {
     const { selectedCity } = this.state
     const { cityName } = this.state
     const itineraries = this.props.itineraries.itineraries
-    console.log('itineraries :', itineraries)
+    // console.log('itineraries :', itineraries)
     if (itineraries != null) {
       if (Object.keys(itineraries).includes(cityName)) {
         const itiByCity = itineraries[cityName]

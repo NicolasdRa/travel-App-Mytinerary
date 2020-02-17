@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import 'typeface-roboto'
 import { Typography, Button, TextField, Container } from '@material-ui/core'
-import './Login.css'
-import { connect } from 'react-redux'
-import { loginUser } from '../../store/actions/authActions'
-import { Link } from 'react-router-dom'
 import { Alert } from 'reactstrap'
+import './Login.css'
 import uuid from 'react-uuid'
+import { loginUser } from '../../store/actions/authActions'
 import { clearErrors } from '../../store/actions/errorActions'
 
 class Login extends Component {
@@ -39,13 +39,12 @@ class Login extends Component {
     clearErrors()
     e.preventDefault()
 
-    const { email, password, isAuthenticated } = this.state
+    const { email, password } = this.state
 
     const user = {
       email,
       password
     }
-
     this.props.loginUser(user)
   }
 

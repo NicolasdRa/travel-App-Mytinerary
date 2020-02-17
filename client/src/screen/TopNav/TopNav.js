@@ -14,6 +14,7 @@ import Menu from '@material-ui/core/Menu'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
+import { logOutUser } from '../../store/actions/authActions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +48,11 @@ export default function TopNav () {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleLogOut = e => {
+    e.preventDefault()
+    dispatch(logOutUser(user))
   }
 
   return (
@@ -100,8 +106,8 @@ export default function TopNav () {
               </MenuItem>
             )}
             {isAuthenticated ? (
-              <MenuItem onClick={() => dispatch({ type: 'LOGOUT_SUCCESS' })}>
-                <Link to='#'>Log out</Link>
+              <MenuItem onClick={handleLogOut}>
+                <Link to='/'>Log out</Link>
               </MenuItem>
             ) : (
               <MenuItem onClick={handleClose}>

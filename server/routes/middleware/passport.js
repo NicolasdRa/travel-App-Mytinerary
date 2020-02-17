@@ -10,7 +10,7 @@ var JwtStrategy = require('passport-jwt').Strategy,
 
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
-opts.secretOrKey = key.jwt.secretOrKey
+opts.secretOrKey = process.env.JWT_SECRET
 
 passport.use(
   new JwtStrategy(opts, function (jwt_payload, done) {
@@ -33,8 +33,8 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy
 passport.use(
   new GoogleStrategy(
     {
-      clientID: key.google.clientId,
-      clientSecret: key.google.clientSecret,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: '/api/auth/google/redirect'
     },
     (accessToken, refreshToken, profile, done) => {

@@ -7,7 +7,6 @@ dotenv.config()
 
 // requires middleware modules
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
 const cors = require('cors')
 
 // sets up express app
@@ -26,7 +25,7 @@ const passport = require('./routes/middleware/passport')
 
 //passport middleware
 app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.session())
 
 // allows loading resources from other urls... find out more
 app.use(cors())
@@ -35,24 +34,15 @@ app.use(cors())
 app.use('/api/cities', require('./routes/cityRoutes'))
 app.use('/api/itineraries', require('./routes/itineraryRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
-app.use('/api/auth', require('./routes/authRoutes'))
-// app.use('/profile', require('./routes/profileRoutes'))
 
 // sets up which port to listen to for requests
-const port = process.env.PORT || 5000
+const port = process.env.PORT
 
-//connects to DB (mongoDb Atlas) & listens for requests
-mongoose
-  .connect(process.env.DB_CONNECT, {
-    useNewUrlParser: true,
-    useCreateIndex: true
-  })
+// requires DB
+require('./db')
+console.log('Connection to Mongo DB established')
 
-  .then(() =>
-    app.listen(port, () => {
-      console.log(`Server is running on port: ${port}`)
-      console.log('Connection to Mongo DB established')
-    })
-  )
-
-  .catch(err => console.log(err))
+// listens for requests
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`)
+})

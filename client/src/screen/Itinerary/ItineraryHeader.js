@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ItineraryHeader (props) {
-  console.log('props :', props)
+  // console.log('props :', props)
   const classes = useStyles()
   const { cityName, cityImg, selectedCity } = props
   const itineraries = props.itineraries
