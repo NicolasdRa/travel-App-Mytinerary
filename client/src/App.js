@@ -29,7 +29,7 @@ export default class App extends Component {
             <Route exact path='/' component={Landing} />
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/login' component={Login} />
-            <Route exact path='/user/profile' component={Profile} />
+            <Route exact path='/profile' component={Profile} />
             <Route exact path='/cities' component={Cities} />
             <Route exact path='/itineraries/:city_name' component={Itinerary} />
           </Switch>

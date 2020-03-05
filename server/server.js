@@ -7,7 +7,9 @@ dotenv.config()
 
 // requires middleware modules
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
+// const cookieSession = require('cookie-session')
 
 // sets up express app
 const app = express()
@@ -19,12 +21,23 @@ app.use(
     extended: true
   })
 )
+// parses json object
+app.use(cookieParser())
+
+// brings in cookie-session
+// app.use(
+//   cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: process.env.COOKIE_SESSION_KEY
+//   })
+// )
 
 //brings in passport authenticacion file
 const passport = require('./routes/middleware/passport')
 
 //passport middleware
 app.use(passport.initialize())
+app.use(passport.session())
 // app.use(passport.session())
 
 // allows loading resources from other urls... find out more

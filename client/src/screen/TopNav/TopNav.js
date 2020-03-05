@@ -6,15 +6,13 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import Switch from '@material-ui/core/Switch'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormGroup from '@material-ui/core/FormGroup'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
 import { logOutUser } from '../../store/actions/authActions'
+import { logOutAll } from '../../store/actions/authActions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TopNav () {
   const classes = useStyles()
-  const [auth, setAuth] = React.useState(true)
+  // const [auth, setAuth] = React.useState(true)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -38,9 +36,9 @@ export default function TopNav () {
   const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
 
-  const handleChange = event => {
-    setAuth(event.target.checked)
-  }
+  // const handleChange = event => {
+  //   setAuth(event.target.checked)
+  // }
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget)
@@ -53,6 +51,11 @@ export default function TopNav () {
   const handleLogOut = e => {
     e.preventDefault()
     dispatch(logOutUser(user))
+  }
+
+  const handleLogOutAll = e => {
+    e.preventDefault()
+    dispatch(logOutAll(user))
   }
 
   return (
@@ -106,9 +109,14 @@ export default function TopNav () {
               </MenuItem>
             )}
             {isAuthenticated ? (
-              <MenuItem onClick={handleLogOut}>
-                <Link to='/'>Log out</Link>
-              </MenuItem>
+              <React.Fragment>
+                <MenuItem onClick={handleLogOut}>
+                  <Link to='/'>Log out</Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogOutAll}>
+                  <Link to='/'>Log out from all devices</Link>
+                </MenuItem>
+              </React.Fragment>
             ) : (
               <MenuItem onClick={handleClose}>
                 <Link to='/signup'>Create account</Link>
@@ -120,18 +128,6 @@ export default function TopNav () {
           </Menu>
         </Toolbar>
       </AppBar>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label='login switch'
-            />
-          }
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
     </div>
     // <div className={classes.root}>
     //   <AppBar position='fixed'>

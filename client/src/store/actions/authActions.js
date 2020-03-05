@@ -12,6 +12,7 @@ import {
   LOGOUT_FAIL,
   CLEAR_ERRORS
 } from './types'
+import setAuthToken from '../../AuthHandler/SetAuthToken'
 
 // Setup config/headers & token
 export const tokenConfig = getState => {
@@ -28,26 +29,65 @@ export const tokenConfig = getState => {
   // If token, add to headers
   if (token) {
     config.headers['x-auth-token'] = token
+    // } else if (token === null) {
+    //   try {
+    //     const urlString = window.location.href
+    //     const stringsArray = urlString.split('=', 2)
+    //     if (stringsArray > 0) {
+    //       const rawToken = stringsArray[1]
+    //       const arrayToken = rawToken.split('#', 1)
+    //       const token = arrayToken[0]
+    //       config.headers['x-auth-token'] = token
+    //     }
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // const urlString = window.location.href
+    // const stringsArray = urlString.split('=', 2)
+    // if (stringsArray > 0) {
+    //   const rawToken = stringsArray[1]
+    //   const arrayToken = rawToken.split('#', 1)
+    //   const token = arrayToken[0]
+    //   config.headers['x-auth-token'] = token
+    //   console.log(token)
+    // }
+    // if (req && req.cookies) {
+    //   req => (token = req.cookies['jwt'])
+    // }
+    // console.log('jwt from cookies', token)
+    // return token
   }
   return config
 }
 
 // Check token and load user
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = (token, id) => async (dispatch, getState) => {
   // User Loading
   dispatch({ type: USER_LOADING })
-
-  // GET request to api route
-  axios
-    .get('http://localhost:5000/api/users/profile', tokenConfig(getState))
-    .then(res => dispatch({ type: USER_LOADED, payload: res.data }))
-    .catch(err => {
-      dispatch(
-        returnErrors(err.response.data, err.response.satus, 'LOGIN_FAIL')
-      )
+  // console.log(user, id)
+  if (token) {
+    try {
+      //   const cookie = document.cookie
+      //   const token = cookie.split('=', 2)[1]
+      setAuthToken(token)
+      console.log('set auth header token from cookies', token)
+    } catch (error) {
       dispatch({ type: AUTH_ERROR })
-      dispatch({ type: LOGIN_FAIL })
-    })
+    }
+  }
+
+  try {
+    const res = await axios.get(
+      'http://localhost:5000/api/users/profile'
+      // tokenConfig()
+    )
+    dispatch({ type: USER_LOADED, payload: res.data })
+  } catch (err) {
+    // GET request to api route
+    dispatch(returnErrors(err.response.data, err.response.satus, 'LOGIN_FAIL'))
+    dispatch({ type: AUTH_ERROR })
+    dispatch({ type: LOGIN_FAIL })
+  }
 }
 
 // SIGN UP new USER in DB
@@ -58,7 +98,6 @@ export const signupUser = user => async dispatch => {
       'Content-Type': 'application/json'
     }
   }
-
   // Request Body
   const body = JSON.stringify(user)
 
@@ -115,25 +154,8 @@ export const loginUser = user => (dispatch, getState) => {
 export const logOutUser = user => dispatch => {
   const token = localStorage.getItem('token')
 
-  console.log(token)
-  console.log('logout action user', user)
-
   if (token) {
-    // Set Headers
-    // var Headers = new Headers()
-    // Headers.append('Content-Type', 'application/x-www-form-urlencoded')
-    // Headers.append('Authorization', 'Bearer ' + token)
-
-    // Request Body
     const body = JSON.stringify(user)
-
-    // Request options
-    // var config = {
-    //   headers: Headers,
-    //   body: Body
-    // }
-
-    // Set Headers
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -143,6 +165,45 @@ export const logOutUser = user => dispatch => {
 
     axios
       .post('http://localhost:5000/api/users/logout', body, config)
+      .then(res => {
+        dispatch({
+          type: LOGOUT_SUCCESS,
+          payload: res.data
+        })
+        dispatch({
+          type: CLEAR_ERRORS
+        })
+      })
+      .catch(
+        err =>
+          dispatch(
+            returnErrors(err.response.data, err.response.satus, 'LOGOUT_FAIL')
+          ),
+        dispatch({ type: LOGOUT_FAIL })
+      )
+  } else {
+    dispatch({ type: LOGOUT_FAIL })
+  }
+}
+
+//Logs out user from all devices
+export const logOutAll = user => dispatch => {
+  const token = localStorage.getItem('token')
+
+  console.log(token)
+  console.log('logout action user', user)
+
+  if (token) {
+    const body = JSON.stringify(user)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    }
+
+    axios
+      .post('http://localhost:5000/api/users/logoutall', body, config)
       .then(res => {
         dispatch({
           type: LOGOUT_SUCCESS,

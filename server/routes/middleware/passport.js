@@ -27,6 +27,18 @@ passport.use(
   })
 )
 
+// serialize user for google strategy
+// passport.serializeUser(function (user, done) {
+//   done(null, user._id)
+// })
+
+// passport.deserializeUser(function (id, done) {
+//   User.findById(id, (err, user) => {
+//     if (err) done(err)
+//     else done(null, user)
+//   })
+// })
+
 // Google Login Auth Strategy
 var GoogleStrategy = require('passport-google-oauth20').Strategy
 
@@ -35,17 +47,17 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/auth/google/redirect'
+      callbackURL: '/api/users/google/redirect'
     },
     (accessToken, refreshToken, profile, done) => {
       // passport callback function
 
       // Check if logging user is in our DB
-      User.findOne({ googleId: profile.id }).then(currentUser => {
-        if (currentUser) {
+      User.findOne({ googleId: profile.id }).then(user => {
+        if (user) {
           // already have a user
-          // console.log('User is:', currentUser)
-          done(null, currentUser)
+          console.log('Current User is:', user)
+          done(null, user)
         } else {
           //if not create user in DB
           new User({
@@ -55,9 +67,9 @@ passport.use(
             img: profile.photos[0].value
           })
             .save()
-            .then(newUser => {
-              // console.log('new user created:' + newUser)
-              done(null, newUser)
+            .then(user => {
+              console.log('new user created:' + user)
+              done(null, user)
             })
         }
       })

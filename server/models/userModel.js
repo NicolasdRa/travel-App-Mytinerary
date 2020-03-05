@@ -56,7 +56,7 @@ userSchema.pre('save', async function (next) {
   // Hash the password before saving the user model
   const user = this
   if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8)
+    user.password = await bcrypt.hash(user.password, 10)
   }
   next()
 })
@@ -87,6 +87,3 @@ userSchema.statics.findByCredentials = async (email, password) => {
 const User = mongoose.model('user', userSchema)
 
 module.exports = User
-
-// //name of module is the singular version (city) of the database name (cities)
-// module.exports = mongoose.model('user', userSchema)

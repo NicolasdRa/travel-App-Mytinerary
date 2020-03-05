@@ -40,9 +40,19 @@ const itinerarySchema = new mongoose.Schema({
       price: String,
       duration: Number,
       hashtags: String,
-      likes: Number
+      // eliminate key likes and replace by count over the array likedBy
+      likes: Number,
+      likedBy: Array
     }
-  ]
+  ],
+  likes: {
+    type: Number,
+    required: false
+  },
+  likedBy: {
+    type: Array,
+    required: false
+  }
 })
 
 // Hint: each itinerary should have a title, a profile picture(URL), a rating, a duration, a price and some hashtags. Try to think about the most suitable data type for each of these parameters.

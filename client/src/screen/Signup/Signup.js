@@ -137,7 +137,7 @@ class Signup extends Component {
             <Button
               variant='contained'
               color='secondary'
-              href='http://localhost:5000/api/auth/google'
+              href='http://localhost:5000/api/users/google'
             >
               Sign up with Google
             </Button>

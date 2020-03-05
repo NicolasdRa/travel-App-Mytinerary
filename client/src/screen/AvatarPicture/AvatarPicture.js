@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import { useSelector } from 'react-redux'
-import { red, deepOrange, deepPurple } from '@material-ui/core/colors'
+import { deepOrange } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme => ({
   avatarPic: {
@@ -32,9 +32,8 @@ export default function ImageAvatars () {
       }}
     >
       <Avatar
-        src={user.avatarPicture}
-        className={classes.small}
-        className={classes.orange}
+        src={user.img}
+        className={classes.small.orange}
         alt={user.userName}
       >
         {initials}

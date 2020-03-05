@@ -24,15 +24,10 @@ export default (state = initialState, action) => {
         ...state,
         isloading: true
       }
-    case USER_LOADED:
-      return {
-        ...state,
-        isAuthenticated: true,
-        isloading: false,
-        user: action.payload
-      }
+
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
+    case USER_LOADED:
       localStorage.setItem('token', action.payload.token)
       return {
         ...state,
