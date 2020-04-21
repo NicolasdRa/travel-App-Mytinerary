@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import 'typeface-roboto'
 import {
   Grid,
@@ -7,21 +7,19 @@ import {
   Typography
 } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { fetchCities } from '../../store/actions/cityActions'
+import ActivityGallery from './ActivityGallery'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
+import { fetchCities } from '../../store/actions/cityActions'
+import './Activities.css'
 
-import CityGallery from '../CityGallery/CityGallery'
-import './Cities.css'
-
-class Cities extends React.Component {
+class Activities extends Component {
   state = {
-    filteredCities: null,
+    filteredItineraries: null,
     string: ''
   }
 
-  // fetches cities from DB
+  // fetches itineraries & cities from DB
   componentDidMount () {
-    this.props.fetchCities()
     this.props.fetchItineraries()
   }
 
@@ -37,17 +35,23 @@ class Cities extends React.Component {
   }
 
   render () {
-    const { cities } = this.props
-
-    console.log(cities)
+    const itineraries = this.props.itineraries
+    console.log(itineraries)
 
     // filter function
-    if (cities !== null) {
-      let filteredCities = [
-        ...cities.filter(city => {
-          return city.name.toLowerCase().startsWith(this.state.string)
-        })
-      ]
+    if (itineraries !== null) {
+      let activitiesArray = []
+
+      itineraries.forEach(itinerary => {
+        if (itinerary.activities.length > 0) {
+          activitiesArray.push(itinerary.activities)
+        }
+        console.log(activitiesArray)
+      })
+
+      let activities = activitiesArray.flat()
+
+      console.log(activities)
 
       return (
         <Grid item xs={12}>
@@ -55,7 +59,7 @@ class Cities extends React.Component {
             <form onSubmit={this.handleSubmit}>
               <TextField
                 id='outlined-helperText'
-                label='Search City..'
+                label='Search Activities by City Name..'
                 defaultValue=''
                 variant='outlined'
                 onChange={this.handleChange}
@@ -66,16 +70,23 @@ class Cities extends React.Component {
             <Typography
               style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'start' }}
             >
-              Most popular Cities
+              Most popular Activities
             </Typography>
           </div>
-          <CityGallery cities={filteredCities} />
+          <ActivityGallery
+            string={this.state.string}
+            activities={activities.sort((a, b) => (a.likes > b.likes ? -1 : 1))}
+
+            //    {filteredItineraries
+            //   .map(filteredItineraries.activities)
+            //   .sort((a, b) => (a.likes > b.likes ? -1 : 1))}
+          />
         </Grid>
       )
     } else {
       return (
         <div className='loader'>
-          <Typography>Loading cities...</Typography>
+          <Typography>Loading Activities...</Typography>
           <CircularProgress color='secondary' />
         </div>
       )
@@ -85,17 +96,15 @@ class Cities extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    cities: state.cities.cities,
-    itineraries: state.itineraries.itineraries,
-    string: state.string
+    itineraries: state.itineraries.itineraries
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchCities: () => dispatch(fetchCities()),
-    fetchItineraries: () => dispatch(fetchItineraries())
+    fetchItineraries: () => dispatch(fetchItineraries()),
+    fetchCities: () => dispatch(fetchCities())
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cities)
+export default connect(mapStateToProps, mapDispatchToProps)(Activities)

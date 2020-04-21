@@ -2,27 +2,32 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import AvatarPicture from '../AvatarPicture/AvatarPicture'
 import { logOutUser } from '../../store/actions/authActions'
 import { logOutAll } from '../../store/actions/authActions'
+import logo from '../../Images/LogoSmallSimpleGrey.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    // marginRight: theme.spacing(2)
+  },
+  toolbar: {
+    justifyContent: 'space-between'
   },
   title: {
     flexGrow: 1
+  },
+  logo: {
+    maxWidth: 100,
+    marginLeft: 12
   }
 }))
 
@@ -61,20 +66,11 @@ export default function TopNav () {
   return (
     <div className={classes.root}>
       <AppBar position='fixed'>
-        <Toolbar>
-          <IconButton
-            edge='start'
-            className={classes.menuButton}
-            color='inherit'
-            aria-label='menu'
-          >
-            {user != null ? <AvatarPicture /> : <AccountCircle />}
-          </IconButton>
-          <Typography variant='h6' className={classes.title}>
-            {isAuthenticated
-              ? 'Hi ' + user.userName + '!'
-              : 'Hello guest user!'}
-          </Typography>
+        <Toolbar className={classes.toolbar}>
+          <img src={logo} alt='Logo' className={classes.logo} />
+          {/* <Typography variant='h6' className={classes.title}>
+            {isAuthenticated ? 'Hi ' + user.userName + '!' : 'Hi guest user!'}
+          </Typography> */}
           <IconButton
             edge='start'
             className={classes.menuButton}
@@ -128,6 +124,7 @@ export default function TopNav () {
           </Menu>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </div>
     // <div className={classes.root}>
     //   <AppBar position='fixed'>

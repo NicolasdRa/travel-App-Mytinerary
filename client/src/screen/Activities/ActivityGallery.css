@@ -1,8 +1,0 @@
-.activity_gallery{
-    position: relative;
-    display: flex;
-    width: auto;
-    /* height: fit-content; */
-    /* z-index: 5; */
-    overflow-x: auto;
-}

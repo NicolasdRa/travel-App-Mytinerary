@@ -2,6 +2,9 @@
 display: flex;
 flex-direction: column;
 justify-content: space-between;
-min-height: 100vh;
-/* background-color: aqua; */
+background-image: radial-gradient(circle, rgba(255, 255, 255, .7) 0%, rgba(255, 255, 255, 1) 60%), url(../../Images/Shanghai.png);
+background-repeat: no-repeat;
+background-size: cover;
+background-position: top;
+
 }

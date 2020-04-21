@@ -29,58 +29,20 @@ export const tokenConfig = getState => {
   // If token, add to headers
   if (token) {
     config.headers['x-auth-token'] = token
-    // } else if (token === null) {
-    //   try {
-    //     const urlString = window.location.href
-    //     const stringsArray = urlString.split('=', 2)
-    //     if (stringsArray > 0) {
-    //       const rawToken = stringsArray[1]
-    //       const arrayToken = rawToken.split('#', 1)
-    //       const token = arrayToken[0]
-    //       config.headers['x-auth-token'] = token
-    //     }
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // const urlString = window.location.href
-    // const stringsArray = urlString.split('=', 2)
-    // if (stringsArray > 0) {
-    //   const rawToken = stringsArray[1]
-    //   const arrayToken = rawToken.split('#', 1)
-    //   const token = arrayToken[0]
-    //   config.headers['x-auth-token'] = token
-    //   console.log(token)
-    // }
-    // if (req && req.cookies) {
-    //   req => (token = req.cookies['jwt'])
-    // }
-    // console.log('jwt from cookies', token)
-    // return token
   }
   return config
 }
 
 // Check token and load user
-export const loadUser = (token, id) => async (dispatch, getState) => {
-  // User Loading
-  dispatch({ type: USER_LOADING })
-  // console.log(user, id)
+export const loadUser = token => async dispatch => {
   if (token) {
-    try {
-      //   const cookie = document.cookie
-      //   const token = cookie.split('=', 2)[1]
-      setAuthToken(token)
-      console.log('set auth header token from cookies', token)
-    } catch (error) {
-      dispatch({ type: AUTH_ERROR })
-    }
+    setAuthToken(token)
+    // console.log('set auth header token from cookies', token)
   }
 
   try {
-    const res = await axios.get(
-      'http://localhost:5000/api/users/profile'
-      // tokenConfig()
-    )
+    const res = await axios.get('http://localhost:5000/api/users/profile')
+
     dispatch({ type: USER_LOADED, payload: res.data })
   } catch (err) {
     // GET request to api route

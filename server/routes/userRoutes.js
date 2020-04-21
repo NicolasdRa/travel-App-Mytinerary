@@ -32,7 +32,6 @@ router.post('/login', async (req, res) => {
         .send({ error: 'Login failed! Check authentication credentials' })
     }
     const token = await user.generateAuthToken()
-    // console.log('login route', user, token)
     res.send({ user, token })
   } catch (error) {
     res.status(400).send(error)
@@ -40,33 +39,27 @@ router.post('/login', async (req, res) => {
 })
 
 // HTTP GET / users/profile — Get user profile.
-router.get(
-  '/profile',
-  auth,
-  async (req, res) => {
-    const token = req.header('Authorization').replace('Bearer ', '')
-    // get logged in user profile info
-    const id = req.id
-    try {
-      // let decoded = jwt_decode(token)
-      // console.log('decoded', decoded)
-      // const id = decoded
-      const user = await User.findById(id)
-      if (user) {
-        return res.send(user, token)
-      }
-      if (!user) {
-        return res
-          .status(401)
-          .send({ error: 'Login failed! Check authentication credentials' })
-      }
-    } catch (error) {
-      res.status(500).send(error)
+router.get('/profile', auth, async (req, res) => {
+  // get logged in user profile info
+  const token = req.header('Authorization').replace('Bearer ', '')
+  const decoded = jwtDecode(token)
+  const id = decoded._id
+
+  try {
+    const user = await User.findOne({ _id: id })
+
+    if (user) {
+      return res.send(user)
     }
+    if (!user) {
+      return res
+        .status(401)
+        .send({ error: 'No user found! Check authentication credentials' })
+    }
+  } catch (error) {
+    res.status(500).send(error)
   }
-  //    res.send(req.user)
-  // }
-)
+})
 
 // HTTP POST /users/logout — Logout the user
 router.post('/logout', auth, async (req, res) => {

@@ -6,19 +6,18 @@ import Landing from './screen/Landing/Landing'
 import Signup from './screen/Signup/Signup'
 import Login from './screen/Login/Login'
 import Profile from './screen/Profile/Profile'
-import Cities from './screen/Cities/Cities'
-import Itinerary from './screen/Itinerary/Itinerary'
+import Listing from './screen/Listing/Listing'
+import Itinerary from './screen/Itineraries/Itineraries'
 import BottomNav from './screen/BottomNav/BottomNav'
 import './App.css'
 import 'typeface-roboto'
-import store from './store/store'
-import { loadUser } from './store/actions/authActions'
+//
 
 export default class App extends Component {
   // Checks & Loads user if logged in
-  componentDidMount () {
-    store.dispatch(loadUser())
-  }
+  // componentDidMount () {
+  //   store.dispatch(loadUser())
+  // }
 
   render () {
     return (
@@ -30,7 +29,7 @@ export default class App extends Component {
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/profile' component={Profile} />
-            <Route exact path='/cities' component={Cities} />
+            <Route exact path='/listing' component={Listing} />
             <Route exact path='/itineraries/:city_name' component={Itinerary} />
           </Switch>
         </div>

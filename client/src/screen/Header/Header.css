@@ -1,20 +1,12 @@
-
-.logoBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-content: center;
-  width: 100%;
-  margin-top: 3rem;
-}
-
 .img {
-  height: 8rem;
+  width: 12rem;
+  margin: 3rem 0 1rem 0;
   padding: 1rem;
-  object-fit: contain;
+  /* object-fit: contain; */
   overflow: hidden;
 }
 
 .legend {
-  font-size: 1.3rem;
+  margin-top: 1rem;
+  font-size: 1.2rem;
 }

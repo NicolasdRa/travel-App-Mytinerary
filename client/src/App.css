@@ -6,7 +6,10 @@
 
 .main {
   display: flex;
+  justify-content: center;
   text-align: center;
+  margin-bottom: 4rem;
+  height: 85vh;
   }
 
 .bottomNav {

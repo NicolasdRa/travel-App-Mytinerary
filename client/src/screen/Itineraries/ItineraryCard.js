@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { red } from '@material-ui/core/colors'
@@ -22,6 +21,8 @@ import EuroIcon from '@material-ui/icons/Euro'
 import { connect } from 'react-redux'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 
+import ActivityGallerySmall from '../Activities/ActivityGallerySmall'
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -30,6 +31,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     padding: '.6rem .6rem 0 .6rem'
   },
+
   content: {
     display: 'flex',
     flexDirection: 'row',
@@ -48,6 +50,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     minWidth: '60%'
+    // marginRight: 'auto'
   },
 
   image: {
@@ -96,7 +99,8 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     width: '10rem',
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    paddingLeft: '.3rem'
   },
 
   icons: {
@@ -123,7 +127,6 @@ const useStyles = makeStyles(theme => ({
 
   expand: {
     transform: 'rotate(0deg)',
-    // marginLeft: '.5rem',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest
     })
@@ -140,20 +143,10 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ActivityCard = props => {
+const ItineraryCard = props => {
   const classes = useStyles()
   const [expanded, setExpanded] = React.useState(false)
-
-  const {
-    city,
-    category,
-    title,
-    img,
-    price,
-    duration,
-    hashtags,
-    likes
-  } = props.activity
+  const { title, likes, duration, price, hashtags, img } = props.itinerary
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -165,9 +158,9 @@ const ActivityCard = props => {
         <div className={classes.details}>
           <CardContent className={classes.info}>
             <div className={classes.main_info}>
-              <Typography variant='overline' color='textSecondary'>
-                {city} - {category}
-              </Typography>
+              {/* <Typography variant='overline' color='textSecondary'>
+                {city}
+              </Typography> */}
               <Typography component='h6' variant='h6'>
                 {title}
               </Typography>
@@ -252,10 +245,13 @@ const ActivityCard = props => {
             root: classes.cardContentGallery
           }}
         >
-          {/* activities={props.itinerary.activities.sort((a, b) =>
-            a.likes > b.likes ? -1 : 1
-            )} */}
-
+          <ActivityGallerySmall
+            className={classes.activity_gallery}
+            itinerary={props.itinerary}
+            // activities={props.itinerary.activities.sort((a, b) =>
+            //   a.likes > b.likes ? -1 : 1
+            // )}
+          />
           {/* <div>
             <form>
               <TextField
@@ -279,8 +275,8 @@ const ActivityCard = props => {
 const mapStateToProps = state => {
   return {
     cities: state.cities.cities,
-    itineraries: state.itineraries.itineraries,
-    string: state.string
+    itineraries: state.itineraries.itineraries
+    // string: state.string
   }
 }
 
@@ -290,4 +286,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActivityCard)
+export default connect(mapStateToProps, mapDispatchToProps)(ItineraryCard)

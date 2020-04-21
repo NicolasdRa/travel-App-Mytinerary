@@ -33,6 +33,7 @@ const itinerarySchema = new mongoose.Schema({
 
   activities: [
     {
+      city: String,
       category: String,
       title: String,
       img: String,

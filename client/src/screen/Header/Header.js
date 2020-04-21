@@ -1,20 +1,22 @@
-import React from 'react';
-import { Box } from '@material-ui/core';
+import React from 'react'
+import { Container, Box, Typography } from '@material-ui/core'
 import './Header.css'
-import logo from '../../Images/myLogo.png';
+import logo from '../../Images/myLogo.png'
 
 const Header = () => {
-
-        return (
-            <Box>
-               <Box className='logoBox'>
-                   <img src={logo} alt="Logo" className='img'/>
-               </Box>
-               <Box>
-                   <h3 className='legend'>Find the perfect trip, designed by insiders who know and love their cities</h3> 
-               </Box>
-            </Box>        
-        )
+  return (
+    <Container>
+      <Box maxWidth='sm={4}'>
+        <img src={logo} alt='Logo' className='img' />
+      </Box>
+      <Box>
+        <Typography variant='subtitle2' className='legend'>
+          Find the perfect trip, designed by insiders who know and love their
+          cities.
+        </Typography>
+      </Box>
+    </Container>
+  )
 }
 
-export default Header;
+export default Header

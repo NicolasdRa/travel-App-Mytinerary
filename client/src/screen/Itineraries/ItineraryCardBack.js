@@ -83,7 +83,8 @@ const ItineraryCard = props => {
             variant='rounded'
             className={classes.avatar}
           >
-            user
+            {/* to get from user _id) */}
+            Author Name
           </Avatar>
         }
         action={

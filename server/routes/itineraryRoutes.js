@@ -6,8 +6,8 @@ const itineraryModel = require('../models/itineraryModel')
 router.get('/all', (req, res) => {
   itineraryModel
     .find({})
-    .then(files => {
-      res.send(files)
+    .then(itineraryArray => {
+      res.send(itineraryArray)
     })
     .catch(err => console.log(err))
 })

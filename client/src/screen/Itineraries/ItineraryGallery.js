@@ -1,12 +1,11 @@
 import React from 'react'
 import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
-
-import ActivityCard from './ActivityCard'
+import ItineraryCard from './ItineraryCard'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  activity_gallery: {
+  itinerary_gallery: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -14,25 +13,25 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ActivityGallery = props => {
+const ItineraryGallery = props => {
+  const { itineraries, string } = props
   const classes = useStyles()
-  const { activities, string } = props
 
-  if (activities.length > 0) {
+  if (itineraries.length > 0) {
     return (
-      <div className={classes.activity_gallery}>
-        {activities.map(activity => (
-          <ActivityCard activity={activity} key={activity._id} />
+      <div className={classes.itinerary_gallery}>
+        {itineraries.map(itinerary => (
+          <ItineraryCard itinerary={itinerary} key={itinerary._id} />
         ))}
       </div>
     )
   } else {
     return (
       <Typography style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'center' }}>
-        No activities found for {string}
+        No itineraries found for {string}
       </Typography>
     )
   }
 }
 
-export default ActivityGallery
+export default ItineraryGallery
