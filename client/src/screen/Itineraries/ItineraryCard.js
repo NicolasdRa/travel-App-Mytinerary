@@ -2,7 +2,6 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { red } from '@material-ui/core/colors'
-
 import {
   Avatar,
   Collapse,
@@ -11,13 +10,15 @@ import {
   Card,
   CardMedia,
   CardContent,
-  CardActions
+  CardActions,
+  Button,
+  Box
 } from '@material-ui/core'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
-
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 
@@ -27,9 +28,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    flex: '0 0 1',
     margin: '0.2rem',
-    width: '100%',
-    padding: '.6rem .6rem 0 .6rem'
+    width: '100%'
+    // padding: '.6rem .6rem 0 .6rem'
   },
 
   content: {
@@ -56,9 +58,9 @@ const useStyles = makeStyles(theme => ({
   image: {
     justifyContent: 'flex-end',
     minWidth: '40%',
-    maxWidth: '40%',
-    borderRadius: 10,
-    boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9'
+    maxWidth: '40%'
+    // borderRadius: 10,
+    // boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9'
   },
 
   actions: {
@@ -135,18 +137,31 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)'
   },
 
-  cardContentGallery: {
-    display: 'flex',
+  expandedCardContent: {
     flexDirection: 'column',
     flexWrap: 'nowrap',
-    padding: '.2rem'
-  }
+    padding: '.2rem',
+    '&:last-child': { paddingBottom: '16px' }
+  },
+  info_display: { textAlign: 'center', margin: '.5rem 0' },
+
+  text_btn: { margin: '.5rem auto 0 auto' }
 }))
 
 const ItineraryCard = props => {
   const classes = useStyles()
   const [expanded, setExpanded] = React.useState(false)
-  const { title, likes, duration, price, hashtags, img } = props.itinerary
+  const itinerary = props.itinerary
+  const {
+    city,
+    title,
+    likes,
+    duration,
+    price,
+    hashtags,
+    img,
+    activities
+  } = props.itinerary
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -187,7 +202,6 @@ const ItineraryCard = props => {
                 </Typography>
               </div>
             </div>
-            {/* <Divider /> */}
           </CardContent>
         </div>
         <CardMedia className={classes.image} image={img} title={title} />
@@ -199,11 +213,7 @@ const ItineraryCard = props => {
         }}
       >
         <div className={classes.author_info}>
-          <Avatar
-            // aria-label='recipe'
-            // variant='rounded'
-            className={classes.avatar}
-          >
+          <Avatar className={classes.avatar}>
             {/* (get from author_id) */}
             Author Name
           </Avatar>
@@ -224,7 +234,7 @@ const ItineraryCard = props => {
           >
             <FavoriteIcon />
             <Typography variant='body2' color='textSecondary' component='p'>
-              {likes}
+              {likes.length}
             </Typography>
           </IconButton>
           <IconButton
@@ -242,15 +252,28 @@ const ItineraryCard = props => {
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent
           classes={{
-            root: classes.cardContentGallery
+            root: classes.expandedCardContent
           }}
         >
+          <Box className={classes.info_display}>
+            {activities.length === 0 && (
+              <Typography>No activities found for ' {title} '</Typography>
+            )}
+            {activities.length === 1 && (
+              <Typography>
+                {activities.length} activity found for ' {title} '
+              </Typography>
+            )}
+            {activities.length > 1 && (
+              <Typography>
+                {activities.length} activities found for ' {title} '
+              </Typography>
+            )}
+          </Box>
+
           <ActivityGallerySmall
-            className={classes.activity_gallery}
-            itinerary={props.itinerary}
-            // activities={props.itinerary.activities.sort((a, b) =>
-            //   a.likes > b.likes ? -1 : 1
-            // )}
+            itinerary={itinerary}
+            activities={activities.sort((a, b) => (a.likes > b.likes ? -1 : 1))}
           />
           {/* <div>
             <form>
@@ -266,6 +289,15 @@ const ItineraryCard = props => {
               />
             </form>
           </div> */}
+          <Button
+            size='small'
+            color='secondary'
+            component={Link}
+            to={'/itinerarypage/' + title}
+            className={classes.text_btn}
+          >
+            VIEW MORE
+          </Button>
         </CardContent>
       </Collapse>
     </Card>

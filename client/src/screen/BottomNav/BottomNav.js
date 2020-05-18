@@ -48,13 +48,13 @@ export default function BottomNav () {
         value='explore'
         icon={<SearchRoundedIcon />}
       />
-      <BottomNavigationAction
+      {/* <BottomNavigationAction
         component={Link}
         to='/postForm'
         label='Add'
         value='add'
         icon={<AddRoundedIcon />}
-      />
+      /> */}
       <BottomNavigationAction
         component={Link}
         to='/profile'

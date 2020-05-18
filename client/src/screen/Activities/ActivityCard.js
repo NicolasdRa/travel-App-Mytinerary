@@ -1,11 +1,11 @@
 import React from 'react'
-
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { red } from '@material-ui/core/colors'
 
 import {
   Avatar,
+  Button,
   Collapse,
   Typography,
   IconButton,
@@ -19,6 +19,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 
+import { Link } from 'react-router-dom'
+
 import { connect } from 'react-redux'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 
@@ -27,9 +29,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     margin: '0.2rem',
-    width: '100%',
-    padding: '.6rem .6rem 0 .6rem'
+    width: '100%'
+    // padding: '.6rem .6rem 0 .6rem'
   },
+
   content: {
     display: 'flex',
     flexDirection: 'row',
@@ -53,9 +56,9 @@ const useStyles = makeStyles(theme => ({
   image: {
     justifyContent: 'flex-end',
     minWidth: '40%',
-    maxWidth: '40%',
-    borderRadius: 10,
-    boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9'
+    maxWidth: '40%'
+    // borderRadius: 10,
+    // boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9'
   },
 
   actions: {
@@ -132,11 +135,12 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)'
   },
 
-  cardContentGallery: {
+  cardContent_Gallery: {
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',
-    padding: '.2rem'
+    padding: '.2rem',
+    '&:last-child': { paddingBottom: '16px' }
   }
 }))
 
@@ -249,9 +253,18 @@ const ActivityCard = props => {
       <Collapse in={expanded} timeout='auto' unmountOnExit>
         <CardContent
           classes={{
-            root: classes.cardContentGallery
+            root: classes.cardContent_Gallery
           }}
         >
+          <Button
+            size='small'
+            color='secondary'
+            component={Link}
+            to={'/activitypage/' + title}
+            className={classes.text_btn}
+          >
+            VIEW MORE
+          </Button>
           {/* activities={props.itinerary.activities.sort((a, b) =>
             a.likes > b.likes ? -1 : 1
             )} */}

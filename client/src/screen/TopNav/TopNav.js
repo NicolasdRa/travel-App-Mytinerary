@@ -1,16 +1,16 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOutUser } from '../../store/actions/authActions'
 import { logOutAll } from '../../store/actions/authActions'
 import logo from '../../Images/LogoSmallSimpleGrey.png'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +40,7 @@ export default function TopNav () {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
-
+  const history = useHistory()
   // const handleChange = event => {
   //   setAuth(event.target.checked)
   // }
@@ -56,11 +56,16 @@ export default function TopNav () {
   const handleLogOut = e => {
     e.preventDefault()
     dispatch(logOutUser(user))
+
+    if ((user = null)) {
+      history.push('/')
+    }
   }
 
   const handleLogOutAll = e => {
     e.preventDefault()
     dispatch(logOutAll(user))
+    history.push('/')
   }
 
   return (
@@ -105,14 +110,14 @@ export default function TopNav () {
               </MenuItem>
             )}
             {isAuthenticated ? (
-              <React.Fragment>
+              <div>
                 <MenuItem onClick={handleLogOut}>
                   <Link to='/'>Log out</Link>
                 </MenuItem>
                 <MenuItem onClick={handleLogOutAll}>
                   <Link to='/'>Log out from all devices</Link>
                 </MenuItem>
-              </React.Fragment>
+              </div>
             ) : (
               <MenuItem onClick={handleClose}>
                 <Link to='/signup'>Create account</Link>
@@ -126,79 +131,5 @@ export default function TopNav () {
       </AppBar>
       <Toolbar />
     </div>
-    // <div className={classes.root}>
-    //   <AppBar position='fixed'>
-    //     <Toolbar>
-    //       {auth && (
-    //         <div>
-    //           <IconButton
-    //             aria-label='account of current user'
-    //             aria-controls='menu-appbar'
-    //             aria-haspopup='true'
-    //             onClick={handleMenu}
-    //             color='inherit'
-    //           >
-    //             <AccountCircle />
-    //           </IconButton>
-    //           <Menu
-    //             id='menu-appbar'
-    //             anchorEl={anchorEl}
-    //             anchorOrigin={{
-    //               vertical: 'top',
-    //               horizontal: 'right'
-    //             }}
-    //             keepMounted
-    //             transformOrigin={{
-    //               vertical: 'top',
-    //               horizontal: 'right'
-    //             }}
-    //             open={open}
-    //             onClose={handleClose}
-    //           >
-    //             {isAuthenticated ? (
-    //               <MenuItem onClick={handleLogOut}>
-    //                 <Link to='#'>Log out</Link>
-    //               </MenuItem>
-    //             ) : (
-    //               ((
-    //                 <MenuItem onClick={handleClose}>
-    //                   <Link to='/login'>Log in</Link>
-    //                 </MenuItem>
-    //               ),
-    //               (
-    //                 <MenuItem onClick={handleClose}>
-    //                   <Link to='/signup'>Create account</Link>
-    //                 </MenuItem>
-    //               ))
-    //             )}
-    //           </Menu>
-    //         </div>
-    //       )}
-    //       <Typography variant='h6' className={classes.title}>
-    //         User´s Name / code
-    //       </Typography>
-    //       <IconButton
-    //         edge='start'
-    //         className={classes.menuButton}
-    //         color='inherit'
-    //         aria-label='menu'
-    //       >
-    //         <MenuIcon />
-    //       </IconButton>
-    //     </Toolbar>
-    //   </AppBar>
-    //   <FormGroup>
-    //     <FormControlLabel
-    //       control={
-    //         <Switch
-    //           checked={auth}
-    //           onChange={handleChange}
-    //           aria-label='login switch'
-    //         />
-    //       }
-    //       label={auth ? 'Logout' : 'Login'}
-    //     />
-    //   </FormGroup>
-    // </div>
   )
 }

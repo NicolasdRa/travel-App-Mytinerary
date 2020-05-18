@@ -1,21 +1,41 @@
 import React, { Component } from 'react'
 import 'typeface-roboto'
-import {
-  Grid,
-  CircularProgress,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import ActivityGallery from './ActivityGallery'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 import { fetchCities } from '../../store/actions/cityActions'
-import './Activities.css'
+
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifySelf: 'center',
+    width: '100%'
+  },
+
+  searchBar: {
+    margin: '0.2rem 0 0.2rem 0',
+    width: '95%'
+  },
+
+  text: {
+    margin: '1rem 0 .5rem 1rem',
+    textAlign: 'start'
+  },
+  loader: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+})
 
 class Activities extends Component {
   state = {
     filteredItineraries: null,
-    string: ''
+    string: '',
+    activites: ''
   }
 
   // fetches itineraries & cities from DB
@@ -35,8 +55,8 @@ class Activities extends Component {
   }
 
   render () {
+    const { classes } = this.props
     const itineraries = this.props.itineraries
-    console.log(itineraries)
 
     // filter function
     if (itineraries !== null) {
@@ -46,16 +66,19 @@ class Activities extends Component {
         if (itinerary.activities.length > 0) {
           activitiesArray.push(itinerary.activities)
         }
-        console.log(activitiesArray)
       })
 
       let activities = activitiesArray.flat()
 
-      console.log(activities)
+      // .then(
+      //   this.setState({
+      //     activities: activities
+      //   })
+      // )
 
       return (
-        <Grid item xs={12}>
-          <div>
+        <Box>
+          <Box className={classes.container}>
             <form onSubmit={this.handleSubmit}>
               <TextField
                 id='outlined-helperText'
@@ -64,15 +87,13 @@ class Activities extends Component {
                 variant='outlined'
                 onChange={this.handleChange}
                 color='primary'
-                style={{ margin: '0.2rem 0 0.2rem 0', width: '95%' }}
+                className={classes.searchBar}
               />
             </form>
-            <Typography
-              style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'start' }}
-            >
+            <Typography className={classes.text}>
               Most popular Activities
             </Typography>
-          </div>
+          </Box>
           <ActivityGallery
             string={this.state.string}
             activities={activities.sort((a, b) => (a.likes > b.likes ? -1 : 1))}
@@ -81,12 +102,12 @@ class Activities extends Component {
             //   .map(filteredItineraries.activities)
             //   .sort((a, b) => (a.likes > b.likes ? -1 : 1))}
           />
-        </Grid>
+        </Box>
       )
     } else {
       return (
-        <div className='loader'>
-          <Typography>Loading Activities...</Typography>
+        <div className={classes.loader}>
+          <Typography>Loading activities...</Typography>
           <CircularProgress color='secondary' />
         </div>
       )
@@ -107,4 +128,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activities)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Activities))

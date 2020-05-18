@@ -1,15 +1,17 @@
 import React from 'react'
 import 'typeface-roboto'
-import './Landing.css'
 import { Box, Container } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import Header from '../Header/Header'
+import Header from '../Headers/Header'
 import { Button, Typography } from '@material-ui/core'
-import Links from '../Links/Links'
+// import Links from '../Links/Links'
+import Signup from '../Signup/Signup'
+import Login from '../Login/Login'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadUser } from '../../store/actions/authActions'
 import jwtDecode from 'jwt-decode'
+import Image from '../../Images/Shanghai.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,8 +20,22 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
 
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundImage:
+      'radial-gradient(circle, rgba(255, 255, 255, .7) 0%, rgba(255, 255, 255, 1) 60%), url(' +
+      Image +
+      ')',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'top',
+    paddingBottom: '4rem'
+  },
+
   header: {
-    marginTop: '5.5rem'
+    marginTop: '5rem'
   },
 
   startBtn: {
@@ -33,6 +49,12 @@ const useStyles = makeStyles(theme => ({
 
   links: {
     marginTop: '3.5rem'
+  },
+
+  link_btns: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    margin: '0.5rem 5rem'
   }
 }))
 
@@ -54,7 +76,7 @@ const Landing = () => {
   }
 
   return (
-    <Box className='container'>
+    <Box className={classes.container}>
       <Container className={classes.header}>
         <Header />
         <Button
@@ -71,7 +93,11 @@ const Landing = () => {
           <Typography variant='subtitle1' className={classes.legend}>
             Want to build your own MYtinerary?
           </Typography>
-          <Links />
+          {/* <Links /> */}
+          <Box className={classes.link_btns}>
+            <Signup />
+            <Login />
+          </Box>
         </Box>
         {/* <Divider className={classes.divider} /> */}
       </Container>

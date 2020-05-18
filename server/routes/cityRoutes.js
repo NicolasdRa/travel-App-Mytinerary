@@ -24,7 +24,7 @@ router.get('/all', (req, res) => {
 // });
 
 // adds a new city in the DB
-router.post('/', (req, res) => {
+router.post('/add', (req, res) => {
   if (
     req.body.name !=
     cityModel.find({

@@ -46,6 +46,7 @@ app.use(cors())
 // initializes (imports) routes
 app.use('/api/cities', require('./routes/cityRoutes'))
 app.use('/api/itineraries', require('./routes/itineraryRoutes'))
+app.use('/api/itineraries/add', require('./routes/itineraryRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 
 // sets up which port to listen to for requests

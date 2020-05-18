@@ -10,6 +10,18 @@ const userSchema = new mongoose.Schema({
     unique: false
   },
 
+  firstName: {
+    type: String,
+    required: false,
+    unique: false
+  },
+
+  lastName: {
+    type: String,
+    required: false,
+    unique: false
+  },
+
   email: {
     type: String,
     required: true,
@@ -27,6 +39,12 @@ const userSchema = new mongoose.Schema({
     required: false
   },
 
+  details: {
+    type: String,
+    required: false,
+    unique: false
+  },
+
   password: {
     type: String,
     required: false,
@@ -42,11 +60,25 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+
   tokens: [
     {
       token: {
         type: String,
         required: true
+      }
+    }
+  ],
+
+  favourites: [
+    {
+      itineraries: {
+        type: Array,
+        required: false
+      },
+      activities: {
+        type: Array,
+        required: false
       }
     }
   ]
@@ -64,7 +96,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
   const user = this
-  const options = { expiresIn: 3600 }
+  const options = { expiresIn: 120 }
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, options)
   user.tokens = user.tokens.concat({ token })
   await user.save()

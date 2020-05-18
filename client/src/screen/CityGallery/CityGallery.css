@@ -1,6 +1,0 @@
-.gallery{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;    
-}

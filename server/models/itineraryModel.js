@@ -12,21 +12,26 @@ const itinerarySchema = new mongoose.Schema({
   },
   img: {
     type: String,
-    required: true
+    required: false
   },
   rating: {
     type: Number,
-    required: true
+    required: false
   },
   duration: {
-    type: Number,
+    type: String,
     required: true
   },
   price: {
-    type: Number,
+    type: String,
     required: true
   },
-  hashtags: {
+  category: {
+    type: String,
+    required: false
+  },
+
+  details: {
     type: String,
     required: false
   },
@@ -41,22 +46,20 @@ const itinerarySchema = new mongoose.Schema({
       price: String,
       duration: Number,
       hashtags: String,
-      // eliminate key likes and replace by count over the array likedBy
-      likes: Number,
-      likedBy: Array
+      likes: Array
     }
   ],
   likes: {
-    type: Number,
-    required: false
-  },
-  likedBy: {
     type: Array,
     required: false
+  },
+  user: {
+    type: String,
+    required: true
   }
 })
 
-// Hint: each itinerary should have a title, a profile picture(URL), a rating, a duration, a price and some hashtags. Try to think about the most suitable data type for each of these parameters.
+// Hint: each itinerary should have a title, a profile picture(URL), a duration, a price and category. Try to think about the most suitable data type for each of these parameters.
 
 //name of module is the singular version (itinerary) of the database name (itinerary)
 module.exports = mongoose.model('itinerary', itinerarySchema)

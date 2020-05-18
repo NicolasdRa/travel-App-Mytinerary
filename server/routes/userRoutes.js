@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
         .send({ error: 'Login failed! Check authentication credentials' })
     }
     const token = await user.generateAuthToken()
-    res.send({ user, token })
+    res.send({ user, token }).redirect(`//localhost:3000/listing`)
   } catch (error) {
     res.status(400).send(error)
   }
@@ -111,5 +111,42 @@ router.get(
     }
   }
 )
+
+// HTTP POST /users — Register users.
+router.post('/signup', async (req, res) => {
+  // Create a new user
+  try {
+    const user = new User(req.body)
+    await user.save()
+    const token = await user.generateAuthToken()
+    res.status(201).send({ user, token })
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
+// // HTTP POST /users/favourites/itinerary Post favourites ITINERARY.
+
+// router.get('/favourites/all', (req, res) => {
+//   let _id = req.body.id
+//     .find({user: _id})
+//     .then(itineraryArray => {
+//       res.send(itineraryArray)
+//     })
+//     .catch(err => console.log(err))
+// })
+
+// // HTTP POST /users/favourites/itinerary — Post favourite ITINERARY.
+
+// // /*gets ITINERARIES from ONE city*/
+// router.get('/:city_name', (req, res) => {
+//   let cityRequested = req.params.city_name
+//   itineraryModel
+//     .find({ city: cityRequested })
+//     .then(itineraryArray => {
+//       res.send(itineraryArray)
+//     })
+//     .catch(err => console.log(err))
+// })
 
 module.exports = router

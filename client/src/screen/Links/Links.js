@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import './Links.css'
 
 const useStyles = makeStyles(theme => ({
   linkContainer: {
@@ -21,7 +20,6 @@ const Links = () => {
       <Button component={Link} to='/signup' color='secondary'>
         SIGNUP
       </Button>
-      {/* <br /> */}
       <Button color='secondary' component={Link} to='/login'>
         LOGIN
       </Button>

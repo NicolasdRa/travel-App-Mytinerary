@@ -1,16 +1,67 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import 'typeface-roboto'
-import { Typography, Button, TextField, Container } from '@material-ui/core'
-import { Alert } from 'reactstrap'
-import './Login.css'
-import uuid from 'react-uuid'
+import { Link, useHistory } from 'react-router-dom'
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Typography
+} from '@material-ui/core'
+import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import { loginUser } from '../../store/actions/authActions'
 import { clearErrors } from '../../store/actions/errorActions'
+import { withStyles } from '@material-ui/core/styles'
+import uuid from 'react-uuid'
+import { Alert } from 'reactstrap'
+// import Slide from '@material-ui/core/Slide'
+
+// const Transition = React.forwardRef(function Transition (props, ref) {
+//   return <Slide direction='up' ref={ref} {...props} />
+// })
+
+const styles = theme => ({
+  title: {
+    margin: '1.5rem 0 0 0',
+    padding: 0,
+    textAlign: 'center'
+  },
+
+  subtitle: {
+    margin: '2.5rem 0 0 0 ',
+    padding: 0,
+    textAlign: 'center'
+  },
+
+  input_field: {
+    margin: '.8rem 0'
+  },
+
+  text: {
+    marginTop: '1rem',
+    textAlign: 'center'
+  },
+
+  google_button: {
+    display: 'flex',
+    margin: '1rem 0',
+    padding: '.8rem'
+  },
+
+  btns: {
+    paddingLeft: '1rem'
+  }
+})
 
 class Login extends Component {
   state = {
+    open: false,
+    fullWidth: true,
+    maxWidth: 'sm',
     email: '',
     password: '',
     img: '',
@@ -30,13 +81,21 @@ class Login extends Component {
   }
 
   handleChange = e => {
+    const { id, value } = e.target
     this.setState({
-      [e.target.id]: e.target.value
+      [id]: value
+    })
+  }
+
+  handleClose = () => {
+    this.setState({
+      open: false
     })
   }
 
   handleSubmit = e => {
     clearErrors()
+    this.handleClose()
     e.preventDefault()
 
     const { email, password } = this.state
@@ -55,77 +114,118 @@ class Login extends Component {
     })
   }
 
+  handleToggle = () => {
+    this.setState({
+      open: !this.setState.open
+    })
+  }
+
   render () {
+    const { classes } = this.props
     const errors = this.state.msg
+    const { open } = this.state
+
+    const handleClickOpen = () => {
+      this.setState({
+        open: true
+      })
+    }
 
     return (
-      <Container className='login_form'>
-        <form onSubmit={this.handleSubmit}>
-          <Typography variant='h4' align='center'>
-            Log in
-          </Typography>
-          {errors
-            ? errors.map(error => (
-                <div key={uuid()}>
-                  <Alert
-                    color='danger'
-                    style={{ color: 'red', margin: '1.5rem' }}
-                  >
-                    {error.msg}
-                  </Alert>
-                </div>
-              ))
-            : null}
-          <div className='input_field'>
-            <TextField
-              required
-              id='email'
-              label='Email'
-              variant='outlined'
-              autoComplete='current-email'
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className='input_field'>
-            <TextField
-              required
-              minLength='6'
-              id='password'
-              type='password'
-              label='Password'
-              variant='outlined'
-              autoComplete='current-password'
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className='form_buttons'>
-            <Button onClick={this.clearState} type='reset' variant='contained'>
-              Clear
-            </Button>
-            <Button
-              onClick={this.handleSubmit}
-              variant='contained'
-              color='primary'
+      <div>
+        <Button color='secondary' onClick={handleClickOpen}>
+          LOGIN
+        </Button>
+        <Dialog
+          //   TransitionComponent={Transition}
+          //   keepMounted
+          open={open}
+          onClose={this.handleClose}
+          aria-labelledby='form-dialog-title'
+        >
+          <form onSubmit={this.handleSubmit}>
+            <DialogTitle
+              id='form-dialog-title'
+              disableTypography
+              className={classes.title}
             >
-              Submit
-            </Button>
-          </div>
-          <div className='google_button'>
-            <Button
-              variant='contained'
-              color='secondary'
-              // component={Link}
-              // to='api/auth/google'
-              href='http://localhost:5000/api/users/google'
-            >
-              Log in with Google
-            </Button>
-          </div>
-          <div className='login_links'>
-            <Link to='/signup'>"Don't have an account? Sign Up"</Link>
-          </div>
-        </form>
-      </Container>
+              <Typography variant='body2'>Easy Login</Typography>
+            </DialogTitle>
+            <DialogContent>
+              <Button
+                className={classes.google_button}
+                variant='outlined'
+                //   color='secondary'
+                // component={Link}
+                // to='api/auth/google'
+                href='http://localhost:5000/api/users/google'
+                startIcon={<GoogleSVGIcon />}
+              >
+                Log in with Google
+              </Button>
+              <DialogTitle
+                id='form-dialog-title'
+                disableTypography
+                className={classes.subtitle}
+              >
+                <Typography variant='body2'>
+                  Login with email & password
+                </Typography>
+              </DialogTitle>
+
+              {errors
+                ? errors.map(error => (
+                    <Box key={uuid()}>
+                      <Alert
+                        color='danger'
+                        style={{ color: 'red', margin: '1.5rem' }}
+                      >
+                        {error.msg}
+                      </Alert>
+                    </Box>
+                  ))
+                : null}
+
+              <TextField
+                required
+                autoFocus
+                fullWidth
+                margin='dense'
+                id='email'
+                label='Email Address'
+                type='email'
+                autoComplete='current-email'
+                onChange={this.handleChange}
+                className={classes.input_field}
+              />
+              <TextField
+                required
+                autoFocus
+                margin='dense'
+                id='password'
+                label='Password'
+                type='password'
+                autoComplete='current-password'
+                onChange={this.handleChange}
+                fullWidth
+                className={classes.input_field}
+              />
+              <Typography variant='body2' className={classes.text}>
+                By proceeding you agree to Mytinerary’s Privacy Policy, User
+                Agreement and T&Cs.
+              </Typography>
+            </DialogContent>
+            <DialogActions className={classes.btns}>
+              <Button onClick={this.handleClose} color='primary'>
+                Cancel
+              </Button>
+              <Button onClick={this.handleSubmit} color='secondary'>
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
     )
   }
 }
@@ -146,4 +246,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Login))

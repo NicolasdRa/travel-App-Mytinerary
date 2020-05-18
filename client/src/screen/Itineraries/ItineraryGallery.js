@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: '3rem'
+    margin: '.5rem .5rem 4rem .5rem'
   }
 }))
 

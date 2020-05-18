@@ -1,17 +1,37 @@
 import React from 'react'
 import 'typeface-roboto'
-import {
-  Grid,
-  CircularProgress,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { fetchCities } from '../../store/actions/cityActions'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 
-import CityGallery from '../CityGallery/CityGallery'
-import './Cities.css'
+import CityGallery from './CityGallery'
+
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifySelf: 'center',
+    width: '100%'
+  },
+
+  searchBar: {
+    margin: '0.2rem 0 0.2rem 0',
+    width: '95%'
+  },
+
+  text: {
+    margin: '1rem 0 .5rem 1rem',
+    textAlign: 'start'
+  },
+  loader: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '5rem 5rem'
+  }
+})
 
 class Cities extends React.Component {
   state = {
@@ -37,9 +57,8 @@ class Cities extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
     const { cities } = this.props
-
-    console.log(cities)
 
     // filter function
     if (cities !== null) {
@@ -50,8 +69,8 @@ class Cities extends React.Component {
       ]
 
       return (
-        <Grid item xs={12}>
-          <div>
+        <Box>
+          <Box className={classes.container}>
             <form onSubmit={this.handleSubmit}>
               <TextField
                 id='outlined-helperText'
@@ -60,24 +79,22 @@ class Cities extends React.Component {
                 variant='outlined'
                 onChange={this.handleChange}
                 color='primary'
-                style={{ margin: '0.2rem 0 0.2rem 0', width: '95%' }}
+                className={classes.searchBar}
               />
             </form>
-            <Typography
-              style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'start' }}
-            >
+            <Typography className={classes.text}>
               Most popular Cities
             </Typography>
-          </div>
+          </Box>
           <CityGallery cities={filteredCities} />
-        </Grid>
+        </Box>
       )
     } else {
       return (
-        <div className='loader'>
+        <Box className={classes.loader}>
           <Typography>Loading cities...</Typography>
           <CircularProgress color='secondary' />
-        </div>
+        </Box>
       )
     }
   }
@@ -98,4 +115,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cities)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Cities))

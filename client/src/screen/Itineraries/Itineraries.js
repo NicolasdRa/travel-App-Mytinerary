@@ -1,25 +1,34 @@
 import React, { Component } from 'react'
-// import { compose } from 'redux'
 import 'typeface-roboto'
-import {
-  Grid,
-  CircularProgress,
-  TextField,
-  Typography
-} from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import ItineraryGallery from './ItineraryGallery'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
 import { fetchCities } from '../../store/actions/cityActions'
-// import { withStyles, createStyles } from '@material-ui/core/styles'
-// import './Itineraries.css'
+import { withStyles } from '@material-ui/core/styles'
 
-// const useStyles = () =>
-//   createStyles({
-//     gallery: {
-//       marginBottom: '10rem'
-//     }
-//   })
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifySelf: 'center',
+    width: '100%'
+  },
+
+  searchBar: {
+    margin: '0.2rem 0 0.2rem 0',
+    width: '95%'
+  },
+
+  text: {
+    margin: '1rem 0 .5rem 1rem',
+    textAlign: 'start'
+  },
+  loader: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+})
 
 class Itineraries extends Component {
   state = {
@@ -44,6 +53,7 @@ class Itineraries extends Component {
   }
 
   render () {
+    const { classes } = this.props
     const { itineraries } = this.props
 
     // filter conditional
@@ -55,8 +65,8 @@ class Itineraries extends Component {
       ]
 
       return (
-        <Grid item xs={12}>
-          <div>
+        <Box>
+          <Box className={classes.container}>
             <form onSubmit={this.handleSubmit}>
               <TextField
                 id='outlined-helperText'
@@ -65,29 +75,27 @@ class Itineraries extends Component {
                 variant='outlined'
                 onChange={this.handleChange}
                 color='primary'
-                style={{ margin: '0.2rem 0 0.2rem 0', width: '95%' }}
+                className={classes.searchBar}
               />
             </form>
-            <Typography
-              style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'start' }}
-            >
+            <Typography className={classes.text}>
               Most popular Itineraries
             </Typography>
-          </div>
+          </Box>
           <ItineraryGallery
             string={this.state.string}
             itineraries={filteredItineraries.sort((a, b) =>
               a.likes > b.likes ? -1 : 1
             )}
           />
-        </Grid>
+        </Box>
       )
     } else {
       return (
-        <div className='loader'>
+        <Box className={classes.loader}>
           <Typography>Loading itineraries...</Typography>
           <CircularProgress color='secondary' />
-        </div>
+        </Box>
       )
     }
   }
@@ -106,21 +114,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(withStyles(useStyles)(Itineraries))
-
-// // This one works but doesnt read styles
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(withStyles(useStyles)(Itineraries))
-
-// // // This one works
-// export default compose(
-//   withStyles(useStyles),
-//   connect(mapStateToProps, mapDispatchToProps)
-// )(Itineraries)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Itineraries)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Itineraries))

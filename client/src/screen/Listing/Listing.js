@@ -55,8 +55,11 @@ function LinkTab (props) {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '0 0 auto',
+    width: '100%'
   }
 }))
 
@@ -69,7 +72,7 @@ export default function Listing () {
   }
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
       <Paper position='static'>
         <Tabs
           variant='fullWidth'
@@ -91,6 +94,6 @@ export default function Listing () {
       <TabPanel value={value} index={2}>
         <Activities />
       </TabPanel>
-    </div>
+    </Box>
   )
 }

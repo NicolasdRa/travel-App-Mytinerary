@@ -1,4 +1,11 @@
-import { FETCH_ITINERARIES, SET_LOADING, LOADING_ERROR } from './types'
+import {
+  FETCH_ITINERARIES,
+  SET_LOADING,
+  LOADING_ERROR,
+  ADD_ITINERARY,
+  POSTING_ERROR
+} from './types'
+import axios from 'axios'
 
 // gets itineraries from server/DB
 export const fetchItineraries = () => async dispatch => {
@@ -15,6 +22,25 @@ export const fetchItineraries = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: LOADING_ERROR,
+      payload: error.res.data
+    })
+  }
+}
+
+//adds new itinerary
+export const addItinerary = () => async dispatch => {
+  try {
+    const res = await axios.post('http://localhost:5000/api/itineraries/add')
+
+    const newItinerary = await res.json()
+    console.log(newItinerary)
+    dispatch({
+      type: ADD_ITINERARY,
+      payload: newItinerary
+    })
+  } catch (error) {
+    dispatch({
+      type: POSTING_ERROR,
       payload: error.res.data
     })
   }

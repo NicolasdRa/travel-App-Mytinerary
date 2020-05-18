@@ -1,15 +1,18 @@
 import {
   FETCH_ITINERARIES,
   FETCH_ITINERARIES_BY_CITY,
+  ADD_ITINERARY,
   SET_LOADING,
-  LOADING_ERROR
+  LOADING_ERROR,
+  POSTING_ERROR
 } from '../actions/types'
 
 const initialState = {
   itineraries: null,
   current: null,
   loading: false,
-  error: null
+  error: null,
+  newItinerary: null
 }
 
 export default (state = initialState, action) => {
@@ -33,6 +36,13 @@ export default (state = initialState, action) => {
         loading: false
       }
 
+    case ADD_ITINERARY:
+      return {
+        ...state,
+        newItinerary: action.payload,
+        loading: false
+      }
+
     case SET_LOADING:
       return {
         ...state,
@@ -40,6 +50,13 @@ export default (state = initialState, action) => {
       }
 
     case LOADING_ERROR:
+      console.log(action.payload)
+      return {
+        ...state,
+        error: action.payload
+      }
+
+    case POSTING_ERROR:
       console.log(action.payload)
       return {
         ...state,
