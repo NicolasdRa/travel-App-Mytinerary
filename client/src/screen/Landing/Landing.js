@@ -64,16 +64,16 @@ const Landing = () => {
   const user = useSelector(state => state.auth.user)
   const token = useSelector(state => state.auth.token)
 
-  if (!token || !user) {
-    const cookie = document.cookie
-    // console.log('cookie', cookie)
-    const token = cookie.split('=', 2)[1]
-    // console.log('token', token)
-    // console.log('decoded', jwtDecode(token))
-    const id = jwtDecode(token)._id
-    // console.log(id)
-    dispatch(loadUser(token, id))
-  }
+  // if (!token || !user) {
+  //   const cookie = document.cookie
+  //   // console.log('cookie', cookie)
+  //   const token = cookie.split('=', 2)[1]
+  //   // console.log('token', token)
+  //   // console.log('decoded', jwtDecode(token))
+  //   const id = jwtDecode(token)._id
+  //   // console.log(id)
+  //   dispatch(loadUser(token, id))
+  // }
 
   return (
     <Box className={classes.container}>
