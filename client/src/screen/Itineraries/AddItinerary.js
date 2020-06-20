@@ -132,46 +132,32 @@ class AddItinerary extends Component {
 
   handleChange = e => {
     const { type, id, value, files } = e.target
+    const { newItinerary } = this.state
+
     type === 'file'
       ? this.setState({
           selectedImg: files[0]
         })
-      : this.setState({
-          [id]: value
-        })
+      : this.setState({ ...newItinerary, [id]: value })
   }
 
   handleImgUpload = () => {}
 
   handleSubmit = e => {
     e.preventDefault()
-    clearErrors()
     this.handleClose()
 
-    // const {
-    //   city,
-    //   title,
-    //   img,
-    //   duration,
-    //   price,
-    //   category,
-    //   details,
-    //   activities
-    // } = this.state
+    const { newItinerary } = this.state
+    this.props.addItinerary(newItinerary)
 
-    // const newItinerary = {
-    //   city,
-    //   title,
-    //   img,
-    //   duration,
-    //   price,
-    //   category,
-    //   details,
-    //   activities
-    // }
-    // this.props.addItinerary(newItinerary)
-
-    const formData = new FormData()
+    const formData = new FormData({
+      // city,
+      // title,
+      // details,
+      // category,
+      // duration,
+      // price
+    })
     formData.append('file', this.state.selectedImg)
     console.log(
       'Your Itinerary has been submitted and this image has been uploaded: ' +
