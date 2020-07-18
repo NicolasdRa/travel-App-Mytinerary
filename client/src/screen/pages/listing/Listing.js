@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Paper, Tabs, Tab, Typography, Box } from '@material-ui/core'
 
-import Cities from '../Cities/Cities'
-import Itineraries from '../Itineraries/Itineraries'
-import Activities from '../Activities/Activities'
+import Cities from '../../Cities/Cities'
+import Itineraries from '../../Itineraries/Itineraries'
+import Activities from '../../Activities/Activities'
 
 function TabPanel (props) {
   const { children, value, index, ...other } = props

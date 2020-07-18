@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-
 import TopNav from './screen/TopNav/TopNav'
-import Landing from './screen/Landing/Landing'
+import Landing from './screen/pages/landing/Landing'
 import Signup from './screen/Signup/Signup'
 import Login from './screen/Login/Login'
-import Profile from './screen/Profile/Profile'
-import Listing from './screen/Listing/Listing'
+import Profile from './screen/pages/profile/Profile'
+import Listing from './screen/pages/listing/Listing'
 import CityPage from './screen/Cities/CityPage'
-import ItineraryPage from './screen/Itineraries/ItineraryPage'
-import ActivityPage from './screen/Activities/ActivityPage'
+import ItineraryPage from './screen/pages/itinerary/ItineraryPage'
+import ActivityPage from './screen/pages/activity/ActivityPage'
 import BottomNav from './screen/BottomNav/BottomNav'
 import { Box } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
+import theme from './screen/theme/Theme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   topNav: {
     position: 'fixed',
     bottom: 0,
@@ -33,18 +35,15 @@ const styles = theme => ({
     top: 0,
     width: '100%'
   }
-})
+}))
 
-class App extends Component {
-  // Checks & Loads user if logged in
-  // componentDidMount () {
-  //   store.dispatch(loadUser())
-  // }
+const App = () => {
+  const classes = useStyles()
+  const matches = useMediaQuery(theme.breakpoints.down('md'))
 
-  render () {
-    const { classes } = this.props
-    return (
-      <BrowserRouter>
+  return (
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
         <TopNav className={classes.topNav} />
         <Box className={classes.main}>
           <Switch>
@@ -62,10 +61,10 @@ class App extends Component {
             <Route exact path='/activitypage/:title' component={ActivityPage} />
           </Switch>
         </Box>
-        <BottomNav className={classes.bottomNav} />
-      </BrowserRouter>
-    )
-  }
+        {matches ? <BottomNav className={classes.bottomNav} /> : null}
+      </ThemeProvider>
+    </BrowserRouter>
+  )
 }
 
-export default withStyles(styles)(App)
+export default App

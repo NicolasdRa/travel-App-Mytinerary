@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import 'typeface-roboto'
 import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import ActivityGallery from './ActivityGallery'

@@ -1,5 +1,4 @@
 import React from 'react'
-import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
 // import AddItinerary from './AddItinerary'
 import {
@@ -14,8 +13,8 @@ import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 import CreateIcon from '@material-ui/icons/Create'
-import ActivityGallerySmall from '../Activities/ActivityGallerySmall'
-import ImageHeader from '../Headers/ImageHeader'
+import ActivityGallerySmall from '../../Activities/ActivityGallerySmall'
+import ImageHeader from '../../Headers/ImageHeader'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Avatar,
@@ -9,17 +8,17 @@ import {
   IconButton,
   Typography
 } from '@material-ui/core'
-import Signup from '../Signup/Signup'
-import Login from '../Login/Login'
-import AddItinerary from '../Itineraries/AddItinerary'
+import Signup from '../../Signup/Signup'
+import Login from '../../Login/Login'
+import AddItinerary from '../../Itineraries/AddItinerary'
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import CreateIcon from '@material-ui/icons/Create'
-import ImageHeader from '../Headers/ImageHeader'
-import UserItinerariesSmall from '../Itineraries/UserItinerariesSmall'
+import ImageHeader from '../../Headers/ImageHeader'
+import UserItinerariesSmall from '../../Itineraries/UserItinerariesSmall'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { fetchCities } from '../../store/actions/cityActions'
-import { fetchItineraries } from '../../store/actions/itineraryActions'
+import { fetchCities } from '../../../store/actions/cityActions'
+import { fetchItineraries } from '../../../store/actions/itineraryActions'
 
 const useStyles = makeStyles(theme => ({
   container: {

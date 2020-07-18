@@ -1,12 +1,9 @@
 import React from 'react'
-import 'typeface-roboto'
 import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { fetchCities } from '../../store/actions/cityActions'
 import { fetchItineraries } from '../../store/actions/itineraryActions'
-
 import CityGallery from './CityGallery'
-
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({

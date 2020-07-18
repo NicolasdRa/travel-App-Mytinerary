@@ -1,5 +1,4 @@
 import React from 'react'
-import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
 import ItineraryCard from './ItineraryCard'
 import { Typography } from '@material-ui/core'

@@ -1,5 +1,4 @@
 import React from 'react'
-import 'typeface-roboto'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Avatar,
@@ -13,7 +12,7 @@ import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 import CreateIcon from '@material-ui/icons/Create'
-import ImageHeader from '../Headers/ImageHeader'
+import ImageHeader from '../../Headers/ImageHeader'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
