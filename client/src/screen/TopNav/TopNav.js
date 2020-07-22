@@ -14,9 +14,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
+  // root: {
+  //   flexGrow: 1
+  // },
   toolbar: {
     justifyContent: 'space-between'
   },
@@ -24,8 +24,18 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   logo: {
-    maxWidth: 100,
-    marginLeft: 12
+    height: '1.3rem',
+    padding: '.5rem .3rem',
+
+    [theme.breakpoints.up('md')]: {
+      height: '1.6rem'
+    },
+    [theme.breakpoints.up('lg')]: {
+      height: '1.8rem'
+    },
+    [theme.breakpoints.up('xl')]: {
+      height: '2.5rem'
+    }
   }
 }))
 

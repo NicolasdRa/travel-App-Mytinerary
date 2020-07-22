@@ -6,16 +6,39 @@ import logo from '../../Images/myLogo.png'
 
 const useStyles = makeStyles(theme => ({
   img: {
-    width: '12rem',
-    margin: '3rem 0 1rem 0',
+    //logo landing page
+    width: '15em',
+    margin: '1rem 0',
     padding: '1rem',
-    /* object-fit: contain; */
-    overflow: 'hidden'
+
+    [theme.breakpoints.up('sm')]: {
+      width: '18em'
+    },
+
+    [theme.breakpoints.up('md')]: {
+      width: '20em'
+    },
+
+    [theme.breakpoints.up('lg')]: {
+      width: '30em'
+    }
   },
 
   legend: {
     marginTop: '1rem',
-    fontSize: '1.2rem'
+    fontSize: '1rem',
+
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.2rem'
+    },
+
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.4rem'
+    },
+
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '2rem'
+    }
   }
 }))
 
@@ -24,7 +47,7 @@ const Header = () => {
 
   return (
     <Container>
-      <Box maxWidth='sm={4}'>
+      <Box>
         <img src={logo} alt='Logo' className={classes.img} />
       </Box>
       <Box>

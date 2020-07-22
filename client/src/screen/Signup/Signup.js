@@ -16,12 +16,7 @@ import { signupUser } from '../../store/actions/authActions'
 import { clearErrors } from '../../store/actions/errorActions'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'react-uuid'
-import { Alert } from 'reactstrap'
-// import Slide from '@material-ui/core/Slide'
-
-// const Transition = React.forwardRef(function Transition (props, ref) {
-//   return <Slide direction='up' ref={ref} {...props} />
-// })
+import { Alert, AlertTitle } from '@material-ui/lab'
 
 const styles = theme => ({
   title: {
@@ -137,7 +132,7 @@ class Signup extends Component {
     return (
       <div>
         <Button color='secondary' onClick={handleClickOpen}>
-          SIGNUP
+          Signup
         </Button>
         <Dialog
           //   TransitionComponent={Transition}
@@ -179,10 +174,11 @@ class Signup extends Component {
                 ? errors.map(error => (
                     <Box key={uuid()}>
                       <Alert
-                        color='danger'
+                        severity='error'
                         style={{ color: 'red', margin: '1.5rem' }}
                       >
-                        {error.msg}
+                        <AlertTitle>Error</AlertTitle>
+                        {error.msg} — <strong>check it out!</strong>
                       </Alert>
                     </Box>
                   ))

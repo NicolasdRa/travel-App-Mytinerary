@@ -7,6 +7,12 @@ export default createMuiTheme({
     },
     secondary: {
       main: '#ef5350'
+    },
+
+    common: {
+      beige: '#BFA6A2',
+      blue: '#0092FF',
+      green: '#4caf50'
     }
   },
   typography: {
@@ -18,5 +24,21 @@ export default createMuiTheme({
       marginLeft: '25px'
     }
   },
-  overrides: {}
+  overrides: {
+    MuiGrid: {
+      container: {
+        width: '100% !important',
+        margin: ' 0 !important'
+      }
+    }
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920
+    }
+  }
 })

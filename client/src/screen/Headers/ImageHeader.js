@@ -8,10 +8,18 @@ const useStyles = makeStyles(theme => ({
     backgroundPosition: 'center',
     width: '100%',
     height: '10rem',
-    backgroundSize: 'cover'
+    backgroundSize: 'cover',
+
+    [theme.breakpoints.up('sm')]: {
+      height: '15rem'
+    },
+    [theme.breakpoints.up('lg')]: {
+      height: '30rem'
+    }
   }
 }))
 
+// image header for profile, itinerary, activity pages
 const ImageHeader = props => {
   const classes = useStyles(props)
 

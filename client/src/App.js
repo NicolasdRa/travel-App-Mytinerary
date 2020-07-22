@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import TopNav from './screen/TopNav/TopNav'
 import Landing from './screen/pages/landing/Landing'
@@ -10,7 +10,8 @@ import CityPage from './screen/Cities/CityPage'
 import ItineraryPage from './screen/pages/itinerary/ItineraryPage'
 import ActivityPage from './screen/pages/activity/ActivityPage'
 import BottomNav from './screen/BottomNav/BottomNav'
-import { Box } from '@material-ui/core'
+import Footer from './screen/footer/Footer'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import theme from './screen/theme/Theme'
@@ -19,21 +20,19 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 const useStyles = makeStyles(theme => ({
   topNav: {
     position: 'fixed',
-    bottom: 0,
-    width: '100%'
+    bottom: 0
   },
 
   main: {
     display: 'flex',
     justifyContent: 'center',
-    textAlign: 'center',
-    marginBottom: '4rem'
+    alignItems: 'center',
+    textAlign: 'center'
   },
 
   bottomNav: {
     position: 'fixed',
-    top: 0,
-    width: '100%'
+    top: 0
   }
 }))
 
@@ -45,7 +44,7 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <TopNav className={classes.topNav} />
-        <Box className={classes.main}>
+        <Grid className={classes.main}>
           <Switch>
             <Route exact path='/' component={Landing} />
             <Route exact path='/signup' component={Signup} />
@@ -60,8 +59,8 @@ const App = () => {
             />
             <Route exact path='/activitypage/:title' component={ActivityPage} />
           </Switch>
-        </Box>
-        {matches ? <BottomNav className={classes.bottomNav} /> : null}
+        </Grid>
+        {matches ? <BottomNav className={classes.bottomNav} /> : <Footer />}
       </ThemeProvider>
     </BrowserRouter>
   )
