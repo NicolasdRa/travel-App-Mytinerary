@@ -1,13 +1,13 @@
 import React from 'react'
-import { Box, Container } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Header from '../../Headers/Header'
 import { Button, Typography } from '@material-ui/core'
-import Signup from '../../Signup/Signup'
-import Login from '../../Login/Login'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser } from '../../../store/actions/authActions'
+import { openLoginForm } from '../../../Components/Redux/loginForm/loginFormActions'
+import { openSignupForm } from '../../../Components/Redux/signupForm/signupFormActions'
+import { loadUser } from '../../../Components/Redux/auth/authActions'
 import jwtDecode from 'jwt-decode'
 import Grid from '@material-ui/core/Grid'
 import Image from '../../../Images/Shanghai.png'
@@ -54,8 +54,8 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
-  legend: {
-    margin: '.5rem 0',
+  question: {
+    margin: '1rem 0 1.5rem 0',
     [theme.breakpoints.up('sm')]: {
       margin: '1rem 0 0 0',
       fontSize: '1.5rem'
@@ -67,24 +67,38 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
-  link_btns: {
+  btnsContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '0.5rem 5rem 3rem 5rem',
+    marginBottom: '4rem',
 
     [theme.breakpoints.up('sm')]: {
-      margin: '1rem 5rem 3rem 5rem'
+      margin: '1rem 5rem 4rem 5rem'
     },
 
     [theme.breakpoints.up('lg')]: {
-      margin: '1rem 5rem 3rem 5rem'
+      margin: '1rem 5rem 4rem 5rem'
     }
   },
 
   modal_btn: {
-    margin: '0 5rem',
-    height: '3rem'
+    margin: '0 .5rem',
+    height: '3rem',
+    width: '6rem',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 1.5rem',
+      width: '8rem',
+      height: '3rem',
+      fontSize: '1.1rem'
+    },
+
+    [theme.breakpoints.up('lg')]: {
+      margin: '0 1.5rem',
+      width: '8rem',
+      height: '3.5rem',
+      fontSize: '1.2rem'
+    }
   }
 }))
 
@@ -103,11 +117,6 @@ const Landing = () => {
   //   const id = jwtDecode(token)._id
   //   // console.log(id)
   //   dispatch(loadUser(token, id))
-  // }
-
-  // const openSignUpModal = () => {
-  //   // use selector to select piece of state
-  //   //dispatch action to set modal state to open
   // }
 
   return (
@@ -135,25 +144,31 @@ const Landing = () => {
       </Grid>
       <Grid
         item
+        container
         direction='column'
         justify='center'
         alignItems='center'
-        className={classes.linksBlock}
       >
-        <Typography variant='subtitle1' className={classes.legend}>
+        <Typography variant='subtitle1' className={classes.question}>
           Want to build your own MYtinerary?
         </Typography>
-        <Box className={classes.link_btns}>
-          {/* <Button
+        <Box className={classes.btnsContainer}>
+          <Button
             variant='outlined'
-            color='primary'
-            onClick={openSignUpModal}
+            color='secondary'
+            onClick={() => dispatch(openLoginForm())}
             className={classes.modal_btn}
           >
-            Test
-          </Button> */}
-          <Signup className={classes.btn} />
-          <Login className={classes.btn} />
+            Login
+          </Button>
+          <Button
+            variant='outlined'
+            color='secondary'
+            onClick={() => dispatch(openSignupForm())}
+            className={classes.modal_btn}
+          >
+            Signup
+          </Button>
         </Box>
       </Grid>
     </Grid>

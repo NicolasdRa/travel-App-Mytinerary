@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Container, Box, Typography } from '@material-ui/core'
+import { Container, Grid, Typography } from '@material-ui/core'
 // import './Header.css'
 import logo from '../../Images/myLogo.png'
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1rem',
 
     [theme.breakpoints.up('sm')]: {
-      fontSize: '1.2rem'
+      fontSize: '1.4rem'
     },
 
     [theme.breakpoints.up('md')]: {
@@ -47,15 +47,17 @@ const Header = () => {
 
   return (
     <Container>
-      <Box>
+      <Grid>
         <img src={logo} alt='Logo' className={classes.img} />
-      </Box>
-      <Box>
-        <Typography variant='subtitle2' className={classes.legend}>
-          Find the perfect trip, designed by insiders who know and love their
-          cities.
-        </Typography>
-      </Box>
+      </Grid>
+      <Grid container direction='row' justify='center' alignItems='center'>
+        <Grid item xs={11} sm={8} lg={10}>
+          <Typography variant='subtitle2' className={classes.legend}>
+            Find the perfect trip, designed by insiders who know and love their
+            cities.
+          </Typography>
+        </Grid>
+      </Grid>
     </Container>
   )
 }

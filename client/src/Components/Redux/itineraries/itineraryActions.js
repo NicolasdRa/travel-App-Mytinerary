@@ -4,7 +4,7 @@ import {
   LOADING_ERROR,
   ADD_ITINERARY,
   POSTING_ERROR
-} from './types'
+} from '../types'
 import axios from 'axios'
 
 // gets itineraries from server/DB

@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+// import { Link, useHistory } from 'react-router-dom'
 import {
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   Typography
 } from '@material-ui/core'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
-import { loginUser } from '../../store/actions/authActions'
-import { clearErrors } from '../../store/actions/errorActions'
+import { loginUser } from '../../Components/Redux/auth/authActions'
+import { clearErrors } from '../../Components/Redux/error/errorActions'
+import {
+  openLoginForm,
+  closeLoginForm
+} from '../../Components/Redux/loginForm/loginFormActions'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'react-uuid'
 import { Alert, AlertTitle } from '@material-ui/lab'
@@ -54,7 +57,6 @@ const styles = theme => ({
 
 class Login extends Component {
   state = {
-    open: false,
     fullWidth: true,
     maxWidth: 'sm',
     email: '',
@@ -83,9 +85,7 @@ class Login extends Component {
   }
 
   handleClose = () => {
-    this.setState({
-      open: false
-    })
+    this.props.closeLoginForm()
   }
 
   handleSubmit = e => {
@@ -109,21 +109,13 @@ class Login extends Component {
     })
   }
 
-  handleToggle = () => {
-    this.setState({
-      open: !this.setState.open
-    })
-  }
-
   render () {
     const { classes } = this.props
     const errors = this.state.msg
-    const { open } = this.state
+    const open = this.props.setOpen
 
     const handleClickOpen = () => {
-      this.setState({
-        open: true
-      })
+      this.props.openLoginForm()
     }
 
     return (
@@ -158,6 +150,7 @@ class Login extends Component {
               >
                 Log in with Google
               </Button>
+
               <DialogTitle
                 id='form-dialog-title'
                 disableTypography
@@ -231,14 +224,17 @@ const mapStateToProps = state => {
     user: state.user,
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
-    errors: state.errors
+    errors: state.errors,
+    setOpen: state.loginForm.setOpen
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     loginUser: user => dispatch(loginUser(user)),
-    clearErrors: () => dispatch(clearErrors())
+    clearErrors: () => dispatch(clearErrors()),
+    openLoginForm: () => dispatch(openLoginForm()),
+    closeLoginForm: () => dispatch(closeLoginForm())
   }
 }
 

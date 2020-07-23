@@ -5,7 +5,7 @@ import {
   SET_LOADING,
   LOADING_ERROR,
   POSTING_ERROR
-} from '../actions/types'
+} from '../types'
 
 const initialState = {
   itineraries: null,

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { fetchCities } from '../../store/actions/cityActions'
-import { fetchItineraries } from '../../store/actions/itineraryActions'
+import { fetchCities } from '../../Components/Redux/cities/cityActions'
+import { fetchItineraries } from '../../Components/Redux/itineraries/itineraryActions'
 import CityGallery from './CityGallery'
 import { withStyles } from '@material-ui/core/styles'
 

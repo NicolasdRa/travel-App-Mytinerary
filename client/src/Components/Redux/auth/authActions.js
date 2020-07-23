@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { returnErrors } from './errorActions'
+import { returnErrors } from '../error/errorActions'
 import {
   USER_LOADING,
   USER_LOADED,
@@ -11,8 +11,8 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   CLEAR_ERRORS
-} from './types'
-import setAuthToken from '../../AuthHandler/SetAuthToken'
+} from '../types'
+import setAuthToken from '../../../AuthHandler/SetAuthToken'
 
 // Setup config/headers & token
 export const tokenConfig = getState => {

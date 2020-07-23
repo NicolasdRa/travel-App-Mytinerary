@@ -20,7 +20,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchItineraries } from '../../store/actions/itineraryActions'
+import { fetchItineraries } from '../../Components/Redux/itineraries/itineraryActions'
 
 import ActivityGallerySmall from '../Activities/ActivityGallerySmall'
 

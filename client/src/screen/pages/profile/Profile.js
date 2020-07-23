@@ -17,8 +17,8 @@ import ImageHeader from '../../Headers/ImageHeader'
 import UserItinerariesSmall from '../../Itineraries/UserItinerariesSmall'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { fetchCities } from '../../../store/actions/cityActions'
-import { fetchItineraries } from '../../../store/actions/itineraryActions'
+import { fetchCities } from '../../../Components/Redux/cities/cityActions'
+import { fetchItineraries } from '../../../Components/Redux/itineraries/itineraryActions'
 
 const useStyles = makeStyles(theme => ({
   container: {

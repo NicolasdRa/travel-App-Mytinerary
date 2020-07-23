@@ -6,14 +6,17 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   Typography
 } from '@material-ui/core'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
-import { signupUser } from '../../store/actions/authActions'
-import { clearErrors } from '../../store/actions/errorActions'
+import { signupUser } from '../../Components/Redux/auth/authActions'
+import { clearErrors } from '../../Components/Redux/error/errorActions'
+import {
+  openSignupForm,
+  closeSignupForm
+} from '../../Components/Redux/signupForm/signupFormActions'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'react-uuid'
 import { Alert, AlertTitle } from '@material-ui/lab'
@@ -53,9 +56,8 @@ const styles = theme => ({
 
 class Signup extends Component {
   state = {
-    open: false,
-    // fullWidth: true,
-    // maxWidth: 'sm',
+    fullWidth: true,
+    maxWidth: 'sm',
     firstName: '',
     lastName: '',
     userName: '',
@@ -70,7 +72,7 @@ class Signup extends Component {
     const { errors } = this.props
     if (errors !== prevProps.errors)
       if (errors.id === 'SIGNUP_FAIL') {
-        // Check for login Errors
+        // Check for signup Errors
         this.setState({ msg: errors.msg.msg })
       } else {
         this.setState({ msg: null })
@@ -84,9 +86,7 @@ class Signup extends Component {
   }
 
   handleClose = () => {
-    this.setState({
-      open: false
-    })
+    this.props.closeSignupForm()
   }
 
   handleSubmit = e => {
@@ -107,26 +107,18 @@ class Signup extends Component {
 
   clearState = e => {
     e.preventDefault()
-    // this.setState({
-    //   [e.target.id]: ''
-    // })
-  }
-
-  handleToggle = () => {
     this.setState({
-      open: !this.setState.open
+      [e.target.id]: ''
     })
   }
 
   render () {
     const { classes } = this.props
     const errors = this.state.msg
-    const { open } = this.state
+    const open = this.props.setOpen
 
     const handleClickOpen = () => {
-      this.setState({
-        open: true
-      })
+      this.props.openSignupForm()
     }
 
     return (
@@ -183,6 +175,7 @@ class Signup extends Component {
                     </Box>
                   ))
                 : null}
+
               <TextField
                 required
                 autoFocus
@@ -220,12 +213,10 @@ class Signup extends Component {
                 fullWidth
                 className={classes.input_field}
               />
-              <DialogContentText className={classes.text}>
-                <Typography variant='body2'>
-                  By proceeding you agree to Mytinerary’s Privacy Policy, User
-                  Agreement and T&Cs.
-                </Typography>
-              </DialogContentText>
+              <Typography variant='body2' className={classes.text}>
+                By proceeding you agree to Mytinerary’s Privacy Policy, User
+                Agreement and T&Cs.
+              </Typography>
             </DialogContent>
             <DialogActions className={classes.btns}>
               <Button onClick={this.handleClose} color='primary'>
@@ -247,14 +238,17 @@ const mapStateToProps = state => {
     user: state.user,
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
-    errors: state.errors
+    errors: state.errors,
+    setOpen: state.signupForm.setOpen
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     signupUser: user => dispatch(signupUser(user)),
-    clearErrors: () => dispatch(clearErrors())
+    clearErrors: () => dispatch(clearErrors()),
+    openSignupForm: () => dispatch(openSignupForm()),
+    closeSignupForm: () => dispatch(closeSignupForm())
   }
 }
 

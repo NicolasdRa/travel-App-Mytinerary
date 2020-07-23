@@ -1,4 +1,4 @@
-import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from './types'
+import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 // gets cities from server/DB
 export const fetchCities = () => async dispatch => {

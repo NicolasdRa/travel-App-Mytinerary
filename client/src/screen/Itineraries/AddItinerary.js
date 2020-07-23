@@ -21,8 +21,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import { addItinerary } from '../../store/actions/itineraryActions'
-import { clearErrors } from '../../store/actions/errorActions'
+import { addItinerary } from '../../Components/Redux/itineraries/itineraryActions'
+import { clearErrors } from '../../Components/Redux/error/errorActions'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({

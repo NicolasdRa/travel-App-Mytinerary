@@ -1,4 +1,4 @@
-import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../actions/types'
+import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 const initialState = {
   cities: null,

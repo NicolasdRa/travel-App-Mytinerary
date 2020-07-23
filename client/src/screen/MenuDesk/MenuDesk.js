@@ -3,8 +3,8 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logOutUser } from '../../store/actions/authActions'
-import { logOutAll } from '../../store/actions/authActions'
+import { logOutUser, logOutAll } from '../../Components/Redux/auth/authActions'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
