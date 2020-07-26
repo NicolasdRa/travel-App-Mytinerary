@@ -11,8 +11,11 @@ export default createMuiTheme({
 
     common: {
       beige: '#BFA6A2',
+      beigeLight: '#efebe9',
       blue: '#0092FF',
-      green: '#4caf50'
+      green: '#4caf50',
+      chalk: '#fafafa',
+      orangeLight: '#fbe9e7'
     }
   },
   typography: {

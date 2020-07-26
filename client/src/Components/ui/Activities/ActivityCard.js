@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     margin: '0.2rem',
-    width: '100%'
+    width: '100%',
+    maxWidth: '20rem'
     // padding: '.6rem .6rem 0 .6rem'
   },
 

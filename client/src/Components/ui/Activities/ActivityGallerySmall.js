@@ -10,8 +10,6 @@ const useStyles = makeStyles(() => ({
     flex: '0 1 auto',
     flexDirection: 'row',
     width: 'auto',
-    /* height: fit-content; */
-    /* z-index: 5; */
     overflowX: 'auto'
   }
 }))

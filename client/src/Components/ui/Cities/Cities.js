@@ -1,28 +1,64 @@
 import React from 'react'
-import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  TextField,
+  Typography,
+  Paper
+} from '@material-ui/core'
 import { connect } from 'react-redux'
 import { fetchCities } from '../../Redux/cities/cityActions'
 import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
 import CityGallery from './CityGallery'
 import { withStyles } from '@material-ui/core/styles'
+import ListingHeader from '../Headers/ListingHeader'
 
 const styles = theme => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    justifySelf: 'center',
-    width: '100%'
+    justifySelf: 'center'
+  },
+
+  searchbarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.common.beigeLight,
+    opacity: '1',
+    // borderStyle: 'solid',
+    // borderColor: theme.palette.primary.light,
+    // border: '1px',
+    borderRadius: '5px',
+    padding: '1rem 1.5rem',
+    margin: '-.2rem -.5rem 0 -.5rem'
+  },
+
+  searchBarTitle: {
+    color: theme.palette.primary.main,
+    fontSize: '1rem',
+    fontWeight: '300',
+    textAlign: 'left',
+    margin: '.5rem .5rem .7rem .5rem'
   },
 
   searchBar: {
-    margin: '0.2rem 0 0.2rem 0',
-    width: '95%'
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: '8px'
   },
 
-  text: {
-    margin: '1rem 0 .5rem 1rem',
+  subtitle: {
+    margin: '1.7rem auto .5rem 1.5rem',
     textAlign: 'start'
   },
+
+  galleryContainer: {
+    display: 'flex',
+    width: 'auto',
+    overflowX: 'auto'
+  },
+
   loader: {
     display: 'flex',
     flexDirection: 'column',
@@ -65,25 +101,43 @@ class Cities extends React.Component {
         })
       ]
 
+      function generateRandomInteger (min, max) {
+        return Math.floor(min + Math.random() * (max + 1 - min))
+      }
+
+      const randomNumber = generateRandomInteger(0, cities.length)
+      const city =
+        filteredCities !== undefined || filteredCities !== null
+          ? filteredCities[0]
+          : cities[0]
+
       return (
         <Box>
           <Box className={classes.container}>
-            <form onSubmit={this.handleSubmit}>
-              <TextField
-                id='outlined-helperText'
-                label='Search City..'
-                defaultValue=''
-                variant='outlined'
-                onChange={this.handleChange}
-                color='primary'
-                className={classes.searchBar}
-              />
-            </form>
-            <Typography className={classes.text}>
+            <ListingHeader city={city} className={classes.header} />
+            <Paper elevation={2} className={classes.searchbarContainer}>
+              <Typography className={classes.searchBarTitle}>
+                Choose your destination
+              </Typography>
+              <form onSubmit={this.handleSubmit}>
+                <TextField
+                  id='outlined-helperText'
+                  label='Search City..'
+                  defaultValue=''
+                  variant='outlined'
+                  onChange={this.handleChange}
+                  color='primary'
+                  className={classes.searchBar}
+                />
+              </form>
+            </Paper>
+            <Typography variant='subtitle2' className={classes.subtitle}>
               Most popular Cities
             </Typography>
           </Box>
-          <CityGallery cities={filteredCities} />
+          <Box className={classes.galleryContainer}>
+            <CityGallery cities={filteredCities} />
+          </Box>
         </Box>
       )
     } else {

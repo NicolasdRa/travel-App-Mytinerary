@@ -20,7 +20,12 @@ function TabPanel (props) {
       {...other}
     >
       {value === index && (
-        <Box style={{ padding: '0.5rem' }} p={3}>
+        <Box
+          style={{
+            padding: '1rem'
+          }}
+          p={3}
+        >
           {children}
         </Box>
       )}
@@ -59,7 +64,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     flex: '0 0 auto',
-    width: '100%'
+    width: '100%',
+    margin: '0 1rem'
   }
 }))
 

@@ -5,10 +5,29 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   gallery: {
+    // display: 'flex',
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
+    // margin: '0 1rem 3rem 1rem',
+
+    position: 'relative',
     display: 'flex',
+    flex: '0 1 auto',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: '3rem'
+    width: 'auto',
+    overflowX: 'auto'
+
+    // [theme.breakpoints.up('sm')]: {
+    //   margin: '1rem 3rem'
+    // },
+
+    // [theme.breakpoints.up('md')]: {
+    //   margin: '1rem 5rem'
+    // }
+
+    // [theme.breakpoints.up('lg')]: {
+    //   width: '30em'
+    // }
   }
 }))
 
