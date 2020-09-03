@@ -1,14 +1,16 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import ItineraryCard from './ItineraryCard'
+import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  itinerary_gallery: {
+  gallery: {
+    postion: 'relative',
     display: 'flex',
+    flex: '0 1 auto',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    margin: '.5rem .5rem 4rem .5rem'
+    width: 'auto',
+    overflowX: 'auto'
   }
 }))
 
@@ -18,7 +20,7 @@ const ItineraryGallery = props => {
 
   if (itineraries.length > 0) {
     return (
-      <div className={classes.itinerary_gallery}>
+      <div className={classes.gallery}>
         {itineraries.map(itinerary => (
           <ItineraryCard itinerary={itinerary} key={itinerary._id} />
         ))}

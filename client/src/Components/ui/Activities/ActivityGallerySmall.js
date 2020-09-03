@@ -8,7 +8,6 @@ const useStyles = makeStyles(() => ({
     position: 'relative',
     display: 'flex',
     flex: '0 1 auto',
-    flexDirection: 'row',
     width: 'auto',
     overflowX: 'auto'
   }

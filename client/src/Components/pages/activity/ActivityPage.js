@@ -1,5 +1,4 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import {
   Avatar,
   Box,
@@ -15,6 +14,7 @@ import CreateIcon from '@material-ui/icons/Create'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   container: {

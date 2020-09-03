@@ -1,14 +1,18 @@
 const mongoose = require('mongoose')
+
+// Schema
 const itinerarySchema = new mongoose.Schema({
   city: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   },
   title: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   },
   img: {
     type: String,
@@ -24,7 +28,8 @@ const itinerarySchema = new mongoose.Schema({
   },
   price: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   category: {
     type: String,
@@ -33,7 +38,8 @@ const itinerarySchema = new mongoose.Schema({
 
   details: {
     type: String,
-    required: false
+    required: false,
+    trim: true
   },
 
   activities: [
@@ -59,7 +65,6 @@ const itinerarySchema = new mongoose.Schema({
   }
 })
 
-// Hint: each itinerary should have a title, a profile picture(URL), a duration, a price and category. Try to think about the most suitable data type for each of these parameters.
-
-//name of module is the singular version (itinerary) of the database name (itinerary)
-module.exports = mongoose.model('itinerary', itinerarySchema)
+// Model
+const Itinerary = mongoose.model('Itinerary', itinerarySchema)
+module.exports = Itinerary

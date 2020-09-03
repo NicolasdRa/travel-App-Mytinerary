@@ -31,12 +31,12 @@ export const fetchItineraries = () => async dispatch => {
 export const addItinerary = () => async dispatch => {
   try {
     const res = await axios.post('http://localhost:5000/api/itineraries/add')
+    const data = await res.json()
+    console.log(data)
 
-    const newItinerary = await res.json()
-    console.log(newItinerary)
     dispatch({
       type: ADD_ITINERARY,
-      payload: newItinerary
+      payload: data
     })
   } catch (error) {
     dispatch({

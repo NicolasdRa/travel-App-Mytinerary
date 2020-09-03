@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import TopNav from './Components/ui/TopNav/TopNav'
 import Signup from './Components/ui/Signup/Signup'
@@ -17,6 +18,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import theme from './Components/theme/Theme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+
+import { fetchCities } from './Components/Redux/cities/cityActions'
+import { fetchItineraries } from './Components/Redux/itineraries/itineraryActions'
 
 const useStyles = makeStyles(theme => ({
   topNav: {
@@ -37,9 +41,15 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const App = () => {
+const App = ({ fetchCities, fetchItineraries }) => {
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
+
+  // fetches data from DB
+  useEffect(() => {
+    fetchCities()
+    fetchItineraries()
+  }, [])
 
   return (
     <BrowserRouter>
@@ -67,4 +77,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(null, { fetchCities, fetchItineraries })(App)

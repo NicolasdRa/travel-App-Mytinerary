@@ -16,7 +16,7 @@ import CreateIcon from '@material-ui/icons/Create'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { fetchCities } from '../../Redux/cities/cityActions'
 import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
 
@@ -174,21 +174,20 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function Profile () {
+const Profile = () => {
   const classes = useStyles()
   const user = useSelector(state => state.auth.user)
   const cities = useSelector(state => state.cities.cities)
   const itineraries = useSelector(state => state.itineraries.itineraries)
+  const dispatch = useDispatch()
 
-  console.log(user)
+  // if (cities === null) {
+  //   dispatch(fetchCities())
+  // }
 
-  if (cities === null) {
-    fetchCities()
-  }
-
-  if (itineraries === null) {
-    fetchItineraries()
-  }
+  // if (itineraries === null) {
+  //   dispatch(fetchItineraries())
+  // }
 
   if (user != null) {
     const { userName, firstName, lastName, details, img, email, likes } = user
@@ -277,3 +276,5 @@ export default function Profile () {
     )
   }
 }
+
+export default Profile

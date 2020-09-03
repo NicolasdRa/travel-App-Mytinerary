@@ -1,133 +1,158 @@
-import React, { Component } from 'react'
-import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import {
+  Grid,
+  CircularProgress,
+  TextField,
+  Typography,
+  Paper
+} from '@material-ui/core'
 import ActivityGallery from './ActivityGallery'
-import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
-import { fetchCities } from '../../Redux/cities/cityActions'
+import ListingHeader from '../Headers/ListingHeader'
+import { makeStyles } from '@material-ui/core/styles'
 
-import { withStyles } from '@material-ui/core/styles'
-
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   container: {
+    paddingBottom: '3rem'
+  },
+
+  searchbarContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifySelf: 'center',
-    width: '100%'
+    justifyContent: 'center',
+    backgroundColor: theme.palette.common.beigeLight,
+    padding: '1rem 1rem',
+    margin: '-.5rem 0 0 0'
+  },
+
+  searchBarTitle: {
+    color: theme.palette.primary.main,
+    fontSize: '.9rem',
+    fontWeight: '500',
+    textAlign: 'left',
+    margin: '0 0 .5rem .5rem'
   },
 
   searchBar: {
-    margin: '0.2rem 0 0.2rem 0',
-    width: '95%'
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: '5px'
   },
 
-  text: {
-    margin: '1rem 0 .5rem 1rem',
+  subtitle: {
+    margin: '2rem auto .5rem 1.5rem',
     textAlign: 'start'
   },
+
   loader: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: '5rem 5rem'
   }
-})
+}))
 
-class Activities extends Component {
-  state = {
-    filteredItineraries: null,
-    string: '',
-    activites: ''
-  }
-
+const Activities = () => {
   // fetches itineraries & cities from DB
-  componentDidMount () {
-    this.props.fetchItineraries()
-  }
+  const classes = useStyles()
 
-  handleChange = e => {
+  const itineraries = useSelector(state => state.itineraries.itineraries)
+
+  const [string, setString] = useState('')
+  const [city, setCity] = useState(null)
+
+  const handleChange = e => {
     // updates string in state
-    this.setState({
-      string: e.target.value.toLowerCase()
-    })
+    setString(e.target.value.toLowerCase())
   }
 
-  handleSubmit = e => {
-    e.preventDefault()
-  }
-
-  render () {
-    const { classes } = this.props
-    const itineraries = this.props.itineraries
-
-    // filter function
-    if (itineraries !== null) {
-      let activitiesArray = []
-
-      itineraries.forEach(itinerary => {
-        if (itinerary.activities.length > 0) {
-          activitiesArray.push(itinerary.activities)
-        }
+  // filter function
+  let filteredActivitiesArray = []
+  if (itineraries !== null) {
+    let filteredItineraries = [
+      ...itineraries.filter(itinerary => {
+        return itinerary.city.toLowerCase().startsWith(string)
       })
+    ]
 
-      let activities = activitiesArray.flat()
+    filteredItineraries.forEach(itinerary => {
+      if (itinerary.activities.length > 0) {
+        filteredActivitiesArray.push(itinerary.activities)
+      }
+    })
 
-      // .then(
-      //   this.setState({
-      //     activities: activities
-      //   })
-      // )
+    let activities = filteredActivitiesArray.flat()
 
-      return (
-        <Box>
-          <Box className={classes.container}>
-            <form onSubmit={this.handleSubmit}>
-              <TextField
-                id='outlined-helperText'
-                label='Search Activities by City Name..'
-                defaultValue=''
-                variant='outlined'
-                onChange={this.handleChange}
-                color='primary'
-                className={classes.searchBar}
-              />
-            </form>
-            <Typography className={classes.text}>
-              Most popular Activities
+    function generateRandomInteger (min, max) {
+      return Math.floor(min + Math.random() * (max + 1 - min))
+    }
+
+    const randomNumber = generateRandomInteger(0, activities.length - 1)
+
+    let headerActivity = null
+    city === null
+      ? (headerActivity = itineraries[0].activities[randomNumber])
+      : (headerActivity = activities[0])
+    console.log(randomNumber)
+    console.log(activities)
+    return (
+      <Grid
+        container
+        direction='column'
+        // justify='center'
+        alignItems='center'
+        className={classes.container}
+      >
+        <Grid item xs={12} container direction='column' justify='center'>
+          <ListingHeader data={headerActivity} className={classes.header} />
+          <Paper
+            elevation={2}
+            variant='outlined'
+            className={classes.searchbarContainer}
+          >
+            <Typography className={classes.searchBarTitle}>
+              Want to have fun?
             </Typography>
-          </Box>
+
+            <TextField
+              id='outlined-helperText'
+              label='Search activities by City Name..'
+              defaultValue=''
+              variant='outlined'
+              onChange={handleChange}
+              color='primary'
+              className={classes.searchBar}
+            />
+          </Paper>
+        </Grid>
+        <Grid container item xs={12}>
+          <Typography variant='subtitle2' className={classes.subtitle}>
+            Most popular Activities
+          </Typography>
           <ActivityGallery
-            string={this.state.string}
-            activities={activities.sort((a, b) => (a.likes > b.likes ? -1 : 1))}
+            string={string}
+            activities={activities.sort((a, b) => b.likes - a.likes)}
 
             //    {filteredItineraries
             //   .map(filteredItineraries.activities)
             //   .sort((a, b) => (a.likes > b.likes ? -1 : 1))}
           />
-        </Box>
-      )
-    } else {
-      return (
-        <div className={classes.loader}>
-          <Typography>Loading activities...</Typography>
-          <CircularProgress color='secondary' />
-        </div>
-      )
-    }
+        </Grid>
+      </Grid>
+    )
+  } else {
+    return (
+      <Grid
+        container
+        className={classes.loader}
+        direction='column'
+        justify='center'
+        alignjustify='center'
+      >
+        <Typography>Loading activities...</Typography>
+        <CircularProgress color='secondary' />
+      </Grid>
+    )
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    itineraries: state.itineraries.itineraries
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchItineraries: () => dispatch(fetchItineraries()),
-    fetchCities: () => dispatch(fetchCities())
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(Activities))
+export default Activities

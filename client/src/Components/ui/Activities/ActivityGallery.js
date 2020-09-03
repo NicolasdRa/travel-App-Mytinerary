@@ -6,11 +6,13 @@ import ActivityCard from './ActivityCard'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  activity_gallery: {
+  gallery: {
+    position: 'relative',
     display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: '3rem'
+    flex: '0 1 auto',
+    width: 'auto',
+    height: 'auto',
+    overflowX: 'auto'
   }
 }))
 
@@ -20,7 +22,7 @@ const ActivityGallery = props => {
 
   if (activities.length > 0) {
     return (
-      <div className={classes.activity_gallery}>
+      <div className={classes.gallery}>
         {activities.map(activity => (
           <ActivityCard activity={activity} key={activity._id} />
         ))}

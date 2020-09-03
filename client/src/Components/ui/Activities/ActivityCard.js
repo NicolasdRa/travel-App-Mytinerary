@@ -1,90 +1,92 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import clsx from 'clsx'
-import { red } from '@material-ui/core/colors'
-
 import {
   Avatar,
+  Box,
   Button,
-  Collapse,
-  Typography,
-  IconButton,
   Card,
+  CardHeader,
   CardMedia,
   CardContent,
-  CardActions
+  CardActions,
+  IconButton,
+  Typography
 } from '@material-ui/core'
 import FavoriteIcon from '@material-ui/icons/Favorite'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
-
-import { Link } from 'react-router-dom'
-
-import { connect } from 'react-redux'
-import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    margin: '0.2rem',
-    width: '100%',
-    maxWidth: '20rem'
-    // padding: '.6rem .6rem 0 .6rem'
+    margin: '0.3rem',
+    minWidth: '12rem',
+    maxWidth: '15rem',
+    overflow: 'visible'
   },
 
-  content: {
+  cardHeader: {
+    paddingBottom: '13px'
+  },
+
+  title: {
+    textAlign: 'left',
+    fontSize: '1rem',
+    fontWeight: '500'
+  },
+
+  subheader: {
+    textAlign: 'left',
+    fontSize: '.8rem'
+  },
+
+  media: {
+    height: 0,
+    paddingTop: '56.25%' // 16:9
+  },
+
+  cardContent: {
     display: 'flex',
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    paddingBottom: '0',
+    paddingTop: '13px'
   },
 
-  info: {
-    flex: '1 0 auto',
-    flexDirection: 'row',
-    textAlign: 'start',
-    padding: '16px',
-    '&:last-child': { paddingBottom: '8px' }
+  avatar: {
+    backgroundColor: theme.palette.secondary.main,
+    height: '1rem',
+    width: '1rem',
+    alignSelf: 'flex-start'
   },
 
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    minWidth: '60%'
-  },
-
-  image: {
-    justifyContent: 'flex-end',
-    minWidth: '40%',
-    maxWidth: '40%'
-    // borderRadius: 10,
-    // boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9'
-  },
-
-  actions: {
-    display: 'flex',
-    padding: '2px'
-  },
-
-  author_info: {
+  authorInfo: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
 
-  extra_info: {
+  authorName: {
+    margin: '0 0 0 5px',
+    fontSize: '.7rem'
+  },
+
+  additionalInfo: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: '8px'
+    flexDirection: 'column',
+    alignItems: 'flex-start'
+    // padding: '5px 5px 0 0'
   },
 
   duration: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '.7rem'
+    // marginRight: '8px'
   },
 
   price: {
@@ -92,63 +94,36 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: '0 0 0 1rem'
-  },
-
-  action_icons: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: '10rem',
-    marginLeft: 'auto'
+    margin: '0',
+    fontSize: '.7rem'
   },
 
   icons: {
-    height: '1rem',
-    width: '1rem',
-    fill: 'grey'
+    height: '.7rem',
+    width: '.7rem',
+    fill: 'grey',
+    marginRight: '3px'
   },
 
-  avatar: {
-    backgroundColor: red[500],
-    margin: '0 0.8rem',
-    width: '1.5rem',
-    height: '1.5rem'
-  },
-
-  author_name: {
-    alignSelf: 'center'
-  },
-
-  likes_btn: {
-    marginRight: '22%',
-    paddingLeft: '14px'
-  },
-
-  expand: {
-    transform: 'rotate(0deg)',
-    // marginLeft: '.5rem',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest
-    })
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)'
-  },
-
-  cardContent_Gallery: {
+  cardActions: {
     display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'nowrap',
-    padding: '.2rem',
-    '&:last-child': { paddingBottom: '16px' }
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // paddingTop: 0,
+    paddingBottom: 0
+  },
+
+  textBtn: { margin: '0 3px 5px 0', fontSize: '.7rem' },
+
+  likesBtn: {
+    paddingLeft: '8px'
   }
 }))
 
 const ActivityCard = props => {
   const classes = useStyles()
-  const [expanded, setExpanded] = React.useState(false)
 
+  const activity = props.activity
   const {
     city,
     category,
@@ -160,62 +135,23 @@ const ActivityCard = props => {
     likes
   } = props.activity
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
-  }
-
   return (
     <Card className={classes.root}>
-      <div className={classes.content}>
-        <div className={classes.details}>
-          <CardContent className={classes.info}>
-            <div className={classes.main_info}>
-              <Typography variant='overline' color='textSecondary'>
-                {city} - {category}
-              </Typography>
-              <Typography component='h6' variant='h6'>
-                {title}
-              </Typography>
-              <Typography variant='body2' color='textSecondary'>
-                {hashtags}
-              </Typography>
-            </div>
-            <div
-              className={classes.extra_info}
-              style={{
-                padding: '0'
-              }}
-            >
-              <div className={classes.duration}>
-                <AccessTimeIcon className={classes.icons} />
-                <Typography variant='body2' color='textSecondary' component='p'>
-                  {duration}hs
-                </Typography>
-              </div>
-              <div className={classes.price}>
-                <EuroIcon className={classes.icons} />
-                <Typography variant='body2' color='textSecondary' component='p'>
-                  {price}
-                </Typography>
-              </div>
-            </div>
-            {/* <Divider /> */}
-          </CardContent>
-        </div>
-        <CardMedia className={classes.image} image={img} title={title} />
-      </div>
-      <CardActions
-        disableSpacing
+      <CardHeader
         classes={{
-          root: classes.actions
+          root: classes.cardHeader,
+          title: classes.title,
+          subheader: classes.subheader,
+          action: classes.additionalInfo
         }}
-      >
-        <div className={classes.author_info}>
-          <Avatar
-            // aria-label='recipe'
-            // variant='rounded'
-            className={classes.avatar}
-          >
+        title={title}
+        subheader={city}
+        //action={}
+      />
+      <CardMedia className={classes.media} image={img} />
+      <CardContent className={classes.cardContent}>
+        <Box className={classes.authorInfo}>
+          <Avatar className={classes.avatar}>
             {/* (get from author_id) */}
             Author Name
           </Avatar>
@@ -223,85 +159,46 @@ const ActivityCard = props => {
             variant='body2'
             color='textSecondary'
             component='p'
-            className={classes.author_name}
+            className={classes.authorName}
           >
-            {/* ..still to develop this variable */}
+            {/* {..still to develop this variable} */}
             by John Doe
           </Typography>
-        </div>
-        <div className={classes.action_icons}>
-          <IconButton
-            aria-label='add to favorites'
-            className={classes.likes_btn}
-          >
-            <FavoriteIcon />
-            <Typography variant='body2' color='textSecondary' component='p'>
-              {likes}
+        </Box>
+        <Box className={classes.additionalInfo}>
+          <Box className={classes.duration}>
+            <AccessTimeIcon className={classes.icons} />
+            <Typography variant='caption' color='textSecondary' component='p'>
+              {duration}hs
             </Typography>
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label='show more'
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </div>
-      </CardActions>
-      <Collapse in={expanded} timeout='auto' unmountOnExit>
-        <CardContent
-          classes={{
-            root: classes.cardContent_Gallery
-          }}
+          </Box>
+          <Box className={classes.price}>
+            <EuroIcon className={classes.icons} />
+            <Typography variant='caption' color='textSecondary' component='p'>
+              {price}
+            </Typography>
+          </Box>
+        </Box>
+      </CardContent>
+      <CardActions className={classes.cardActions}>
+        <IconButton aria-label='add to favorites' className={classes.likesBtn}>
+          <FavoriteIcon />
+          <Typography variant='body2' color='textSecondary' component='p'>
+            {likes.length}
+          </Typography>
+        </IconButton>
+        <Button
+          size='small'
+          color='primary'
+          component={Link}
+          to={'/activitypage/' + title}
+          className={classes.textBtn}
         >
-          <Button
-            size='small'
-            color='secondary'
-            component={Link}
-            to={'/activitypage/' + title}
-            className={classes.text_btn}
-          >
-            VIEW MORE
-          </Button>
-          {/* activities={props.itinerary.activities.sort((a, b) =>
-            a.likes > b.likes ? -1 : 1
-            )} */}
-
-          {/* <div>
-            <form>
-              <TextField
-                id='outlined-helperText'
-                label='Leave a comment'
-                defaultValue=''
-                variant='outlined'
-                // onChange={}
-                // onSubmit={}
-                color='primary'
-                style={{ margin: '1rem 0 2.5rem 0', width: '95%' }}
-              />
-            </form>
-          </div> */}
-        </CardContent>
-      </Collapse>
+          View more
+        </Button>
+      </CardActions>
     </Card>
   )
 }
 
-const mapStateToProps = state => {
-  return {
-    cities: state.cities.cities,
-    itineraries: state.itineraries.itineraries,
-    string: state.string
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchItineraries: cities => dispatch(fetchItineraries(cities))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ActivityCard)
+export default ActivityCard

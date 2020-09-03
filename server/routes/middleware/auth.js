@@ -18,4 +18,5 @@ const auth = async (req, res, next) => {
     res.status(400).send('Invalid credentials to access this resource')
   }
 }
+
 module.exports = auth

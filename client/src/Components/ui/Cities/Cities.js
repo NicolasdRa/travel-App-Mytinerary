@@ -1,23 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import {
-  Box,
+  Grid,
   CircularProgress,
   TextField,
   Typography,
   Paper
 } from '@material-ui/core'
-import { connect } from 'react-redux'
-import { fetchCities } from '../../Redux/cities/cityActions'
-import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
 import CityGallery from './CityGallery'
-import { withStyles } from '@material-ui/core/styles'
 import ListingHeader from '../Headers/ListingHeader'
+import { makeStyles } from '@material-ui/core/styles'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifySelf: 'center'
+    paddingBottom: '3rem'
   },
 
   searchbarContainer: {
@@ -25,38 +21,27 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: theme.palette.common.beigeLight,
-    opacity: '1',
-    // borderStyle: 'solid',
-    // borderColor: theme.palette.primary.light,
-    // border: '1px',
-    borderRadius: '5px',
-    padding: '1rem 1.5rem',
-    margin: '-.2rem -.5rem 0 -.5rem'
+    padding: '1rem 1rem',
+    margin: '-.5rem 0 0 0'
   },
 
   searchBarTitle: {
     color: theme.palette.primary.main,
-    fontSize: '1rem',
-    fontWeight: '300',
+    fontSize: '.9rem',
+    fontWeight: '500',
     textAlign: 'left',
-    margin: '.5rem .5rem .7rem .5rem'
+    margin: '0 0 .5rem .5rem'
   },
 
   searchBar: {
     width: '100%',
     backgroundColor: 'white',
-    borderRadius: '8px'
+    borderRadius: '5px'
   },
 
   subtitle: {
-    margin: '1.7rem auto .5rem 1.5rem',
+    margin: '2rem auto .5rem 1.5rem',
     textAlign: 'start'
-  },
-
-  galleryContainer: {
-    display: 'flex',
-    width: 'auto',
-    overflowX: 'auto'
   },
 
   loader: {
@@ -64,109 +49,92 @@ const styles = theme => ({
     flexDirection: 'column',
     margin: '5rem 5rem'
   }
-})
+}))
 
-class Cities extends React.Component {
-  state = {
-    filteredCities: null,
-    string: ''
-  }
+const Cities = () => {
+  const classes = useStyles()
 
-  // fetches cities from DB
-  componentDidMount () {
-    this.props.fetchCities()
-    this.props.fetchItineraries()
-  }
+  const cities = useSelector(state => state.cities.cities)
 
-  handleChange = e => {
+  const [string, setString] = useState('')
+  const [city, setCity] = useState(null)
+
+  const handleChange = e => {
     // updates string in state
-    this.setState({
-      string: e.target.value.toLowerCase()
-    })
+    setString(e.target.value.toLowerCase())
   }
 
-  handleSubmit = e => {
-    e.preventDefault()
-  }
+  // filter function
+  let filteredCities = []
+  if (cities !== null) {
+    filteredCities = [
+      ...cities.filter(city => {
+        return city.name.toLowerCase().startsWith(string)
+      })
+    ]
 
-  render () {
-    const { classes } = this.props
-    const { cities } = this.props
-
-    // filter function
-    if (cities !== null) {
-      let filteredCities = [
-        ...cities.filter(city => {
-          return city.name.toLowerCase().startsWith(this.state.string)
-        })
-      ]
-
-      function generateRandomInteger (min, max) {
-        return Math.floor(min + Math.random() * (max + 1 - min))
-      }
-
-      const randomNumber = generateRandomInteger(0, cities.length)
-      const city =
-        filteredCities !== undefined || filteredCities !== null
-          ? filteredCities[0]
-          : cities[0]
-
-      return (
-        <Box>
-          <Box className={classes.container}>
-            <ListingHeader city={city} className={classes.header} />
-            <Paper elevation={2} className={classes.searchbarContainer}>
-              <Typography className={classes.searchBarTitle}>
-                Choose your destination
-              </Typography>
-              <form onSubmit={this.handleSubmit}>
-                <TextField
-                  id='outlined-helperText'
-                  label='Search City..'
-                  defaultValue=''
-                  variant='outlined'
-                  onChange={this.handleChange}
-                  color='primary'
-                  className={classes.searchBar}
-                />
-              </form>
-            </Paper>
-            <Typography variant='subtitle2' className={classes.subtitle}>
-              Most popular Cities
-            </Typography>
-          </Box>
-          <Box className={classes.galleryContainer}>
-            <CityGallery cities={filteredCities} />
-          </Box>
-        </Box>
-      )
-    } else {
-      return (
-        <Box className={classes.loader}>
-          <Typography>Loading cities...</Typography>
-          <CircularProgress color='secondary' />
-        </Box>
-      )
+    function generateRandomInteger (min, max) {
+      return Math.floor(min + Math.random() * (max + 1 - min))
     }
+
+    const randomNumber = generateRandomInteger(0, cities.length - 1)
+    let headerCity = null
+    city === null
+      ? (headerCity = cities[randomNumber])
+      : (headerCity = filteredCities[0])
+    console.log(randomNumber)
+
+    return (
+      <Grid
+        container
+        direction='column'
+        // justify='center'
+        alignItems='center'
+        className={classes.container}
+      >
+        <Grid item xs={12} container direction='column' justify='center'>
+          <ListingHeader data={headerCity} className={classes.header} />
+          <Paper
+            elevation={2}
+            variant='outlined'
+            className={classes.searchbarContainer}
+          >
+            <Typography className={classes.searchBarTitle}>
+              Choose your destination
+            </Typography>
+            <TextField
+              id='outlined-helperText'
+              label='Search City..'
+              defaultValue=''
+              variant='outlined'
+              onChange={handleChange}
+              color='primary'
+              className={classes.searchBar}
+            />
+          </Paper>
+        </Grid>
+        <Grid container item xs={12}>
+          <Typography variant='subtitle2' className={classes.subtitle}>
+            Most popular Cities
+          </Typography>
+          <CityGallery className={classes.gallery} cities={filteredCities} />
+        </Grid>
+      </Grid>
+    )
+  } else {
+    return (
+      <Grid
+        container
+        className={classes.loader}
+        direction='column'
+        justify='center'
+        alignjustify='center'
+      >
+        <Typography>Loading cities...</Typography>
+        <CircularProgress color='secondary' />
+      </Grid>
+    )
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    cities: state.cities.cities,
-    itineraries: state.itineraries.itineraries,
-    string: state.string
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchCities: () => dispatch(fetchCities()),
-    fetchItineraries: () => dispatch(fetchItineraries())
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(Cities))
+export default Cities

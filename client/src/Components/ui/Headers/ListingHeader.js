@@ -4,10 +4,10 @@ import { Box, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   image: {
-    backgroundImage: props => 'url(' + props.city.img + ')',
+    backgroundImage: props => 'url(' + props.data.img + ')',
     backgroundPosition: 'center',
     width: '100%',
-    height: '10rem',
+    height: '16vh',
     backgroundSize: 'cover',
     borderRadius: '5px',
 
@@ -19,10 +19,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
-  title: {
+  textArea: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     color: 'white',
     padding: '1rem 1.5rem'
   }
@@ -31,12 +32,18 @@ const useStyles = makeStyles(theme => ({
 // image header for listing tabs: cities, itineraries, activities
 const ListingHeader = props => {
   const classes = useStyles(props)
-  const { city } = props
+  const { data } = props
+  console.log(data)
 
   return (
     <Box sm={12} className={classes.image}>
-      <Box className={classes.title}>
-        <Typography variant='h6'>{city.name}</Typography>
+      <Box className={classes.textArea}>
+        <Typography variant='h6'>
+          {data.name ? data.name : data.title}
+        </Typography>
+        <Typography variant='body2'>
+          {data.country ? data.country : data.city}
+        </Typography>
       </Box>
     </Box>
   )

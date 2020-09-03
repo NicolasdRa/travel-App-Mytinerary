@@ -17,9 +17,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    margin: '0.2rem',
+    margin: '0.3rem',
     minWidth: '12rem',
-    maxWidth: '15rem',
+    maxWidth: '14rem',
     overflow: 'visible',
 
     [theme.breakpoints.up('md')]: {
@@ -34,10 +34,17 @@ const useStyles = makeStyles(theme => ({
     paddinTop: 0
   },
 
+  cardImg: {
+    height: '8rem',
+    // objectFit: 'cover',
+    // minWidth: '4rem',
+    borderRadius: 2
+  },
+
   textBtn: { margin: '0 .5rem', fontSize: '.7rem' },
 
   likesBtn: {
-    margin: '0 .5rem'
+    margin: '0 auto 0 0'
   },
 
   cardContent: {
@@ -54,21 +61,26 @@ function CityCard (props) {
       <CardActionArea>
         <CardMedia
           component='img'
-          alt='Contemplative Reptile'
-          height='140'
+          alt='City Image'
+          // height='120'
           image={img}
           title={name}
+          className={classes.cardImg}
         />
         <CardContent className={classes.cardContent}>
-          <Typography component='h6' variant='h6'>
-            {name}
-          </Typography>
+          <Typography variant='subtitle2'>{name}</Typography>
           <Typography variant='body2' color='textSecondary'>
             {country}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.cardActions}>
+        <IconButton aria-label='add to favorites' className={classes.likesBtn}>
+          <FavoriteIcon />
+          <Typography variant='body2' color='textSecondary' component='p'>
+            {likes}
+          </Typography>
+        </IconButton>
         <Button
           size='small'
           color='primary'
@@ -79,12 +91,6 @@ function CityCard (props) {
         >
           View more
         </Button>
-        <IconButton aria-label='add to favorites' className={classes.likesBtn}>
-          <FavoriteIcon />
-          <Typography variant='body2' color='textSecondary' component='p'>
-            {likes}
-          </Typography>
-        </IconButton>
       </CardActions>
     </Card>
   )

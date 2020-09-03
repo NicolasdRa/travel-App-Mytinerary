@@ -2,15 +2,14 @@ import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 // gets cities from server/DB
 export const fetchCities = () => async dispatch => {
-  setLoading()
-
   try {
+    setLoading()
     const res = await fetch('http://localhost:5000/api/cities/all')
-    const cities = await res.json()
-    // console.log(cities)
+    const data = await res.json()
+
     dispatch({
       type: FETCH_CITIES,
-      payload: cities
+      payload: data
     })
   } catch (error) {
     dispatch({

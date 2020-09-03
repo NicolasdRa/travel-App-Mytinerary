@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom'
 const useStyles = makeStyles({
   root: {
     flex: '0 0 auto',
-    maxwidth: '8rem',
     margin: '.3rem',
     minWidth: '8rem',
     maxWidth: '8rem',

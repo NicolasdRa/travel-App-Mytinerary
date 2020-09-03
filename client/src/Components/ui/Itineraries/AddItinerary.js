@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import {
   Box,
@@ -8,24 +8,25 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  Grid,
   IconButton,
+  Select,
   TextField,
   Typography
 } from '@material-ui/core'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
-import Select from '@material-ui/core/Select'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import { addItinerary } from '../../Redux/itineraries/itineraryActions'
 import { clearErrors } from '../../Redux/error/errorActions'
-import { withStyles } from '@material-ui/core/styles'
+import { useSelector, useDispatch } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   title: {
     margin: '1.5rem 0 0 0',
     padding: 0,
@@ -47,6 +48,16 @@ const styles = theme => ({
     textAlign: 'center'
   },
 
+  formControl: {
+    display: 'flex',
+    justifySelf: 'space-between',
+    minWidth: '30%'
+  },
+
+  // select: {
+  //   minWidth: '3rem'
+  // },
+
   submit_button: {
     display: 'flex',
     margin: '1rem 0',
@@ -57,17 +68,11 @@ const styles = theme => ({
     paddingLeft: '1rem'
   },
 
-  formControl: {
-    margin: theme.spacing(1)
-    // minWidth: 120,
-    // maxWidth: 300,
-  },
-
-  price_duration: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around'
-  },
+  // price_duration: {
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around'
+  // },
 
   photo_icon: {
     height: '3rem',
@@ -80,321 +85,255 @@ const styles = theme => ({
     right: '1.5rem',
     zIndex: '1000'
   }
-})
+}))
 
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
-}
+const AddItinerary = ({ addItinerary }) => {
+  const classes = useStyles()
+  const [open, setOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [newItinerary, setNewItinerary] = useState({
+    city: '',
+    title: '',
+    category: '',
+    price: '',
+    duration: '',
+    details: '',
+    img: ''
+  })
+  const [file, setFile] = useState(null)
+  const [error, setError] = useState(null)
+  // const [category, setCategory] = useState(null)
 
-class AddItinerary extends Component {
-  state = {
-    open: false,
-    fullWidth: true,
-    maxWidth: 'sm',
-    isAuthenticated: false,
-    msg: null,
-    newItinerary: {
-      city: '',
-      title: '',
-      img: '',
-      duration: '',
-      price: '',
-      category: [],
-      details: '',
-      activities: []
-    },
-    selectedImg: null
-  }
+  const { city, title, category, price, duration, details, img } = newItinerary
 
-  componentDidUpdate (prevProps) {
-    const { errors } = this.props
-    if (errors !== prevProps.errors)
-      if (errors.id === 'POSTING_ERROR') {
-        // Check for login Errors
-        this.setState({ msg: errors.msg.msg })
-      } else {
-        this.setState({ msg: null })
-      }
-  }
+  console.log(city)
+  console.log(title)
+  console.log(category)
+  console.log(price)
+  console.log(duration)
+  console.log(details)
 
-  handleClose = () => {
-    this.setState({
-      open: false
-    })
+  const types = ['image/png', 'image/jpeg']
+
+  const handleChange = e => {
+    const { id, value, files } = e.target
+
+    // let selectedImg
+    // files !== null ? (selectedImg = files[0]) : (selectedImg = null)
+
+    setNewItinerary(prevState => ({ ...prevState, [id]: value }))
+    // setCategory(e.target.value)
+
+    // if (selectedImg && types.includes(selectedImg.type)) {
+    //   setFile(selectedImg)
+    //   setError(null)
+    // } else {
+    //   setFile(null)
+    //   setError('Please select a valid image type (.png or .jpeg)')
+    // }
   }
 
-  handleChange = e => {
-    const { type, id, value, files } = e.target
-    const { newItinerary } = this.state
-
-    type === 'file'
-      ? this.setState({
-          selectedImg: files[0]
-        })
-      : this.setState({ ...newItinerary, [id]: value })
-  }
-
-  handleImgUpload = () => {}
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault()
-    this.handleClose()
 
-    const { newItinerary } = this.state
-    this.props.addItinerary(newItinerary)
+    const formData = new FormData()
+    formData.append('file', file)
 
-    const formData = new FormData({
-      // city,
-      // title,
-      // details,
-      // category,
-      // duration,
-      // price
-    })
-    formData.append('file', this.state.selectedImg)
-    console.log(
-      'Your Itinerary has been submitted and this image has been uploaded: ' +
-        this.state.selectedImg
-    )
+    addItinerary(formData)
   }
 
-  clearState = e => {
-    e.preventDefault()
-    this.setState({
-      [e.target.id]: ''
-    })
+  const handleClickOpen = () => {
+    setOpen(true)
   }
 
-  handleToggle = () => {
-    this.setState({
-      open: !this.setState.open
-    })
+  const handleClose = () => {
+    setOpen(false)
   }
 
-  render () {
-    const { classes } = this.props
-    const errors = this.state.msg
-    const { open } = this.state
-    const {
-      city,
-      title,
-      img,
-      duration,
-      price,
-      category,
-      details,
-      activities
-    } = this.state
+  const CategoryOptions = [
+    'Arts & Culture',
+    'Popular Attractions',
+    'Pubs & Bars',
+    'Food & Nightlife',
+    'Tours & Sightseeing',
+    'Spa & Wellness',
+    'Sports & Outdoors',
+    'Nature & Wildlife',
+    'Unique Experiences'
+  ]
+  const PriceOptions = ['€', '€€', '€€€']
+  const DurationOptions = [
+    '0,5',
+    '1',
+    '1.5',
+    '2',
+    '2.5',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '12',
+    '+ 12'
+  ]
 
-    const handleClickOpen = () => {
-      this.setState({
-        open: true
-      })
-    }
-
-    return (
-      <div>
-        <Fab
-          color='secondary'
-          aria-label='add'
-          onClick={handleClickOpen}
-          className={classes.add_btn}
-        >
-          <AddIcon />
-        </Fab>
-        <Dialog
-          //   TransitionComponent={Transition}
-          //   keepMounted
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby='form-dialog-title'
-        >
-          <form onSubmit={this.handleSubmit}>
-            <DialogTitle
-              id='form-dialog-title'
-              disableTypography
-              className={classes.title}
-            >
-              <Typography variant='body2'>Add Your New Itinerary</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                required
-                autoFocus
-                fullWidth
-                margin='dense'
-                id='city'
-                label='Itinerary City'
-                type='city'
-                autoComplete='current-city'
-                value={city}
-                onChange={this.handleChange}
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                fullWidth
-                margin='dense'
-                id='title'
-                label='Title'
-                type='title'
-                autoComplete='current-title'
-                value={title}
-                onChange={this.handleChange}
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                fullWidth
-                margin='dense'
-                id='details'
-                label='Description'
-                type='details'
-                autoComplete='current-details'
-                value={details}
-                onChange={this.handleChange}
-                className={classes.input_field}
-              />
-              <Box className={classes.price_duration}>
+  return (
+    <div>
+      <Fab
+        color='secondary'
+        aria-label='add'
+        onClick={handleClickOpen}
+        className={classes.add_btn}
+      >
+        <AddIcon />
+      </Fab>
+      <Dialog
+        //   TransitionComponent={Transition}
+        //   keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'
+      >
+        <form onSubmit={handleSubmit}>
+          <DialogTitle
+            id='form-dialog-title'
+            disableTypography
+            className={classes.title}
+          >
+            <Typography variant='body2'>Add Your New Itinerary</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              margin='dense'
+              id='city'
+              label='Itinerary City'
+              type='city'
+              autoComplete='current-city'
+              value={city}
+              onChange={handleChange}
+              className={classes.input_field}
+            />
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              margin='dense'
+              id='title'
+              label='Title'
+              type='title'
+              autoComplete='current-title'
+              value={title}
+              onChange={handleChange}
+              className={classes.input_field}
+            />
+            <Grid item container className={classes.price_duration}>
+              <Grid item xs={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='demo-simple-select-helper-label'>
-                    Category
-                  </InputLabel>
+                  <InputLabel id='category-label'>Category</InputLabel>
                   <Select
-                    labelId='demo-simple-select-helper-label'
+                    className={classes.select}
+                    labelId='category-label'
                     id='category'
                     value={category}
-                    onChange={this.handleChange}
+                    onChange={handleChange}
                   >
-                    <MenuItem value={'Arts & Culture'}>Arts & Culture</MenuItem>
-                    <MenuItem value={'Popular Attractions'}>
-                      Popular Attractions
-                    </MenuItem>
-                    <MenuItem value={'Pubs & Bars'}>Pubs & Bars</MenuItem>
-                    <MenuItem value={'Food & Nightlife'}>
-                      Food & Nightlife
-                    </MenuItem>
-                    <MenuItem value={'Tours & Sightseeing'}>
-                      Tours & Sightseeing
-                    </MenuItem>
-                    <MenuItem value={'Spa & Wellness'}>Spa & Wellness</MenuItem>
-                    <MenuItem value={'Sports & Outdoors'}>
-                      Sports & Outdoors
-                    </MenuItem>
-                    <MenuItem value={'Nature & Wildlife'}>
-                      Nature & Wildlife
-                    </MenuItem>
-                    <MenuItem value={'Unique Experiences'}>
-                      Unique Experiences
-                    </MenuItem>
+                    {CategoryOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                        {console.log(option)}
+                      </MenuItem>
+                    ))}
                   </Select>
-                  <FormHelperText>Choose category</FormHelperText>
                 </FormControl>
-
+              </Grid>
+              <Grid item xs={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='demo-simple-select-helper-label'>
-                    Price
-                  </InputLabel>
+                  <InputLabel id='price-label'>Price</InputLabel>
                   <Select
-                    labelId='demo-simple-select-helper-label'
+                    className={classes.select}
+                    labelId='price-label'
                     id='price'
                     value={price}
-                    onChange={this.handleChange}
+                    onChange={handleChange}
                   >
-                    <MenuItem value={'€'}>€</MenuItem>
-                    <MenuItem value={'€€'}>€€</MenuItem>
-                    <MenuItem value={'€€€'}>€€€</MenuItem>
+                    {PriceOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
                   </Select>
-                  <FormHelperText>Choose price</FormHelperText>
                 </FormControl>
+              </Grid>
+              <Grid item xs={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='demo-simple-select-helper-label'>
-                    Duration
-                  </InputLabel>
+                  <InputLabel id='duration-label'>Duration</InputLabel>
                   <Select
-                    labelId='demo-simple-select-helper-label'
+                    className={classes.select}
+                    labelId='duration-label'
                     id='duration'
                     value={duration}
-                    onChange={this.handleChange}
+                    onChange={handleChange}
                   >
-                    <MenuItem value={'0h 30m'}>0h 30m</MenuItem>
-                    <MenuItem value={'1h 00m'}>1h 00m</MenuItem>
-                    <MenuItem value={'1hs 30m'}>1hs 30m</MenuItem>
-                    <MenuItem value={'2hs 00m'}>2hs 00m</MenuItem>
-                    <MenuItem value={'2hs 30m'}>2hs 30m</MenuItem>
-                    <MenuItem value={'3hs 00m'}>3hs 00m</MenuItem>
-                    <MenuItem value={'3hs 30m'}>3hs 30m</MenuItem>
-                    <MenuItem value={'4hs 00m'}>4hs 00m</MenuItem>
-                    <MenuItem value={'4hs 30m'}>4hs 30m</MenuItem>
-                    <MenuItem value={'5hs 00m'}>5hs 00m</MenuItem>
-                    <MenuItem value={'5hs 30m'}>5hs 30m</MenuItem>
-                    <MenuItem value={'6hs 00m'}>6hs 00m</MenuItem>
-                    <MenuItem value={'6hs 30m'}>6hs 30m</MenuItem>
-                    <MenuItem value={'7hs 00m'}>7hs 00m</MenuItem>
-                    <MenuItem value={'7hs 30m'}>7hs 30m</MenuItem>
-                    <MenuItem value={'8hs 00m'}>8hs 00m</MenuItem>
-                    <MenuItem value={'12hs 00m'}>12hs 00m</MenuItem>
-                    <MenuItem value={'+ de 12hs 00m'}>+ de 12hs 00m</MenuItem>
+                    {DurationOptions.map((option, index) => (
+                      <MenuItem
+                        key={index}
+                        value={`${option}hs`}
+                      >{`${option}hs`}</MenuItem>
+                    ))}
                   </Select>
-                  <FormHelperText>Choose Duration</FormHelperText>
                 </FormControl>
-              </Box>
-              <input type='file' onChange={this.handleChange} />
+              </Grid>
+            </Grid>
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              margin='dense'
+              id='details'
+              label='Description'
+              type='details'
+              autoComplete='current-details'
+              value={details}
+              onChange={handleChange}
+              className={classes.input_field}
+            />
+            <Box>
+              <input type='file' onChange={handleChange} />
               <IconButton>
                 <AddAPhotoIcon
                   color='secondary'
                   className={classes.photo_icon}
                 />
               </IconButton>
+              <Box className='output'>
+                {error && <Box className='error'>{error}</Box>}
+                {file && <Box className='file'>{file.name}</Box>}
+              </Box>
+            </Box>
 
-              <DialogContentText className={classes.text}>
-                <Typography variant='body2'>
-                  By proceeding you agree to Mytinerary’s Privacy Policy, User
-                  Agreement and T&Cs.
-                </Typography>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color='primary'>
-                Cancel
-              </Button>
-              <Button onClick={this.handleSubmit} color='secondary'>
-                Submit
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    )
-  }
+            <DialogContentText className={classes.text}>
+              {/* <Typography variant='body2'> */}
+              By proceeding you agree to Mytinerary’s Privacy Policy, User
+              Agreement and T&Cs.
+              {/* </Typography> */}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions className={classes.btns}>
+            <Button onClick={handleClose} color='primary'>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} color='secondary'>
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  )
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-    authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated,
-    errors: state.errors
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addItinerary: newItinerary => dispatch(addItinerary(newItinerary)),
-    clearErrors: () => dispatch(clearErrors())
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(AddItinerary))
+export default connect(null, { addItinerary })(AddItinerary)

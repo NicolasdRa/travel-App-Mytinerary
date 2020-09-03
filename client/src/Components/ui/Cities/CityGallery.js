@@ -1,19 +1,13 @@
 import React from 'react'
-import 'typeface-roboto'
+import { Box } from '@material-ui/core'
 import CityCard from './CityCard'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   gallery: {
-    // display: 'flex',
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // margin: '0 1rem 3rem 1rem',
-
     position: 'relative',
     display: 'flex',
     flex: '0 1 auto',
-    flexDirection: 'row',
     width: 'auto',
     overflowX: 'auto'
 
@@ -36,11 +30,11 @@ const CityGallery = props => {
   const { cities } = props
 
   return (
-    <div className={classes.gallery}>
+    <Box className={classes.gallery}>
       {cities.map(city => (
         <CityCard city={city} key={city._id} />
       ))}
-    </div>
+    </Box>
   )
 }
 
