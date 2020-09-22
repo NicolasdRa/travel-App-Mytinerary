@@ -3,7 +3,6 @@ const cityRouter = require('./routes/cityRoutes')
 const itineraryRouter = require('./routes/itineraryRoutes')
 const userRouter = require('./routes/userRoutes')
 const app = express()
-const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const passport = require('./routes/middleware/passport')
@@ -11,9 +10,8 @@ const passport = require('./routes/middleware/passport')
 
 // MIDDLEWARE
 app.use(express.json())
-app.use(bodyParser.json())
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true
   })
 )

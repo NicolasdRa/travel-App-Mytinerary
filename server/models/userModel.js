@@ -7,20 +7,17 @@ const jwt = require('jsonwebtoken')
 const userSchema = new mongoose.Schema({
   userName: {
     type: String,
-    required: false,
-    unique: false
+    required: [true, 'Please, include user name!'],
+    unique: true,
+    trim: true
   },
 
   firstName: {
-    type: String,
-    required: false,
-    unique: false
+    type: String
   },
 
   lastName: {
-    type: String,
-    required: false,
-    unique: false
+    type: String
   },
 
   email: {
@@ -28,38 +25,71 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true,
-    validate: value => {
-      if (!validator.isEmail(value)) {
-        throw new Error({ error: 'Invalid Email address' })
-      }
-    }
+    validate: [
+      validator.isEmail,
+      'Invalid Email, please provide a valid email address'
+    ]
   },
 
   img: {
     type: String,
-    required: false
+    default: 'default.jpg'
+  },
+
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'admin'],
+    default: 'user'
   },
 
   details: {
     type: String,
-    required: false,
-    unique: false
+    trim: true
   },
 
   password: {
     type: String,
-    required: false,
-    minlength: 6
+    required: [true, 'Please provide a valid password'],
+    minlength: 6,
+    select: false
+  },
+
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Please provide a valid password'],
+    validate: {
+      // works only on create an save
+      validator: function (el) {
+        return el === this.password
+      },
+      message: 'Passwords do not match'
+    }
   },
 
   googleId: {
-    type: String,
-    required: false
+    type: String
   },
 
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now
+  },
+
+  passwordChangedAt: {
+    type: Date
+  },
+
+  passwordResetToken: {
+    type: String
+  },
+
+  passwordResetExpires: {
+    type: Date
+  },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
   },
 
   tokens: [
@@ -73,14 +103,8 @@ const userSchema = new mongoose.Schema({
 
   favourites: [
     {
-      itineraries: {
-        type: Array,
-        required: false
-      },
-      activities: {
-        type: Array,
-        required: false
-      }
+      itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
+      activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }]
     }
   ]
 })

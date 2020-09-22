@@ -3,10 +3,10 @@ const router = express.Router()
 const {
   getAllCities,
   getCity,
-  postCity,
+  createCity,
   updateCity,
   deleteCity
-} = require('../controllers/cityControllers')
+} = require('../controllers/cityController')
 
 // ------------------------------------- //
 // ROUTES
@@ -14,7 +14,7 @@ const {
 router
   .route('/')
   .get(getAllCities)
-  .post(postCity)
+  .post(createCity)
 
 router
   .route('/:id')

@@ -5,16 +5,27 @@ const citySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: [true, 'A city must have a name']
   },
   country: {
     type: String,
-    required: true
+    required: [true, 'A city must belong to a country']
+  },
+  description: {
+    type: String
+  },
+  inhabitants: {
+    type: Number
   },
   img: {
     type: String,
     required: true
-  }
+  },
+  location: {
+    type: { type: String, default: 'Point', enum: ['Point'] },
+    coordinates: [Number]
+  },
+  guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
 })
 
 // Model

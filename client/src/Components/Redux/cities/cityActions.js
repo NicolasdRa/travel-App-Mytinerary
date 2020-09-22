@@ -1,10 +1,11 @@
+import axios from 'axios'
 import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 // gets cities from server/DB
 export const fetchCities = () => async dispatch => {
   try {
     setLoading()
-    const res = await fetch('http://localhost:5000/api/cities/all')
+    const res = await axios.get('http://localhost:5000/api/v1/cities')
     const data = await res.json()
 
     dispatch({
@@ -14,7 +15,7 @@ export const fetchCities = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: LOADING_ERROR,
-      payload: error.res.data
+      payload: error
     })
   }
 }

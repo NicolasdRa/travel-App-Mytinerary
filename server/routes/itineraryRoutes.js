@@ -4,8 +4,8 @@ const auth = require('./middleware/auth')
 const multer = require('multer')
 const {
   getAllItineraries,
-  postItinerary,
   getItinerary,
+  createItinerary,
   updateItinerary,
   deleteItinerary,
   getCityItineraries
@@ -53,13 +53,13 @@ const upload = multer({
 router
   .route('/')
   .get(getAllItineraries)
-  .post([auth, upload.single('img')], postItinerary)
+  .post(createItinerary)
 
 router
   .route('/:id')
   .get(getItinerary)
-  .put(auth, updateItinerary)
-  .delete(auth, deleteItinerary)
+  .patch(updateItinerary)
+  .delete(deleteItinerary)
 
 router.route('/:city_name').get(getCityItineraries)
 
