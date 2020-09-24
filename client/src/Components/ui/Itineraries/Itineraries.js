@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 const Itineraries = () => {
   const classes = useStyles()
 
-  const itineraries = useSelector(state => state.itineraries.itineraries)
+  const itineraries = useSelector(state => state.itineraries.itineraries.data)
 
   const [string, setString] = useState('')
   const [city, setCity] = useState(null)
@@ -70,7 +70,7 @@ const Itineraries = () => {
   if (itineraries !== null) {
     filteredItineraries = [
       ...itineraries.filter(itinerary => {
-        return itinerary.city.toLowerCase().startsWith(string)
+        return itinerary.city.name.toLowerCase().startsWith(string)
       })
     ]
 
@@ -85,8 +85,7 @@ const Itineraries = () => {
     city === null
       ? (headerItinerary = itineraries[randomNumber])
       : (headerItinerary = filteredItineraries[0])
-    console.log(randomNumber)
-    console.log(filteredItineraries)
+
     return (
       <Grid
         container

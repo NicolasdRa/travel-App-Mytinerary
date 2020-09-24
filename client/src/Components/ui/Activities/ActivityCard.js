@@ -123,13 +123,13 @@ const useStyles = makeStyles(theme => ({
 const ActivityCard = props => {
   const classes = useStyles()
 
-  const activity = props.activity
   const {
     city,
+    itinerary,
     category,
     title,
     img,
-    price,
+    pricing,
     duration,
     hashtags,
     likes
@@ -145,7 +145,7 @@ const ActivityCard = props => {
           action: classes.additionalInfo
         }}
         title={title}
-        subheader={city}
+        subheader={city.name}
         //action={}
       />
       <CardMedia className={classes.media} image={img} />
@@ -175,7 +175,7 @@ const ActivityCard = props => {
           <Box className={classes.price}>
             <EuroIcon className={classes.icons} />
             <Typography variant='caption' color='textSecondary' component='p'>
-              {price}
+              {pricing.price}
             </Typography>
           </Box>
         </Box>
@@ -184,7 +184,7 @@ const ActivityCard = props => {
         <IconButton aria-label='add to favorites' className={classes.likesBtn}>
           <FavoriteIcon />
           <Typography variant='body2' color='textSecondary' component='p'>
-            {likes.length}
+            {likes}
           </Typography>
         </IconButton>
         <Button

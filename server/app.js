@@ -1,6 +1,7 @@
 const express = require('express')
 const cityRouter = require('./routes/cityRoutes')
 const itineraryRouter = require('./routes/itineraryRoutes')
+const activityRouter = require('./routes/activityRoutes')
 const userRouter = require('./routes/userRoutes')
 const app = express()
 const cookieParser = require('cookie-parser')
@@ -41,7 +42,7 @@ app.use(cors())
 // MOUNTING routers
 app.use('/api/v1/cities', cityRouter)
 app.use('/api/v1/itineraries', itineraryRouter)
-// app.use('/api/v1/activities', activityRouter)
+app.use('/api/v1/activities', activityRouter)
 app.use('/api/v1/users', userRouter)
 
 module.exports = app

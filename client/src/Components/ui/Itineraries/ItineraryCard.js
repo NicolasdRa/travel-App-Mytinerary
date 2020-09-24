@@ -129,7 +129,7 @@ const ItineraryCard = props => {
     title,
     likes,
     duration,
-    price,
+    pricing,
     hashtags,
     img,
     activities,
@@ -146,7 +146,7 @@ const ItineraryCard = props => {
           action: classes.additionalInfo
         }}
         title={title}
-        subheader={city}
+        subheader={city.name}
         //action={}
       />
       <CardMedia className={classes.media} image={img} />
@@ -176,7 +176,7 @@ const ItineraryCard = props => {
           <Box className={classes.price}>
             <EuroIcon className={classes.icons} />
             <Typography variant='caption' color='textSecondary' component='p'>
-              {price}
+              {pricing.price}
             </Typography>
           </Box>
         </Box>
@@ -185,7 +185,7 @@ const ItineraryCard = props => {
         <IconButton aria-label='add to favorites' className={classes.likesBtn}>
           <FavoriteIcon />
           <Typography variant='body2' color='textSecondary' component='p'>
-            {likes.length}
+            {likes}
           </Typography>
         </IconButton>
         <Button

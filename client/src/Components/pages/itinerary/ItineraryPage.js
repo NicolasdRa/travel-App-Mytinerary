@@ -170,17 +170,17 @@ function ItineraryPage (props) {
   const title = props.match.params.title
 
   const itinerary = useSelector(state =>
-    state.itineraries.itineraries.filter(itinerary => itinerary.title === title)
+    state.itineraries.itineraries.data.filter(
+      itinerary => itinerary.title === title
+    )
   )
-
-  console.log(itinerary)
 
   const {
     city,
     category,
     likes,
     duration,
-    price,
+    pricing,
     hashtags,
     img,
     activities,
@@ -192,7 +192,7 @@ function ItineraryPage (props) {
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
         <Typography className={classes.overline} variant='overline'>
-          {city} - {category}
+          {city.name} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>
@@ -206,7 +206,7 @@ function ItineraryPage (props) {
               <FavoriteBorderRoundedIcon className={classes.likes_icon} />
             </IconButton>
             <Typography variant='body2' color='textSecondary' component='p'>
-              {likes.length}
+              {likes}
             </Typography>
           </Box>
         </Box>
@@ -240,7 +240,7 @@ function ItineraryPage (props) {
             <Box className={classes.price}>
               <EuroIcon className={classes.icons} />
               <Typography variant='body2' color='textSecondary' component='p'>
-                {price}
+                {pricing.price}
               </Typography>
             </Box>
           </Box>

@@ -168,26 +168,20 @@ function ActivityPage (props) {
   const classes = useStyles()
   const title = props.match.params.title
 
-  const itineraries = useSelector(state => state.itineraries.itineraries)
-
-  let activitiesArray = []
-
-  itineraries.forEach(itinerary => {
-    if (itinerary.activities.length > 0) {
-      activitiesArray.push(itinerary.activities)
-    }
-  })
-
-  let activities = activitiesArray.flat()
-  const activity = activities.filter(activity => activity.title === title)
+  const activity = useSelector(state =>
+    state.activities.activities.data.filter(
+      activity => activity.title === title
+    )
+  )
 
   const {
     city,
     category,
     likes,
     duration,
-    price,
+    pricing,
     hashtags,
+    itinerary,
     img,
     details
   } = activity[0]
@@ -197,7 +191,7 @@ function ActivityPage (props) {
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
         <Typography className={classes.overline} variant='overline'>
-          {city} - {category}
+          {city.name} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>
@@ -245,7 +239,7 @@ function ActivityPage (props) {
             <Box className={classes.price}>
               <EuroIcon className={classes.icons} />
               <Typography variant='body2' color='textSecondary' component='p'>
-                {price}
+                {pricing.price}
               </Typography>
             </Box>
           </Box>

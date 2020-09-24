@@ -39,7 +39,7 @@ exports.updateOne = Model =>
 
     res.status(200).json({
       status: 'success',
-      data: { doc }
+      data: doc
     })
   })
 
@@ -68,17 +68,16 @@ exports.getOne = (Model, populateOptions) =>
 
     res.status(200).json({
       status: 'success',
-      data: {
-        doc
-      }
+      data: doc
     })
   })
 
 exports.getAll = Model =>
   asyncErrorCatcher(async (req, res, next) => {
-    // these two lines below allow for nested GET routes on resource (hack)
+    // creates filter object for nested routes
     let filter = {}
-    if (req.params.tourId) filter = { tour: req.params.tourId }
+    if (req.params.itineraryId) filter = { itinerary: req.params.itineraryId }
+    if (req.params.userId) filter = { user: req.params.userId }
 
     const features = new APIfeatures(Model.find(filter), req.query)
       .filter()
@@ -92,8 +91,6 @@ exports.getAll = Model =>
     res.status(200).json({
       status: 'success',
       results: docs.length,
-      data: {
-        docs
-      }
+      data: docs
     })
   })

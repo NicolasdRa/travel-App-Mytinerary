@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   }
 })
 
-export default function ActivityCardSmall (props) {
+const ActivityCardSmall = props => {
   const classes = useStyles()
   const { title, img } = props.activity
 
@@ -70,3 +70,5 @@ export default function ActivityCardSmall (props) {
     </Card>
   )
 }
+
+export default ActivityCardSmall

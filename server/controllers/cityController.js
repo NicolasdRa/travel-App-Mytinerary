@@ -14,4 +14,4 @@ exports.createCity = createOne(City)
 exports.deleteCity = deleteOne(City)
 exports.updateCity = updateOne(City)
 
-// CRUD controllers for custom routes -- still to implement
+// CRUD controllers for special routes -- still to be implemented

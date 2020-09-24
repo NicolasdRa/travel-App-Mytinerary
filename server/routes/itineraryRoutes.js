@@ -10,7 +10,7 @@ const {
   deleteItinerary,
   getCityItineraries
 } = require('../controllers/itineraryController')
-
+const activityRouter = require('../routes/activityRoutes')
 // ------------------------------------- //
 // Middleware
 
@@ -49,6 +49,10 @@ const upload = multer({
 // router.param('id', checkID)
 
 // ------------------------------------- //
+
+// Nested routes
+router.use('/:itineraryId/activities', activityRouter)
+
 // Routes
 router
   .route('/')

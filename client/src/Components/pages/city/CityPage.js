@@ -49,14 +49,14 @@ function CityPage (props) {
   const cityName = props.match.params.city_name
 
   const city = useSelector(state =>
-    state.cities.cities.filter(city => city.name === cityName)
+    state.cities.cities.data.filter(city => city.name === cityName)
   )
   const itineraries = useSelector(state =>
-    state.itineraries.itineraries.filter(
+    state.itineraries.itineraries.data.filter(
       itineraries => itineraries.city === cityName
     )
   )
-  console.log(itineraries)
+
   const { name, img, country } = city[0]
 
   return (

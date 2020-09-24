@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 const Cities = () => {
   const classes = useStyles()
 
-  const cities = useSelector(state => state.cities.cities)
+  const cities = useSelector(state => state.cities.cities.data)
 
   const [string, setString] = useState('')
   const [city, setCity] = useState(null)
@@ -82,7 +82,6 @@ const Cities = () => {
     city === null
       ? (headerCity = cities[randomNumber])
       : (headerCity = filteredCities[0])
-    console.log(randomNumber)
 
     return (
       <Grid

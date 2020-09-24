@@ -52,10 +52,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Activities = () => {
-  // fetches itineraries & cities from DB
   const classes = useStyles()
-
-  const itineraries = useSelector(state => state.itineraries.itineraries)
+  const activities = useSelector(state => state.activities.activities.data)
+  console.log(activities)
 
   const [string, setString] = useState('')
   const [city, setCity] = useState(null)
@@ -66,34 +65,24 @@ const Activities = () => {
   }
 
   // filter function
-  let filteredActivitiesArray = []
-  if (itineraries !== null) {
-    let filteredItineraries = [
-      ...itineraries.filter(itinerary => {
-        return itinerary.city.toLowerCase().startsWith(string)
+  let filteredActivities = []
+  if (activities !== null) {
+    filteredActivities = [
+      ...activities.filter(activity => {
+        return activity.city.name.toLowerCase().startsWith(string)
       })
     ]
-
-    filteredItineraries.forEach(itinerary => {
-      if (itinerary.activities.length > 0) {
-        filteredActivitiesArray.push(itinerary.activities)
-      }
-    })
-
-    let activities = filteredActivitiesArray.flat()
 
     function generateRandomInteger (min, max) {
       return Math.floor(min + Math.random() * (max + 1 - min))
     }
 
     const randomNumber = generateRandomInteger(0, activities.length - 1)
-
     let headerActivity = null
-    city === null
-      ? (headerActivity = itineraries[0].activities[randomNumber])
-      : (headerActivity = activities[0])
-    console.log(randomNumber)
-    console.log(activities)
+    activities === null
+      ? (headerActivity = activities[randomNumber])
+      : (headerActivity = filteredActivities[0])
+
     return (
       <Grid
         container

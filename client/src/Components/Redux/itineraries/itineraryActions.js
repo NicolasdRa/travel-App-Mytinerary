@@ -12,12 +12,17 @@ export const fetchItineraries = () => async dispatch => {
   setLoading()
 
   try {
-    const res = await axios.get('http://localhost:5000/api/v1/itineraries')
-    const itineraries = await res.json()
-    console.log(itineraries)
+    const res = await axios({
+      method: 'get',
+      url: '/itineraries',
+      baseURL: 'http://localhost:5000/api/v1',
+      responseType: 'json'
+    })
+    const data = await res.data
+
     dispatch({
       type: FETCH_ITINERARIES,
-      payload: itineraries
+      payload: data
     })
   } catch (error) {
     console.log(error)

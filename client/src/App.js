@@ -21,6 +21,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { fetchCities } from './Components/Redux/cities/cityActions'
 import { fetchItineraries } from './Components/Redux/itineraries/itineraryActions'
+import { fetchActivities } from './Components/Redux/activities/activityActions'
 
 const useStyles = makeStyles(theme => ({
   topNav: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const App = ({ fetchCities, fetchItineraries }) => {
+const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -49,6 +50,7 @@ const App = ({ fetchCities, fetchItineraries }) => {
   useEffect(() => {
     fetchCities()
     fetchItineraries()
+    fetchActivities()
   }, [])
 
   return (
@@ -77,4 +79,8 @@ const App = ({ fetchCities, fetchItineraries }) => {
   )
 }
 
-export default connect(null, { fetchCities, fetchItineraries })(App)
+export default connect(null, {
+  fetchCities,
+  fetchItineraries,
+  fetchActivities
+})(App)

@@ -4,8 +4,8 @@ const mongoose = require('mongoose')
 const citySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    unique: [true, 'A city must have a name']
+    required: [true, 'A city must have a name'],
+    unique: true
   },
   country: {
     type: String,

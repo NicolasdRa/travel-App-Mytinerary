@@ -1,7 +1,7 @@
-import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
+import { FETCH_ACTIVITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 const initialState = {
-  cities: null,
+  activities: null,
   current: null,
   loading: false,
   error: null
@@ -9,10 +9,10 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_CITIES:
+    case FETCH_ACTIVITIES:
       return {
         ...state,
-        cities: action.payload,
+        activities: action.payload,
         loading: false
       }
 

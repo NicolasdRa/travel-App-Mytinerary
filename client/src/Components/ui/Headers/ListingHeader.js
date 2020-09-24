@@ -33,17 +33,15 @@ const useStyles = makeStyles(theme => ({
 const ListingHeader = props => {
   const classes = useStyles(props)
   const { data } = props
+  const { name, title, country, city } = data
   console.log(data)
+  console.log(name, country, title)
 
   return (
     <Box sm={12} className={classes.image}>
       <Box className={classes.textArea}>
-        <Typography variant='h6'>
-          {data.name ? data.name : data.title}
-        </Typography>
-        <Typography variant='body2'>
-          {data.country ? data.country : data.city}
-        </Typography>
+        <Typography variant='h6'>{name ? name : title}</Typography>
+        <Typography variant='body2'>{title ? city.name : name}</Typography>
       </Box>
     </Box>
   )

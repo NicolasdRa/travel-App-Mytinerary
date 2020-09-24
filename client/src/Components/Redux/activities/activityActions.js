@@ -1,20 +1,20 @@
 import axios from 'axios'
-import { FETCH_CITIES, SET_LOADING, LOADING_ERROR } from '../types'
+import { FETCH_ACTIVITIES, SET_LOADING, LOADING_ERROR } from '../types'
 
 // gets cities from server/DB
-export const fetchCities = () => async dispatch => {
+export const fetchActivities = () => async dispatch => {
   try {
     setLoading()
     const res = await axios({
       method: 'get',
-      url: '/cities',
+      url: '/activities',
       baseURL: 'http://localhost:5000/api/v1',
       responseType: 'json'
     })
     const data = await res.data
 
     dispatch({
-      type: FETCH_CITIES,
+      type: FETCH_ACTIVITIES,
       payload: data
     })
   } catch (error) {
