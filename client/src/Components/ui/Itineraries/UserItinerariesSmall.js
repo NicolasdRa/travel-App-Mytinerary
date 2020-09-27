@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import 'typeface-roboto'
 import { Box, Typography } from '@material-ui/core'
-import ActivityCardSmall from '../Activities/ActivityCardSmall'
+import ItineraryCardSmall from '../Itineraries/ItineraryCardSmall'
 import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 const UserItinerariesSmall = () => {
   const classes = useStyles()
   const user = useSelector(state => state.auth.user)
-  const itineraries = useSelector(state => state.itineraries.itineraries)
+  const itineraries = useSelector(state => state.itineraries.itineraries.data)
 
   // const { _id } = user
   // const filteredItineraries = itineraries.filter(
@@ -42,7 +42,7 @@ const UserItinerariesSmall = () => {
         <Box className={classes.gallery}>
           {/* {filteredItineraries.map(itinerary => ( */}
           {itineraries.map(itinerary => (
-            <ActivityCardSmall activity={itinerary} key={itinerary._id} />
+            <ItineraryCardSmall itinerary={itinerary} key={itinerary._id} />
           ))}
         </Box>
       </Box>

@@ -34,8 +34,6 @@ const ListingHeader = props => {
   const classes = useStyles(props)
   const { data } = props
   const { name, title, country, city } = data
-  console.log(data)
-  console.log(name, country, title)
 
   return (
     <Box sm={12} className={classes.image}>

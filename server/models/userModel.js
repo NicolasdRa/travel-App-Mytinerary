@@ -36,6 +36,26 @@ const userSchema = new mongoose.Schema({
     default: 'default.jpg'
   },
 
+  password: {
+    type: String,
+    required: [true, 'Please provide a valid password'],
+    minlength: 6,
+    select: false
+  },
+
+  // passwordConfirm: {
+  //   type: String,
+  //   required: [true, 'Please provide a valid password'],
+  //   minlength: 6,
+  //   validate: {
+  //     // works only on create and save
+  //     validator: function (el) {
+  //       return el === this.password
+  //     },
+  //     message: 'Passwords do not match'
+  //   }
+  // },
+
   role: {
     type: String,
     enum: ['user', 'guide', 'admin'],
@@ -45,25 +65,6 @@ const userSchema = new mongoose.Schema({
   details: {
     type: String,
     trim: true
-  },
-
-  password: {
-    type: String,
-    required: [true, 'Please provide a valid password'],
-    minlength: 6,
-    select: false
-  },
-
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please provide a valid password'],
-    validate: {
-      // works only on create an save
-      validator: function (el) {
-        return el === this.password
-      },
-      message: 'Passwords do not match'
-    }
   },
 
   googleId: {
@@ -86,27 +87,31 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: {
     type: Date
   },
-  active: {
-    type: Boolean,
-    default: true,
+
+  blacklist: {
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true
+        }
+      }
+    ],
     select: false
   },
-
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true
-      }
-    }
-  ],
 
   favourites: [
     {
       itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
       activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }]
     }
-  ]
+  ],
+
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
 })
 
 userSchema.pre('save', async function (next) {
@@ -118,14 +123,23 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-userSchema.methods.generateAuthToken = async function () {
-  // Generate an auth token for the user
-  const user = this
-  const options = { expiresIn: 120 }
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, options)
-  user.tokens = user.tokens.concat({ token })
-  await user.save()
-  return token
+// disabled -- then refactor to re-functionalise token blacklist
+// userSchema.methods.generateAuthToken = async function () {
+//   // Generate an jwt token for the user
+//   const user = this
+//   const options = { expiresIn: 120 }
+//   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, options)
+//   user.blacklist.tokens = user.blacklist.tokens.concat({ token })
+//   await user.save()
+//   return token
+// }
+
+// instance method - compare passwords
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword)
 }
 
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -142,5 +156,5 @@ userSchema.statics.findByCredentials = async (email, password) => {
 }
 
 // Model
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('User', userSchema)
 module.exports = User

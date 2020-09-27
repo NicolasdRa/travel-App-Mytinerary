@@ -1,27 +1,27 @@
 const express = require('express')
+const app = express()
 const cityRouter = require('./routes/cityRoutes')
 const itineraryRouter = require('./routes/itineraryRoutes')
 const activityRouter = require('./routes/activityRoutes')
 const userRouter = require('./routes/userRoutes')
-const app = express()
+const authRouter = require('./routes/authRoutes')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const passport = require('./routes/middleware/passport')
+const passport = require('./middleware/passport')
+const AppError = require('./utils/appError')
 // const cookieSession = require('cookie-session')
 
 // MIDDLEWARE
-app.use(express.json())
+
+// body parsers
+app.use(express.json({ limit: '5000kb' }))
 app.use(
   express.urlencoded({
     extended: true
   })
 )
 
-app.use((req, res, next) => {
-  req.reqTime = new Date().toISOString()
-  next()
-})
-
+// cookie parser
 app.use(cookieParser())
 
 // cookie-session
@@ -31,6 +31,13 @@ app.use(cookieParser())
 //     keys: process.env.COOKIE_SESSION_KEY
 //   })
 // )
+
+// Test middleware
+app.use((req, res, next) => {
+  req.reqTime = new Date().toISOString()
+  console.log('cookies', req.cookies)
+  next()
+})
 
 //passport middleware
 app.use(passport.initialize())
@@ -44,5 +51,23 @@ app.use('/api/v1/cities', cityRouter)
 app.use('/api/v1/itineraries', itineraryRouter)
 app.use('/api/v1/activities', activityRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/auth', authRouter)
+
+// handler for unhandled routes
+app.all('*', (req, res, next) => {
+  next(new AppError(`Cant't find ${req.originalUrl} on this server!`, 404))
+})
+
+// global error handler // then further develop into a fully fledged controller
+
+app.use((error, req, res, next) => {
+  error.statusCode = error.statusCode || 500
+  error.status = error.status || 'error'
+
+  res.status(error.statusCode).json({
+    status: error.status,
+    message: error.message
+  })
+})
 
 module.exports = app

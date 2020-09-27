@@ -1,8 +1,8 @@
 const passport = require('passport')
 const mongoose = require('mongoose')
-const User = require('../../models/userModel.js')
-mongoose.model('user')
-const key = require('../../keys')
+const User = require('../models/userModel.js')
+mongoose.model('User')
+const key = require('../keys')
 
 // JWT Auth Strategy
 var JwtStrategy = require('passport-jwt').Strategy,

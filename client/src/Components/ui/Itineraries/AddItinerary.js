@@ -106,13 +106,6 @@ const AddItinerary = ({ addItinerary }) => {
 
   const { city, title, category, price, duration, details, img } = newItinerary
 
-  console.log(city)
-  console.log(title)
-  console.log(category)
-  console.log(price)
-  console.log(duration)
-  console.log(details)
-
   const types = ['image/png', 'image/jpeg']
 
   const handleChange = e => {
@@ -244,7 +237,6 @@ const AddItinerary = ({ addItinerary }) => {
                     {CategoryOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
-                        {console.log(option)}
                       </MenuItem>
                     ))}
                   </Select>

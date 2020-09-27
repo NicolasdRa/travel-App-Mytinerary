@@ -17,8 +17,6 @@ import ImageHeader from '../../ui/Headers/ImageHeader'
 import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCities } from '../../Redux/cities/cityActions'
-import { fetchItineraries } from '../../Redux/itineraries/itineraryActions'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -177,17 +175,9 @@ const useStyles = makeStyles(theme => ({
 const Profile = () => {
   const classes = useStyles()
   const user = useSelector(state => state.auth.user)
-  const cities = useSelector(state => state.cities.cities)
-  const itineraries = useSelector(state => state.itineraries.itineraries)
-  const dispatch = useDispatch()
-
-  // if (cities === null) {
-  //   dispatch(fetchCities())
-  // }
-
-  // if (itineraries === null) {
-  //   dispatch(fetchItineraries())
-  // }
+  const cities = useSelector(state => state.cities.cities.data)
+  const itineraries = useSelector(state => state.itineraries.itineraries.data)
+  // const dispatch = useDispatch()
 
   if (user != null) {
     const { userName, firstName, lastName, details, img, email, likes } = user

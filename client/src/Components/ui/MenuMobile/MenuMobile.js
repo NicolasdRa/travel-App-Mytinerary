@@ -9,7 +9,7 @@ import Signup from '../Signup/Signup'
 import Login from '../Login/Login'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
-import { logOutUser, logOutAll } from '../../Redux/auth/authActions'
+import { logOutUser } from '../../Redux/auth/authActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
@@ -27,12 +27,6 @@ export const MenuMobile = () => {
   const handleLogOut = e => {
     e.preventDefault()
     dispatch(logOutUser(user))
-    history.push('/')
-  }
-
-  const handleLogOutAll = e => {
-    e.preventDefault()
-    dispatch(logOutAll(user))
     history.push('/')
   }
 
@@ -99,9 +93,6 @@ export const MenuMobile = () => {
           <div>
             <MenuItem onClick={handleLogOut}>
               <Link to='/'>Log out</Link>
-            </MenuItem>
-            <MenuItem onClick={handleLogOutAll}>
-              <Link to='/'>Log out from all devices</Link>
             </MenuItem>
           </div>
         ) : (

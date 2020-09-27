@@ -12,37 +12,44 @@ import {
   LOGOUT_FAIL,
   CLEAR_ERRORS
 } from '../types'
-import setAuthToken from '../../../AuthHandler/SetAuthToken'
 
-// Setup config/headers & token
+// util Setup config/headers & token -- check if/when to use
 export const tokenConfig = getState => {
-  // Get token from local storage
+  // 1. Get token from local storage
   const token = getState().auth.token
 
-  // Set Headers
+  // 2. Set Headers
   const config = {
     headers: {
       'Content-type': 'application/json'
     }
   }
 
-  // If token, add to headers
+  // 3. If token, add to headers
   if (token) {
     config.headers['x-auth-token'] = token
   }
   return config
 }
 
+// util set authorization token -- check if/when to use
+export const setAuthToken = token => {
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  } else {
+    delete axios.defaults.headers.common['Authorization']
+  }
+}
+
 // Check token and load user
 export const loadUser = token => async dispatch => {
   if (token) {
     setAuthToken(token)
-    // console.log('set auth header token from cookies', token)
+    console.log('setAuthToken header token from axios req', token)
   }
 
   try {
-    const res = await axios.get('http://localhost:5000/api/users/profile')
-
+    const res = await axios.get('/api/v1/users/:id')
     dispatch({ type: USER_LOADED, payload: res.data })
   } catch (err) {
     // GET request to api route
@@ -52,137 +59,57 @@ export const loadUser = token => async dispatch => {
   }
 }
 
-// SIGN UP new USER in DB
-export const signupUser = user => async dispatch => {
-  // Set Headers
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-  // Request Body
-  const body = JSON.stringify(user)
-
-  axios
-    .post('http://localhost:5000/api/users/signup', body, config)
-    .then(res => {
-      dispatch({
-        type: SIGNUP_SUCCESS,
-        payload: res.data
-      })
-      dispatch({
-        type: CLEAR_ERRORS
-      })
-    })
-    .catch(
-      err =>
-        dispatch(
-          returnErrors(err.response.data, err.response.satus, 'SIGNUP_FAIL')
-        ),
-      dispatch({ type: SIGNUP_FAIL })
-    )
-}
-
-// LOG IN USER
-export const loginUser = user => (dispatch, getState) => {
-  // Request Body
-  const body = JSON.stringify(user)
-
-  // User Loading
-  dispatch({ type: USER_LOADING })
-
-  axios
-    .post('http://localhost:5000/api/users/login', body, tokenConfig(getState))
-    // .then(res => dispatch({ type: USER_LOADED, payload: res.data }))
-    .then(res => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data
-      })
-      dispatch({
-        type: CLEAR_ERRORS
-      })
-    })
-    .catch(err => {
-      dispatch(
-        returnErrors(err.response.data, err.response.satus, 'LOGIN_FAIL')
-      )
-      dispatch({ type: AUTH_ERROR })
-      dispatch({ type: LOGIN_FAIL })
-    })
-}
-
-//Logs out user
-export const logOutUser = user => dispatch => {
-  const token = localStorage.getItem('token')
-
-  if (token) {
-    const body = JSON.stringify(user)
-    const config = {
+// SIGN UP user
+export const signupUser = formData => async dispatch => {
+  try {
+    dispatch({ type: USER_LOADING })
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/auth/signup',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    }
-
-    axios
-      .post('http://localhost:5000/api/users/logout', body, config)
-      .then(res => {
-        dispatch({
-          type: LOGOUT_SUCCESS,
-          payload: res.data
-        })
-        dispatch({
-          type: CLEAR_ERRORS
-        })
-      })
-      .catch(
-        err =>
-          dispatch(
-            returnErrors(err.response.data, err.response.satus, 'LOGOUT_FAIL')
-          ),
-        dispatch({ type: LOGOUT_FAIL })
-      )
-  } else {
-    dispatch({ type: LOGOUT_FAIL })
+        'Content-Type': 'application/json'
+      },
+      data: formData
+    })
+    dispatch({ type: SIGNUP_SUCCESS, payload: res.data })
+    dispatch({ type: CLEAR_ERRORS })
+  } catch (error) {
+    dispatch({ type: SIGNUP_FAIL, payload: error.response.data })
   }
 }
 
-//Logs out user from all devices
-export const logOutAll = user => dispatch => {
-  const token = localStorage.getItem('token')
-
-  console.log(token)
-  console.log('logout action user', user)
-
-  if (token) {
-    const body = JSON.stringify(user)
-    const config = {
+// LOG IN user
+export const loginUser = formData => async dispatch => {
+  try {
+    dispatch({ type: USER_LOADING })
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/auth/login',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    }
+        'Content-Type': 'application/json'
+      },
+      data: formData
+    })
+    dispatch({ type: LOGIN_SUCCESS, payload: res.data })
+    dispatch({ type: USER_LOADED, payload: res.data })
+  } catch (error) {
+    dispatch({ type: LOGIN_FAIL, payload: error.response.data })
+  }
+}
 
-    axios
-      .post('http://localhost:5000/api/users/logoutall', body, config)
-      .then(res => {
-        dispatch({
-          type: LOGOUT_SUCCESS,
-          payload: res.data
-        })
-        dispatch({
-          type: CLEAR_ERRORS
-        })
-      })
-      .catch(
-        err =>
-          dispatch(
-            returnErrors(err.response.data, err.response.satus, 'LOGOUT_FAIL')
-          ),
-        dispatch({ type: LOGOUT_FAIL })
-      )
-  } else {
-    dispatch({ type: LOGOUT_FAIL })
+//LOG OUT user
+export const logOutUser = user => async dispatch => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/auth/logout',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: user
+    })
+    dispatch({ type: LOGOUT_SUCCESS, payload: res.data })
+  } catch (error) {
+    dispatch({ type: LOGOUT_FAIL, payload: error.response.data })
   }
 }

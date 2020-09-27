@@ -3,7 +3,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logOutUser, logOutAll } from '../../Redux/auth/authActions'
+import { logOutUser } from '../../Redux/auth/authActions'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -33,12 +33,6 @@ export const MenuDesk = valueFromLogo => {
   const handleLogOut = e => {
     e.preventDefault()
     dispatch(logOutUser(user))
-    history.push('/')
-  }
-
-  const handleLogOutAll = e => {
-    e.preventDefault()
-    dispatch(logOutAll(user))
     history.push('/')
   }
 
