@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../middleware/authorization')
 const multer = require('multer')
 const {
   getAllItineraries,
