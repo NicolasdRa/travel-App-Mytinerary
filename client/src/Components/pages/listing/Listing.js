@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Paper, Tabs, Tab, Typography, Box } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import Cities from '../../ui/Cities/Cities'
 import Itineraries from '../../ui/Itineraries/Itineraries'
 import Activities from '../../ui/Activities/Activities'
+import AddItinerary from '../../ui/Itineraries/AddItinerary'
 
 function TabPanel (props) {
   const { children, value, index, ...other } = props
@@ -72,6 +74,7 @@ const useStyles = makeStyles(theme => ({
 export default function Listing () {
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -100,6 +103,7 @@ export default function Listing () {
       <TabPanel value={value} index={2}>
         <Activities />
       </TabPanel>
+      {isAuthenticated ? <AddItinerary /> : null}
     </Box>
   )
 }

@@ -175,11 +175,10 @@ const useStyles = makeStyles(theme => ({
 const Profile = () => {
   const classes = useStyles()
   const user = useSelector(state => state.auth.user)
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const cities = useSelector(state => state.cities.cities.data)
-  const itineraries = useSelector(state => state.itineraries.itineraries.data)
-  // const dispatch = useDispatch()
 
-  if (user != null) {
+  if (isAuthenticated) {
     const { userName, firstName, lastName, details, img, email, likes } = user
     function generateRandomInteger (min, max) {
       return Math.floor(min + Math.random() * (max + 1 - min))

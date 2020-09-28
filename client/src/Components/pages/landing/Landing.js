@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openLoginForm } from '../../Redux/loginForm/loginFormActions'
 import { openSignupForm } from '../../Redux/signupForm/signupFormActions'
 import { loadUser } from '../../Redux/auth/authActions'
-import jwtDecode from 'jwt-decode'
+
 import Grid from '@material-ui/core/Grid'
 import Image from '../../ui/Images/Shanghai.png'
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   startBtn: {
-    margin: '3rem 0',
+    margin: '1rem 0',
     width: '12rem',
     height: '3rem',
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   question: {
-    margin: '1rem 0 1.5rem 0',
+    margin: '3rem 0 1rem 0',
     [theme.breakpoints.up('sm')]: {
       margin: '1rem 0 0 0',
       fontSize: '1.5rem'
@@ -67,11 +67,13 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
+  textGuest: { margin: '1rem 0 0 0' },
+
   btnsContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: '4rem',
+    margin: '1rem 0 2.5rem 0',
 
     [theme.breakpoints.up('sm')]: {
       margin: '1rem 5rem 4rem 5rem'
@@ -106,18 +108,13 @@ const Landing = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector(state => state.auth.user)
-  const token = useSelector(state => state.auth.token)
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
-  // if (!token || !user) {
-  //   const cookie = document.cookie
-  //   // console.log('cookie', cookie)
-  //   const token = cookie.split('=', 2)[1]
-  //   // console.log('token', token)
-  //   // console.log('decoded', jwtDecode(token))
-  //   const id = jwtDecode(token)._id
-  //   // console.log(id)
-  //   dispatch(loadUser(token, id))
-  // }
+  // only for dev purposes - works only if cookie httpOnly set to false
+  if (user === null) {
+    const jwt = document.cookie.split('=', 2)[1]
+    dispatch(loadUser(jwt))
+  }
 
   return (
     <Grid
@@ -132,15 +129,29 @@ const Landing = () => {
         <Header />
       </Grid>
       <Grid item>
-        <Button
-          className={classes.startBtn}
-          variant='contained'
-          color='secondary'
-          component={Link}
-          to='/listing'
-        >
-          Start as guest
-        </Button>
+        <Typography variant='subtitle1' className={classes.question}>
+          Want to build your own MYtinerary?
+        </Typography>
+        {!isAuthenticated ? (
+          <Box className={classes.btnsContainer}>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => dispatch(openLoginForm())}
+              className={classes.modal_btn}
+            >
+              Login
+            </Button>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => dispatch(openSignupForm())}
+              className={classes.modal_btn}
+            >
+              Signup
+            </Button>
+          </Box>
+        ) : null}
       </Grid>
       <Grid
         item
@@ -149,27 +160,20 @@ const Landing = () => {
         justify='center'
         alignItems='center'
       >
-        <Typography variant='subtitle1' className={classes.question}>
-          Want to build your own MYtinerary?
-        </Typography>
-        <Box className={classes.btnsContainer}>
-          <Button
-            variant='outlined'
-            color='secondary'
-            onClick={() => dispatch(openLoginForm())}
-            className={classes.modal_btn}
-          >
-            Login
-          </Button>
-          <Button
-            variant='outlined'
-            color='secondary'
-            onClick={() => dispatch(openSignupForm())}
-            className={classes.modal_btn}
-          >
-            Signup
-          </Button>
-        </Box>
+        {!isAuthenticated ? (
+          <Typography variant='subtitle1' className={classes.textGuest}>
+            View itineraries as a guest
+          </Typography>
+        ) : null}
+        <Button
+          className={classes.startBtn}
+          variant={!isAuthenticated ? 'outlined' : 'contained'}
+          color='secondary'
+          component={Link}
+          to='/listing'
+        >
+          {!isAuthenticated ? 'Start as guest' : 'Start'}
+        </Button>
       </Grid>
     </Grid>
   )

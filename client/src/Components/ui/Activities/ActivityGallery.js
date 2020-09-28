@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 const ActivityGallery = props => {
   const classes = useStyles()
   const { activities, string } = props
-  console.log('gallery', activities)
 
   if (activities.length > 0) {
     return (

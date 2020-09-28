@@ -54,7 +54,6 @@ const useStyles = makeStyles(theme => ({
 const Activities = () => {
   const classes = useStyles()
   const activities = useSelector(state => state.activities.activities.data)
-  console.log(activities)
 
   const [string, setString] = useState('')
   const [city, setCity] = useState(null)

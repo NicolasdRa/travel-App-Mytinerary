@@ -4,6 +4,7 @@ import { Box, Typography } from '@material-ui/core'
 import ItineraryGallery from '../../ui/Itineraries/ItineraryGallery'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import { useSelector } from 'react-redux'
+import AddItinerary from '../../ui/Itineraries/AddItinerary'
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 function CityPage (props) {
   const classes = useStyles()
   const cityName = props.match.params.city_name
-
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const city = useSelector(state =>
     state.cities.cities.data.filter(city => city.name === cityName)
   )
@@ -74,6 +75,7 @@ function CityPage (props) {
         )}
         <ItineraryGallery itineraries={itineraries} />
       </Box>
+      {isAuthenticated ? <AddItinerary /> : null}
     </Box>
   )
 }

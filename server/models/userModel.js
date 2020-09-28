@@ -73,30 +73,22 @@ const userSchema = new mongoose.Schema({
 
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    select: false
   },
 
   passwordChangedAt: {
-    type: Date
+    type: Date,
+    select: false
   },
 
   passwordResetToken: {
-    type: String
+    type: String,
+    select: false
   },
 
   passwordResetExpires: {
-    type: Date
-  },
-
-  blacklist: {
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true
-        }
-      }
-    ],
+    type: Date,
     select: false
   },
 
@@ -115,11 +107,14 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.pre('save', async function (next) {
-  // Hash the password before saving the user model
+  // Hash password before saving user
   const user = this
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 10)
   }
+
+  // delete password confirm before saving
+  // user.passwordConfirm = undefined
   next()
 })
 

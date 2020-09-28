@@ -12,6 +12,7 @@ import {
   LOGOUT_FAIL,
   CLEAR_ERRORS
 } from '../types'
+import jwtDecode from 'jwt-decode'
 
 // util Setup config/headers & token -- check if/when to use
 export const tokenConfig = getState => {
@@ -44,18 +45,16 @@ export const setAuthToken = token => {
 // Check token and load user
 export const loadUser = token => async dispatch => {
   if (token) {
-    setAuthToken(token)
-    console.log('setAuthToken header token from axios req', token)
-  }
+    try {
+      const id = jwtDecode(token).id
+      setAuthToken(token)
 
-  try {
-    const res = await axios.get('/api/v1/users/:id')
-    dispatch({ type: USER_LOADED, payload: res.data })
-  } catch (err) {
-    // GET request to api route
-    dispatch(returnErrors(err.response.data, err.response.satus, 'LOGIN_FAIL'))
-    dispatch({ type: AUTH_ERROR })
-    dispatch({ type: LOGIN_FAIL })
+      const res = await axios.get(`/api/v1/users/${id}`)
+      dispatch({ type: USER_LOADED, payload: res.data })
+    } catch (error) {
+      dispatch({ type: AUTH_ERROR, payload: error.response.data })
+      console.log(error.response.data)
+    }
   }
 }
 

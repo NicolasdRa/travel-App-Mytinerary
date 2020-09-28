@@ -13,13 +13,13 @@ const signToken = id => {
   })
 }
 
-const generateToken = (user, statusCode, req, res) => {
+const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
   const token = signToken(user._id)
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true,
+    httpOnly: false,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
   }
 
@@ -52,7 +52,7 @@ exports.signup = asyncErrorCatcher(async (req, res, next) => {
   // const url = `${req.protocol}://${req.get('host')}/me`
   // await new Email(newUser, url).sendWelcome()
 
-  generateToken(newUser, 201, req, res)
+  generateTokenCookieAndSendResponse(newUser, 201, req, res)
 })
 
 // LOGIN handler
@@ -71,8 +71,8 @@ exports.login = asyncErrorCatcher(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401))
   }
 
-  // 3) send token to client
-  generateToken(user, 200, req, res)
+  // 3) send token and data to client
+  generateTokenCookieAndSendResponse(user, 200, req, res)
 })
 
 // LOGOUT handler

@@ -15,6 +15,7 @@ import ImageHeader from '../../ui/Headers/ImageHeader'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
+import AddItinerary from '../../ui/Itineraries/AddItinerary'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -167,7 +168,7 @@ const useStyles = makeStyles(theme => ({
 function ActivityPage (props) {
   const classes = useStyles()
   const title = props.match.params.title
-
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const activity = useSelector(state =>
     state.activities.activities.data.filter(
       activity => activity.title === title
@@ -276,6 +277,7 @@ function ActivityPage (props) {
           <Divider className={classes.divider} />
         </Box>
       </Box>
+      {isAuthenticated ? <AddItinerary /> : null}
     </Box>
   )
 }
