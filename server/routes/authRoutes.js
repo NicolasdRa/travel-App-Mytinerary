@@ -3,9 +3,10 @@ const router = express.Router()
 const {
   signup,
   login,
-  logout
-  //   forgotPassword,
-  //   resetPassword
+  logout,
+  forgotPassword,
+  resetPassword,
+  updatePassword
 } = require('../controllers/authController')
 
 // ------------------------------------- //
@@ -16,9 +17,10 @@ router.route('/login').post(login)
 router.route('/logout').post(logout)
 router.route('/logoutall').post(logout)
 
-// router.route('/forgotpassword').post(forgotPassword)
+router.route('/forgotpassword').post(forgotPassword)
+router.route('/resetpassword').post(resetPassword)
 
-// router.route('/resetpassword').post(resetPassword)
+router.route('/updatepassword').post(updatePassword)
 
 // // HTTP POST /users — Register users.
 // router.post('/signup', async (req, res) => {

@@ -7,6 +7,7 @@ const {
   updateCity,
   deleteCity
 } = require('../controllers/cityController')
+const { restrict } = require('../controllers/authController')
 
 // ------------------------------------- //
 // ROUTES
@@ -19,7 +20,7 @@ router
 router
   .route('/:id')
   .get(getCity)
-  .patch(updateCity)
-  .delete(deleteCity)
+  .patch(restrict('admin'), updateCity)
+  .delete(restrict('admin'), deleteCity)
 
 module.exports = router

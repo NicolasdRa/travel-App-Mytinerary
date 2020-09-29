@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const AppError = require('./../utils/appError')
 
 // Schema
 const userSchema = new mongoose.Schema({
@@ -106,6 +108,7 @@ const userSchema = new mongoose.Schema({
   }
 })
 
+// password hash pre-middleware
 userSchema.pre('save', async function (next) {
   // Hash password before saving user
   const user = this
@@ -118,7 +121,23 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-// disabled -- then refactor to re-functionalise token blacklist
+// password update pre-middleware
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next()
+
+  // - 1000 hack to make sure delays at timestamp creation dont make token invalid
+  this.passwordChangedAt = Date.now() - 1000
+  next()
+})
+
+// query middleware - filter inactive users
+userSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } })
+  next()
+})
+
+// DISABLED -- then refactor to re-functionalise token blacklist
 // userSchema.methods.generateAuthToken = async function () {
 //   // Generate an jwt token for the user
 //   const user = this
@@ -129,7 +148,7 @@ userSchema.pre('save', async function (next) {
 //   return token
 // }
 
-// instance method - compare passwords
+// instance method - bycript compare passwords
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
@@ -137,15 +156,45 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword)
 }
 
+// instance method - check if password changed after authentication
+userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    )
+    return JWTTimeStamp < changedTimeStamp
+  }
+  // if password has not changed
+  return false
+}
+
+// instance method - generate token for password reset
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex')
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex')
+
+  console.log({ resetToken }, this.passwordResetToken)
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+
+  return resetToken
+}
+
+// static method - find users
 userSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password.
   const user = await User.findOne({ email })
   if (!user) {
-    throw new Error({ error: 'Invalid login credentials' })
+    throw new AppError('Invalid login credentials.', 401)
   }
   const isPasswordMatch = await bcrypt.compare(password, user.password)
   if (!isPasswordMatch) {
-    throw new Error({ error: 'Invalid login credentials' })
+    throw new AppError('Invalid login credentials.', 401)
   }
   return user
 }

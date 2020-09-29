@@ -14,42 +14,13 @@ import {
 } from '../types'
 import jwtDecode from 'jwt-decode'
 
-// util Setup config/headers & token -- check if/when to use
-export const tokenConfig = getState => {
-  // 1. Get token from local storage
-  const token = getState().auth.token
-
-  // 2. Set Headers
-  const config = {
-    headers: {
-      'Content-type': 'application/json'
-    }
-  }
-
-  // 3. If token, add to headers
-  if (token) {
-    config.headers['x-auth-token'] = token
-  }
-  return config
-}
-
-// util set authorization token -- check if/when to use
-export const setAuthToken = token => {
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  } else {
-    delete axios.defaults.headers.common['Authorization']
-  }
-}
-
 // Check token and load user
 export const loadUser = token => async dispatch => {
   if (token) {
     try {
       const id = jwtDecode(token).id
-      setAuthToken(token)
-
       const res = await axios.get(`/api/v1/users/${id}`)
+
       dispatch({ type: USER_LOADED, payload: res.data })
     } catch (error) {
       dispatch({ type: AUTH_ERROR, payload: error.response.data })

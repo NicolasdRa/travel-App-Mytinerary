@@ -3,10 +3,11 @@ const jwt = require('jsonwebtoken')
 const { promisify } = require('util')
 const asyncErrorCatcher = require('../utils/asyncErrorCatcher')
 const AppError = require('./../utils/appError')
-// const Email = require('./../utils/email')
-// const crypto = require('crypto')
+const Email = require('./../utils/email')
+const crypto = require('crypto')
 
-// JWT token generation
+// AUTHENTICATION
+// instance method -JWT token signature
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
@@ -34,18 +35,14 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
   })
 }
 
-// AUTHENTICATION
-
 // SIGNUP handler
 exports.signup = asyncErrorCatcher(async (req, res, next) => {
   const newUser = await User.create({
     userName: req.body.userName,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    img: req.body.img
     // passwordConfirm: req.body.passwordConfirm
-    // delete the two keys below after testing _ especially the role key which leads to security issues
-    // passwordChangedAt: req.body.passwordChangedAt,
-    // role: req.body.role
   })
 
   // send welcome email to user email address
@@ -88,13 +85,13 @@ exports.logout = (req, res) => {
 exports.protect = asyncErrorCatcher(async (req, res, next) => {
   // 1) Get token & check if it exists
   let token
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1]
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt
+  const authHeader = req.headers.authorization
+  const cookie = req.cookies.jwt
+
+  if (authHeader && authHeader.startsWith('Bearer')) {
+    token = authHeader.split(' ')[1]
+  } else if (cookie) {
+    token = cookie
   }
 
   if (!token) {
@@ -103,34 +100,34 @@ exports.protect = asyncErrorCatcher(async (req, res, next) => {
     )
   }
 
-  // 2) verify if token
+  // 2) verify token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
 
   // 3) check if user still exists
-  const currentUser = await User.findById(decoded.id)
-  if (!currentUser) {
+  const user = await User.findById(decoded.id)
+  if (!user) {
     return next(new AppError('The user no longer exists.', 401))
   }
 
-  // // 4) check if user changed password after token was issued
-  // if (currentUser.changedPasswordAfter(decoded.iat)) {
-  //   return next(
-  //     new AppError('User recently changed password! Please log in again.', 401)
-  //   )
-  // }
+  // 4) check if user changed password after token was issued
+  if (user.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('Password recently changed! Please log in again.', 401)
+    )
+  }
 
   // grant access to protected route
-  req.user = currentUser
-  res.locals.user = currentUser
+  req.user = user
+  // res.locals.user = user
   next()
 })
 
 // -------------------------------------- //
 // AUTHORIZATION
 
-exports.restrictTo = (...roles) => {
+exports.restrict = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin', 'lead-guide']
+    // roles ['admin', 'guide', 'user']
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have permission to perform this action.', 403)
@@ -144,7 +141,7 @@ exports.restrictTo = (...roles) => {
 // PASSWORD RESET
 
 exports.forgotPassword = asyncErrorCatcher(async (req, res, next) => {
-  // 1) get user based on Posted email
+  // 1) get user based on provided email
   const user = await User.findOne({ email: req.body.email })
 
   if (!user)
@@ -158,7 +155,7 @@ exports.forgotPassword = asyncErrorCatcher(async (req, res, next) => {
   try {
     const resetURL = `${req.protocol}://${req.get(
       'host'
-    )}/api/v1/users/resetPassword/${resetToken}`
+    )}/api/v1/auth/resetpassword/${resetToken}`
 
     await new Email(user, resetURL).sendPasswordReset()
     res.status(200).json({
@@ -191,14 +188,14 @@ exports.resetPassword = asyncErrorCatcher(async (req, res, next) => {
     passwordResetExpires: { $gt: Date.now() }
   })
 
-  // 2) set new password if valid token
+  // 2) set new password if valid token and user found
   if (!user) {
     return next(
       new AppError('Provided token is invalid or it has expired.', 400)
     )
   }
   user.password = req.body.password
-  user.passwordConfirm = req.body.passwordConfirm
+  // user.passwordConfirm = req.body.passwordConfirm
   user.passwordResetToken = undefined
   user.passwordResetExpires = undefined
   await user.save()
@@ -206,8 +203,8 @@ exports.resetPassword = asyncErrorCatcher(async (req, res, next) => {
   // 3) update changedPasswordAt property for the current user
   // done in user model as instance method
 
-  // 4) Log the user in, send JWT
-  createSendToken(user, 200, req, res)
+  // 4) Log in user, send JWT
+  generateTokenCookieAndSendResponse(user, 200, req, res)
 })
 
 // password update without forgetting
@@ -228,5 +225,5 @@ exports.updatePassword = asyncErrorCatcher(async (req, res, next) => {
   await user.save()
 
   // 4) log user in, sent JWT
-  createSendToken(user, 200, req, res)
+  generateTokenCookieAndSendResponse(user, 200, req, res)
 })

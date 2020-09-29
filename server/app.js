@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const passport = require('./middleware/passport')
 const AppError = require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
 // const cookieSession = require('cookie-session')
 
 // MIDDLEWARE
@@ -58,16 +59,7 @@ app.all('*', (req, res, next) => {
   next(new AppError(`Cant't find ${req.originalUrl} on this server!`, 404))
 })
 
-// global error handler // then further develop into a fully fledged controller
-
-app.use((error, req, res, next) => {
-  error.statusCode = error.statusCode || 500
-  error.status = error.status || 'error'
-
-  res.status(error.statusCode).json({
-    status: error.status,
-    message: error.message
-  })
-})
+// global error handler
+app.use(globalErrorHandler)
 
 module.exports = app

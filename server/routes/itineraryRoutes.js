@@ -9,6 +9,7 @@ const {
   deleteItinerary,
   getCityItineraries
 } = require('../controllers/itineraryController')
+const { protect } = require('../controllers/authController')
 const activityRouter = require('../routes/activityRoutes')
 // ------------------------------------- //
 // Middleware
@@ -56,13 +57,13 @@ router.use('/:itineraryId/activities', activityRouter)
 router
   .route('/')
   .get(getAllItineraries)
-  .post(createItinerary)
+  .post(protect, createItinerary)
 
 router
   .route('/:id')
   .get(getItinerary)
-  .patch(updateItinerary)
-  .delete(deleteItinerary)
+  .patch(protect, updateItinerary)
+  .delete(protect, deleteItinerary)
 
 router.route('/:city_name').get(getCityItineraries)
 

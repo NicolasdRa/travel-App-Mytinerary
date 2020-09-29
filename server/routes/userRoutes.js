@@ -11,7 +11,7 @@ const {
   uploadUserPhoto,
   resizeUserPhoto
 } = require('../controllers/userController')
-const { protect } = require('../controllers/authController')
+const { protect, restrict } = require('../controllers/authController')
 
 // const passport = require('passport')
 
@@ -27,17 +27,16 @@ router
   .delete(deleteMe)
 
 // admin routes
-// router.use(restrictTo('admin'))
 router
   .route('/')
   .get(getAllUsers)
-  .post(createUser)
+  .post(restrict('admin'), createUser)
 
 router
   .route('/:id')
   .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser)
+  .patch(restrict('admin'), updateUser)
+  .delete(restrict('admin'), deleteUser)
 
 module.exports = router
 

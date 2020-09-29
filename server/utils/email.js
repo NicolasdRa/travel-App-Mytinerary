@@ -12,7 +12,7 @@ module.exports = class Email {
 
   newTransport () {
     if (process.env.NODE_ENV === 'production') {
-      //Sendgrid
+      //Sendgrid - production transport
       return nodemailer.createTransport({
         service: 'SendGrid',
         auth: {
@@ -21,7 +21,7 @@ module.exports = class Email {
         }
       })
     }
-
+    //Mailtrap - development transport
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
@@ -35,7 +35,7 @@ module.exports = class Email {
   async send (template, subject) {
     // Actually send the email
     // 1) render html base on a pug template
-    const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
+    const html = pug.renderFile(`${__dirname}/emailTemplates/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
       subject
