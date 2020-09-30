@@ -4,8 +4,9 @@
   "description": "Mytinerary PWA",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"nodemon server.js\" \"cd ../client && npm start\"",
-    "server": "nodemon server"
+    "start": "node server.js",
+    "dev": "concurrently \"nodemon server.js\" \"cd ../client && npm start\"",
+    "prod": "concurrently \"NODE_ENV=production nodemon server.js\" \"cd ../client && npm start\""
   },
   "author": "Nicolás di Rago",
   "license": "ISC",
@@ -37,5 +38,8 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "nodemon": "^2.0.4"
+  },
+  "engines": {
+    "node": "^12"
   }
 }

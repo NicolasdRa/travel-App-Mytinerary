@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const app = express()
 const cityRouter = require('./routes/cityRoutes')
 const itineraryRouter = require('./routes/itineraryRoutes')
@@ -21,6 +22,10 @@ app.use(
     extended: true
   })
 )
+
+// view engine set up
+app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'utils/emailTemplates'))
 
 // cookie parser
 app.use(cookieParser())

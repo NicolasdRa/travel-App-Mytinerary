@@ -24,7 +24,7 @@ const handleJwtError = () =>
 const handleJwtExpiredError = () =>
   new AppError('Your token has expired, please log in again', 401)
 
-const sendErrorDev = (error, req, res) => {
+const sendDevError = (error, req, res) => {
   // A) API
   if (req.originalUrl.startsWith('/api')) {
     return res.status(error.statusCode).json({
@@ -43,7 +43,7 @@ const sendErrorDev = (error, req, res) => {
   })
 }
 
-const sendErrorProd = (error, req, res) => {
+const sendProdError = (error, req, res) => {
   // A) API
   if (req.originalUrl.startsWith('/api')) {
     // a) Operational, trusted error: send message to client
@@ -54,7 +54,7 @@ const sendErrorProd = (error, req, res) => {
       })
     }
 
-    // b) programming or unknown origin error: dont leak details
+    // b) programming or unknown origin error: details not leaked
     // 1. Log error
     console.error('Unexpected ERROR', error)
 
@@ -88,7 +88,7 @@ module.exports = (error, req, res, next) => {
   error.status = error.status || 'error'
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(error, req, res)
+    sendDevError(error, req, res)
   } else if (process.env.NODE_ENV === 'production') {
     let err = { ...error }
     let errName = error.name
@@ -100,6 +100,6 @@ module.exports = (error, req, res, next) => {
     if (errName === 'JsonWebTokenError') err = handleJwtError(err)
     if (errName === 'TokenExpiredError') err = handleJwtExpiredError(err)
 
-    sendErrorProd(err, req, res)
+    sendProdError(err, req, res)
   }
 }

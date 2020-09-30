@@ -7,7 +7,7 @@ const Email = require('./../utils/email')
 const crypto = require('crypto')
 
 // AUTHENTICATION
-// instance method -JWT token signature
+
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
@@ -46,8 +46,8 @@ exports.signup = asyncErrorCatcher(async (req, res, next) => {
   })
 
   // send welcome email to user email address
-  // const url = `${req.protocol}://${req.get('host')}/me`
-  // await new Email(newUser, url).sendWelcome()
+  const url = `${req.protocol}://${req.get('host')}/me`
+  await new Email(newUser, url).sendWelcome()
 
   generateTokenCookieAndSendResponse(newUser, 201, req, res)
 })
