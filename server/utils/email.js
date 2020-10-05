@@ -35,7 +35,7 @@ module.exports = class Email {
   async send (template, subject) {
     // Actually send the email
     // 1) render html base on a pug template
-    const html = pug.renderFile(`${__dirname}/emailTemplates/${template}.pug`, {
+    const html = pug.renderFile(`views/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
       subject
@@ -55,7 +55,7 @@ module.exports = class Email {
   }
 
   async sendWelcome () {
-    await this.send('welcome', 'Welcome to Mytinerary App')
+    await this.send('welcome2', 'Welcome to Mytinerary App')
   }
 
   async sendPasswordReset () {

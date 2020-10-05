@@ -16,16 +16,19 @@ const globalErrorHandler = require('./controllers/errorController')
 // MIDDLEWARE
 
 // body parsers
-app.use(express.json({ limit: '5000kb' }))
+app.use(express.json({ limit: '500kb' }))
 app.use(
   express.urlencoded({
     extended: true
   })
 )
 
-// view engine set up
+// view engine set up - only for sending emails
 app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'utils/emailTemplates'))
+app.set('views', path.join(__dirname, 'views'))
+
+// serves statics files
+app.use(express.static(path.join(__dirname, 'public')))
 
 // cookie parser
 app.use(cookieParser())

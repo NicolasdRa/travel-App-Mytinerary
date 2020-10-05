@@ -12,6 +12,7 @@ import Listing from './Components/pages/listing/Listing'
 import CityPage from './Components/pages/city/CityPage'
 import ItineraryPage from './Components/pages/itinerary/ItineraryPage'
 import ActivityPage from './Components/pages/activity/ActivityPage'
+import PasswordResetForm from './Components/ui/PasswordResetForm/PasswordResetForm'
 
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -60,8 +61,11 @@ const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
         <Grid className={classes.main}>
           <Switch>
             <Route exact path='/' component={Landing} />
-            <Route exact path='/signup' component={Signup} />
-            <Route exact path='/login' component={Login} />
+            <Route
+              exact
+              path='/resetPassword/:resetToken'
+              component={PasswordResetForm}
+            />
             <Route exact path='/profile' component={Profile} />
             <Route exact path='/listing' component={Listing} />
             <Route exact path='/citypage/:city_name' component={CityPage} />

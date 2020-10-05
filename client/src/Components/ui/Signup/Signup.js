@@ -63,6 +63,7 @@ class Signup extends Component {
     userName: '',
     email: '',
     password: '',
+    passwordConfirm: '',
     img: '',
     isAuthenticated: false,
     msg: null
@@ -94,12 +95,13 @@ class Signup extends Component {
     this.handleClose()
     e.preventDefault()
 
-    const { userName, email, password } = this.state
+    const { userName, email, password, passwordConfirm } = this.state
 
     const newUser = {
       userName,
       email,
-      password
+      password,
+      passwordConfirm
     }
 
     this.props.signupUser(newUser)
@@ -209,6 +211,19 @@ class Signup extends Component {
                 label='Password'
                 type='password'
                 autoComplete='current-password'
+                onChange={this.handleChange}
+                fullWidth
+                className={classes.input_field}
+              />
+              <TextField
+                required
+                autoFocus
+                minLength='6'
+                margin='dense'
+                id='passwordConfirm'
+                label='Confirm Password'
+                type='password'
+                autoComplete='current-password-confirm'
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}

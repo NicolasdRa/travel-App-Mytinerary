@@ -34,8 +34,8 @@ const userSchema = new mongoose.Schema({
   },
 
   img: {
-    type: String,
-    default: 'default.jpg'
+    type: String
+    // default: 'default.jpg'
   },
 
   password: {
@@ -45,18 +45,18 @@ const userSchema = new mongoose.Schema({
     select: false
   },
 
-  // passwordConfirm: {
-  //   type: String,
-  //   required: [true, 'Please provide a valid password'],
-  //   minlength: 6,
-  //   validate: {
-  //     // works only on create and save
-  //     validator: function (el) {
-  //       return el === this.password
-  //     },
-  //     message: 'Passwords do not match'
-  //   }
-  // },
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Please provide a valid password'],
+    minlength: 6,
+    validate: {
+      // works only on create and save
+      validator: function (el) {
+        return el === this.password
+      },
+      message: 'Passwords do not match'
+    }
+  },
 
   role: {
     type: String,

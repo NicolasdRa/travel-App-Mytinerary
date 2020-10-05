@@ -10,7 +10,11 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  SENT_PASSWORD_RESET_LINK_SUCCESS,
+  SENT_PASSWORD_RESET_LINK_FAIL,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL
 } from '../types'
 import jwtDecode from 'jwt-decode'
 
@@ -81,5 +85,45 @@ export const logOutUser = user => async dispatch => {
     dispatch({ type: LOGOUT_SUCCESS, payload: res.data })
   } catch (error) {
     dispatch({ type: LOGOUT_FAIL, payload: error.response.data })
+  }
+}
+
+// SEND PASSWORD RESET LINK
+export const forgotPassword = formData => async dispatch => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/auth/forgotpassword',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: formData
+    })
+    dispatch({ type: SENT_PASSWORD_RESET_LINK_SUCCESS, payload: res.data })
+  } catch (error) {
+    dispatch({
+      type: SENT_PASSWORD_RESET_LINK_FAIL,
+      payload: error.response.data
+    })
+  }
+}
+
+// RESET PASSWORD
+export const resetPassword = formData => async dispatch => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: '/api/v1/auth/resetpassword',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: formData
+    })
+    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data })
+  } catch (error) {
+    dispatch({
+      type: RESET_PASSWORD_FAIL,
+      payload: error.response.data
+    })
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-// import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -12,7 +12,8 @@ import {
   Typography
 } from '@material-ui/core'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
-import { loginUser } from '../../Redux/auth/authActions'
+// import { MuiAlert } from '@material-ui/lab/Alert'
+import { loginUser, forgotPassword } from '../../Redux/auth/authActions'
 import { clearErrors } from '../../Redux/error/errorActions'
 import {
   openLoginForm,
@@ -20,7 +21,7 @@ import {
 } from '../../Redux/loginForm/loginFormActions'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'react-uuid'
-import { Alert, AlertTitle } from '@material-ui/lab'
+import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 
 const styles = theme => ({
   title: {
@@ -63,7 +64,8 @@ class Login extends Component {
     password: '',
     img: '',
     isAuthenticated: false,
-    msg: null
+    msg: null,
+    openSnackBar: false
   }
 
   componentDidUpdate (prevProps) {
@@ -111,7 +113,6 @@ class Login extends Component {
 
   render () {
     const { classes } = this.props
-    const errors = this.state.msg
     const open = this.props.setOpen
 
     const handleClickOpen = () => {
@@ -161,7 +162,7 @@ class Login extends Component {
                 </Typography>
               </DialogTitle>
 
-              {errors
+              {/* {errors
                 ? errors.map(error => (
                     <Box key={uuid()}>
                       <Alert
@@ -173,7 +174,7 @@ class Login extends Component {
                       </Alert>
                     </Box>
                   ))
-                : null}
+                : null} */}
 
               <TextField
                 required
@@ -199,6 +200,7 @@ class Login extends Component {
                 fullWidth
                 className={classes.input_field}
               />
+              <ForgotPasswordForm className={classes.forgotPassword} />
               <Typography variant='body2' className={classes.text}>
                 By proceeding you agree to Mytinerary’s Privacy Policy, User
                 Agreement and T&Cs.
@@ -232,6 +234,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loginUser: user => dispatch(loginUser(user)),
+    forgotPassword: user => dispatch(forgotPassword(user)),
     clearErrors: () => dispatch(clearErrors()),
     openLoginForm: () => dispatch(openLoginForm()),
     closeLoginForm: () => dispatch(closeLoginForm())

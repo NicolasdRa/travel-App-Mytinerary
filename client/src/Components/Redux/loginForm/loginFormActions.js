@@ -1,9 +1,9 @@
 // opens login form modal
-export const openLoginForm = loginForm => ({
+export const openLoginForm = () => ({
   type: 'SET_OPEN'
 })
 
 // closes login form modal
-export const closeLoginForm = loginForm => ({
+export const closeLoginForm = () => ({
   type: 'SET_CLOSE'
 })

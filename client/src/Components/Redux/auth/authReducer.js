@@ -7,7 +7,11 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
-  LOGOUT_FAIL
+  LOGOUT_FAIL,
+  SENT_PASSWORD_RESET_LINK_SUCCESS,
+  SENT_PASSWORD_RESET_LINK_FAIL,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL
 } from '../types'
 
 const initialState = {
@@ -51,6 +55,8 @@ export default (state = initialState, action) => {
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case SIGNUP_FAIL:
+    case SENT_PASSWORD_RESET_LINK_FAIL:
+    case RESET_PASSWORD_FAIL:
       return {
         ...state,
         token: null,
@@ -60,6 +66,8 @@ export default (state = initialState, action) => {
         errors: action.payload
       }
     case LOGOUT_SUCCESS:
+    case SENT_PASSWORD_RESET_LINK_SUCCESS:
+    case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         token: null,

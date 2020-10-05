@@ -41,8 +41,8 @@ exports.signup = asyncErrorCatcher(async (req, res, next) => {
     userName: req.body.userName,
     email: req.body.email,
     password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
     img: req.body.img
-    // passwordConfirm: req.body.passwordConfirm
   })
 
   // send welcome email to user email address
@@ -153,14 +153,13 @@ exports.forgotPassword = asyncErrorCatcher(async (req, res, next) => {
 
   // 3) send it to user's email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/auth/resetpassword/${resetToken}`
+    const resetURL = `${process.env.FRONTEND_URL}resetpassword/${resetToken}`
 
     await new Email(user, resetURL).sendPasswordReset()
     res.status(200).json({
       status: 'success',
-      message: 'Reset token sent to email!'
+      message: 'Reset token sent to email!',
+      resetToken: resetURL
     })
   } catch (error) {
     user.passwordResetToken = undefined
@@ -180,7 +179,7 @@ exports.resetPassword = asyncErrorCatcher(async (req, res, next) => {
   // 1) get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
-    .update(req.params.token)
+    .update(req.body.resetToken)
     .digest('hex')
 
   const user = await User.findOne({
@@ -195,7 +194,7 @@ exports.resetPassword = asyncErrorCatcher(async (req, res, next) => {
     )
   }
   user.password = req.body.password
-  // user.passwordConfirm = req.body.passwordConfirm
+  user.passwordConfirm = req.body.passwordConfirm
   user.passwordResetToken = undefined
   user.passwordResetExpires = undefined
   await user.save()
