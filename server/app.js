@@ -1,21 +1,59 @@
 const express = require('express')
 const path = require('path')
-const app = express()
+
+const rateLimit = require('express-rate-limit')
+const helmet = require('helmet')
+const mongoSanitize = require('express-mongo-sanitize')
+const xss = require('xss-clean')
+const hpp = require('hpp')
+const cors = require('cors')
+
+const cookieParser = require('cookie-parser')
+const compression = require('compression')
+
 const cityRouter = require('./routes/cityRoutes')
 const itineraryRouter = require('./routes/itineraryRoutes')
 const activityRouter = require('./routes/activityRoutes')
 const userRouter = require('./routes/userRoutes')
 const authRouter = require('./routes/authRoutes')
-const cookieParser = require('cookie-parser')
-const cors = require('cors')
+
 const passport = require('./middleware/passport')
+
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
-// const cookieSession = require('cookie-session')
 
-// MIDDLEWARE
+const app = express()
 
-// body parsers
+// enables proxy when deployed to heroku
+app.enable('trust proxy')
+
+// view engine set up (for sending html emails auth process)
+app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'views'))
+
+// Global MIDDLEWARE
+
+// Cors - simple requests (get, post) - Access-Control-Allow-Origin *
+app.use(cors())
+
+// Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
+app.options('*', cors())
+
+// serves statics files
+app.use(express.static(path.join(__dirname, 'public')))
+
+// Set security HTTP headers
+app.use(helmet())
+
+// Limit requests from same API - against Brute force attack
+const limiter = rateLimit({
+  max: 200,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from the IP, please try again in an hour!'
+})
+app.use('/api', limiter)
+
+// Body parsers
 app.use(express.json({ limit: '500kb' }))
 app.use(
   express.urlencoded({
@@ -23,23 +61,34 @@ app.use(
   })
 )
 
-// view engine set up - only for sending emails
-app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'views'))
-
-// serves statics files
-app.use(express.static(path.join(__dirname, 'public')))
-
 // cookie parser
 app.use(cookieParser())
 
-// cookie-session
-// app.use(
-//   cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: process.env.COOKIE_SESSION_KEY
-//   })
-// )
+// Data sanitization against NoSQL query injection (it removes $ from query attacks and makes them unusable)
+app.use(mongoSanitize())
+
+// Data sanitization against XSS attacks
+app.use(xss())
+
+// prevent parameter pollution in queries
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'pricing',
+      'ratingAvg',
+      'ratingsAmount',
+      'location',
+      'difficulty',
+      'guides',
+      'city',
+      'hashtags'
+    ]
+  })
+)
+
+// compress all text sent in the app
+app.use(compression())
 
 // Test middleware
 app.use((req, res, next) => {
@@ -48,12 +97,9 @@ app.use((req, res, next) => {
   next()
 })
 
-//passport middleware
+// Passport
 app.use(passport.initialize())
 app.use(passport.session())
-// app.use(passport.session())
-
-app.use(cors())
 
 // MOUNTING routers
 app.use('/api/v1/cities', cityRouter)

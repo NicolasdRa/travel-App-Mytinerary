@@ -58,8 +58,6 @@ class Signup extends Component {
   state = {
     fullWidth: true,
     maxWidth: 'sm',
-    firstName: '',
-    lastName: '',
     userName: '',
     email: '',
     password: '',
@@ -116,7 +114,6 @@ class Signup extends Component {
 
   render () {
     const { classes } = this.props
-    const errors = this.state.msg
     const open = this.props.setOpen
 
     const handleClickOpen = () => {
@@ -150,7 +147,7 @@ class Signup extends Component {
                 //   color='secondary'
                 // component={Link}
                 // to='api/auth/google'
-                href='http://localhost:5000/api/users/google'
+                href='http://localhost:5000/api/v1/auth/google'
                 startIcon={<GoogleSVGIcon />}
               >
                 Sign up with Google
@@ -163,7 +160,7 @@ class Signup extends Component {
               >
                 <Typography variant='body2'>Sign up with your info</Typography>
               </DialogTitle>
-
+              {/* 
               {errors
                 ? errors.map(error => (
                     <Box key={uuid()}>
@@ -176,7 +173,7 @@ class Signup extends Component {
                       </Alert>
                     </Box>
                   ))
-                : null}
+                : null} */}
 
               <TextField
                 required

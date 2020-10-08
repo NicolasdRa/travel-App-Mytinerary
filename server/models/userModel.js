@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const crypto = require('crypto')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 const AppError = require('./../utils/appError')
 
 // Schema
@@ -40,14 +40,14 @@ const userSchema = new mongoose.Schema({
 
   password: {
     type: String,
-    required: [true, 'Please provide a valid password'],
+    // required: [true, 'Please provide a valid password'],
     minlength: 6,
     select: false
   },
 
   passwordConfirm: {
     type: String,
-    required: [true, 'Please provide a valid password'],
+    // required: [true, 'Please provide a valid password'],
     minlength: 6,
     validate: {
       // works only on create and save
@@ -136,17 +136,6 @@ userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } })
   next()
 })
-
-// DISABLED -- then refactor to re-functionalise token blacklist
-// userSchema.methods.generateAuthToken = async function () {
-//   // Generate an jwt token for the user
-//   const user = this
-//   const options = { expiresIn: 120 }
-//   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, options)
-//   user.blacklist.tokens = user.blacklist.tokens.concat({ token })
-//   await user.save()
-//   return token
-// }
 
 // instance method - bycript compare passwords
 userSchema.methods.correctPassword = async function (

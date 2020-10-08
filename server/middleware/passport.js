@@ -46,16 +46,16 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/users/google/redirect'
+      callbackURL: '/api/v1/auth/google/redirect'
     },
     (accessToken, refreshToken, profile, done) => {
       // passport callback function
 
-      // Check if logging user is in our DB
+      // Check if user is in DB
       User.findOne({ googleId: profile.id }).then(user => {
         if (user) {
           // already have a user
-          console.log('Current User is:', user)
+          console.log('From passport --- Current User is:', user)
           done(null, user)
         } else {
           //if not create user in DB

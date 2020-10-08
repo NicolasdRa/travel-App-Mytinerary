@@ -154,7 +154,7 @@ class PasswordResetForm extends Component {
               />
               <Snackbar
                 anchorOrigin={{
-                  vertical: 'center',
+                  vertical: 'top',
                   horizontal: 'center'
                 }}
                 open={this.state.openSnackBar}

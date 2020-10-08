@@ -146,7 +146,7 @@ class Login extends Component {
                 //   color='secondary'
                 // component={Link}
                 // to='api/auth/google'
-                href='http://localhost:5000/api/users/google'
+                href='http://localhost:5000/api/v1/auth/google'
                 startIcon={<GoogleSVGIcon />}
               >
                 Log in with Google

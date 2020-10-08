@@ -5,6 +5,7 @@ const asyncErrorCatcher = require('../utils/asyncErrorCatcher')
 const AppError = require('./../utils/appError')
 const Email = require('./../utils/email')
 const crypto = require('crypto')
+const passport = require('passport')
 
 // AUTHENTICATION
 
@@ -20,6 +21,7 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
+    // set httpOnly to "true" for production
     httpOnly: false,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
   }
@@ -80,6 +82,32 @@ exports.logout = (req, res) => {
   })
   res.status(200).json({ status: 'success' })
 }
+
+// GOOGLE LOGIN sign in and re-direct handler
+exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
+  const user = req.user
+  const token = await signToken(user._id)
+
+  if (!user || !token) {
+    return next(
+      new AppError(
+        'Invalid credentials, please try again with a valid goolge account.',
+        401
+      )
+    )
+  }
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    // set httpOnly to "true" for production
+    httpOnly: false,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+  }
+
+  res.cookie('jwt', token, cookieOptions).redirect(`//localhost:3000/`)
+})
 
 // PROTECT ROUTE handler
 exports.protect = asyncErrorCatcher(async (req, res, next) => {
