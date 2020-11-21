@@ -9,47 +9,50 @@ const AppError = require('./../utils/appError')
 const userSchema = new mongoose.Schema({
   userName: {
     type: String,
-    required: [true, 'Please, include user name!'],
+    // required: [true, 'Please, include user name!'],
     unique: true,
-    trim: true
+    trim: true,
   },
 
   firstName: {
     type: String,
-    default: ''
+    default: '',
   },
 
   lastName: {
     type: String,
-    default: ''
+    default: '',
   },
 
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: [
+      true,
+      'there is already an account registered under that email address, please provide another email!',
+    ],
     lowercase: true,
     validate: [
       validator.isEmail,
-      'Invalid Email, please provide a valid email address'
-    ]
+      'Invalid Email, please provide a valid email address',
+    ],
   },
 
   img: {
     type: String,
-    default: 'defaultProfileCover.jpg'
+    default: 'defaultProfileCover.jpg',
   },
 
   coverImg: {
     type: String,
-    default: ''
+    default: '',
   },
 
   password: {
     type: String,
     // required: [true, 'Please provide a valid password'],
     minlength: 6,
-    select: false
+    select: false,
   },
 
   passwordConfirm: {
@@ -61,60 +64,60 @@ const userSchema = new mongoose.Schema({
       validator: function (el) {
         return el === this.password
       },
-      message: 'Passwords do not match'
+      message: 'Passwords do not match',
     },
-    select: false
+    select: false,
   },
 
   role: {
     type: String,
     enum: ['user', 'guide', 'admin'],
-    default: 'user'
+    default: 'user',
   },
 
   details: {
     type: String,
     trim: true,
-    default: ''
+    default: '',
   },
 
   googleId: {
-    type: String
+    type: String,
   },
 
   createdAt: {
     type: Date,
     default: Date.now,
-    select: false
+    select: false,
   },
 
   passwordChangedAt: {
     type: Date,
-    select: false
+    select: false,
   },
 
   passwordResetToken: {
     type: String,
-    select: false
+    select: false,
   },
 
   passwordResetExpires: {
     type: Date,
-    select: false
+    select: false,
   },
 
   favourites: [
     {
       itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
-      activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }]
-    }
+      activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }],
+    },
   ],
 
   active: {
     type: Boolean,
     default: true,
-    select: false
-  }
+    select: false,
+  },
 })
 
 // password hash pre-middleware
@@ -149,7 +152,7 @@ userSchema.pre(/^find/, function (next) {
 // instance method - bycript compare passwords
 userSchema.methods.correctPassword = async function (
   candidatePassword,
-  userPassword
+  userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword)
 }
@@ -159,7 +162,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
     const changedTimeStamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
-      10
+      10,
     )
     return JWTTimeStamp < changedTimeStamp
   }
