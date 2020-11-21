@@ -3,41 +3,6 @@ const mongoose = require('mongoose')
 const User = require('../models/userModel.js')
 mongoose.model('User')
 
-// JWT Auth Strategy
-var JwtStrategy = require('passport-jwt').Strategy,
-  ExtractJwt = require('passport-jwt').ExtractJwt
-
-var opts = {}
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
-opts.secretOrKey = process.env.JWT_SECRET
-
-passport.use(
-  new JwtStrategy(opts, function (jwt_payload, done) {
-    User.findOne({ id: jwt_payload.sub }, function (err, user) {
-      if (err) {
-        return done(err, false)
-      }
-      if (user) {
-        return done(null, user)
-      } else {
-        return done(null, false)
-      }
-    })
-  })
-)
-
-// serialize user for google strategy
-// passport.serializeUser(function (user, done) {
-//   done(null, user._id)
-// })
-
-// passport.deserializeUser(function (id, done) {
-//   User.findById(id, (err, user) => {
-//     if (err) done(err)
-//     else done(null, user)
-//   })
-// })
-
 // Google Login Auth Strategy
 var GoogleStrategy = require('passport-google-oauth20').Strategy
 
@@ -55,7 +20,7 @@ passport.use(
       User.findOne({ googleId: profile.id }).then(user => {
         if (user) {
           // already have a user
-          console.log('From passport --- Current User is:', user)
+          console.log('From passport -- Current User is:', user)
           done(null, user)
         } else {
           //if not create user in DB
@@ -67,7 +32,7 @@ passport.use(
           })
             .save()
             .then(user => {
-              console.log('new user created:' + user)
+              console.log('From passport -- new user created:' + user)
               done(null, user)
             })
         }
@@ -77,3 +42,26 @@ passport.use(
 )
 
 module.exports = passport
+
+// JWT Auth Strategy
+// var JwtStrategy = require('passport-jwt').Strategy,
+//   ExtractJwt = require('passport-jwt').ExtractJwt
+
+// var opts = {}
+// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
+// opts.secretOrKey = process.env.JWT_SECRET
+
+// passport.use(
+//   new JwtStrategy(opts, function (jwt_payload, done) {
+//     User.findOne({ id: jwt_payload.sub }, function (err, user) {
+//       if (err) {
+//         return done(err, false)
+//       }
+//       if (user) {
+//         return done(null, user)
+//       } else {
+//         return done(null, false)
+//       }
+//     })
+//   })
+// )

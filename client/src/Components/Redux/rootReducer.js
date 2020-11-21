@@ -6,6 +6,7 @@ import authReducer from './auth/authReducer'
 import errorReducer from './error/errorReducer'
 import loginFormReducer from './loginForm/loginFormReducer'
 import signupFormReducer from './signupForm/signupFormReducer'
+import userReducer from './users/userReducer'
 
 const rootReducer = combineReducers({
   cities: citiesReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   errors: errorReducer,
   loginForm: loginFormReducer,
-  signupForm: signupFormReducer
+  signupForm: signupFormReducer,
+  users: userReducer
 })
 
 export default rootReducer

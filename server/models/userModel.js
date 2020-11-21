@@ -15,11 +15,13 @@ const userSchema = new mongoose.Schema({
   },
 
   firstName: {
-    type: String
+    type: String,
+    default: ''
   },
 
   lastName: {
-    type: String
+    type: String,
+    default: ''
   },
 
   email: {
@@ -34,8 +36,13 @@ const userSchema = new mongoose.Schema({
   },
 
   img: {
-    type: String
-    // default: 'default.jpg'
+    type: String,
+    default: 'defaultProfileCover.jpg'
+  },
+
+  coverImg: {
+    type: String,
+    default: ''
   },
 
   password: {
@@ -55,7 +62,8 @@ const userSchema = new mongoose.Schema({
         return el === this.password
       },
       message: 'Passwords do not match'
-    }
+    },
+    select: false
   },
 
   role: {
@@ -66,7 +74,8 @@ const userSchema = new mongoose.Schema({
 
   details: {
     type: String,
-    trim: true
+    trim: true,
+    default: ''
   },
 
   googleId: {

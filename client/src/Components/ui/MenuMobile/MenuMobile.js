@@ -10,6 +10,7 @@ import Login from '../Login/Login'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
 import { logOutUser } from '../../Redux/auth/authActions'
+import { unloadCurrentUser } from '../../Redux/users/userActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
@@ -27,6 +28,7 @@ export const MenuMobile = () => {
   const handleLogOut = e => {
     e.preventDefault()
     dispatch(logOutUser(user))
+    dispatch(unloadCurrentUser())
     history.push('/')
   }
 

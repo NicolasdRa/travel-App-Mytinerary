@@ -54,10 +54,10 @@ const useStyles = makeStyles(theme => ({
 const Cities = () => {
   const classes = useStyles()
 
-  const cities = useSelector(state => state.cities.cities.data)
-
   const [string, setString] = useState('')
   const [city, setCity] = useState(null)
+
+  const cities = useSelector(state => state.cities.cities.data)
 
   const handleChange = e => {
     // updates string in state

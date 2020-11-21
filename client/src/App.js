@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import TopNav from './Components/ui/TopNav/TopNav'
 import BottomNav from './Components/ui/BottomNav/BottomNav'
@@ -21,6 +21,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { fetchCities } from './Components/Redux/cities/cityActions'
 import { fetchItineraries } from './Components/Redux/itineraries/itineraryActions'
 import { fetchActivities } from './Components/Redux/activities/activityActions'
+import { loadCurrentUser } from './Components/Redux/users/userActions'
+import { isLoggedIn } from './Components/Redux/auth/authActions'
 
 const useStyles = makeStyles(theme => ({
   topNav: {
@@ -44,6 +46,18 @@ const useStyles = makeStyles(theme => ({
 const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
+
+  const dispatch = useDispatch()
+
+  const user = useSelector(state => state.users.currentUser)
+  useEffect(() => {
+    dispatch(isLoggedIn(user))
+  }, [user])
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  useEffect(() => {
+    dispatch(loadCurrentUser())
+  }, [isAuthenticated])
 
   // fetches data from DB
   useEffect(() => {
@@ -84,5 +98,6 @@ const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
 export default connect(null, {
   fetchCities,
   fetchItineraries,
-  fetchActivities
+  fetchActivities,
+  loadCurrentUser
 })(App)

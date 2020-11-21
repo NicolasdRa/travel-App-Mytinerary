@@ -18,7 +18,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ITINERARIES:
-      // console.log("fetched itineraries")
       return {
         ...state,
         itineraries: action.payload,

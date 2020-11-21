@@ -123,14 +123,12 @@ const useStyles = makeStyles(theme => ({
 const ItineraryCard = props => {
   const classes = useStyles()
 
-  const itinerary = props.itinerary
   const {
     city,
     title,
     likes,
     duration,
     pricing,
-    hashtags,
     img,
     activities,
     details

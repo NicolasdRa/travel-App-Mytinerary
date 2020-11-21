@@ -19,13 +19,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function ImageAvatars () {
   const classes = useStyles()
-  const user = useSelector(state => state.auth.user)
+  const { userName, firstName, img } = useSelector(
+    state => state.users.currentUser
+  )
 
-  let initials = user.userName.charAt(0).toUpperCase()
+  let initials
+  userName ? (initials = userName.charAt(0).toUpperCase()) : (initials = 'U')
 
   return (
     <div className={classes.root}>
-      <Avatar src={user.img} className={classes.small} alt={user.userName}>
+      <Avatar src={img} className={classes.small} alt={userName}>
         {initials}
       </Avatar>
     </div>

@@ -22,6 +22,7 @@ const passport = require('./middleware/passport')
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
 
+// Start express app
 const app = express()
 
 // enables proxy when deployed to heroku
@@ -39,19 +40,21 @@ app.use(cors())
 // Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
 app.options('*', cors())
 
-// serves statics files
-app.use(express.static(path.join(__dirname, 'public')))
+// serves statics files (uploaded imgs)
+const staticDir = path.join(__dirname, 'public')
+app.use(express.static(staticDir))
 
 // Set security HTTP headers
 app.use(helmet())
 
+// ENABLE FOR PRODUCTION AND SET APPROPRIATE LIMIT
 // Limit requests from same API - against Brute force attack
-const limiter = rateLimit({
-  max: 200,
-  windowMs: 60 * 60 * 1000,
-  message: 'Too many requests from the IP, please try again in an hour!'
-})
-app.use('/api', limiter)
+// const limiter = rateLimit({
+//   max: 500,
+//   windowMs: 60 * 60 * 1000,
+//   message: 'Too many requests from the IP, please try again in an hour!'
+// })
+// app.use('/api', limiter)
 
 // Body parsers
 app.use(express.json({ limit: '500kb' }))
@@ -93,7 +96,7 @@ app.use(compression())
 // Test middleware
 app.use((req, res, next) => {
   req.reqTime = new Date().toISOString()
-  console.log('cookies', req.cookies)
+  // console.log('cookies', req.cookies)
   next()
 })
 

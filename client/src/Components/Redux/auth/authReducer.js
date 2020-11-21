@@ -1,7 +1,7 @@
 import {
   USER_LOADING,
-  USER_LOADED,
-  AUTH_ERROR,
+  IS_LOGGED_IN,
+  IS_LOGGED_OUT,
   SIGNUP_SUCCESS,
   SIGNUP_FAIL,
   LOGIN_SUCCESS,
@@ -27,50 +27,44 @@ export default (state = initialState, action) => {
         ...state,
         isloading: true
       }
-
-    case USER_LOADED:
+    case IS_LOGGED_IN:
       return {
         ...state,
         isAuthenticated: true,
         isloading: false,
-        user: action.payload.data,
-        token: action.payload.data.token
+        user: action.payload
       }
 
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
       return {
         ...state,
-        ...action.payload,
         isAuthenticated: true,
-        isloading: false
+        isloading: false,
+        user: action.payload.data._id
       }
     case LOGOUT_FAIL:
       return {
         ...state,
-        ...action.payload,
         isAuthenticated: true,
         isloading: false
       }
-    case AUTH_ERROR:
+    case LOGOUT_SUCCESS:
+    case IS_LOGGED_OUT:
     case LOGIN_FAIL:
     case SIGNUP_FAIL:
     case SENT_PASSWORD_RESET_LINK_FAIL:
     case RESET_PASSWORD_FAIL:
       return {
         ...state,
-        token: null,
         isAuthenticated: false,
         user: null,
-        isloading: false,
-        errors: action.payload
+        isloading: false
       }
-    case LOGOUT_SUCCESS:
     case SENT_PASSWORD_RESET_LINK_SUCCESS:
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
-        token: null,
         isAuthenticated: false,
         user: null,
         isloading: false

@@ -4,7 +4,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
-import AddRoundedIcon from '@material-ui/icons/AddRounded'
+// import AddRoundedIcon from '@material-ui/icons/AddRounded'
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
 import { useSelector } from 'react-redux'
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 export default function BottomNav () {
   const classes = useStyles()
   const [value, setValue] = React.useState('recents')
-  const user = useSelector(state => state.auth.user)
+  const user = useSelector(state => state.users.currentUser)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)

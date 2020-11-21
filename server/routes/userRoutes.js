@@ -8,23 +8,21 @@ const {
   updateMe,
   deleteMe,
   getMe,
-  uploadUserPhoto,
-  resizeUserPhoto
+  uploadUserImg,
+  resizeUserImg,
+  uploadCoverImg,
+  resizeCoverImg
 } = require('../controllers/userController')
 const { protect, restrict } = require('../controllers/authController')
-
-// const passport = require('passport')
 
 const router = express.Router()
 
 // protects ruotes below this point
 router.use(protect)
 
-router
-  .route('/me')
-  .get(getMe, getUser)
-  .patch(updateMe)
-  .delete(deleteMe)
+router.route('/me').get(getMe, getUser)
+router.patch('/updateMe', uploadUserImg, resizeUserImg, updateMe)
+router.delete('/deleteMe', deleteMe)
 
 // admin routes
 router

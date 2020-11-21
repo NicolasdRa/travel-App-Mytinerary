@@ -1,13 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Typography
-} from '@material-ui/core'
+import { Avatar, Box, Divider, IconButton, Typography } from '@material-ui/core'
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import Signup from '../../ui/Signup/Signup'
 import Login from '../../ui/Login/Login'
@@ -15,8 +9,10 @@ import AddItinerary from '../../ui/Itineraries/AddItinerary'
 import CreateIcon from '@material-ui/icons/Create'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
-import { Link } from 'react-router-dom'
+import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
 import { useSelector, useDispatch } from 'react-redux'
+import { loadCurrentUser } from '../../Redux/users/userActions'
+import { isLoggedIn } from '../../Redux/auth/authActions'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -174,23 +170,32 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = () => {
   const classes = useStyles()
-  const user = useSelector(state => state.auth.user)
+  const dispatch = useDispatch()
+
+  const user = useSelector(state => state.users.currentUser)
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const cities = useSelector(state => state.cities.cities.data)
+
+  useEffect(() => {
+    return () => {
+      dispatch(loadCurrentUser())
+    }
+  }, [])
 
   if (isAuthenticated) {
-    const { userName, firstName, lastName, details, img, email, likes } = user
-    function generateRandomInteger (min, max) {
-      return Math.floor(min + Math.random() * (max + 1 - min))
-    }
-
-    const randomNumber = generateRandomInteger(0, cities.length)
-
-    const randomImg = cities[randomNumber].img
+    const {
+      userName,
+      firstName,
+      lastName,
+      details,
+      img,
+      coverImg,
+      email,
+      likes
+    } = user
 
     return (
       <Box className={classes.container}>
-        <ImageHeader img={randomImg} className={classes.header} />
+        <ImageHeader img={coverImg} className={classes.header} />
         <Box className={classes.content}>
           <Avatar
             alt={firstName + '' + lastName}
@@ -199,7 +204,7 @@ const Profile = () => {
           />
           <Box className={classes.info}>
             <Box className={classes.edit_btn}>
-              <Button
+              {/* <Button
                 size='small'
                 color='secondary'
                 component={Link}
@@ -207,8 +212,9 @@ const Profile = () => {
                 className={classes.text_btn}
               >
                 Edit profile
-              </Button>
-              <CreateIcon className={classes.write_icon} />
+              </Button> */}
+              <UpdateProfileForm />
+              {/* <CreateIcon className={classes.write_icon} /> */}
             </Box>
             <Box className={classes.likes}>
               <IconButton
@@ -232,11 +238,9 @@ const Profile = () => {
               component='p'
               className={classes.userName}
             >
-              {/* ..still to develop this variable */}
               {userName}
             </Typography>
           </Box>
-          {/* <Divider className={classes.divider} /> */}
           <Box className={classes.gallery}>
             <Typography variant='body2' className={classes.text}>
               {details}

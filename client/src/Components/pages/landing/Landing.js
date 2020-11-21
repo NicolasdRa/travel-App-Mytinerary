@@ -7,7 +7,11 @@ import { Button, Typography } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoginForm } from '../../Redux/loginForm/loginFormActions'
 import { openSignupForm } from '../../Redux/signupForm/signupFormActions'
-import { loadUser } from '../../Redux/auth/authActions'
+// import {
+//   loadCurrentUser,
+//   unloadCurrentUser
+// } from '../../Redux/users/userActions'
+// import { isLoggedIn } from '../../Redux/auth/authActions'
 
 import Grid from '@material-ui/core/Grid'
 import Image from '../../ui/Images/Shanghai.png'
@@ -107,14 +111,16 @@ const useStyles = makeStyles(theme => ({
 const Landing = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector(state => state.auth.user)
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
-  // only for dev purposes - works only if cookie httpOnly set to false
-  if (user === null) {
-    const jwt = document.cookie.split('=', 2)[1]
-    dispatch(loadUser(jwt))
-  }
+  // const user = useSelector(state => state.users.currentUser)
+  // useEffect(() => {
+  //   dispatch(isLoggedIn(user))
+  // }, [user])
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  // useEffect(() => {
+  //   dispatch(loadCurrentUser())
+  // }, [isAuthenticated])
 
   return (
     <Grid
