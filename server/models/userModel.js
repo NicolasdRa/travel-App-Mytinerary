@@ -40,12 +40,11 @@ const userSchema = new mongoose.Schema({
 
   img: {
     type: String,
-    default: 'defaultProfileCover.jpg',
   },
 
   coverImg: {
     type: String,
-    default: '',
+    default: 'defaultProfileCover.jpg',
   },
 
   password: {

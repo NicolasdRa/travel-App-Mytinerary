@@ -37,7 +37,7 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
 
 exports.uploadUserImg = upload.single('img')
 
-// exports.uploadCoverImg = upload.single('coverImg')
+exports.uploadCoverImg = upload.single('coverImg')
 
 // img resize middleware
 exports.resizeUserImg = asyncErrorCatcher(async (req, res, next) => {
@@ -105,6 +105,43 @@ exports.updateMe = asyncErrorCatcher(async (req, res, next) => {
 
   // 3) if file upload, add photo property to filteredBody
   if (req.file) filteredBody.img = req.file.filename
+
+  // 4) update user document
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  })
+
+  res.status(200).json({
+    status: 'success',
+    data: updatedUser,
+  })
+})
+
+// updates User Profile Cover Image
+exports.updateCoverImg = asyncErrorCatcher(async (req, res, next) => {
+  // 1) create error if user posts password data
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'This route is not meant to update passwords. Please use: /updatePassword.',
+        400,
+      ),
+    )
+  }
+
+  // 2) filter fields to be updated
+  const filteredBody = filterObj(
+    req.body,
+    'userName',
+    'firstName',
+    'lastName',
+    'details',
+    'email',
+  )
+
+  // 3) if file upload, add photo property to filteredBody
+  if (req.file) filteredBody.coverImg = req.file.filename
 
   // 4) update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {

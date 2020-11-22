@@ -56,3 +56,27 @@ export const updateUserProfile = (formData) => async (dispatch) => {
     })
   }
 }
+
+export const updateProfileCoverImage = (formData) => async (dispatch) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: '/api/v1/users/updateCover',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    })
+    console.log(res.data)
+    dispatch({
+      type: UPDATE_USER,
+      payload: res.data,
+    })
+  } catch (error) {
+    console.log(error)
+    dispatch({
+      type: UPDATE_ERROR,
+      payload: error,
+    })
+  }
+}

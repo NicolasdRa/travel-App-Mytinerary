@@ -7,89 +7,87 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   IconButton,
-  TextField,
-  Typography
+  Typography,
 } from '@material-ui/core'
-import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined'
-import ImageButton from '../ImageButton/ImageButton'
+import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 import { updateUserProfile } from '../../Redux/users/userActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { loadCurrentUser } from '../../Redux/users/userActions'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   coverImage: {
-    width: '100%'
+    width: '100%',
   },
 
   title: {
     margin: '1.5rem 0 0 0',
     padding: 0,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   subtitle: {
     margin: '2.5rem 0 0 0 ',
     padding: 0,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   input_field: {
-    margin: '.8rem 0'
+    margin: '.8rem 0',
   },
 
   text: {
     marginTop: '1rem',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   formControl: {
     display: 'flex',
     justifySelf: 'space-between',
-    minWidth: '30%'
+    minWidth: '30%',
   },
 
   submit_button: {
     display: 'flex',
     margin: '1rem 0',
-    padding: '.8rem'
+    padding: '.8rem',
   },
 
   btns: {
-    paddingLeft: '1rem'
+    paddingLeft: '1rem',
   },
 
   photo_icon: {
     height: '3rem',
-    width: '3rem'
+    width: '3rem',
   },
 
   add_btn: {
     position: 'fixed',
     bottom: '4rem',
     right: '1.5rem',
-    zIndex: '1000'
-  }
+    zIndex: '1000',
+  },
 }))
 
-const UploadPhotoForm = () => {
+const UploadProfileImgForm = () => {
   const classes = useStyles()
 
   const dispatch = useDispatch()
 
   // Global state - user info
-  const { img, coverImg } = useSelector(state => state.users.currentUser)
+  const { img } = useSelector((state) => state.users.currentUser)
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
   const [file, setFile] = useState(null)
 
-  const handleChangeFile = e => {
+  const handleChangeFile = (e) => {
     setFile(e.target.files[0])
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     const formData = new FormData()
@@ -110,12 +108,11 @@ const UploadPhotoForm = () => {
 
   return (
     <div>
-      <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
+      <ImageButtonRounded img={img} handleClick={handleClickOpen} />
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'
-      >
+        aria-labelledby='form-dialog-title'>
         <form onSubmit={handleSubmit} encType='multipart/form-data'>
           {/* <img
             className={classes.coverImage}
@@ -126,9 +123,8 @@ const UploadPhotoForm = () => {
           <DialogTitle
             id='form-dialog-title'
             disableTypography
-            className={classes.title}
-          >
-            <Typography variant='body2'>Update your cover image</Typography>
+            className={classes.title}>
+            <Typography variant='body2'>Choose your Profile image</Typography>
           </DialogTitle>
           <DialogContent>
             <Box>
@@ -138,6 +134,14 @@ const UploadPhotoForm = () => {
                 onChange={handleChangeFile}
                 // ref={fileInput => (this.fileInput = fileInput)}
               />
+              <IconButton
+              //   onClick={() => this.fileInput.click()}
+              >
+                <AddAPhotoIcon
+                  color='secondary'
+                  className={classes.photo_icon}
+                />
+              </IconButton>
             </Box>
           </DialogContent>
           <DialogActions className={classes.btns}>
@@ -154,4 +158,4 @@ const UploadPhotoForm = () => {
   )
 }
 
-export default connect(null, { updateUserProfile })(UploadPhotoForm)
+export default connect(null, { updateUserProfile })(UploadProfileImgForm)

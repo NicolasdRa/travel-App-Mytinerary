@@ -8,13 +8,11 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton,
   TextField,
   Typography,
 } from '@material-ui/core'
-import UploadPhotoForm from '../UploadPhotoForm/UploadPhotoForm'
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
-// import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined'
+import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
+import UploadProfileImgForm from '../UploadProfileImgForm/UploadProfileImgForm'
 import { updateUserProfile } from '../../Redux/users/userActions'
 import { makeStyles } from '@material-ui/core/styles'
 import { loadCurrentUser } from '../../Redux/users/userActions'
@@ -96,18 +94,17 @@ const UpdateProfileForm = () => {
     lastName: '',
     details: '',
   })
-  const [file, setFile] = useState(null)
 
   const handleChangeProfile = (e) => {
     const { id, value } = e.target
     setProfile({ ...profile, [id]: value })
   }
 
-  const handleChangeFile = (e) => {
-    setFile(e.target.files[0])
-  }
+  // const [file, setFile] = useState(null)
 
-  // const jwt = document.cookie.split('=', 2)[1]
+  // const handleChangeFile = (e) => {
+  //   setFile(e.target.files[0])
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -117,7 +114,7 @@ const UpdateProfileForm = () => {
     formData.append('firstName', profile.firstName)
     formData.append('lastName', profile.lastName)
     formData.append('details', profile.details)
-    formData.append('img', file)
+    // formData.append('img', file)
 
     dispatch(updateUserProfile(formData))
     dispatch(loadCurrentUser())
@@ -156,7 +153,8 @@ const UpdateProfileForm = () => {
               Update your profile
             </Typography>
           </DialogTitle>
-          <UploadPhotoForm />
+          <UploadCoverImgForm />
+          <UploadProfileImgForm />
           <DialogContent>
             <TextField
               required
@@ -217,27 +215,6 @@ const UpdateProfileForm = () => {
               onChange={handleChangeProfile}
               className={classes.input_field}
             />
-            <Box>
-              <input
-                // style={{ display: 'none' }}
-                type='file'
-                onChange={handleChangeFile}
-                // ref={fileInput => (this.fileInput = fileInput)}
-              />
-              <IconButton
-              //   onClick={() => this.fileInput.click()}
-              >
-                <AddAPhotoIcon
-                  color='secondary'
-                  className={classes.photo_icon}
-                />
-              </IconButton>
-            </Box>
-
-            <Typography variant='body2' className={classes.text}>
-              By proceeding you agree to Mytinerary’s Privacy Policy, User
-              Agreement and T&Cs.
-            </Typography>
           </DialogContent>
           <DialogActions className={classes.btns}>
             <Button onClick={handleClose} color='primary'>

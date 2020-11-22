@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 const images = [
   {
     // url: '/resources/defaultProfileCover.jpg',
-    title: 'cover',
+    title: 'profile',
     width: '80%',
   },
   // {
@@ -29,15 +29,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     margin: '0 auto',
-    // minWidth: 300,
-    width: '85%',
+    minWidth: '5rem',
+    maxWidth: '50%',
   },
   image: {
     position: 'relative',
-    height: 300,
+    marginTop: '-2rem',
+    minHeight: '5rem',
     [theme.breakpoints.down('xs')]: {
-      width: '100% !important', // Overrides inline-style
-      height: '10rem',
+      width: '5rem !important', // Overrides inline-style
+      height: '5rem',
     },
     '&:hover, &$focusVisible': {
       zIndex: 1,
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     backgroundSize: 'cover',
     backgroundPosition: '50% 50%',
-    borderRadius: '.5rem',
+    borderRadius: '50%',
   },
   imageBackdrop: {
     position: 'absolute',
@@ -83,13 +84,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.black,
     opacity: 0.4,
     transition: theme.transitions.create('opacity'),
-    borderRadius: '.5rem',
+    borderRadius: '50%',
+    border: '2px solid white',
   },
   imageTitle: {
     position: 'relative',
-    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px ${
-      theme.spacing(1) + 6
-    }px`,
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px ${theme.spacing(
+      1,
+    )}px`,
   },
   imageMarked: {
     height: 3,
@@ -103,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ImageButton = (props) => {
+const ImageButtonRounded = (props) => {
   const classes = useStyles()
 
   return (
@@ -121,7 +123,7 @@ const ImageButton = (props) => {
           <span
             className={classes.imageSrc}
             style={{
-              backgroundImage: `url(${props.coverImg})`,
+              backgroundImage: `url(${props.img})`,
             }}
           />
           <span className={classes.imageBackdrop} />
@@ -141,9 +143,9 @@ const ImageButton = (props) => {
   )
 }
 
-ImageButton.propTypes = {
-  coverImg: PropTypes.string.isRequired,
+ImageButtonRounded.propTypes = {
+  img: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
 }
 
-export default ImageButton
+export default ImageButtonRounded

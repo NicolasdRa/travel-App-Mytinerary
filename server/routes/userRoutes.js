@@ -11,7 +11,8 @@ const {
   uploadUserImg,
   resizeUserImg,
   uploadCoverImg,
-  resizeCoverImg
+  resizeCoverImg,
+  updateCoverImg,
 } = require('../controllers/userController')
 const { protect, restrict } = require('../controllers/authController')
 
@@ -22,13 +23,12 @@ router.use(protect)
 
 router.route('/me').get(getMe, getUser)
 router.patch('/updateMe', uploadUserImg, resizeUserImg, updateMe)
+router.patch('/updateCover', uploadCoverImg, resizeCoverImg, updateCoverImg)
+
 router.delete('/deleteMe', deleteMe)
 
 // admin routes
-router
-  .route('/')
-  .get(getAllUsers)
-  .post(restrict('admin'), createUser)
+router.route('/').get(getAllUsers).post(restrict('admin'), createUser)
 
 router
   .route('/:id')
