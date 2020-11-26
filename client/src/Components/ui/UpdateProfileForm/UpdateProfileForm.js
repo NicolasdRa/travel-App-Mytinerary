@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   title: {
-    margin: '1.5rem 0',
+    margin: '2rem 0 1rem 0',
     padding: 0,
     textTransform: 'uppercase',
     textAlign: 'center',
@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   subtitle: {
-    margin: '2.5rem 0 0 0 ',
+    fontSize: '.8rem',
+    margin: '1rem 0 1.5rem 0 ',
     padding: 0,
     textAlign: 'center',
   },
@@ -153,6 +154,12 @@ const UpdateProfileForm = () => {
               Update your profile
             </Typography>
           </DialogTitle>
+          <Typography
+            variant='body1'
+            color={'primary'}
+            className={classes.subtitle}>
+            Change your images or edit your info
+          </Typography>
           <UploadCoverImgForm />
           <UploadProfileImgForm />
           <DialogContent>
