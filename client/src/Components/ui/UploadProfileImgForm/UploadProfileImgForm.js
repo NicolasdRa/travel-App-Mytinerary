@@ -1,5 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
+import Slider from "@material-ui/core/Slider";
+import Cropper from "react-easy-crop";
+import { getCroppedImg, readFile } from "../../utils/imageUtils";
+import "./styles.css";
 import {
   Box,
   Button,
@@ -17,10 +21,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { loadCurrentUser } from "../../Redux/users/userActions";
 
 const useStyles = makeStyles((theme) => ({
-  coverImage: {
-    width: "100%",
-  },
-
   title: {
     margin: "1.5rem 0 0 0",
     padding: "0 1.5rem",
@@ -37,17 +37,6 @@ const useStyles = makeStyles((theme) => ({
     margin: ".8rem 0",
   },
 
-  text: {
-    marginTop: "1rem",
-    textAlign: "center",
-  },
-
-  formControl: {
-    display: "flex",
-    justifySelf: "space-between",
-    minWidth: "30%",
-  },
-
   photoIconContainer: {
     display: "flex",
     flexDirection: "column",
@@ -61,46 +50,69 @@ const useStyles = makeStyles((theme) => ({
   },
 
   previewContainer: {
-    display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  previewImgContainer: {
-    display: "flex",
-    maxHeight: "10em",
-  },
-
-  previewImg: {
-    objectFit: "cover",
-    overflow: "hidden",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    borderRadius: "1rem",
-  },
-
-  submit_button: {
-    display: "flex",
-    margin: "1rem 0",
-    padding: ".8rem",
   },
 
   btns: {
     paddingLeft: "1rem",
   },
 
-  add_btn: {
-    position: "fixed",
-    bottom: "4rem",
-    right: "1.5rem",
-    zIndex: "1000",
+  // cropper here below
+  cropContainer: {
+    margin: ".5rem 0 0 0",
+    position: "relative",
+    width: "100%",
+    height: 200,
+    borderRadius: "1rem",
+    background: "#333",
+    [theme.breakpoints.up("sm")]: {
+      height: 400,
+    },
+  },
+
+  cropButton: {
+    flexShrink: 0,
+    marginLeft: 16,
+  },
+
+  controls: {
+    padding: 16,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
+    [theme.breakpoints.up("sm")]: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+  },
+
+  sliderContainer: {
+    display: "flex",
+    flex: "1",
+    alignItems: "center",
+  },
+
+  sliderLabel: {
+    [theme.breakpoints.down("xs")]: {
+      minWidth: 65,
+    },
+  },
+
+  slider: {
+    padding: "22px 0px",
+    marginLeft: 16,
+    [theme.breakpoints.up("sm")]: {
+      flexDirection: "row",
+      alignItems: "center",
+      margin: "0 16px",
+    },
   },
 }));
 
 const UploadProfileImgForm = () => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
 
   // Global state - user info
@@ -108,40 +120,65 @@ const UploadProfileImgForm = () => {
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState("Pick your file");
-  const [previewFile, setPreviewFile] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImageFile, setCroppedImageFile] = useState(null);
 
-  // Ref needed to be able to hide default input and functionalise custom icon  btn
+  // Ref needed to hide default input and functionalise custom icon btn
   const hiddenInput = useRef(null);
-
   const handleClick = (e) => {
     hiddenInput.current.click();
   };
 
-  const handleChangeFile = (e) => {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      fileReader.readyState === 2 && setPreviewFile(fileReader.result);
-    };
-    setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
-    fileReader.readAsDataURL(e.target.files[0]);
+  // handles file input changes
+  const handleChangeFile = async (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      let imageDataUrl = await readFile(file);
+
+      setImageSrc(imageDataUrl);
+    }
   };
 
+  // creates cropped image base64 to show, upload or download
+  const createCroppedImageFile = useCallback(async () => {
+    const croppedImage = await getCroppedImg(
+      imageSrc,
+      croppedAreaPixels,
+      rotation,
+    );
+    // console.log("done", { croppedImage });
+    setCroppedImageFile(croppedImage);
+  }, [imageSrc, croppedAreaPixels, rotation]);
+
+  // handles crop complete
+  const handleCropComplete = useCallback(
+    (croppedArea, croppedAreaPixels) => {
+      setCroppedAreaPixels(croppedAreaPixels);
+      // console.log({ area: croppedArea }, { pixels: croppedAreaPixels });
+      createCroppedImageFile();
+    },
+    [crop],
+  );
+
   const handleClearImage = (e) => {
-    setPreviewFile(null);
+    setImageSrc(null);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // createCroppedImageFile();
 
     const formData = new FormData();
-    formData.append("img", file);
+    formData.append("img", croppedImageFile);
 
     dispatch(updateUserProfile(formData));
     dispatch(loadCurrentUser());
     setOpen(false);
+    setImageSrc(null);
   };
 
   const handleClickOpen = () => {
@@ -156,56 +193,94 @@ const UploadProfileImgForm = () => {
     <div>
       <ImageButtonRounded img={img} handleClick={handleClickOpen} />
       <Dialog
+        className={classes.modal}
         open={open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'>
         <form onSubmit={handleSubmit} encType='multipart/form-data'>
-          {/* <img
-            className={classes.coverImage}
-            src={coverImg}
-            alt='background image'
-          /> */}
-
           <DialogTitle
             id='form-dialog-title'
             disableTypography
             className={classes.title}>
-            <Typography variant='body2'>Choose your Profile image</Typography>
+            <Typography variant='body2'>
+              Choose and adjust your Profile image
+            </Typography>
           </DialogTitle>
-          <DialogContent>
-            <Box className={classes.photoIconContainer}>
-              <input
-                style={{ display: "none" }}
-                id='customFile'
-                onChange={handleChangeFile}
-                type='file'
-                ref={hiddenInput}
-              />
-              <IconButton onClick={handleClick}>
-                <AddAPhotoIcon
-                  color='secondary'
-                  className={classes.photo_icon}
-                />
-              </IconButton>
-            </Box>
-            {previewFile ? (
+          <DialogContent className={classes.contentContainer}>
+            {imageSrc ? (
               <Box className={classes.previewContainer}>
-                <Box className={classes.previewImgContainer}>
-                  <img
-                    src={previewFile}
-                    alt='preview file'
-                    className={classes.previewImg}
+                <div className={classes.cropContainer}>
+                  <Cropper
+                    image={imageSrc}
+                    crop={crop}
+                    zoom={zoom}
+                    rotation={rotation}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onRotationChange={setRotation}
+                    onCropComplete={handleCropComplete}
                   />
-                </Box>
+                </div>
+                <div className={classes.controls}>
+                  <div className={classes.sliderContainer}>
+                    <Typography
+                      variant='overline'
+                      classes={{ root: classes.sliderLabel }}>
+                      Zoom
+                    </Typography>
+                    <Slider
+                      value={zoom}
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      aria-labelledby='Zoom'
+                      onChange={(e, zoom) => setZoom(zoom)}
+                      classes={{ root: classes.slider }}
+                    />
+                  </div>
+                  <div className={classes.sliderContainer}>
+                    <Typography
+                      variant='overline'
+                      classes={{ root: classes.sliderLabel }}>
+                      Rotate
+                    </Typography>
+                    <Slider
+                      value={rotation}
+                      min={0}
+                      max={360}
+                      step={1}
+                      aria-labelledby='Rotation'
+                      classes={{ root: classes.slider }}
+                      onChange={(e, rotation) => setRotation(rotation)}
+                    />
+                  </div>
+                </div>
               </Box>
-            ) : null}
+            ) : (
+              <Box className={classes.photoIconContainer}>
+                <input
+                  style={{ display: "none" }}
+                  id='customFile'
+                  onChange={handleChangeFile}
+                  type='file'
+                  ref={hiddenInput}
+                />
+                <IconButton onClick={handleClick}>
+                  <AddAPhotoIcon
+                    color='secondary'
+                    className={classes.photo_icon}
+                  />
+                </IconButton>
+              </Box>
+            )}
           </DialogContent>
           <DialogActions className={classes.btns}>
             <Button onClick={handleClose} color='primary'>
               Cancel
             </Button>
-            {previewFile ? (
-              <Button onClick={handleClearImage} color='tertiary'>
+            {imageSrc ? (
+              <Button onClick={handleClearImage} color='primary'>
                 Clear
               </Button>
             ) : null}

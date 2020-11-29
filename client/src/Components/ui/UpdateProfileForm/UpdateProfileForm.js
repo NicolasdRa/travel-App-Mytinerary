@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Button,
@@ -10,125 +10,115 @@ import {
   Grid,
   TextField,
   Typography,
-} from '@material-ui/core'
-import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
-import UploadProfileImgForm from '../UploadProfileImgForm/UploadProfileImgForm'
-import { updateUserProfile } from '../../Redux/users/userActions'
-import { makeStyles } from '@material-ui/core/styles'
-import { loadCurrentUser } from '../../Redux/users/userActions'
+} from "@material-ui/core";
+import UploadCoverImgForm from "../UploadCoverImgForm/UploadCoverImgForm";
+import UploadProfileImgForm from "../UploadProfileImgForm/UploadProfileImgForm";
+import { updateUserProfile } from "../../Redux/users/userActions";
+import { makeStyles } from "@material-ui/core/styles";
+import { loadCurrentUser } from "../../Redux/users/userActions";
 
 const useStyles = makeStyles((theme) => ({
   coverImage: {
-    width: '100%',
+    width: "100%",
     // backgroundSize: 'cover'
   },
 
   title: {
-    margin: '2rem 0 1rem 0',
+    margin: "2rem 0 1rem 0",
     padding: 0,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    color: 'primary',
-    fontWeight: 600,
+    textAlign: "center",
   },
 
   subtitle: {
-    fontSize: '.8rem',
-    margin: '1rem 0 1.5rem 0 ',
+    fontSize: ".8rem",
+    margin: "1rem 0 1.5rem 0 ",
     padding: 0,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   input_field: {
-    margin: '.8rem 0',
+    margin: ".8rem 0",
   },
 
   text: {
-    marginTop: '1rem',
-    textAlign: 'center',
+    marginTop: "1rem",
+    textAlign: "center",
   },
 
   formControl: {
-    display: 'flex',
-    justifySelf: 'space-between',
-    minWidth: '30%',
+    display: "flex",
+    justifySelf: "space-between",
+    minWidth: "30%",
   },
 
   submit_button: {
-    display: 'flex',
-    margin: '1rem 0',
-    padding: '.8rem',
+    display: "flex",
+    margin: "1rem 0",
+    padding: ".8rem",
   },
 
   btns: {
-    paddingLeft: '1rem',
+    paddingLeft: "1rem",
   },
 
   photo_icon: {
-    height: '3rem',
-    width: '3rem',
+    height: "3rem",
+    width: "3rem",
   },
 
   add_btn: {
-    position: 'fixed',
-    bottom: '4rem',
-    right: '1.5rem',
-    zIndex: '1000',
+    position: "fixed",
+    bottom: "4rem",
+    right: "1.5rem",
+    zIndex: "1000",
   },
-}))
+}));
 
 const UpdateProfileForm = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Global state - user info
   const { userName, firstName, lastName, details } = useSelector(
     (state) => state.users.currentUser,
-  )
+  );
 
   // Component level state - profile info & file
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({
-    userName: '',
-    firstName: '',
-    lastName: '',
-    details: '',
-  })
+    userName: "",
+    firstName: "",
+    lastName: "",
+    details: "",
+  });
 
   const handleChangeProfile = (e) => {
-    const { id, value } = e.target
-    setProfile({ ...profile, [id]: value })
-  }
-
-  // const [file, setFile] = useState(null)
-
-  // const handleChangeFile = (e) => {
-  //   setFile(e.target.files[0])
-  // }
+    const { id, value } = e.target;
+    setProfile({ ...profile, [id]: value });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData()
-    formData.append('userName', profile.userName)
-    formData.append('firstName', profile.firstName)
-    formData.append('lastName', profile.lastName)
-    formData.append('details', profile.details)
-    // formData.append('img', file)
+    const formData = new FormData();
+    formData.append("userName", profile.userName);
+    formData.append("firstName", profile.firstName);
+    formData.append("lastName", profile.lastName);
+    formData.append("details", profile.details);
 
-    dispatch(updateUserProfile(formData))
-    dispatch(loadCurrentUser())
-    setOpen(false)
-  }
+    dispatch(updateUserProfile(formData));
+    dispatch(loadCurrentUser());
+    setOpen(false);
+  };
 
   const handleClickOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -140,23 +130,17 @@ const UpdateProfileForm = () => {
         onClose={handleClose}
         aria-labelledby='form-dialog-title'>
         <form onSubmit={handleSubmit} encType='multipart/form-data'>
-          {/* <img
-            className={classes.coverImage}
-            src={coverImg}
-            alt='background image'
-          /> */}
-
           <DialogTitle
             id='form-dialog-title'
             disableTypography
             className={classes.title}>
-            <Typography variant='h6' color={'primary'}>
+            <Typography variant='h6' color='primary'>
               Update your profile
             </Typography>
           </DialogTitle>
           <Typography
             variant='body1'
-            color={'primary'}
+            color='inherit'
             className={classes.subtitle}>
             Change your images or edit your info
           </Typography>
@@ -176,7 +160,6 @@ const UpdateProfileForm = () => {
               onChange={handleChangeProfile}
               className={classes.input_field}
             />
-
             <Grid item container className={classes.price_duration}>
               <Grid item xs={6} container>
                 <TextField
@@ -234,7 +217,7 @@ const UpdateProfileForm = () => {
         </form>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default connect(null, { updateUserProfile })(UpdateProfileForm)
+export default connect(null, { updateUserProfile })(UpdateProfileForm);

@@ -1,185 +1,191 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 
-import { makeStyles } from '@material-ui/core/styles'
-import { Avatar, Box, Divider, IconButton, Typography } from '@material-ui/core'
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
-import Signup from '../../ui/Signup/Signup'
-import Login from '../../ui/Login/Login'
-import AddItinerary from '../../ui/Itineraries/AddItinerary'
-import CreateIcon from '@material-ui/icons/Create'
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
-import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
-import { useSelector, useDispatch } from 'react-redux'
-import { loadCurrentUser } from '../../Redux/users/userActions'
-import { isLoggedIn } from '../../Redux/auth/authActions'
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Avatar,
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+} from "@material-ui/core";
+import FavoriteBorderRoundedIcon from "@material-ui/icons/FavoriteBorderRounded";
+import Signup from "../../ui/Signup/Signup";
+import Login from "../../ui/Login/Login";
+import CreateItineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import CreateIcon from "@material-ui/icons/Create";
+import ImageHeader from "../../ui/Headers/ImageHeader";
+import UserItinerariesSmall from "../../ui/Itineraries/UserItinerariesSmall";
+import UpdateProfileForm from "../../ui/UpdateProfileForm/UpdateProfileForm";
+import { useSelector, useDispatch } from "react-redux";
+import { loadCurrentUser } from "../../Redux/users/userActions";
+import { isLoggedIn } from "../../Redux/auth/authActions";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    width: '100%'
+    display: "flex",
+    flexDirection: "column",
+    flex: "0 0 auto",
+    width: "100%",
   },
 
   header: {
-    height: '20rem',
-    width: '100%'
+    height: "20rem",
+    width: "100%",
   },
 
   content: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '0 1rem'
+    display: "flex",
+    flexDirection: "column",
+    margin: "0 1rem",
   },
 
   userImg: {
-    display: 'flex',
-    margin: '-1.5rem auto 0 auto',
-    height: '6rem',
-    width: '6rem',
-    border: '2px solid white'
+    display: "flex",
+    margin: "-1.5rem auto 0 auto",
+    height: "6rem",
+    width: "6rem",
+    border: "2px solid white",
   },
 
   info: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: '-3rem',
-    padding: '0 1rem 0 0'
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "-3rem",
+    padding: "0 1rem 0 0",
   },
 
   edit_btn: {
-    display: 'flex',
-    color: 'grey',
-    alignItems: 'center'
+    display: "flex",
+    color: "grey",
+    alignItems: "center",
   },
 
   likes: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   likes_btn: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: '0 0 auto',
-    textAlign: 'left',
-    padding: 0
+    display: "flex",
+    flexDirection: "row",
+    flex: "0 0 auto",
+    textAlign: "left",
+    padding: 0,
   },
 
   likes_icon: {
-    height: '2.5rem',
-    width: '2.5rem'
+    height: "2.5rem",
+    width: "2.5rem",
   },
 
   extra_info: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0 2rem'
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "0 2rem",
   },
 
   user_info: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    margin: '1rem 0'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    margin: "1rem 0",
   },
 
   avatar: {
-    height: '2rem',
-    width: '2rem',
-    marginRight: '.5rem'
+    height: "2rem",
+    width: "2rem",
+    marginRight: ".5rem",
   },
 
   price_time: {
-    display: 'flex',
-    marginLeft: 'auto',
-    alignItems: 'center',
-    padding: '1rem 0'
+    display: "flex",
+    marginLeft: "auto",
+    alignItems: "center",
+    padding: "1rem 0",
   },
 
   duration: {
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
 
   price: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: '1rem'
+    display: "flex",
+    alignItems: "center",
+    marginLeft: "1rem",
   },
 
   info_icon: {
-    alignItems: 'center',
-    fill: 'grey'
+    alignItems: "center",
+    fill: "grey",
   },
 
   divider: {
-    margin: '1rem 0'
+    margin: "1rem 0",
   },
 
   text: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    textAlign: 'center',
-    margin: '.5rem'
+    display: "flex",
+    flexDirection: "column",
+    flex: "0 0 auto",
+    textAlign: "center",
+    margin: ".5rem",
   },
 
   gallery: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto'
+    display: "flex",
+    flexDirection: "column",
+    flex: "0 0 auto",
   },
 
   write_btn: {
-    display: 'flex',
-    color: 'grey',
-    paddingLeft: '.5rem',
-    alignItems: 'center'
+    display: "flex",
+    color: "grey",
+    paddingLeft: ".5rem",
+    alignItems: "center",
   },
 
   write_icon: {
-    alignItems: 'center',
-    width: '1.2rem',
-    height: '1.2rem',
-    paddingBottom: '.3rem'
+    alignItems: "center",
+    width: "1.2rem",
+    height: "1.2rem",
+    paddingBottom: ".3rem",
   },
 
   alt_container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
   },
 
   alt_container_legend: {
-    display: 'flex',
-    margin: '3rem',
-    textAlign: 'center'
+    display: "flex",
+    margin: "3rem",
+    textAlign: "center",
   },
 
   alt_container_btns: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    margin: '0.5rem 5rem'
-  }
-}))
+    display: "flex",
+    justifyContent: "space-around",
+    margin: "0.5rem 5rem",
+  },
+}));
 
 const Profile = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const user = useSelector(state => state.users.currentUser)
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  const user = useSelector((state) => state.users.currentUser);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
     return () => {
-      dispatch(loadCurrentUser())
-    }
-  }, [])
+      dispatch(loadCurrentUser());
+    };
+  }, []);
 
   if (isAuthenticated) {
     const {
@@ -190,15 +196,15 @@ const Profile = () => {
       img,
       coverImg,
       email,
-      likes
-    } = user
+      likes,
+    } = user;
 
     return (
       <Box className={classes.container}>
         <ImageHeader img={coverImg} className={classes.header} />
         <Box className={classes.content}>
           <Avatar
-            alt={firstName + '' + lastName}
+            alt={firstName + "" + lastName}
             src={img}
             className={classes.userImg}
           />
@@ -219,8 +225,7 @@ const Profile = () => {
             <Box className={classes.likes}>
               <IconButton
                 aria-label='add to favorites'
-                className={classes.likes_btn}
-              >
+                className={classes.likes_btn}>
                 <FavoriteBorderRoundedIcon className={classes.likes_icon} />
               </IconButton>
               <Typography variant='body2' color='textSecondary' component='p'>
@@ -236,8 +241,7 @@ const Profile = () => {
               variant='body2'
               color='textSecondary'
               component='p'
-              className={classes.userName}
-            >
+              className={classes.userName}>
               {userName}
             </Typography>
           </Box>
@@ -249,10 +253,10 @@ const Profile = () => {
             <UserItinerariesSmall />
             <Divider className={classes.divider} />
           </Box>
-          <AddItinerary />
+          <CreateItineraryForm />
         </Box>
       </Box>
-    )
+    );
   } else {
     return (
       <Box className={classes.alt_container}>
@@ -266,8 +270,8 @@ const Profile = () => {
           <Login />
         </Box>
       </Box>
-    )
+    );
   }
-}
+};
 
-export default Profile
+export default Profile;
