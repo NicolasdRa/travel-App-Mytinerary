@@ -1,90 +1,92 @@
-import React, { useState } from 'react'
-import 'typeface-roboto'
+import React, { useState } from "react";
+import "typeface-roboto";
 import {
   Grid,
   CircularProgress,
   TextField,
   Typography,
-  Paper
-} from '@material-ui/core'
-import { useSelector } from 'react-redux'
-import ItineraryGallery from './ItineraryGallery'
-import ListingHeader from '../Headers/ListingHeader'
-import { makeStyles } from '@material-ui/core/styles'
+  Paper,
+} from "@material-ui/core";
+import { useSelector } from "react-redux";
+import ItineraryGallery from "../ItineraryGallery/ItineraryGallery";
+import ListingHeader from "../Headers/ListingHeader";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
-    paddingBottom: '3rem'
+    paddingBottom: "3rem",
   },
 
   searchbarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     backgroundColor: theme.palette.common.beigeLight,
-    padding: '1rem 1rem',
-    margin: '-.5rem 0 0 0'
+    padding: "1rem 1rem",
+    margin: "-.5rem 0 0 0",
   },
 
   searchBarTitle: {
     color: theme.palette.primary.main,
-    fontSize: '.9rem',
-    fontWeight: '500',
-    textAlign: 'left',
-    margin: '0 0 .5rem .5rem'
+    fontSize: ".9rem",
+    fontWeight: "500",
+    textAlign: "left",
+    margin: "0 0 .5rem .5rem",
   },
 
   searchBar: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: '5px'
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: "5px",
   },
 
   subtitle: {
-    margin: '2rem auto .5rem 1.5rem',
-    textAlign: 'start'
+    margin: "2rem auto .5rem 1.5rem",
+    textAlign: "start",
   },
 
   loader: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '5rem 5rem'
-  }
-}))
+    display: "flex",
+    flexDirection: "column",
+    margin: "5rem 5rem",
+  },
+}));
 
 const Itineraries = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const itineraries = useSelector(state => state.itineraries.itineraries.data)
+  const itineraries = useSelector(
+    (state) => state.itineraries.itineraries.data,
+  );
 
-  const [string, setString] = useState('')
-  const [city, setCity] = useState(null)
-
-  const handleChange = e => {
+  const [string, setString] = useState("");
+  const [city, setCity] = useState(null);
+  console.log(city);
+  const handleChange = (e) => {
     // updates string in state
-    setString(e.target.value.toLowerCase())
-  }
+    setString(e.target.value.toLowerCase());
+  };
 
   // filter function
-  let filteredItineraries = []
+  let filteredItineraries = [];
   if (itineraries !== null) {
     filteredItineraries = [
-      ...itineraries.filter(itinerary => {
-        return itinerary.city.name.toLowerCase().startsWith(string)
-      })
-    ]
+      ...itineraries.filter((itinerary) => {
+        return itinerary.city.name.toLowerCase().startsWith(string);
+      }),
+    ];
 
-    function generateRandomInteger (min, max) {
-      return Math.floor(min + Math.random() * (max + 1 - min))
+    function generateRandomInteger(min, max) {
+      return Math.floor(min + Math.random() * (max + 1 - min));
     }
 
-    const randomNumber = generateRandomInteger(0, itineraries.length - 1)
+    const randomNumber = generateRandomInteger(0, itineraries.length - 1);
 
-    let headerItinerary = null
-
+    let headerItinerary = null;
+    console.log(city);
     city === null
       ? (headerItinerary = itineraries[randomNumber])
-      : (headerItinerary = filteredItineraries[0])
+      : (headerItinerary = filteredItineraries[0]);
 
     return (
       <Grid
@@ -92,15 +94,13 @@ const Itineraries = () => {
         direction='column'
         // justify='center'
         alignItems='center'
-        className={classes.container}
-      >
+        className={classes.container}>
         <Grid item xs={12} container direction='column' justify='center'>
           <ListingHeader data={headerItinerary} className={classes.header} />
           <Paper
             elevation={2}
             variant='outlined'
-            className={classes.searchbarContainer}
-          >
+            className={classes.searchbarContainer}>
             <Typography className={classes.searchBarTitle}>
               Choose your route
             </Typography>
@@ -125,7 +125,7 @@ const Itineraries = () => {
           />
         </Grid>
       </Grid>
-    )
+    );
   } else {
     return (
       <Grid
@@ -133,13 +133,12 @@ const Itineraries = () => {
         className={classes.loader}
         direction='column'
         justify='center'
-        alignjustify='center'
-      >
+        alignjustify='center'>
         <Typography>Loading itineraries...</Typography>
         <CircularProgress color='secondary' />
       </Grid>
-    )
+    );
   }
-}
+};
 
-export default Itineraries
+export default Itineraries;

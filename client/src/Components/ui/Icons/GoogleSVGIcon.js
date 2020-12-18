@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import Icon from '@mdi/react'
-import { mdiGoogle } from '@mdi/js'
+import React from "react";
+import Icon from "@mdi/react";
+import { mdiGoogle } from "@mdi/js";
 
-export default function GoogleSVGIcon () {
+export default function GoogleSVGIcon() {
   return (
     <Icon
       path={mdiGoogle}
@@ -14,5 +14,5 @@ export default function GoogleSVGIcon () {
       color='red'
       //   spin
     />
-  )
+  );
 }

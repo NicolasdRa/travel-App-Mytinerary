@@ -1,124 +1,121 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
-  Typography
-} from '@material-ui/core'
-import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
-import { signupUser } from '../../Redux/auth/authActions'
-import { clearErrors } from '../../Redux/error/errorActions'
+  Typography,
+} from "@material-ui/core";
+import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
+import { signupUser } from "../../Redux/auth/authActions";
+import { clearErrors } from "../../Redux/error/errorActions";
 import {
   openSignupForm,
-  closeSignupForm
-} from '../../Redux/signupForm/signupFormActions'
-import { withStyles } from '@material-ui/core/styles'
-import uuid from 'react-uuid'
-import { Alert, AlertTitle } from '@material-ui/lab'
+  closeSignupForm,
+} from "../../Redux/signupForm/signupFormActions";
+import { withStyles } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
-    margin: '1.5rem 0 0 0',
+    margin: "1.5rem 0 0 0",
     padding: 0,
-    textAlign: 'center'
+    textAlign: "center",
   },
 
   subtitle: {
-    margin: '2.5rem 0 0 0 ',
+    margin: "2.5rem 0 0 0 ",
     padding: 0,
-    textAlign: 'center'
+    textAlign: "center",
   },
 
   input_field: {
-    margin: '.8rem 0'
+    margin: ".8rem 0",
   },
 
   text: {
-    marginTop: '1rem',
-    textAlign: 'center'
+    marginTop: "1rem",
+    textAlign: "center",
   },
 
   google_button: {
-    display: 'flex',
-    margin: '1rem 0',
-    padding: '.8rem'
+    display: "flex",
+    margin: "1rem 0",
+    padding: ".8rem",
   },
 
   btns: {
-    paddingLeft: '1rem'
-  }
-})
+    paddingLeft: "1rem",
+  },
+});
 
 class Signup extends Component {
   state = {
     fullWidth: true,
-    maxWidth: 'sm',
-    userName: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    img: '',
+    maxWidth: "sm",
+    userName: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    img: "",
     isAuthenticated: false,
-    msg: null
-  }
+    msg: null,
+  };
 
-  componentDidUpdate (prevProps) {
-    const { errors } = this.props
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props;
     if (errors !== prevProps.errors)
-      if (errors.id === 'SIGNUP_FAIL') {
+      if (errors.id === "SIGNUP_FAIL") {
         // Check for signup Errors
-        this.setState({ msg: errors.msg.msg })
+        this.setState({ msg: errors.msg.msg });
       } else {
-        this.setState({ msg: null })
+        this.setState({ msg: null });
       }
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.id]: e.target.value
-    })
-  }
+      [e.target.id]: e.target.value,
+    });
+  };
 
   handleClose = () => {
-    this.props.closeSignupForm()
-  }
+    this.props.closeSignupForm();
+  };
 
-  handleSubmit = e => {
-    clearErrors()
-    this.handleClose()
-    e.preventDefault()
+  handleSubmit = (e) => {
+    clearErrors();
+    this.handleClose();
+    e.preventDefault();
 
-    const { userName, email, password, passwordConfirm } = this.state
+    const { userName, email, password, passwordConfirm } = this.state;
 
     const newUser = {
       userName,
       email,
       password,
-      passwordConfirm
-    }
+      passwordConfirm,
+    };
 
-    this.props.signupUser(newUser)
-  }
+    this.props.signupUser(newUser);
+  };
 
-  clearState = e => {
-    e.preventDefault()
+  clearState = (e) => {
+    e.preventDefault();
     this.setState({
-      [e.target.id]: ''
-    })
-  }
+      [e.target.id]: "",
+    });
+  };
 
-  render () {
-    const { classes } = this.props
-    const open = this.props.setOpen
+  render() {
+    const { classes } = this.props;
+    const open = this.props.setOpen;
 
     const handleClickOpen = () => {
-      this.props.openSignupForm()
-    }
+      this.props.openSignupForm();
+    };
 
     return (
       <div>
@@ -130,14 +127,12 @@ class Signup extends Component {
           //   keepMounted
           open={open}
           onClose={this.handleClose}
-          aria-labelledby='form-dialog-title'
-        >
+          aria-labelledby='form-dialog-title'>
           <form onSubmit={this.handleSubmit}>
             <DialogTitle
               id='form-dialog-title'
               disableTypography
-              className={classes.title}
-            >
+              className={classes.title}>
               <Typography variant='body2'>Easy Signup</Typography>
             </DialogTitle>
             <DialogContent>
@@ -148,16 +143,14 @@ class Signup extends Component {
                 // component={Link}
                 // to='api/auth/google'
                 href='http://localhost:5000/api/v1/auth/google'
-                startIcon={<GoogleSVGIcon />}
-              >
+                startIcon={<GoogleSVGIcon />}>
                 Sign up with Google
               </Button>
 
               <DialogTitle
                 id='form-dialog-title'
                 disableTypography
-                className={classes.subtitle}
-              >
+                className={classes.subtitle}>
                 <Typography variant='body2'>Sign up with your info</Typography>
               </DialogTitle>
               {/* 
@@ -241,30 +234,30 @@ class Signup extends Component {
           </form>
         </Dialog>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.user,
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
     errors: state.errors,
-    setOpen: state.signupForm.setOpen
-  }
-}
+    setOpen: state.signupForm.setOpen,
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    signupUser: user => dispatch(signupUser(user)),
+    signupUser: (user) => dispatch(signupUser(user)),
     clearErrors: () => dispatch(clearErrors()),
     openSignupForm: () => dispatch(openSignupForm()),
-    closeSignupForm: () => dispatch(closeSignupForm())
-  }
-}
+    closeSignupForm: () => dispatch(closeSignupForm()),
+  };
+};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(Signup))
+  mapDispatchToProps,
+)(withStyles(styles)(Signup));

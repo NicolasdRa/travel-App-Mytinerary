@@ -1,10 +1,14 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Box, Typography } from "@material-ui/core";
-import ItineraryGallery from "../../ui/Itineraries/ItineraryGallery";
-import ImageHeader from "../../ui/Headers/ImageHeader";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
+import ItineraryGallery from "../../ui/ItineraryGallery/ItineraryGallery";
+import ImageHeader from "../../ui/Headers/ImageHeader";
 import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+
+import { Box, Typography } from "@material-ui/core";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -45,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CityPage(props) {
+const CityPage = (props) => {
   const classes = useStyles();
   const cityName = props.match.params.city_name;
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -78,6 +82,14 @@ function CityPage(props) {
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
   );
-}
+};
+
+CityPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      city_name: PropTypes.string.isRequired,
+    }),
+  }),
+};
 
 export default CityPage;

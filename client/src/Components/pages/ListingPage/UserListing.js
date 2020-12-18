@@ -2,12 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab, Typography, Box } from "@material-ui/core";
-import { useSelector } from "react-redux";
-
-import Cities from "../../ui/Cities/Cities";
-import Itineraries from "../../ui/Itineraries/Itineraries";
-import Activities from "../../ui/Activities/Activities";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import Itineraries from "../Itineraries/Itineraries";
+import Activities from "../Activities/Activities";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,11 +17,7 @@ function TabPanel(props) {
       aria-labelledby={`nav-tab-${index}`}
       {...other}>
       {value === index && (
-        <Box
-          style={{
-            padding: "1rem",
-          }}
-          p={3}>
+        <Box style={{ padding: "0.5rem" }} p={3}>
           {children}
         </Box>
       )}
@@ -65,14 +57,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     flex: "0 0 auto",
     width: "100%",
-    margin: "0 1rem",
   },
 }));
 
-export default function Listing() {
+const UserListing = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,27 +70,26 @@ export default function Listing() {
 
   return (
     <Box className={classes.root}>
+      <Typography variant='body1'>Your Contributions</Typography>
+
       <Paper position='static'>
         <Tabs
           variant='fullWidth'
           value={value}
           onChange={handleChange}
           aria-label='nav tabs example'>
-          <LinkTab label='Cities' href='/drafts' {...a11yProps(0)} />
-          <LinkTab label='Itineraries' href='/trash' {...a11yProps(1)} />
-          <LinkTab label='Activities' href='/spam' {...a11yProps(2)} />
+          <LinkTab label='Itineraries' href='/' {...a11yProps(1)} />
+          <LinkTab label='Activities' href='/' {...a11yProps(2)} />
         </Tabs>
       </Paper>
       <TabPanel value={value} index={0}>
-        <Cities />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <Itineraries />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={1}>
         <Activities />
       </TabPanel>
-      {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
   );
-}
+};
+
+export default UserListing;

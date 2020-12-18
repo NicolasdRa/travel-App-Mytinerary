@@ -1,86 +1,85 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Grid,
   CircularProgress,
   TextField,
   Typography,
-  Paper
-} from '@material-ui/core'
-import ActivityGallery from './ActivityGallery'
-import ListingHeader from '../Headers/ListingHeader'
-import { makeStyles } from '@material-ui/core/styles'
+  Paper,
+} from "@material-ui/core";
+import ActivityGallery from "./ActivityGallery";
+import ListingHeader from "../Headers/ListingHeader";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
-    paddingBottom: '3rem'
+    paddingBottom: "3rem",
   },
 
   searchbarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     backgroundColor: theme.palette.common.beigeLight,
-    padding: '1rem 1rem',
-    margin: '-.5rem 0 0 0'
+    padding: "1rem 1rem",
+    margin: "-.5rem 0 0 0",
   },
 
   searchBarTitle: {
     color: theme.palette.primary.main,
-    fontSize: '.9rem',
-    fontWeight: '500',
-    textAlign: 'left',
-    margin: '0 0 .5rem .5rem'
+    fontSize: ".9rem",
+    fontWeight: "500",
+    textAlign: "left",
+    margin: "0 0 .5rem .5rem",
   },
 
   searchBar: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: '5px'
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: "5px",
   },
 
   subtitle: {
-    margin: '2rem auto .5rem 1.5rem',
-    textAlign: 'start'
+    margin: "2rem auto .5rem 1.5rem",
+    textAlign: "start",
   },
 
   loader: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '5rem 5rem'
-  }
-}))
+    display: "flex",
+    flexDirection: "column",
+    margin: "5rem 5rem",
+  },
+}));
 
 const Activities = () => {
-  const classes = useStyles()
-  const activities = useSelector(state => state.activities.activities.data)
+  const classes = useStyles();
 
-  const [string, setString] = useState('')
-  const [city, setCity] = useState(null)
+  const activities = useSelector((state) => state.activities.activities.data);
+  const [string, setString] = useState("");
 
-  const handleChange = e => {
-    // updates string in state
-    setString(e.target.value.toLowerCase())
-  }
+  // updates string in state
+  const handleChange = (e) => {
+    setString(e.target.value.toLowerCase());
+  };
 
   // filter function
-  let filteredActivities = []
+  let filteredActivities = [];
   if (activities !== null) {
     filteredActivities = [
-      ...activities.filter(activity => {
-        return activity.city.name.toLowerCase().startsWith(string)
-      })
-    ]
+      ...activities.filter((activity) => {
+        return activity.city.name.toLowerCase().startsWith(string);
+      }),
+    ];
 
-    function generateRandomInteger (min, max) {
-      return Math.floor(min + Math.random() * (max + 1 - min))
+    function generateRandomInteger(min, max) {
+      return Math.floor(min + Math.random() * (max + 1 - min));
     }
 
-    const randomNumber = generateRandomInteger(0, activities.length - 1)
-    let headerActivity = null
+    const randomNumber = generateRandomInteger(0, activities.length - 1);
+    let headerActivity = null;
     activities === null
       ? (headerActivity = activities[randomNumber])
-      : (headerActivity = filteredActivities[0])
+      : (headerActivity = filteredActivities[0]);
 
     return (
       <Grid
@@ -88,15 +87,13 @@ const Activities = () => {
         direction='column'
         // justify='center'
         alignItems='center'
-        className={classes.container}
-      >
+        className={classes.container}>
         <Grid item xs={12} container direction='column' justify='center'>
           <ListingHeader data={headerActivity} className={classes.header} />
           <Paper
             elevation={2}
             variant='outlined'
-            className={classes.searchbarContainer}
-          >
+            className={classes.searchbarContainer}>
             <Typography className={classes.searchBarTitle}>
               Want to have fun?
             </Typography>
@@ -126,7 +123,7 @@ const Activities = () => {
           />
         </Grid>
       </Grid>
-    )
+    );
   } else {
     return (
       <Grid
@@ -134,13 +131,12 @@ const Activities = () => {
         className={classes.loader}
         direction='column'
         justify='center'
-        alignjustify='center'
-      >
+        alignjustify='center'>
         <Typography>Loading activities...</Typography>
         <CircularProgress color='secondary' />
       </Grid>
-    )
+    );
   }
-}
+};
 
-export default Activities
+export default Activities;

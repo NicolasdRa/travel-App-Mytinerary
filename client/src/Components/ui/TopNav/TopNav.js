@@ -1,57 +1,48 @@
-import React, { useState } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import MenuMobile from '../MenuMobile/MenuMobile'
-import MenuDesk from '../MenuDesk/MenuDesk'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
-import { logOutUser, logOutAll } from '../../Redux/auth/authActions'
-import logo from '../../ui/Images/LogoSmallSimpleGrey.png'
-import { makeStyles } from '@material-ui/core/styles'
-import { Button } from '@material-ui/core'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import { useTheme } from '@material-ui/core/styles'
+import React, { useState } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import MenuMobile from "../MenuMobile/MenuMobile";
+import { Link } from "react-router-dom";
+import logo from "../../ui/Images/LogoSmallSimpleGrey.png";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
+// import useMediaQuery from "@material-ui/core/useMediaQuery";
+// import { useTheme } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
-  // root: {
-  //   flexGrow: 1
-  // },
+const useStyles = makeStyles((theme) => ({
   toolbar: {
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   logo: {
-    height: '1.3rem',
-    padding: '.5rem .3rem',
+    height: "1.3rem",
+    padding: ".5rem .3rem",
 
-    [theme.breakpoints.up('md')]: {
-      height: '1.6rem'
+    [theme.breakpoints.up("md")]: {
+      height: "1.6rem",
     },
-    [theme.breakpoints.up('lg')]: {
-      height: '1.8rem'
+    [theme.breakpoints.up("lg")]: {
+      height: "1.8rem",
     },
-    [theme.breakpoints.up('xl')]: {
-      height: '2.5rem'
-    }
-  }
-}))
+    [theme.breakpoints.up("xl")]: {
+      height: "2.5rem",
+    },
+  },
+}));
 
-export default function TopNav () {
-  const classes = useStyles()
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const user = useSelector(state => state.auth.user)
-  const history = useHistory()
+export default function TopNav() {
+  const classes = useStyles();
 
-  const theme = useTheme()
-  const matches = useMediaQuery(theme.breakpoints.down('md'))
+  // const theme = useTheme();
+  // const matches = useMediaQuery(theme.breakpoints.down('md'))
 
   // sets value to pass DeskMenu for tabs at homePage onClik
-  const [value, setValue] = useState(0)
-  const handleChange = (event, value) => {
-    setValue(value)
-  }
+  const [value, setValue] = useState(0);
+  // const handleChange = (event, value) => {
+  //   setValue(value)
+  // }
 
   // This below needs to be fixed --- find another way to push to start page if NO USER
   // if (user === null) {
@@ -66,8 +57,7 @@ export default function TopNav () {
             disableRipple
             component={Link}
             to='/'
-            onClick={() => setValue(0)}
-          >
+            onClick={() => setValue(0)}>
             <img src={logo} alt='Logo' className={classes.logo} />
           </Button>
           <MenuMobile />
@@ -76,5 +66,5 @@ export default function TopNav () {
       </AppBar>
       <Toolbar />
     </div>
-  )
+  );
 }

@@ -1,5 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
+import ImageHeader from "../../ui/Headers/ImageHeader";
+import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+
 import {
   Avatar,
   Box,
@@ -12,167 +18,16 @@ import FavoriteBorderRoundedIcon from "@material-ui/icons/FavoriteBorderRounded"
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import EuroIcon from "@material-ui/icons/Euro";
 import CreateIcon from "@material-ui/icons/Create";
-import ActivityGallerySmall from "../../ui/Activities/ActivityGallerySmall";
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    flex: "0 0 auto",
-    width: "100%",
-  },
+import { useStyles } from "./styles";
 
-  header: {
-    height: "20rem",
-    width: "100%",
-  },
-
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "0 1rem",
-  },
-
-  info: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "0 1rem",
-  },
-
-  overline: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    marginTop: "1rem",
-    padding: "0 0 0 1rem",
-  },
-
-  city_title: {
-    display: "flex",
-    flex: "0 0 auto",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-
-  likes: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  likes_btn: {
-    display: "flex",
-    flexDirection: "row",
-    flex: "0 0 auto",
-    textAlign: "left",
-    padding: 0,
-  },
-
-  likes_icon: {
-    height: "2.5rem",
-    width: "2.5rem",
-  },
-
-  extra_info: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "0 2rem",
-  },
-
-  user_info: {
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-
-  avatar: {
-    height: "2rem",
-    width: "2rem",
-    marginRight: ".5rem",
-  },
-
-  price_time: {
-    display: "flex",
-    marginLeft: "auto",
-    alignItems: "center",
-    padding: "1rem 0",
-  },
-
-  duration: {
-    display: "flex",
-    alignItems: "center",
-  },
-
-  price: {
-    display: "flex",
-    alignItems: "center",
-    marginLeft: "1rem",
-  },
-
-  info_icon: {
-    alignItems: "center",
-    fill: "grey",
-  },
-
-  divider: {
-    margin: "1rem",
-  },
-
-  text: {
-    display: "flex",
-    flexDirection: "column",
-    flex: "0 0 auto",
-    textAlign: "left",
-    margin: "1rem",
-  },
-
-  gallery: {
-    display: "flex",
-    flexDirection: "column",
-    flex: "0 0 auto",
-  },
-
-  comment_btns: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: ".5rem 1.5rem",
-  },
-
-  view_btn: {
-    alignItems: "center",
-  },
-
-  text_btn: {
-    alignItems: "center",
-  },
-
-  write_btn: {
-    display: "flex",
-    color: "grey",
-    paddingLeft: ".5rem",
-    alignItems: "center",
-  },
-
-  write_icon: {
-    alignItems: "center",
-  },
-}));
-
-function ItineraryPage(props) {
+const ActivityPage = (props) => {
   const classes = useStyles();
   const title = props.match.params.title;
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const itinerary = useSelector((state) =>
-    state.itineraries.itineraries.data.filter(
-      (itinerary) => itinerary.title === title,
+  const activity = useSelector((state) =>
+    state.activities.activities.data.filter(
+      (activity) => activity.title === title,
     ),
   );
 
@@ -182,11 +37,9 @@ function ItineraryPage(props) {
     likes,
     duration,
     pricing,
-    hashtags,
     img,
-    activities,
     details,
-  } = itinerary[0];
+  } = activity[0];
 
   return (
     <Box className={classes.container}>
@@ -249,16 +102,6 @@ function ItineraryPage(props) {
             {details}
           </Typography>
           <Divider className={classes.divider} />
-          <Box className={classes.gallery}>
-            {activities.length > 0 && (
-              <Typography className={classes.subtitle}>
-                Available activities for {title}
-              </Typography>
-            )}
-            <ActivityGallerySmall activities={activities} />
-          </Box>
-
-          <Divider className={classes.divider} />
           <Box className={classes.comment_btns}>
             <Button
               size='small'
@@ -282,10 +125,18 @@ function ItineraryPage(props) {
           </Box>
           <Divider className={classes.divider} />
         </Box>
-        {isAuthenticated ? <CreateIitineraryForm /> : null}
       </Box>
+      {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
   );
-}
+};
 
-export default ItineraryPage;
+ActivityPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+    }),
+  }),
+};
+
+export default ActivityPage;

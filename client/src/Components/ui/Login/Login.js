@@ -1,123 +1,119 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
-  Typography
-} from '@material-ui/core'
-import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
-// import { MuiAlert } from '@material-ui/lab/Alert'
-import { loginUser, forgotPassword } from '../../Redux/auth/authActions'
-import { clearErrors } from '../../Redux/error/errorActions'
+  Typography,
+} from "@material-ui/core";
+import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
+import { loginUser, forgotPassword } from "../../Redux/auth/authActions";
+import { clearErrors } from "../../Redux/error/errorActions";
 import {
   openLoginForm,
-  closeLoginForm
-} from '../../Redux/loginForm/loginFormActions'
-import { withStyles } from '@material-ui/core/styles'
-import uuid from 'react-uuid'
-import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
+  closeLoginForm,
+} from "../../Redux/loginForm/loginFormActions";
+import { withStyles } from "@material-ui/core/styles";
+import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
 
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
-    margin: '1.5rem 0 0 0',
+    margin: "1.5rem 0 0 0",
     padding: 0,
-    textAlign: 'center'
+    textAlign: "center",
   },
 
   subtitle: {
-    margin: '2.5rem 0 0 0 ',
+    margin: "2.5rem 0 0 0 ",
     padding: 0,
-    textAlign: 'center'
+    textAlign: "center",
   },
 
   input_field: {
-    margin: '.8rem 0'
+    margin: ".8rem 0",
   },
 
   text: {
-    marginTop: '1rem',
-    textAlign: 'center'
+    marginTop: "1rem",
+    textAlign: "center",
   },
 
   google_button: {
-    display: 'flex',
-    margin: '1rem 0',
-    padding: '.8rem'
+    display: "flex",
+    margin: "1rem 0",
+    padding: ".8rem",
   },
 
   btns: {
-    paddingLeft: '1rem'
-  }
-})
+    paddingLeft: "1rem",
+  },
+});
 
 class Login extends Component {
   state = {
     fullWidth: true,
-    maxWidth: 'sm',
-    email: '',
-    password: '',
-    img: '',
+    maxWidth: "sm",
+    email: "",
+    password: "",
+    img: "",
     isAuthenticated: false,
     msg: null,
-    openSnackBar: false
-  }
+    openSnackBar: false,
+  };
 
-  componentDidUpdate (prevProps) {
-    const { errors } = this.props
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props;
     if (errors !== prevProps.errors)
-      if (errors.id === 'LOGIN_FAIL') {
+      if (errors.id === "LOGIN_FAIL") {
         // Check for login Errors
-        this.setState({ msg: errors.msg.msg })
+        this.setState({ msg: errors.msg.msg });
       } else {
-        this.setState({ msg: null })
+        this.setState({ msg: null });
       }
   }
 
-  handleChange = e => {
-    const { id, value } = e.target
+  handleChange = (e) => {
+    const { id, value } = e.target;
     this.setState({
-      [id]: value
-    })
-  }
+      [id]: value,
+    });
+  };
 
   handleClose = () => {
-    this.props.closeLoginForm()
-  }
+    this.props.closeLoginForm();
+  };
 
-  handleSubmit = e => {
-    clearErrors()
-    this.handleClose()
-    e.preventDefault()
+  handleSubmit = (e) => {
+    clearErrors();
+    this.handleClose();
+    e.preventDefault();
 
-    const { email, password } = this.state
+    const { email, password } = this.state;
 
     const user = {
       email,
-      password
-    }
-    this.props.loginUser(user)
-  }
+      password,
+    };
+    this.props.loginUser(user);
+  };
 
-  clearState = e => {
-    e.preventDefault()
+  clearState = (e) => {
+    e.preventDefault();
     this.setState({
-      [e.target.id]: ''
-    })
-  }
+      [e.target.id]: "",
+    });
+  };
 
-  render () {
-    const { classes } = this.props
-    const open = this.props.setOpen
+  render() {
+    const { classes } = this.props;
+    const open = this.props.setOpen;
 
     const handleClickOpen = () => {
-      this.props.openLoginForm()
-    }
+      this.props.openLoginForm();
+    };
 
     return (
       <div>
@@ -129,14 +125,12 @@ class Login extends Component {
           //   keepMounted
           open={open}
           onClose={this.handleClose}
-          aria-labelledby='form-dialog-title'
-        >
+          aria-labelledby='form-dialog-title'>
           <form onSubmit={this.handleSubmit}>
             <DialogTitle
               id='form-dialog-title'
               disableTypography
-              className={classes.title}
-            >
+              className={classes.title}>
               <Typography variant='body2'>Easy Login</Typography>
             </DialogTitle>
             <DialogContent>
@@ -147,16 +141,14 @@ class Login extends Component {
                 // component={Link}
                 // to='api/auth/google'
                 href='http://localhost:5000/api/v1/auth/google'
-                startIcon={<GoogleSVGIcon />}
-              >
+                startIcon={<GoogleSVGIcon />}>
                 Log in with Google
               </Button>
 
               <DialogTitle
                 id='form-dialog-title'
                 disableTypography
-                className={classes.subtitle}
-              >
+                className={classes.subtitle}>
                 <Typography variant='body2'>
                   Login with email & password
                 </Typography>
@@ -217,31 +209,31 @@ class Login extends Component {
           </form>
         </Dialog>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.user,
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
     errors: state.errors,
-    setOpen: state.loginForm.setOpen
-  }
-}
+    setOpen: state.loginForm.setOpen,
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    loginUser: user => dispatch(loginUser(user)),
-    forgotPassword: user => dispatch(forgotPassword(user)),
+    loginUser: (user) => dispatch(loginUser(user)),
+    forgotPassword: (user) => dispatch(forgotPassword(user)),
     clearErrors: () => dispatch(clearErrors()),
     openLoginForm: () => dispatch(openLoginForm()),
-    closeLoginForm: () => dispatch(closeLoginForm())
-  }
-}
+    closeLoginForm: () => dispatch(closeLoginForm()),
+  };
+};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(Login))
+  mapDispatchToProps,
+)(withStyles(styles)(Login));

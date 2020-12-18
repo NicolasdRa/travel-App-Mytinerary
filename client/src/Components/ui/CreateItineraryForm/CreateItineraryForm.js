@@ -1,12 +1,11 @@
 import React, { useState, useRef } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   Grid,
@@ -17,114 +16,21 @@ import {
 } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+
 import { addItinerary } from "../../Redux/itineraries/itineraryActions";
 // import { clearErrors } from "../../Redux/error/errorActions";
-import { makeStyles } from "@material-ui/core/styles";
 import { loadCurrentUser } from "../../Redux/users/userActions";
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    margin: "1.5rem 0 0 0",
-    padding: 0,
-    textAlign: "center",
-  },
-
-  subtitle: {
-    margin: ".5rem 0 0 0 ",
-  },
-
-  input_field: {
-    margin: ".8rem 0",
-  },
-
-  text: {
-    marginTop: "1rem",
-    textAlign: "center",
-  },
-
-  formControl: {
-    padding: "0 10rem 0 0",
-  },
-
-  select: {
-    minWidth: "3rem",
-  },
-
-  btnContainer: {
-    display: "flex",
-    justifyContent: "center",
-  },
-
-  submit_button: {
-    display: "flex",
-    margin: "1rem 0",
-    padding: ".8rem",
-  },
-
-  btns: {
-    paddingLeft: "1rem",
-  },
-
-  // price_duration: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around'
-  // },
-
-  photoIconContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-  },
-
-  photo_icon: {
-    height: "3rem",
-    width: "3rem",
-  },
-
-  previewContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  previewImgContainer: {
-    display: "flex",
-    maxHeight: "10em",
-  },
-
-  previewImg: {
-    objectFit: "cover",
-    overflow: "hidden",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    borderRadius: "1rem",
-  },
-
-  clearButton: {
-    alignSelf: "flex-end",
-  },
-
-  add_btn: {
-    position: "fixed",
-    bottom: "4rem",
-    right: "1.5rem",
-    zIndex: "1000",
-  },
-}));
+import { useStyles } from "./styles";
 
 const CreateItineraryForm = ({ addItinerary }) => {
   const classes = useStyles();
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [newItinerary, setNewItinerary] = useState({
     city: "",
     title: "",
@@ -136,12 +42,12 @@ const CreateItineraryForm = ({ addItinerary }) => {
   });
   const [file, setFile] = useState(null);
   const [previewFile, setPreviewFile] = useState(null);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
-  const { city, title, category, price, duration, details, img } = newItinerary;
+  const { city, title, category, price, duration, details } = newItinerary;
 
   const dispatch = useDispatch();
-  const types = ["image/png", "image/jpeg"];
+  // const types = ["image/png", "image/jpeg"];
 
   // Ref needed to be able to hide default input and functionalise custom icon  btn
   const hiddenInput = useRef(null);
@@ -164,7 +70,7 @@ const CreateItineraryForm = ({ addItinerary }) => {
   };
 
   const handleChange = (e) => {
-    const { id, value, files } = e.target;
+    const { id, value } = e.target;
 
     // let selectedImg
     // files !== null ? (selectedImg = files[0]) : (selectedImg = null)
