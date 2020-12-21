@@ -7,8 +7,7 @@ export const fetchActivities = createAsyncThunk(
   async () => {
     const res = await axios({
       method: 'get',
-      url: '/activities',
-      baseURL: 'http://localhost:5000/api/v1',
+      url: '/api/v1/activities',
       responseType: 'json',
     })
     return res.data

@@ -2,18 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // THUNKS
-export const fetchCities = createAsyncThunk(
-  'cities/fetchAll',
-  async (thunkAPI) => {
-    const res = await axios({
-      method: 'get',
-      url: '/cities',
-      baseURL: 'http://localhost:5000/api/v1',
-      responseType: 'json',
-    })
-    return res.data
-  },
-)
+export const fetchCities = createAsyncThunk('cities/fetchAll', async () => {
+  const res = await axios({
+    method: 'get',
+    url: '/api/v1/cities',
+    responseType: 'json',
+  })
+  return res.data
+})
 
 // SLICE
 const citiesSlice = createSlice({

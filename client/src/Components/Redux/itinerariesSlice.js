@@ -7,8 +7,7 @@ export const fetchItineraries = createAsyncThunk(
   async (thunkAPI) => {
     const res = await axios({
       method: 'get',
-      url: '/itineraries',
-      baseURL: 'http://localhost:5000/api/v1',
+      url: '/api/v1/itineraries',
       responseType: 'json',
     })
     return res.data
@@ -20,8 +19,7 @@ export const addItinerary = createAsyncThunk(
   async (thunkAPI) => {
     const res = await axios({
       method: 'post',
-      url: '/itineraries/add',
-      baseURL: 'http://localhost:5000/api/v1',
+      url: '/api/v1/itineraries/add',
       responseType: 'json',
     })
     const data = await res.json()

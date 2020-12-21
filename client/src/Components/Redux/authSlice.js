@@ -25,8 +25,7 @@ export const logInUser = createAsyncThunk(
   async (formData) => {
     const res = await axios({
       method: 'POST',
-      url: '/auth/login',
-      baseURL: 'http://localhost:5000/api/v1',
+      url: '/api/v1/auth/login',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -120,6 +119,7 @@ const authSlice = createSlice({
       }
     },
     [logInUser.fulfilled]: (state, action) => {
+      console.log(action.payload.data._id)
       return {
         loading: 'done',
         isAuthenticated: true,
