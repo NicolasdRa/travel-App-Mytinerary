@@ -9,9 +9,9 @@ const passport = require('passport')
 
 // AUTHENTICATION
 
-const signToken = id => {
+const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
+    expiresIn: process.env.JWT_EXPIRES_IN,
   })
 }
 
@@ -19,11 +19,11 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
   const token = signToken(user._id)
   const cookieOptions = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ),
     // set httpOnly to "true" for production
     httpOnly: false,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
 
   res.cookie('jwt', token, cookieOptions)
@@ -33,7 +33,7 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
-    data: user
+    data: user,
   })
 }
 
@@ -44,7 +44,7 @@ exports.signup = asyncErrorCatcher(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    img: req.body.img
+    img: req.body.img,
   })
 
   // send welcome email to user email address
@@ -78,7 +78,7 @@ exports.login = asyncErrorCatcher(async (req, res, next) => {
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true
+    httpOnly: true,
   })
   res.status(200).json({ status: 'success' })
 }
@@ -91,19 +91,19 @@ exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
   if (!user || !token) {
     return next(
       new AppError(
-        'Invalid credentials, please try again with a valid goolge account.',
-        401
-      )
+        'Invalid credentials, please try again with a valid google account.',
+        401,
+      ),
     )
   }
 
   const cookieOptions = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ),
     // set httpOnly to "true" for production
     httpOnly: false,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
 
   res.cookie('jwt', token, cookieOptions).redirect(`//localhost:3000/`)
@@ -124,7 +124,7 @@ exports.protect = asyncErrorCatcher(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError('You are not logged in! Please log in to get access.', 401)
+      new AppError('You are not logged in! Please log in to get access.', 401),
     )
   }
 
@@ -140,7 +140,7 @@ exports.protect = asyncErrorCatcher(async (req, res, next) => {
   // 4) check if user changed password after token was issued
   if (user.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError('Password recently changed! Please log in again.', 401)
+      new AppError('Password recently changed! Please log in again.', 401),
     )
   }
 
@@ -158,7 +158,7 @@ exports.restrict = (...roles) => {
     // roles ['admin', 'guide', 'user']
     if (!roles.includes(req.user.role)) {
       return next(
-        new AppError('You do not have permission to perform this action.', 403)
+        new AppError('You do not have permission to perform this action.', 403),
       )
     }
     next()
@@ -187,7 +187,7 @@ exports.forgotPassword = asyncErrorCatcher(async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       message: 'Reset token sent to email!',
-      resetToken: resetURL
+      resetToken: resetURL,
     })
   } catch (error) {
     user.passwordResetToken = undefined
@@ -197,8 +197,8 @@ exports.forgotPassword = asyncErrorCatcher(async (req, res, next) => {
     return next(
       new AppError(
         'There was an error sending the email. Try again later!.',
-        500
-      )
+        500,
+      ),
     )
   }
 })
@@ -212,13 +212,13 @@ exports.resetPassword = asyncErrorCatcher(async (req, res, next) => {
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() }
+    passwordResetExpires: { $gt: Date.now() },
   })
 
   // 2) set new password if valid token and user found
   if (!user) {
     return next(
-      new AppError('Provided token is invalid or it has expired.', 400)
+      new AppError('Provided token is invalid or it has expired.', 400),
     )
   }
   user.password = req.body.password

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useState, useRef } from 'react'
+import { connect, useDispatch } from 'react-redux'
 import {
   Box,
   Button,
@@ -13,69 +13,69 @@ import {
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+} from '@material-ui/core'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
-import { addItinerary } from "../../Redux/itineraries/itineraryActions";
+import { addItinerary } from '../../Redux/itinerariesSlice'
 // import { clearErrors } from "../../Redux/error/errorActions";
-import { loadCurrentUser } from "../../Redux/users/userActions";
+import { loadCurrentUser } from '../../Redux/users/userActions'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
 const CreateItineraryForm = ({ addItinerary }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   // Component level state - profile info & file
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const [newItinerary, setNewItinerary] = useState({
-    city: "",
-    title: "",
-    category: "",
-    price: "",
-    duration: "",
-    details: "",
-    img: "",
-  });
-  const [file, setFile] = useState(null);
-  const [previewFile, setPreviewFile] = useState(null);
+    city: '',
+    title: '',
+    category: '',
+    price: '',
+    duration: '',
+    details: '',
+    img: '',
+  })
+  const [file, setFile] = useState(null)
+  const [previewFile, setPreviewFile] = useState(null)
   // const [error, setError] = useState(null);
 
-  const { city, title, category, price, duration, details } = newItinerary;
+  const { city, title, category, price, duration, details } = newItinerary
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   // const types = ["image/png", "image/jpeg"];
 
   // Ref needed to be able to hide default input and functionalise custom icon  btn
-  const hiddenInput = useRef(null);
+  const hiddenInput = useRef(null)
 
   const handleClick = (e) => {
-    hiddenInput.current.click();
-  };
+    hiddenInput.current.click()
+  }
 
   const handleChangeFile = (e) => {
-    const fileReader = new FileReader();
+    const fileReader = new FileReader()
     fileReader.onload = () => {
-      fileReader.readyState === 2 && setPreviewFile(fileReader.result);
-    };
-    setFile(e.target.files[0]);
-    fileReader.readAsDataURL(e.target.files[0]);
-  };
+      fileReader.readyState === 2 && setPreviewFile(fileReader.result)
+    }
+    setFile(e.target.files[0])
+    fileReader.readAsDataURL(e.target.files[0])
+  }
 
   const handleClearImage = (e) => {
-    setPreviewFile(null);
-  };
+    setPreviewFile(null)
+  }
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
+    const { id, value } = e.target
 
     // let selectedImg
     // files !== null ? (selectedImg = files[0]) : (selectedImg = null)
 
-    setNewItinerary((prevState) => ({ ...prevState, [id]: value }));
+    setNewItinerary((prevState) => ({ ...prevState, [id]: value }))
     // setCategory(e.target.value)
 
     // if (selectedImg && types.includes(selectedImg.type)) {
@@ -85,60 +85,60 @@ const CreateItineraryForm = ({ addItinerary }) => {
     //   setFile(null)
     //   setError('Please select a valid image type (.png or .jpeg)')
     // }
-  };
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const formData = new FormData();
-    formData.append("img", file);
+    const formData = new FormData()
+    formData.append('img', file)
 
-    addItinerary(formData);
-    dispatch(loadCurrentUser());
-    setOpen(false);
-  };
+    addItinerary(formData)
+    dispatch(loadCurrentUser())
+    setOpen(false)
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   const CategoryOptions = [
-    "Arts & Culture",
-    "Popular Attractions",
-    "Pubs & Bars",
-    "Food & Nightlife",
-    "Tours & Sightseeing",
-    "Spa & Wellness",
-    "Sports & Outdoors",
-    "Nature & Wildlife",
-    "Unique Experiences",
-  ];
-  const PriceOptions = ["€", "€€", "€€€"];
+    'Arts & Culture',
+    'Popular Attractions',
+    'Pubs & Bars',
+    'Food & Nightlife',
+    'Tours & Sightseeing',
+    'Spa & Wellness',
+    'Sports & Outdoors',
+    'Nature & Wildlife',
+    'Unique Experiences',
+  ]
+  const PriceOptions = ['€', '€€', '€€€']
   const DurationOptions = [
-    "0,5",
-    "1",
-    "1.5",
-    "2",
-    "2.5",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "12",
-    "+ 12",
-  ];
+    '0,5',
+    '1',
+    '1.5',
+    '2',
+    '2.5',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '12',
+    '+ 12',
+  ]
 
   return (
     <div>
       <Fab
-        color='secondary'
-        aria-label='add'
+        color="secondary"
+        aria-label="add"
         onClick={handleClickOpen}
         className={classes.add_btn}>
         <AddIcon />
@@ -148,18 +148,18 @@ const CreateItineraryForm = ({ addItinerary }) => {
         //   keepMounted
         open={open}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'>
-        <form onSubmit={handleSubmit} encType='multipart/form-data'>
+        aria-labelledby="form-dialog-title">
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <DialogTitle
-            id='form-dialog-title'
+            id="form-dialog-title"
             disableTypography
             className={classes.title}>
-            <Typography variant='h6' color='primary'>
+            <Typography variant="h6" color="primary">
               Create Your Itinerary
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <Typography variant='body2' className={classes.subtitle}>
+            <Typography variant="body2" className={classes.subtitle}>
               Add itinerary details, add a photo and submit. You can then add
               activities to your itinerary.
             </Typography>
@@ -167,11 +167,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
               required
               autoFocus
               fullWidth
-              margin='dense'
-              id='city'
-              label='Itinerary City'
-              type='city'
-              autoComplete='current-city'
+              margin="dense"
+              id="city"
+              label="Itinerary City"
+              type="city"
+              autoComplete="current-city"
               value={city}
               onChange={handleChange}
               className={classes.input_field}
@@ -180,11 +180,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
               required
               autoFocus
               fullWidth
-              margin='dense'
-              id='title'
-              label='Title'
-              type='title'
-              autoComplete='current-title'
+              margin="dense"
+              id="title"
+              label="Title"
+              type="title"
+              autoComplete="current-title"
               value={title}
               onChange={handleChange}
               className={classes.input_field}
@@ -192,11 +192,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
             <Grid item container className={classes.price_duration}>
               <Grid item xs={12} sm={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='category-label'>Category</InputLabel>
+                  <InputLabel id="category-label">Category</InputLabel>
                   <Select
                     className={classes.select}
-                    labelId='category-label'
-                    id='category'
+                    labelId="category-label"
+                    id="category"
                     value={category}
                     onChange={handleChange}>
                     {CategoryOptions.map((option, index) => (
@@ -209,11 +209,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
               </Grid>
               <Grid item xs={12} sm={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='price-label'>Price</InputLabel>
+                  <InputLabel id="price-label">Price</InputLabel>
                   <Select
                     className={classes.select}
-                    labelId='price-label'
-                    id='price'
+                    labelId="price-label"
+                    id="price"
                     value={price}
                     onChange={handleChange}>
                     {PriceOptions.map((option, index) => (
@@ -226,11 +226,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
               </Grid>
               <Grid item xs={12} sm={4} container>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id='duration-label'>Duration</InputLabel>
+                  <InputLabel id="duration-label">Duration</InputLabel>
                   <Select
                     className={classes.select}
-                    labelId='duration-label'
-                    id='duration'
+                    labelId="duration-label"
+                    id="duration"
                     value={duration}
                     onChange={handleChange}>
                     {DurationOptions.map((option, index) => (
@@ -246,29 +246,29 @@ const CreateItineraryForm = ({ addItinerary }) => {
               required
               autoFocus
               fullWidth
-              margin='dense'
-              id='details'
-              label='Description'
-              type='details'
-              autoComplete='current-details'
+              margin="dense"
+              id="details"
+              label="Description"
+              type="details"
+              autoComplete="current-details"
               value={details}
               onChange={handleChange}
               className={classes.input_field}
             />
             <div>
               <input
-                style={{ display: "none" }}
-                id='customFile'
+                style={{ display: 'none' }}
+                id="customFile"
                 onChange={handleChangeFile}
-                type='file'
+                type="file"
                 ref={hiddenInput}
               />
               {!previewFile ? (
                 <Box className={classes.photoIconContainer}>
-                  <Typography variant='body2'>Add a photo</Typography>
+                  <Typography variant="body2">Add a photo</Typography>
                   <IconButton onClick={handleClick}>
                     <AddAPhotoIcon
-                      color='secondary'
+                      color="secondary"
                       className={classes.photo_icon}
                     />
                   </IconButton>
@@ -278,13 +278,13 @@ const CreateItineraryForm = ({ addItinerary }) => {
                   <Box className={classes.previewImgContainer}>
                     <img
                       src={previewFile}
-                      alt='preview file'
+                      alt="preview file"
                       className={classes.previewImg}
                     />
                   </Box>
                   <Button
                     onClick={handleClearImage}
-                    color='tertiary'
+                    color="tertiary"
                     className={classes.clearButton}>
                     Clear photo
                   </Button>
@@ -293,17 +293,17 @@ const CreateItineraryForm = ({ addItinerary }) => {
             </div>
           </DialogContent>
           <DialogActions className={classes.btns}>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color='secondary'>
+            <Button onClick={handleSubmit} color="secondary">
               Submit
             </Button>
           </DialogActions>
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default connect(null, { addItinerary })(CreateItineraryForm);
+export default connect(null, { addItinerary })(CreateItineraryForm)

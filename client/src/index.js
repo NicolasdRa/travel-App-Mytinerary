@@ -1,11 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+import rootReducer from './Components/Redux/rootReducer'
+
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { Provider } from 'react-redux'
-import store from './Components/Redux/store'
+
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import './index.css'
+
+const store = configureStore({
+  reducer: rootReducer,
+})
 
 const theme = createMuiTheme({
   palette: {
@@ -13,14 +21,14 @@ const theme = createMuiTheme({
     primary: {
       main: '#210909',
       light: '#483131',
-      dark: '#000000'
+      dark: '#000000',
     },
     secondary: {
       main: '#dd2c00',
       light: '#ff6434',
-      dark: '#a30000'
-    }
-  }
+      dark: '#a30000',
+    },
+  },
 })
 
 ReactDOM.render(
@@ -29,7 +37,7 @@ ReactDOM.render(
       <App />
     </Provider>
   </MuiThemeProvider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

@@ -1,5 +1,4 @@
 {
     "prettier.jsxBracketSameLine": true,
-    "prettier.jsxSingleQuote": true,
     "liveServer.settings.port": 5501
 }

@@ -1,24 +1,29 @@
-import { combineReducers } from "redux";
-import citiesReducer from "./cities/citiesReducer";
-import itinerariesReducer from "./itineraries/itinerariesReducer";
-import activityReducer from "./activities/activityReducer";
-import authReducer from "./auth/authReducer";
-import errorReducer from "./error/errorReducer";
-import loginFormReducer from "./loginForm/loginFormReducer";
-import signupFormReducer from "./signupForm/signupFormReducer";
-import userReducer from "./users/userReducer";
-import favouriteReducer from "./favourites/favouriteReducer";
+import { combineReducers } from 'redux'
+
+// import authReducer from './auth/authReducer'
+// import userReducer from './users/userReducer'
+
+import errorReducer from './error/errorReducer'
+import loginFormReducer from './loginForm/loginFormReducer'
+import signupFormReducer from './signupForm/signupFormReducer'
+
+import citiesSlice from './citiesSlice'
+import itinerariesSlice from './itinerariesSlice'
+import activitiesSlice from './activitiesSlice'
+import favouritesSlice from './favouritesSlice'
+import authSlice from './authSlice'
+import usersSlice from './usersSlice'
 
 const rootReducer = combineReducers({
-  cities: citiesReducer,
-  itineraries: itinerariesReducer,
-  activities: activityReducer,
-  favourites: favouriteReducer,
-  auth: authReducer,
+  cities: citiesSlice,
+  itineraries: itinerariesSlice,
+  activities: activitiesSlice,
+  favourites: favouritesSlice,
+  auth: authSlice,
+  users: usersSlice,
   errors: errorReducer,
   loginForm: loginFormReducer,
   signupForm: signupFormReducer,
-  users: userReducer,
-});
+})
 
-export default rootReducer;
+export default rootReducer
