@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
-import ActivityGallerySmall from "../../ui/Activities/ActivityGallerySmall";
-import Favourite from "../../ui/Favourite/Favourite";
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
+import Favourite from '../../ui/Favourite/Favourite'
 
-import { Avatar, Box, Button, Divider, Typography } from "@material-ui/core";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import EuroIcon from "@material-ui/icons/Euro";
-import CreateIcon from "@material-ui/icons/Create";
+import { Avatar, Box, Button, Divider, Typography } from '@material-ui/core'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import EuroIcon from '@material-ui/icons/Euro'
+import CreateIcon from '@material-ui/icons/Create'
 
-import { fetchFavourites } from "../../Redux/favourites/favouriteActions";
+import { fetchFavourites } from '../../Redux/favouritesSlice'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
 const ItineraryPage = ({ match }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const favouriteCount = useSelector((state) => state.favourites.results);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const favouriteCount = useSelector((state) => state.favourites.results)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   // takes params to choose itinerary to display
-  const { title } = match.params;
+  const { title } = match.params
 
   const itinerary = useSelector((state) =>
     state.itineraries.itineraries.data.filter(
       (itinerary) => itinerary.title === title,
     ),
-  );
-  const [count, setCount] = useState(0);
+  )
+  const [count, setCount] = useState(0)
 
   //fetches favourites from DB
   useEffect(() => {
-    dispatch(fetchFavourites(itinerary[0].id));
-  }, [itinerary, dispatch]);
+    dispatch(fetchFavourites(itinerary[0].id))
+  }, [itinerary, dispatch])
 
   // updates count
   useEffect(() => {
-    return () => setCount(favouriteCount);
-  }, [favouriteCount]);
+    return () => setCount(favouriteCount)
+  }, [favouriteCount])
 
   // variables for ui
   const {
@@ -54,18 +54,18 @@ const ItineraryPage = ({ match }) => {
     img,
     activities,
     details,
-  } = itinerary[0];
+  } = itinerary[0]
 
   return (
     <Box className={classes.container}>
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
-        <Typography className={classes.overline} variant='overline'>
+        <Typography className={classes.overline} variant="overline">
           {city.name} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>
-            <Typography variant='h5'>{title}</Typography>
+            <Typography variant="h5">{title}</Typography>
           </Box>
           <Box className={classes.likes}>
             <Favourite data={count} />
@@ -81,9 +81,9 @@ const ItineraryPage = ({ match }) => {
               Author Name
             </Avatar>
             <Typography
-              variant='body2'
-              color='textSecondary'
-              component='p'
+              variant="body2"
+              color="textSecondary"
+              component="p"
               className={classes.author_name}>
               {/* ..still to develop this variable */}
               by John Doe
@@ -92,13 +92,13 @@ const ItineraryPage = ({ match }) => {
           <Box className={classes.price_time}>
             <Box className={classes.duration}>
               <AccessTimeIcon className={classes.icons} />
-              <Typography variant='body2' color='textSecondary' component='p'>
+              <Typography variant="body2" color="textSecondary" component="p">
                 {duration}hs
               </Typography>
             </Box>
             <Box className={classes.price}>
               <EuroIcon className={classes.icons} />
-              <Typography variant='body2' color='textSecondary' component='p'>
+              <Typography variant="body2" color="textSecondary" component="p">
                 {pricing.price}
               </Typography>
             </Box>
@@ -106,7 +106,7 @@ const ItineraryPage = ({ match }) => {
         </Box>
         <Divider className={classes.divider} />
         <Box className={classes.gallery}>
-          <Typography variant='body2' className={classes.text}>
+          <Typography variant="body2" className={classes.text}>
             {details}
           </Typography>
           <Divider className={classes.divider} />
@@ -122,19 +122,19 @@ const ItineraryPage = ({ match }) => {
           <Divider className={classes.divider} />
           <Box className={classes.comment_btns}>
             <Button
-              size='small'
-              color='secondary'
+              size="small"
+              color="secondary"
               component={Link}
-              to={"/activitypage/" + title}
+              to={'/activitypage/' + title}
               className={classes.view_btn}>
               View Reviews (54)
             </Button>
             <Box className={classes.write_btn}>
               <Button
-                size='small'
-                color='secondary'
+                size="small"
+                color="secondary"
                 component={Link}
-                to={"/activitypage/" + title}
+                to={'/activitypage/' + title}
                 className={classes.text_btn}>
                 Leave your comment
               </Button>
@@ -146,8 +146,8 @@ const ItineraryPage = ({ match }) => {
         {isAuthenticated ? <CreateIitineraryForm /> : null}
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 ItineraryPage.propTypes = {
   match: PropTypes.shape({
@@ -155,6 +155,6 @@ ItineraryPage.propTypes = {
       title: PropTypes.string.isRequired,
     }),
   }),
-};
+}
 
-export default ItineraryPage;
+export default ItineraryPage
