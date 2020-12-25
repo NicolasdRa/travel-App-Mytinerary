@@ -107,7 +107,7 @@ exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
     httpOnly: false,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
-
+  // res.json(user)
   res.cookie('jwt', token, cookieOptions).redirect(`//localhost:3000/`)
 })
 

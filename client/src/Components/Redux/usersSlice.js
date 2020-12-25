@@ -58,7 +58,7 @@ export const updateProfileCoverImage = createAsyncThunk(
 
 // SLICE
 const usersSlice = createSlice({
-  name: 'users1',
+  name: 'users',
   initialState: {
     loading: 'idle',
     currentUser: null,

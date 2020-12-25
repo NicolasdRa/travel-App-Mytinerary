@@ -1,41 +1,45 @@
 import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
 import MenuIcon from '@material-ui/icons/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
-import { Link, useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import Signup from '../Signup/Signup'
-import Login from '../Login/Login'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AvatarPicture from '../AvatarPicture/AvatarPicture'
-import { logOutUser } from '../../Redux/auth/authActions'
-import { unloadCurrentUser } from '../../Redux/users/userActions'
+
+import Signup from '../Signup/Signup'
+import Login from '../Login/Login'
+
+import { logOutUser } from '../../Redux/authSlice'
+import { unloadCurrentUser } from '../../Redux/usersSlice'
+
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-const useStyles = makeStyles(theme => ({}))
+const useStyles = makeStyles((theme) => ({}))
 
 export const MenuMobile = () => {
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const user = useSelector(state => state.auth.user)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const user = useSelector((state) => state.auth.user)
 
   // log out functionality
-  const handleLogOut = e => {
+  const handleLogOut = (e) => {
     e.preventDefault()
-    dispatch(logOutUser(user))
-    dispatch(unloadCurrentUser())
+    dispatch(logOutUser())
+    // dispatch(unloadCurrentUser())
     history.push('/')
   }
 
   // menu functionality
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-  const handleMenu = event => {
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
@@ -49,14 +53,13 @@ export const MenuMobile = () => {
   return (
     <div>
       <IconButton
-        edge='start'
+        edge="start"
         className={classes.menuButton}
-        color='inherit'
+        color="inherit"
         // aria-label='menu'
-        aria-controls='mobile-menu'
-        aria-haspopup='true'
-        onClick={handleMenu}
-      >
+        aria-controls="mobile-menu"
+        aria-haspopup="true"
+        onClick={handleMenu}>
         {matches ? (
           <MenuIcon />
         ) : user !== null ? (
@@ -67,23 +70,22 @@ export const MenuMobile = () => {
       </IconButton>
 
       <Menu
-        id='mobile-menu'
+        id="mobile-menu"
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         keepMounted
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         open={open}
-        onClose={handleClose}
-      >
+        onClose={handleClose}>
         {isAuthenticated ? (
           <MenuItem onClick={handleClose}>
-            <Link to='/profile'>Your Profile</Link>
+            <Link to="/profile">Your Profile</Link>
           </MenuItem>
         ) : (
           <MenuItem onClick={handleClose}>
@@ -94,7 +96,7 @@ export const MenuMobile = () => {
         {isAuthenticated ? (
           <div>
             <MenuItem onClick={handleLogOut}>
-              <Link to='/'>Log out</Link>
+              <Link to="/">Log out</Link>
             </MenuItem>
           </div>
         ) : (

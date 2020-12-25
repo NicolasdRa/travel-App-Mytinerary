@@ -25,7 +25,10 @@ import { fetchItineraries } from './Components/Redux/itinerariesSlice'
 import { fetchActivities } from './Components/Redux/activitiesSlice'
 
 // import { loadCurrentUser } from './Components/Redux/users/userActions'
-import { loadCurrentUser } from './Components/Redux/usersSlice'
+import {
+  loadCurrentUser,
+  unloadCurrentUser,
+} from './Components/Redux/usersSlice'
 import { isLoggedIn } from './Components/Redux/authSlice'
 
 const useStyles = makeStyles((theme) => ({
@@ -52,16 +55,21 @@ const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
   const matches = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useDispatch()
 
-  // logs in user
-  // const user = useSelector((state) => state.users.currentUser)
-  // useEffect(() => {
-  //   dispatch(isLoggedIn(user))
-  // }, [dispatch, user])
+  //logs in user
+  const user = useSelector((state) => state.users.currentUser)
+  useEffect(() => {
+    if (user) dispatch(isLoggedIn(user))
+  }, [dispatch, user])
 
   // authenticates user
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   useEffect(() => {
     dispatch(loadCurrentUser())
+
+    // clean-up
+    return () => {
+      dispatch(unloadCurrentUser())
+    }
   }, [dispatch, isAuthenticated])
 
   // fetches data from DB
