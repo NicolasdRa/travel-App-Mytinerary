@@ -1,43 +1,43 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { Avatar, Box, Divider, Typography } from "@material-ui/core";
+import { Avatar, Box, Divider, Typography } from '@material-ui/core'
 
-import Signup from "../../ui/Signup/Signup";
-import Login from "../../ui/Login/Login";
-import CreateItineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import UserItinerariesSmall from "../../ui/Itineraries/UserItinerariesSmall";
-import UpdateProfileForm from "../../ui/UpdateProfileForm/UpdateProfileForm";
-import Favourite from "../../ui/Favourite/Favourite";
+import Signup from '../../ui/Signup/Signup'
+import Login from '../../ui/Login/Login'
+import CreateItineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
+import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
+import Favourite from '../../ui/Favourite/Favourite'
 
-import { loadCurrentUser } from "../../Redux/users/userActions";
+import { loadCurrentUser } from '../../Redux/usersSlice'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
 const Profile = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const user = useSelector((state) => state.users.currentUser);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.users.currentUser)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   // const favouriteTotal = useSelector((state) => state.favourites.favourites);
 
   useEffect(() => {
     return () => {
-      dispatch(loadCurrentUser());
-    };
-  }, [dispatch]);
+      dispatch(loadCurrentUser())
+    }
+  }, [dispatch])
 
   if (isAuthenticated) {
-    const { userName, firstName, lastName, details, img, coverImg } = user;
+    const { userName, firstName, lastName, details, img, coverImg } = user
 
     return (
       <Box className={classes.container}>
         <ImageHeader img={coverImg} className={classes.header} />
         <Box className={classes.content}>
           <Avatar
-            alt={firstName + "" + lastName}
+            alt={firstName + '' + lastName}
             src={img}
             className={classes.userImg}
           />
@@ -50,19 +50,19 @@ const Profile = () => {
             </Box>
           </Box>
           <Box className={classes.user_info}>
-            <Typography variant='h5' className={classes.user_fullName}>
+            <Typography variant="h5" className={classes.user_fullName}>
               {firstName} {lastName}
             </Typography>
             <Typography
-              variant='body2'
-              color='textSecondary'
-              component='p'
+              variant="body2"
+              color="textSecondary"
+              component="p"
               className={classes.userName}>
               {userName}
             </Typography>
           </Box>
           <Box className={classes.gallery}>
-            <Typography variant='body2' className={classes.text}>
+            <Typography variant="body2" className={classes.text}>
               {details}
             </Typography>
             <Divider className={classes.divider} />
@@ -72,12 +72,12 @@ const Profile = () => {
           <CreateItineraryForm />
         </Box>
       </Box>
-    );
+    )
   } else {
     return (
       <Box className={classes.alt_container}>
         <Box className={classes.alt_container_legend}>
-          <Typography variant='h6' align='center' className='profileTitle'>
+          <Typography variant="h6" align="center" className="profileTitle">
             Please Sign up or Log in to access your profile page
           </Typography>
         </Box>
@@ -86,8 +86,8 @@ const Profile = () => {
           <Login />
         </Box>
       </Box>
-    );
+    )
   }
-};
+}
 
-export default Profile;
+export default Profile

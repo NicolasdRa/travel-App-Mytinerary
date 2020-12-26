@@ -8,36 +8,36 @@ import {
   DialogTitle,
   Snackbar,
   TextField,
-  Typography
+  Typography,
 } from '@material-ui/core'
-import { openLoginForm } from '../../Redux/loginForm/loginFormActions'
-import { resetPassword } from '../../Redux/auth/authActions'
+import { openLogInForm } from '../../Redux/formsSlice'
+import { resetPassword } from '../../Redux/authSlice'
 import { withStyles } from '@material-ui/core/styles'
 
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
     margin: '1rem 1rem 0 1rem',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   subtitle: {
     margin: '0 1.5rem',
     padding: 0,
-    textAlign: 'left'
+    textAlign: 'left',
   },
 
   input_field: {
-    margin: '.8rem 0'
+    margin: '.8rem 0',
   },
 
   text: {
     marginTop: '1rem',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   btns: {
-    paddingLeft: '1rem'
-  }
+    paddingLeft: '1rem',
+  },
 })
 
 class PasswordResetForm extends Component {
@@ -49,13 +49,13 @@ class PasswordResetForm extends Component {
     isAuthenticated: false,
     msg: null,
     setOpen: true,
-    openSnackBar: false
+    openSnackBar: false,
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { id, value } = e.target
     this.setState({
-      [id]: value
+      [id]: value,
     })
   }
 
@@ -63,7 +63,7 @@ class PasswordResetForm extends Component {
     this.setState({ setOpen: false })
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
     const { password, passwordConfirm } = this.state
@@ -71,14 +71,14 @@ class PasswordResetForm extends Component {
     const data = {
       resetToken: this.props.match.params.resetToken,
       password,
-      passwordConfirm
+      passwordConfirm,
     }
     this.props.resetPassword(data)
     this.setState({ openSnackBar: true })
     setTimeout(() => {
       this.handleClose()
       this.setState({ openSnackBar: false })
-      this.props.openLoginForm()
+      this.props.openLogInForm()
       this.props.history.push(`/`)
     }, 3000)
   }
@@ -90,14 +90,14 @@ class PasswordResetForm extends Component {
     this.setState({ openSnackBar: false })
   }
 
-  clearState = e => {
+  clearState = (e) => {
     e.preventDefault()
     this.setState({
-      [e.target.id]: ''
+      [e.target.id]: '',
     })
   }
 
-  render () {
+  render() {
     const { classes } = this.props
     const open = this.state.setOpen
 
@@ -106,22 +106,19 @@ class PasswordResetForm extends Component {
         <Dialog
           open={open}
           onClose={this.handleClose}
-          aria-labelledby='form-dialog-title'
-        >
+          aria-labelledby="form-dialog-title">
           <form onSubmit={this.handleSubmit}>
             <DialogTitle
-              id='form-dialog-title'
+              id="form-dialog-title"
               disableTypography
-              className={classes.title}
-            >
-              <Typography variant='h6'>Reset your password</Typography>
+              className={classes.title}>
+              <Typography variant="h6">Reset your password</Typography>
             </DialogTitle>
             <DialogTitle
-              id='form-dialog-subtitle'
+              id="form-dialog-subtitle"
               disableTypography
-              className={classes.subtitle}
-            >
-              <Typography variant='body2'>
+              className={classes.subtitle}>
+              <Typography variant="body2">
                 Enter a new password, confirm and submit. You will be logged in
                 shortly afterwards.
               </Typography>
@@ -130,11 +127,11 @@ class PasswordResetForm extends Component {
               <TextField
                 required
                 autoFocus
-                margin='dense'
-                id='password'
-                label='New Password'
-                type='password'
-                autoComplete='current-password'
+                margin="dense"
+                id="password"
+                label="New Password"
+                type="password"
+                autoComplete="current-password"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
@@ -142,12 +139,12 @@ class PasswordResetForm extends Component {
               <TextField
                 required
                 autoFocus
-                minLength='6'
-                margin='dense'
-                id='passwordConfirm'
-                label='Confirm New Password'
-                type='password'
-                autoComplete='current-password-confirm'
+                minLength="6"
+                margin="dense"
+                id="passwordConfirm"
+                label="Confirm New Password"
+                type="password"
+                autoComplete="current-password-confirm"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
@@ -155,23 +152,23 @@ class PasswordResetForm extends Component {
               <Snackbar
                 anchorOrigin={{
                   vertical: 'top',
-                  horizontal: 'center'
+                  horizontal: 'center',
                 }}
                 open={this.state.openSnackBar}
                 autoHideDuration={4000}
                 onClose={this.handleCloseSnackBar}
-                message='Your password has been reset, you will be logged in'
+                message="Your password has been reset, you will be logged in"
               />
-              <Typography variant='body2' className={classes.text}>
+              <Typography variant="body2" className={classes.text}>
                 By proceeding you agree to Mytinerary’s Privacy Policy, User
                 Agreement and T&Cs.
               </Typography>
             </DialogContent>
             <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color='primary'>
+              <Button onClick={this.handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={this.handleSubmit} color='secondary'>
+              <Button onClick={this.handleSubmit} color="secondary">
                 Submit
               </Button>
             </DialogActions>
@@ -182,21 +179,21 @@ class PasswordResetForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated
+    isAuthenticated: state.isAuthenticated,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    resetPassword: data => dispatch(resetPassword(data)),
-    openLoginForm: () => dispatch(openLoginForm())
+    resetPassword: (data) => dispatch(resetPassword(data)),
+    openLogInForm: () => dispatch(openLogInForm()),
   }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(withStyles(styles)(PasswordResetForm))

@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { forgotPassword } from '../../Redux/authSlice'
-import { clearErrors } from '../../Redux/error/errorActions'
+import { clearErrors } from '../../Redux/errorsSlice'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({

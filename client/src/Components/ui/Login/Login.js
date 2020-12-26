@@ -11,11 +11,8 @@ import {
 } from '@material-ui/core'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import { logInUser } from '../../Redux/authSlice'
-import { clearErrors } from '../../Redux/error/errorActions'
-import {
-  openLoginForm,
-  closeLoginForm,
-} from '../../Redux/loginForm/loginFormActions'
+import { clearErrors } from '../../Redux/errorsSlice'
+import { openLogInForm, closeLogInForm } from '../../Redux/formsSlice'
 import { withStyles } from '@material-ui/core/styles'
 import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 
@@ -83,7 +80,7 @@ class Login extends Component {
   }
 
   handleClose = () => {
-    this.props.closeLoginForm()
+    this.props.closeLogInForm()
   }
 
   handleSubmit = (e) => {
@@ -112,7 +109,7 @@ class Login extends Component {
     const open = this.props.setOpen
 
     const handleClickOpen = () => {
-      this.props.openLoginForm()
+      this.props.openLogInForm()
     }
 
     return (
@@ -219,7 +216,7 @@ const mapStateToProps = (state) => {
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
     errors: state.errors,
-    setOpen: state.loginForm.setOpen,
+    setOpen: state.forms.openLogInForm,
   }
 }
 
@@ -227,8 +224,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logInUser: (user) => dispatch(logInUser(user)),
     clearErrors: () => dispatch(clearErrors()),
-    openLoginForm: () => dispatch(openLoginForm()),
-    closeLoginForm: () => dispatch(closeLoginForm()),
+    openLogInForm: () => dispatch(openLogInForm()),
+    closeLogInForm: () => dispatch(closeLogInForm()),
   }
 }
 

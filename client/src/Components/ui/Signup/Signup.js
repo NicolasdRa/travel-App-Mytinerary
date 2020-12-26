@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
   Button,
   Dialog,
@@ -8,118 +8,115 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "@material-ui/core";
-import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
-import { signupUser } from "../../Redux/auth/authActions";
-import { clearErrors } from "../../Redux/error/errorActions";
-import {
-  openSignupForm,
-  closeSignupForm,
-} from "../../Redux/signupForm/signupFormActions";
-import { withStyles } from "@material-ui/core/styles";
+} from '@material-ui/core'
+import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
+import { signupUser } from '../../Redux/authSlice'
+import { clearErrors } from '../../Redux/errorsSlice'
+import { openSignUpForm, closeSignUpForm } from '../../Redux/formsSlice'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
   title: {
-    margin: "1.5rem 0 0 0",
+    margin: '1.5rem 0 0 0',
     padding: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   subtitle: {
-    margin: "2.5rem 0 0 0 ",
+    margin: '2.5rem 0 0 0 ',
     padding: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   input_field: {
-    margin: ".8rem 0",
+    margin: '.8rem 0',
   },
 
   text: {
-    marginTop: "1rem",
-    textAlign: "center",
+    marginTop: '1rem',
+    textAlign: 'center',
   },
 
   google_button: {
-    display: "flex",
-    margin: "1rem 0",
-    padding: ".8rem",
+    display: 'flex',
+    margin: '1rem 0',
+    padding: '.8rem',
   },
 
   btns: {
-    paddingLeft: "1rem",
+    paddingLeft: '1rem',
   },
-});
+})
 
 class Signup extends Component {
   state = {
     fullWidth: true,
-    maxWidth: "sm",
-    userName: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
-    img: "",
+    maxWidth: 'sm',
+    userName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    img: '',
     isAuthenticated: false,
     msg: null,
-  };
+  }
 
   componentDidUpdate(prevProps) {
-    const { errors } = this.props;
+    const { errors } = this.props
     if (errors !== prevProps.errors)
-      if (errors.id === "SIGNUP_FAIL") {
+      if (errors.id === 'SIGNUP_FAIL') {
         // Check for signup Errors
-        this.setState({ msg: errors.msg.msg });
+        this.setState({ msg: errors.msg.msg })
       } else {
-        this.setState({ msg: null });
+        this.setState({ msg: null })
       }
   }
 
   handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
-    });
-  };
+    })
+  }
 
   handleClose = () => {
-    this.props.closeSignupForm();
-  };
+    this.props.closeSignUpForm()
+  }
 
   handleSubmit = (e) => {
-    clearErrors();
-    this.handleClose();
-    e.preventDefault();
+    clearErrors()
+    this.handleClose()
+    e.preventDefault()
 
-    const { userName, email, password, passwordConfirm } = this.state;
+    const { userName, email, password, passwordConfirm } = this.state
 
     const newUser = {
       userName,
       email,
       password,
       passwordConfirm,
-    };
+    }
 
-    this.props.signupUser(newUser);
-  };
+    this.props.signupUser(newUser)
+  }
 
   clearState = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.setState({
-      [e.target.id]: "",
-    });
-  };
+      [e.target.id]: '',
+    })
+  }
 
   render() {
-    const { classes } = this.props;
-    const open = this.props.setOpen;
+    const { classes } = this.props
+    const open = this.props.setOpen
 
     const handleClickOpen = () => {
-      this.props.openSignupForm();
-    };
+      this.props.openSignUpForm()
+    }
 
     return (
       <div>
-        <Button color='secondary' onClick={handleClickOpen}>
+        <Button color="secondary" onClick={handleClickOpen}>
           Signup
         </Button>
         <Dialog
@@ -127,31 +124,31 @@ class Signup extends Component {
           //   keepMounted
           open={open}
           onClose={this.handleClose}
-          aria-labelledby='form-dialog-title'>
+          aria-labelledby="form-dialog-title">
           <form onSubmit={this.handleSubmit}>
             <DialogTitle
-              id='form-dialog-title'
+              id="form-dialog-title"
               disableTypography
               className={classes.title}>
-              <Typography variant='body2'>Easy Signup</Typography>
+              <Typography variant="body2">Easy Signup</Typography>
             </DialogTitle>
             <DialogContent>
               <Button
                 className={classes.google_button}
-                variant='outlined'
+                variant="outlined"
                 //   color='secondary'
                 // component={Link}
                 // to='api/auth/google'
-                href='http://localhost:5000/api/v1/auth/google'
+                href="http://localhost:5000/api/v1/auth/google"
                 startIcon={<GoogleSVGIcon />}>
                 Sign up with Google
               </Button>
 
               <DialogTitle
-                id='form-dialog-title'
+                id="form-dialog-title"
                 disableTypography
                 className={classes.subtitle}>
-                <Typography variant='body2'>Sign up with your info</Typography>
+                <Typography variant="body2">Sign up with your info</Typography>
               </DialogTitle>
               {/* 
               {errors
@@ -171,11 +168,11 @@ class Signup extends Component {
               <TextField
                 required
                 autoFocus
-                margin='dense'
-                id='userName'
-                label='User Name'
-                type='userName'
-                autoComplete='current-firstName'
+                margin="dense"
+                id="userName"
+                label="User Name"
+                type="userName"
+                autoComplete="current-firstName"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
@@ -183,11 +180,11 @@ class Signup extends Component {
               <TextField
                 required
                 autoFocus
-                margin='dense'
-                id='email'
-                label='Email Address'
-                type='email'
-                autoComplete='current-email'
+                margin="dense"
+                id="email"
+                label="Email Address"
+                type="email"
+                autoComplete="current-email"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
@@ -195,12 +192,12 @@ class Signup extends Component {
               <TextField
                 required
                 autoFocus
-                minLength='6'
-                margin='dense'
-                id='password'
-                label='Password'
-                type='password'
-                autoComplete='current-password'
+                minLength="6"
+                margin="dense"
+                id="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
@@ -208,33 +205,33 @@ class Signup extends Component {
               <TextField
                 required
                 autoFocus
-                minLength='6'
-                margin='dense'
-                id='passwordConfirm'
-                label='Confirm Password'
-                type='password'
-                autoComplete='current-password-confirm'
+                minLength="6"
+                margin="dense"
+                id="passwordConfirm"
+                label="Confirm Password"
+                type="password"
+                autoComplete="current-password-confirm"
                 onChange={this.handleChange}
                 fullWidth
                 className={classes.input_field}
               />
-              <Typography variant='body2' className={classes.text}>
+              <Typography variant="body2" className={classes.text}>
                 By proceeding you agree to Mytinerary’s Privacy Policy, User
                 Agreement and T&Cs.
               </Typography>
             </DialogContent>
             <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color='primary'>
+              <Button onClick={this.handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={this.handleSubmit} color='secondary'>
+              <Button onClick={this.handleSubmit} color="secondary">
                 Submit
               </Button>
             </DialogActions>
           </form>
         </Dialog>
       </div>
-    );
+    )
   }
 }
 
@@ -244,20 +241,20 @@ const mapStateToProps = (state) => {
     authError: state.auth.error,
     isAuthenticated: state.isAuthenticated,
     errors: state.errors,
-    setOpen: state.signupForm.setOpen,
-  };
-};
+    setOpen: state.forms.openSignUpForm,
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     signupUser: (user) => dispatch(signupUser(user)),
     clearErrors: () => dispatch(clearErrors()),
-    openSignupForm: () => dispatch(openSignupForm()),
-    closeSignupForm: () => dispatch(closeSignupForm()),
-  };
-};
+    openSignUpForm: () => dispatch(openSignUpForm()),
+    closeSignUpForm: () => dispatch(closeSignUpForm()),
+  }
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withStyles(styles)(Signup));
+)(withStyles(styles)(Signup))

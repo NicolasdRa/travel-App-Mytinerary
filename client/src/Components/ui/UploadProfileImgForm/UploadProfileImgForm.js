@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
-import Slider from "@material-ui/core/Slider";
-import Cropper from "react-easy-crop";
-import { getCroppedImg, readFile } from "../../utils/imageUtils";
-import "./styles.css";
+import React, { useState, useCallback, useRef } from 'react'
+import { connect, useSelector, useDispatch } from 'react-redux'
+import Slider from '@material-ui/core/Slider'
+import Cropper from 'react-easy-crop'
+import { getCroppedImg, readFile } from '../../utils/imageUtils'
+import './styles.css'
 import {
   Box,
   Button,
@@ -13,45 +13,44 @@ import {
   DialogTitle,
   IconButton,
   Typography,
-} from "@material-ui/core";
-import ImageButtonRounded from "../ImageButtonRounded/ImageButtonRounded";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import { updateUserProfile } from "../../Redux/users/userActions";
-import { loadCurrentUser } from "../../Redux/users/userActions";
+} from '@material-ui/core'
+import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
+import { updateUserProfile, loadCurrentUser } from '../../Redux/usersSlice'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
 const UploadProfileImgForm = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
   // Global state - user info
-  const { img } = useSelector((state) => state.users.currentUser);
+  const { img } = useSelector((state) => state.users.currentUser)
 
   // Component level state - profile info & file
-  const [open, setOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImageFile, setCroppedImageFile] = useState(null);
+  const [open, setOpen] = useState(false)
+  const [imageSrc, setImageSrc] = useState(null)
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [rotation, setRotation] = useState(0)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [croppedImageFile, setCroppedImageFile] = useState(null)
 
   // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef(null);
+  const hiddenInput = useRef(null)
   const handleClick = (e) => {
-    hiddenInput.current.click();
-  };
+    hiddenInput.current.click()
+  }
 
   // handles file input changes
   const handleChangeFile = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      let imageDataUrl = await readFile(file);
+      const file = e.target.files[0]
+      let imageDataUrl = await readFile(file)
 
-      setImageSrc(imageDataUrl);
+      setImageSrc(imageDataUrl)
     }
-  };
+  }
 
   // creates cropped image base64 to show, upload or download
   const createCroppedImageFile = useCallback(async () => {
@@ -59,46 +58,46 @@ const UploadProfileImgForm = () => {
       imageSrc,
       croppedAreaPixels,
       rotation,
-    );
+    )
     // console.log("done", { croppedImage });
-    setCroppedImageFile(croppedImage);
-  }, [imageSrc, croppedAreaPixels, rotation]);
+    setCroppedImageFile(croppedImage)
+  }, [imageSrc, croppedAreaPixels, rotation])
 
   // handles crop complete
   const handleCropComplete = useCallback(
     (croppedArea, croppedAreaPixels) => {
-      setCroppedAreaPixels(croppedAreaPixels);
+      setCroppedAreaPixels(croppedAreaPixels)
       // console.log({ area: croppedArea }, { pixels: croppedAreaPixels });
-      createCroppedImageFile();
+      createCroppedImageFile()
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [crop],
-  );
+  )
 
   const handleClearImage = (e) => {
-    setImageSrc(null);
-  };
+    setImageSrc(null)
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     // createCroppedImageFile();
 
-    const formData = new FormData();
-    formData.append("img", croppedImageFile);
+    const formData = new FormData()
+    formData.append('img', croppedImageFile)
 
-    dispatch(updateUserProfile(formData));
-    dispatch(loadCurrentUser());
-    setOpen(false);
-    setImageSrc(null);
-  };
+    dispatch(updateUserProfile(formData))
+    dispatch(loadCurrentUser())
+    setOpen(false)
+    setImageSrc(null)
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <div>
@@ -107,13 +106,13 @@ const UploadProfileImgForm = () => {
         className={classes.modal}
         open={open}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'>
-        <form onSubmit={handleSubmit} encType='multipart/form-data'>
+        aria-labelledby="form-dialog-title">
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <DialogTitle
-            id='form-dialog-title'
+            id="form-dialog-title"
             disableTypography
             className={classes.title}>
-            <Typography variant='body2'>
+            <Typography variant="body2">
               Choose and adjust your Profile image
             </Typography>
           </DialogTitle>
@@ -136,7 +135,7 @@ const UploadProfileImgForm = () => {
                 <div className={classes.controls}>
                   <div className={classes.sliderContainer}>
                     <Typography
-                      variant='overline'
+                      variant="overline"
                       classes={{ root: classes.sliderLabel }}>
                       Zoom
                     </Typography>
@@ -145,14 +144,14 @@ const UploadProfileImgForm = () => {
                       min={1}
                       max={3}
                       step={0.1}
-                      aria-labelledby='Zoom'
+                      aria-labelledby="Zoom"
                       onChange={(e, zoom) => setZoom(zoom)}
                       classes={{ root: classes.slider }}
                     />
                   </div>
                   <div className={classes.sliderContainer}>
                     <Typography
-                      variant='overline'
+                      variant="overline"
                       classes={{ root: classes.sliderLabel }}>
                       Rotate
                     </Typography>
@@ -161,7 +160,7 @@ const UploadProfileImgForm = () => {
                       min={0}
                       max={360}
                       step={1}
-                      aria-labelledby='Rotation'
+                      aria-labelledby="Rotation"
                       classes={{ root: classes.slider }}
                       onChange={(e, rotation) => setRotation(rotation)}
                     />
@@ -171,15 +170,15 @@ const UploadProfileImgForm = () => {
             ) : (
               <Box className={classes.photoIconContainer}>
                 <input
-                  style={{ display: "none" }}
-                  id='customFile'
+                  style={{ display: 'none' }}
+                  id="customFile"
                   onChange={handleChangeFile}
-                  type='file'
+                  type="file"
                   ref={hiddenInput}
                 />
                 <IconButton onClick={handleClick}>
                   <AddAPhotoIcon
-                    color='secondary'
+                    color="secondary"
                     className={classes.photo_icon}
                   />
                 </IconButton>
@@ -187,22 +186,22 @@ const UploadProfileImgForm = () => {
             )}
           </DialogContent>
           <DialogActions className={classes.btns}>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
             {imageSrc ? (
-              <Button onClick={handleClearImage} color='primary'>
+              <Button onClick={handleClearImage} color="primary">
                 Clear
               </Button>
             ) : null}
-            <Button onClick={handleSubmit} color='secondary'>
+            <Button onClick={handleSubmit} color="secondary">
               Upload
             </Button>
           </DialogActions>
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default connect(null, { updateUserProfile })(UploadProfileImgForm);
+export default connect(null, { updateUserProfile })(UploadProfileImgForm)

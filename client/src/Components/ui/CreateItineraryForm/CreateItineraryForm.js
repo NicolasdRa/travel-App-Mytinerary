@@ -22,7 +22,7 @@ import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
 import { addItinerary } from '../../Redux/itinerariesSlice'
 // import { clearErrors } from "../../Redux/error/errorActions";
-import { loadCurrentUser } from '../../Redux/users/userActions'
+import { loadCurrentUser } from '../../Redux/usersSlice'
 
 import { useStyles } from './styles'
 
