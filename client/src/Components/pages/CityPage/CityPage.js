@@ -1,6 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { selectCityByName } from '../../Redux/citiesSlice'
 
 import ItineraryGallery from '../../ui/ItineraryGallery/ItineraryGallery'
 import ImageHeader from '../../ui/Headers/ImageHeader'
@@ -49,20 +50,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CityPage = (props) => {
+const CityPage = ({ match }) => {
   const classes = useStyles()
-  const cityName = props.match.params.city_name
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const city = useSelector((state) =>
-    state.cities.data.filter((city) => city.name === cityName),
-  )
+
+  const cityName = match.params.city_name
+  const city = useSelector((state) => selectCityByName(state, cityName))
+
   const itineraries = useSelector((state) =>
-    state.itineraries.itineraries.data.filter(
+    state.itineraries.data.filter(
       (itineraries) => itineraries.city === cityName,
     ),
   )
 
-  const { name, img, country } = city[0]
+  const { name, img, country } = city
 
   return (
     <Box className={classes.content}>

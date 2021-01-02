@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   Button,
   Dialog,
@@ -18,7 +18,6 @@ import { useStyles } from './styles'
 
 const UpdateProfileForm = () => {
   const classes = useStyles()
-
   const dispatch = useDispatch()
 
   // Global state - user info
@@ -35,7 +34,7 @@ const UpdateProfileForm = () => {
     details: '',
   })
 
-  const handleChangeProfile = (e) => {
+  const handleChange = (e) => {
     const { id, value } = e.target
     setProfile({ ...profile, [id]: value })
   }
@@ -99,7 +98,7 @@ const UpdateProfileForm = () => {
               type="text"
               autoComplete="current-userName"
               defaultValue={userName}
-              onChange={handleChangeProfile}
+              onChange={handleChange}
               className={classes.input_field}
             />
             <Grid item container className={classes.price_duration}>
@@ -114,7 +113,7 @@ const UpdateProfileForm = () => {
                   type="text"
                   autoComplete="current-firstName"
                   defaultValue={firstName}
-                  onChange={handleChangeProfile}
+                  onChange={handleChange}
                   className={classes.input_field}
                 />
               </Grid>
@@ -129,7 +128,7 @@ const UpdateProfileForm = () => {
                   type="text"
                   autoComplete="current-lastName"
                   defaultValue={lastName}
-                  onChange={handleChangeProfile}
+                  onChange={handleChange}
                   className={classes.input_field}
                 />
               </Grid>
@@ -144,7 +143,7 @@ const UpdateProfileForm = () => {
               type="text"
               autoComplete="current-details"
               defaultValue={details}
-              onChange={handleChangeProfile}
+              onChange={handleChange}
               className={classes.input_field}
             />
           </DialogContent>
@@ -162,4 +161,4 @@ const UpdateProfileForm = () => {
   )
 }
 
-export default connect(null, { updateUserProfile })(UpdateProfileForm)
+export default UpdateProfileForm

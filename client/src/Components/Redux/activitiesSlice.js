@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // THUNKS
@@ -47,8 +47,30 @@ const activitiesSlice = createSlice({
   },
 })
 
+// SELECTORS
+const selectActivities = (state) => state.activities.data
+
+export const selectAllActivities = createSelector(
+  [selectActivities],
+  (activities) => activities,
+)
+
+export const selectActivitiesSortedByLikes = createSelector(
+  [selectActivities],
+  (activities) => activities.sort((a, b) => b.likes - a.likes),
+)
+
+export const selectActivityByName = createSelector(
+  [selectAllActivities, (state, name) => name],
+  (activities, name) => activities.find((activity) => activity.name === name),
+)
+
+// ACTION EXPORTS
+
 // Extract and export each action creator by name
 export const { addActivity, deleteActivity } = activitiesSlice.actions
+
+// REDUCER EXPORT
 
 // // Export the reducer as a default export
 export default activitiesSlice.reducer

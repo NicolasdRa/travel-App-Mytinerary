@@ -1,144 +1,156 @@
-import React, { useState } from "react";
-import "typeface-roboto";
+import React, { useState, useEffect } from 'react'
+
+import { useSelector } from 'react-redux'
+import { selectAllItineraries } from '../../Redux/itinerariesSlice'
+
 import {
   Grid,
   CircularProgress,
   TextField,
   Typography,
   Paper,
-} from "@material-ui/core";
-import { useSelector } from "react-redux";
-import ItineraryGallery from "../ItineraryGallery/ItineraryGallery";
-import ListingHeader from "../Headers/ListingHeader";
-import { makeStyles } from "@material-ui/core/styles";
+} from '@material-ui/core'
+
+import ItineraryGallery from '../ItineraryGallery/ItineraryGallery'
+import ListingHeader from '../Headers/ListingHeader'
+
+import { randomNumberGenerator } from '../../utils/utils'
+
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingBottom: "3rem",
+    paddingBottom: '3rem',
   },
 
   searchbarContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     backgroundColor: theme.palette.common.beigeLight,
-    padding: "1rem 1rem",
-    margin: "-.5rem 0 0 0",
+    padding: '1rem 1rem',
+    margin: '-.5rem 0 0 0',
   },
 
   searchBarTitle: {
     color: theme.palette.primary.main,
-    fontSize: ".9rem",
-    fontWeight: "500",
-    textAlign: "left",
-    margin: "0 0 .5rem .5rem",
+    fontSize: '.9rem',
+    fontWeight: '500',
+    textAlign: 'left',
+    margin: '0 0 .5rem .5rem',
   },
 
   searchBar: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: "5px",
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: '5px',
   },
 
   subtitle: {
-    margin: "2rem auto .5rem 1.5rem",
-    textAlign: "start",
+    margin: '2rem auto .5rem 1.5rem',
+    textAlign: 'start',
   },
 
   loader: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "5rem 5rem",
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '5rem 5rem',
   },
-}));
+}))
 
 const Itineraries = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const itineraries = useSelector(
-    (state) => state.itineraries.itineraries.data,
-  );
+  const itineraries = useSelector(selectAllItineraries)
 
-  const [string, setString] = useState("");
-  const [city, setCity] = useState(null);
-  console.log(city);
+  const [string, setString] = useState('')
+  const [headerItinerary, setHeaderItinerary] = useState(null)
+  const [filteredItineraries, setFilteredItineraries] = useState(null)
+
+  useEffect(() => {
+    // random cover image
+    const randomNumber = randomNumberGenerator(0, itineraries.length - 1)
+
+    filteredItineraries === null
+      ? setHeaderItinerary(itineraries[randomNumber])
+      : setHeaderItinerary(filteredItineraries[0])
+  }, [itineraries, filteredItineraries])
+
+  useEffect(() => {
+    // itinerary filter
+    if (string !== '') {
+      const filtered = itineraries.filter((itinerary) =>
+        itinerary.city.toLowerCase().startsWith(string),
+      )
+      setFilteredItineraries(filtered)
+    }
+    // clean up: when string is empty
+    return () => {
+      setFilteredItineraries(null)
+    }
+  }, [itineraries, string])
+
   const handleChange = (e) => {
     // updates string in state
-    setString(e.target.value.toLowerCase());
-  };
+    setString(e.target.value.toLowerCase())
+  }
 
-  // filter function
-  let filteredItineraries = [];
-  if (itineraries !== null) {
-    filteredItineraries = [
-      ...itineraries.filter((itinerary) => {
-        return itinerary.city.name.toLowerCase().startsWith(string);
-      }),
-    ];
+  console.log('Itineraries Tab Rendered')
 
-    function generateRandomInteger(min, max) {
-      return Math.floor(min + Math.random() * (max + 1 - min));
-    }
-
-    const randomNumber = generateRandomInteger(0, itineraries.length - 1);
-
-    let headerItinerary = null;
-    console.log(city);
-    city === null
-      ? (headerItinerary = itineraries[randomNumber])
-      : (headerItinerary = filteredItineraries[0]);
-
-    return (
-      <Grid
-        container
-        direction='column'
-        // justify='center'
-        alignItems='center'
-        className={classes.container}>
-        <Grid item xs={12} container direction='column' justify='center'>
-          <ListingHeader data={headerItinerary} className={classes.header} />
-          <Paper
-            elevation={2}
-            variant='outlined'
-            className={classes.searchbarContainer}>
-            <Typography className={classes.searchBarTitle}>
-              Choose your route
-            </Typography>
-            <TextField
-              id='outlined-helperText'
-              label='Search City..'
-              defaultValue=''
-              variant='outlined'
-              onChange={handleChange}
-              color='primary'
-              className={classes.searchBar}
-            />
-          </Paper>
-        </Grid>
-        <Grid container item xs={12}>
-          <Typography variant='subtitle2' className={classes.subtitle}>
-            Most popular Itineraries
-          </Typography>
-          <ItineraryGallery
-            string={string}
-            itineraries={filteredItineraries.sort((a, b) => a.likes - b.likes)}
-          />
-        </Grid>
-      </Grid>
-    );
-  } else {
+  if (!itineraries) {
     return (
       <Grid
         container
         className={classes.loader}
-        direction='column'
-        justify='center'
-        alignjustify='center'>
+        direction="column"
+        justify="center"
+        alignjustify="center">
         <Typography>Loading itineraries...</Typography>
-        <CircularProgress color='secondary' />
+        <CircularProgress color="secondary" />
       </Grid>
-    );
+    )
   }
-};
 
-export default Itineraries;
+  return (
+    <Grid
+      container
+      direction="column"
+      // justify='center'
+      alignItems="center"
+      className={classes.container}>
+      <Grid item xs={12} container direction="column" justify="center">
+        {headerItinerary ? (
+          <ListingHeader data={headerItinerary} className={classes.header} />
+        ) : null}
+        <Paper
+          elevation={2}
+          variant="outlined"
+          className={classes.searchbarContainer}>
+          <Typography className={classes.searchBarTitle}>
+            Choose your route
+          </Typography>
+          <TextField
+            id="outlined-helperText"
+            label="Search Itineraries for City.."
+            defaultValue=""
+            variant="outlined"
+            onChange={handleChange}
+            color="primary"
+            className={classes.searchBar}
+          />
+        </Paper>
+      </Grid>
+      <Grid container item xs={12}>
+        <Typography variant="subtitle2" className={classes.subtitle}>
+          {string === '' ? 'Most popular Itineraries' : 'Search results'}
+        </Typography>
+        <ItineraryGallery
+          string={string}
+          itineraries={filteredItineraries ? filteredItineraries : itineraries}
+        />
+      </Grid>
+    </Grid>
+  )
+}
+
+export default Itineraries

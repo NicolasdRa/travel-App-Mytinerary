@@ -129,7 +129,6 @@ const authSlice = createSlice({
       }
     },
     [logInUser.fulfilled]: (state, action) => {
-      console.log(action.payload.data._id)
       return {
         loading: 'done',
         isAuthenticated: true,

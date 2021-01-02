@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 
   coverImg: {
     type: String,
-    default: 'defaultProfileCover.jpg',
+    default: '../public/defaultProfileCover.png',
   },
 
   password: {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { selectItineraryByTitle } from '../../Redux/itinerariesSlice'
+
 import PropTypes from 'prop-types'
 
 import ImageHeader from '../../ui/Headers/ImageHeader'
@@ -27,12 +29,13 @@ const ItineraryPage = ({ match }) => {
 
   // takes params to choose itinerary to display
   const { title } = match.params
+  const itinerary = useSelector((state) => selectItineraryByTitle(state, title))
 
-  const itinerary = useSelector((state) =>
-    state.itineraries.itineraries.data.filter(
-      (itinerary) => itinerary.title === title,
-    ),
-  )
+  // const itinerary = useSelector((state) =>
+  //   state.itineraries.itineraries.data.filter(
+  //     (itinerary) => itinerary.title === title,
+  //   ),
+  // )
   const [count, setCount] = useState(0)
 
   //fetches favourites from DB

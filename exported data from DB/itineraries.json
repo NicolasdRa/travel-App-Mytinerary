@@ -1,0 +1,80 @@
+[{
+  "_id": {
+    "$oid": "5e1346d71c9d44000043e82c"
+  },
+  "city": "Berlin",
+  "title": "A stray dog",
+  "coverImg": "https://images.jpost.com/image/upload/f_auto,fl_lossy/t_JD_ArticleMainImage/35425",
+  "likes": 25,
+  "duration": "3hs",
+  "price": "€",
+  "category": "'Tours & Sightseeing'",
+  "details": "A relaxed walk around the city by day.",
+  "activities": []
+}, {
+  "_id": {
+    "$oid": "5e1349e91c9d44000043e82f"
+  },
+  "city": "Barcelona",
+  "title": "Gaudi in a Day",
+  "coverImg": "https://www.aerobusbcn.com/blog/wp-content/uploads/2017/05/Barcelona-aerobus-sara-abilleira-blog-aerobus.jpeg",
+  "likes": [
+    "juana",
+    "lucia",
+    "moria",
+    "gabriella",
+    "ana",
+    "sonia"
+  ],
+  "duration": "3hs",
+  "price": "€",
+  "category": "Arts & Culture",
+  "details": "Este recorrido a pie de 3 horas cubre las principales obras de Antoní Gaudí. Visita el distrito del Eixample, aprende sobre el movimiento del modernismo y, por supuesto, admira la mundialmente conocida Sagrada Família. Duante este tour exploraremos las raíces del movimiento modernista y daremos un vistazo a las revueltas sociales y problemas políticos de esta era. Como resultado, te llevarás una imagen inolvidable de una de las ciudades más espectaculares del mundo y un tributo a sus diseñadores más talentosos.",
+  "activities": []
+}, {
+  "_id": {
+    "$oid": "5e134aee1c9d44000043e830"
+  },
+  "city": "Barcelona",
+  "title": "Tapa till you droppa",
+  "coverImg": "https://www.roadaffair.com/wp-content/uploads/2019/03/tapas-bar-spain-shutterstock_1082042888-1024x683.jpg",
+  "likes": 35,
+  "duration": "2hs",
+  "price": 100,
+  "category": "Food & Nightlife",
+  "details": "You can't miss out on this at all!"
+}, {
+  "_id": {
+    "$oid": "5eb4a2fcc5a057466ca314ae"
+  },
+  "likes": 57,
+  "city": "St Leu",
+  "title": "Wild nature",
+  "img": "https://images.france.fr/zeaejvyq9bhj/1zktilm4erI904jFs8nRQb/533afc7185421f008d4ca4624c897f2f/paddle27_lagon_-_CREDIT_IRT_-_serge_gelabert_dts_12_2019.JPG?w=1120&h=490&q=70&fl=progressive&fit=fill",
+  "duration": "1",
+  "price": 120,
+  "category": "Nature & Wildlife",
+  "details": "For adrenaline junkies, choosing Reunion Island is a no-brainer! There are activities to do everywhere; on the coast, in the sea, in the mountains and even up in the air! We give you more reasons that make Reunion Island so attractive."
+}, {
+  "_id": {
+    "$oid": "5fe98f57b30f4555040946d4"
+  },
+  "likes": 0,
+  "activities": [],
+  "title": "Test itinerary from client",
+  "duration": "60",
+  "details": "this is the first newly posted itinerary",
+  "city": "Hamburg",
+  "price": "€€"
+}, {
+  "_id": {
+    "$oid": "5fea0ce7d694914b7cebfa6f"
+  },
+  "likes": 0,
+  "activities": [],
+  "title": "Test itinerary from Postman",
+  "duration": "60",
+  "details": "this is the first newly posted itinerary",
+  "city": "Hamburg",
+  "price": "€€"
+}]

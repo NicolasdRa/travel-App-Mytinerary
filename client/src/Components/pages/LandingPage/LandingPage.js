@@ -108,6 +108,8 @@ const LandingPage = () => {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 
+  // console.log('Landing Page rendered')
+
   return (
     <Grid
       container

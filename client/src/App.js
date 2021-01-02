@@ -23,8 +23,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { fetchCities } from './Components/Redux/citiesSlice'
 import { fetchItineraries } from './Components/Redux/itinerariesSlice'
 import { fetchActivities } from './Components/Redux/activitiesSlice'
-
-// import { loadCurrentUser } from './Components/Redux/users/userActions'
 import {
   loadCurrentUser,
   unloadCurrentUser,
@@ -75,9 +73,17 @@ const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
   // fetches data from DB
   useEffect(() => {
     fetchCities()
+  }, [fetchCities])
+
+  useEffect(() => {
     fetchItineraries()
+  }, [fetchItineraries])
+
+  useEffect(() => {
     fetchActivities()
-  }, [fetchCities, fetchItineraries, fetchActivities])
+  }, [fetchActivities])
+
+  // console.log('App rendered')
 
   return (
     <BrowserRouter>

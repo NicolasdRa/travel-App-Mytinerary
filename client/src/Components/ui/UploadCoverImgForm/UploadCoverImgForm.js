@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
 import { getCroppedImg, readFile } from '../../utils/imageUtils'
@@ -206,4 +206,4 @@ const UploadCoverImgForm = () => {
   )
 }
 
-export default connect(null, { updateProfileCoverImage })(UploadCoverImgForm)
+export default UploadCoverImgForm

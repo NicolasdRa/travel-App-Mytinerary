@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // THUNKS
@@ -16,14 +16,16 @@ export const fetchItineraries = createAsyncThunk(
 
 export const addItinerary = createAsyncThunk(
   'itineraries/addOne',
-  async (thunkAPI) => {
+  async (formData, thunkAPI) => {
     const res = await axios({
-      method: 'post',
-      url: '/api/v1/itineraries/add',
-      responseType: 'json',
+      method: 'POST',
+      url: '/api/v1/itineraries',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
     })
-    const data = await res.json()
-    return data
+    return res.data
   },
 )
 
@@ -54,11 +56,39 @@ const itinerariesSlice = createSlice({
     [fetchItineraries.rejected]: (state, action) => {
       return {
         loading: 'fail',
-        error: action.error,
+        error: action.payload,
       }
+    },
+    [addItinerary.fulfilled]: (state, action) => {
+      state.loading = 'done'
+      state.newItinerary = action.payload.data
+    },
+    [addItinerary.rejected]: (state, action) => {
+      state.loading = 'fail'
+      state.error = action.payload
     },
   },
 })
+
+// SELECTORS
+const selectItineraries = (state) => state.itineraries.data
+
+export const selectAllItineraries = createSelector(
+  [selectItineraries],
+  (itineraries) => itineraries,
+)
+
+export const selectAllItinerariesForCity = createSelector(
+  [selectAllItineraries, (state, city) => city],
+  (itineraries, city) =>
+    itineraries.filter((itinerary) => itinerary.city === city),
+)
+
+export const selectItineraryByTitle = createSelector(
+  [selectAllItineraries, (state, title) => title],
+  (itineraries, title) =>
+    itineraries.find((itinerary) => itinerary.title === title),
+)
 
 // Extract and export each action creator by name
 export const { deleteItinerary } = itinerariesSlice.actions

@@ -13,7 +13,6 @@ import Signup from '../Signup/Signup'
 import Login from '../Login/Login'
 
 import { logOutUser } from '../../Redux/authSlice'
-import { unloadCurrentUser } from '../../Redux/usersSlice'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
@@ -32,7 +31,6 @@ export const MenuMobile = () => {
   const handleLogOut = (e) => {
     e.preventDefault()
     dispatch(logOutUser())
-    // dispatch(unloadCurrentUser())
     history.push('/')
   }
 

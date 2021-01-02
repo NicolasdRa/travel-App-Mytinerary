@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { selectAllCities } from '../../Redux/citiesSlice'
+
 import {
   Grid,
   CircularProgress,
@@ -7,8 +9,12 @@ import {
   Typography,
   Paper,
 } from '@material-ui/core'
+
 import CityGallery from './CityGallery'
 import ListingHeader from '../Headers/ListingHeader'
+
+import { randomNumberGenerator } from '../../utils/utils'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -54,71 +60,43 @@ const useStyles = makeStyles((theme) => ({
 const Cities = () => {
   const classes = useStyles()
 
-  const [string, setString] = useState('')
-  const [city, setCity] = useState(null)
+  const cities = useSelector(selectAllCities)
 
-  const cities = useSelector((state) => state.cities.data)
+  const [string, setString] = useState('')
+  const [headerCity, setHeaderCity] = useState(null)
+  const [filteredCities, setFilteredCities] = useState(null)
+
+  useEffect(() => {
+    // random cover image
+    const randomNumber = randomNumberGenerator(0, cities.length - 1)
+
+    filteredCities === null
+      ? setHeaderCity(cities[randomNumber])
+      : setHeaderCity(filteredCities[0])
+  }, [cities, filteredCities])
+
+  useEffect(() => {
+    // city filter
+    if (string !== '') {
+      const filtered = cities.filter((city) =>
+        city.name.toLowerCase().startsWith(string),
+      )
+      setFilteredCities(filtered)
+    }
+    // clean up: when string is empty
+    return () => {
+      setFilteredCities(null)
+    }
+  }, [cities, string])
 
   const handleChange = (e) => {
     // updates string in state
     setString(e.target.value.toLowerCase())
   }
 
-  // filter function
-  let filteredCities = []
-  if (cities !== null) {
-    filteredCities = [
-      ...cities.filter((city) => {
-        return city.name.toLowerCase().startsWith(string)
-      }),
-    ]
+  // console.log('Cities Tab Rendered')
 
-    function generateRandomInteger(min, max) {
-      return Math.floor(min + Math.random() * (max + 1 - min))
-    }
-
-    const randomNumber = generateRandomInteger(0, cities.length - 1)
-    let headerCity = null
-    city === null
-      ? (headerCity = cities[randomNumber])
-      : (headerCity = filteredCities[0])
-
-    return (
-      <Grid
-        container
-        direction="column"
-        // justify='center'
-        alignItems="center"
-        className={classes.container}>
-        <Grid item xs={12} container direction="column" justify="center">
-          <ListingHeader data={headerCity} className={classes.header} />
-          <Paper
-            elevation={2}
-            variant="outlined"
-            className={classes.searchbarContainer}>
-            <Typography className={classes.searchBarTitle}>
-              Choose your destination
-            </Typography>
-            <TextField
-              id="outlined-helperText"
-              label="Search City.."
-              defaultValue=""
-              variant="outlined"
-              onChange={handleChange}
-              color="primary"
-              className={classes.searchBar}
-            />
-          </Paper>
-        </Grid>
-        <Grid container item xs={12}>
-          <Typography variant="subtitle2" className={classes.subtitle}>
-            Most popular Cities
-          </Typography>
-          <CityGallery className={classes.gallery} cities={filteredCities} />
-        </Grid>
-      </Grid>
-    )
-  } else {
+  if (!cities) {
     return (
       <Grid
         container
@@ -131,6 +109,47 @@ const Cities = () => {
       </Grid>
     )
   }
+
+  return (
+    <Grid
+      container
+      direction="column"
+      // justify='center'
+      alignItems="center"
+      className={classes.container}>
+      <Grid item xs={12} container direction="column" justify="center">
+        {headerCity ? (
+          <ListingHeader data={headerCity} className={classes.header} />
+        ) : null}
+        <Paper
+          elevation={2}
+          variant="outlined"
+          className={classes.searchbarContainer}>
+          <Typography className={classes.searchBarTitle}>
+            Choose your destination
+          </Typography>
+          <TextField
+            id="outlined-helperText"
+            label="Search City.."
+            defaultValue=""
+            variant="outlined"
+            onChange={handleChange}
+            color="primary"
+            className={classes.searchBar}
+          />
+        </Paper>
+      </Grid>
+      <Grid container item xs={12}>
+        <Typography variant="subtitle2" className={classes.subtitle}>
+          {string === '' ? 'Most popular Cities' : 'Search results'}
+        </Typography>
+        <CityGallery
+          className={classes.gallery}
+          cities={filteredCities ? filteredCities : cities}
+        />
+      </Grid>
+    </Grid>
+  )
 }
 
 export default Cities

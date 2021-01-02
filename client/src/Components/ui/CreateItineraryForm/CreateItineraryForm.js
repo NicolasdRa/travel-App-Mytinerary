@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   Box,
   Button,
@@ -21,32 +21,30 @@ import MenuItem from '@material-ui/core/MenuItem'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
 import { addItinerary } from '../../Redux/itinerariesSlice'
-// import { clearErrors } from "../../Redux/error/errorActions";
-import { loadCurrentUser } from '../../Redux/usersSlice'
+
+import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 
 import { useStyles } from './styles'
 
-const CreateItineraryForm = ({ addItinerary }) => {
+const CreateItineraryForm = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
-  // Component level state - profile info & file
+  // Component level state - profile info
   const [open, setOpen] = useState(false)
-  const [newItinerary, setNewItinerary] = useState({
+  const [itinerary, setItinerary] = useState({
     city: '',
     title: '',
     category: '',
     price: '',
     duration: '',
     details: '',
-    img: '',
   })
-  const [file, setFile] = useState(null)
-  const [previewFile, setPreviewFile] = useState(null)
-  // const [error, setError] = useState(null);
 
-  const { city, title, category, price, duration, details } = newItinerary
+  // Component level state - file
+  const [file, setFile] = useState('')
+  const [previewFile, setPreviewFile] = useState('')
 
-  const dispatch = useDispatch()
   // const types = ["image/png", "image/jpeg"];
 
   // Ref needed to be able to hide default input and functionalise custom icon  btn
@@ -66,35 +64,27 @@ const CreateItineraryForm = ({ addItinerary }) => {
   }
 
   const handleClearImage = (e) => {
-    setPreviewFile(null)
+    setPreviewFile('')
   }
 
   const handleChange = (e) => {
-    const { id, value } = e.target
-
-    // let selectedImg
-    // files !== null ? (selectedImg = files[0]) : (selectedImg = null)
-
-    setNewItinerary((prevState) => ({ ...prevState, [id]: value }))
-    // setCategory(e.target.value)
-
-    // if (selectedImg && types.includes(selectedImg.type)) {
-    //   setFile(selectedImg)
-    //   setError(null)
-    // } else {
-    //   setFile(null)
-    //   setError('Please select a valid image type (.png or .jpeg)')
-    // }
+    const { name, value } = e.target
+    setItinerary({ ...itinerary, [name]: value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('img', file)
+    formData.append('coverImg', previewFile)
+    formData.append('city', itinerary.city)
+    formData.append('title', itinerary.title)
+    formData.append('category', itinerary.category)
+    formData.append('price', itinerary.price)
+    formData.append('duration', itinerary.duration)
+    formData.append('details', itinerary.details)
 
-    addItinerary(formData)
-    dispatch(loadCurrentUser())
+    dispatch(addItinerary(formData))
     setOpen(false)
   }
 
@@ -105,34 +95,6 @@ const CreateItineraryForm = ({ addItinerary }) => {
   const handleClose = () => {
     setOpen(false)
   }
-
-  const CategoryOptions = [
-    'Arts & Culture',
-    'Popular Attractions',
-    'Pubs & Bars',
-    'Food & Nightlife',
-    'Tours & Sightseeing',
-    'Spa & Wellness',
-    'Sports & Outdoors',
-    'Nature & Wildlife',
-    'Unique Experiences',
-  ]
-  const PriceOptions = ['€', '€€', '€€€']
-  const DurationOptions = [
-    '0,5',
-    '1',
-    '1.5',
-    '2',
-    '2.5',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '12',
-    '+ 12',
-  ]
 
   return (
     <div>
@@ -168,11 +130,10 @@ const CreateItineraryForm = ({ addItinerary }) => {
               autoFocus
               fullWidth
               margin="dense"
-              id="city"
+              name="city"
               label="Itinerary City"
-              type="city"
               autoComplete="current-city"
-              value={city}
+              value={itinerary.city}
               onChange={handleChange}
               className={classes.input_field}
             />
@@ -181,11 +142,10 @@ const CreateItineraryForm = ({ addItinerary }) => {
               autoFocus
               fullWidth
               margin="dense"
-              id="title"
+              name="title"
               label="Title"
-              type="title"
               autoComplete="current-title"
-              value={title}
+              value={itinerary.title}
               onChange={handleChange}
               className={classes.input_field}
             />
@@ -196,8 +156,8 @@ const CreateItineraryForm = ({ addItinerary }) => {
                   <Select
                     className={classes.select}
                     labelId="category-label"
-                    id="category"
-                    value={category}
+                    name="category"
+                    value={itinerary.category}
                     onChange={handleChange}>
                     {CategoryOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
@@ -213,11 +173,11 @@ const CreateItineraryForm = ({ addItinerary }) => {
                   <Select
                     className={classes.select}
                     labelId="price-label"
-                    id="price"
-                    value={price}
+                    name="price"
+                    value={itinerary.price}
                     onChange={handleChange}>
                     {PriceOptions.map((option, index) => (
-                      <MenuItem key={index} value={option}>
+                      <MenuItem key={index} id="price" value={option}>
                         {option}
                       </MenuItem>
                     ))}
@@ -230,12 +190,13 @@ const CreateItineraryForm = ({ addItinerary }) => {
                   <Select
                     className={classes.select}
                     labelId="duration-label"
-                    id="duration"
-                    value={duration}
+                    name="duration"
+                    value={itinerary.duration}
                     onChange={handleChange}>
                     {DurationOptions.map((option, index) => (
                       <MenuItem
                         key={index}
+                        id="duration"
                         value={`${option}hs`}>{`${option}hs`}</MenuItem>
                     ))}
                   </Select>
@@ -246,12 +207,14 @@ const CreateItineraryForm = ({ addItinerary }) => {
               required
               autoFocus
               fullWidth
+              multiline
+              rows={5}
               margin="dense"
-              id="details"
+              name="details"
               label="Description"
               type="details"
               autoComplete="current-details"
-              value={details}
+              value={itinerary.details}
               onChange={handleChange}
               className={classes.input_field}
             />
@@ -284,7 +247,7 @@ const CreateItineraryForm = ({ addItinerary }) => {
                   </Box>
                   <Button
                     onClick={handleClearImage}
-                    color="tertiary"
+                    color="primary"
                     className={classes.clearButton}>
                     Clear photo
                   </Button>
@@ -306,4 +269,4 @@ const CreateItineraryForm = ({ addItinerary }) => {
   )
 }
 
-export default connect(null, { addItinerary })(CreateItineraryForm)
+export default CreateItineraryForm

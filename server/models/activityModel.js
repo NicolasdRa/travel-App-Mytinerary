@@ -20,11 +20,11 @@ const activitySchema = new mongoose.Schema(
           'Sports',
           'Outdoor',
           'Nature & Wildlife',
-          'Unique Experiences'
+          'Unique Experiences',
         ],
         message:
-          'Category must be one of these options: Arts, Culture, Popular Attractions, Pubs, Bars, Food & Restaurants, Nightlife, Sightseeing, Spa & Wellness, Sports, Outdoor, Nature & Wildlife or Unique Experiences'
-      }
+          'Category must be one of these options: Arts, Culture, Popular Attractions, Pubs, Bars, Food & Restaurants, Nightlife, Sightseeing, Spa & Wellness, Sports, Outdoor, Nature & Wildlife or Unique Experiences',
+      },
     },
     title: {
       type: String,
@@ -32,16 +32,16 @@ const activitySchema = new mongoose.Schema(
       unique: true,
       maxlength: [
         40,
-        'An activity title must be a maximum of 40 characters long'
+        'An activity title must be a maximum of 40 characters long',
       ],
       minlength: [
         10,
-        'An activity title must be a minimum of 10 characters long'
+        'An activity title must be a minimum of 10 characters long',
       ],
-      trim: true
+      trim: true,
     },
     img: {
-      type: String
+      type: String,
     },
     summary: {
       type: String,
@@ -49,25 +49,25 @@ const activitySchema = new mongoose.Schema(
       required: [true, 'An activity must have a short description'],
       maxlength: [
         100,
-        'An activity summary must be a maximum of 100 characters long'
-      ]
+        'An activity summary must be a maximum of 100 characters long',
+      ],
     },
     details: {
       type: String,
       trim: true,
       maxlength: [
         1000,
-        'An itinerary description must be a maximum of 40 characters long'
-      ]
+        'An itinerary description must be a maximum of 40 characters long',
+      ],
     },
     pricing: {
       free: {
         type: Boolean,
-        default: true
+        default: true,
       },
       price: {
         type: Number,
-        default: 0
+        default: 0,
       },
       discountPrice: {
         type: Number,
@@ -77,9 +77,9 @@ const activitySchema = new mongoose.Schema(
             return value < this.price
           },
           message:
-            'Discount price ({VALUE}) should be lower than the regular price'
-        }
-      }
+            'Discount price ({VALUE}) should be lower than the regular price',
+        },
+      },
     },
 
     duration: { type: Number },
@@ -89,13 +89,14 @@ const activitySchema = new mongoose.Schema(
     itinerary: {
       type: mongoose.Schema.ObjectId,
       ref: 'Itinerary',
-      required: [true, 'An activity must belong to an itinerary']
+      required: [true, 'An activity must belong to an itinerary'],
     },
 
     city: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'City',
-      required: [true, 'An activity must belong to a city']
+      // type: mongoose.Schema.ObjectId,
+      type: String,
+      // ref: 'City',
+      required: [true, 'An activity must belong to a city'],
     },
 
     // author: {
@@ -106,25 +107,25 @@ const activitySchema = new mongoose.Schema(
 
     createdAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   // options object for virtual properties
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 )
 
 // query middleware to populate referenced fields
-activitySchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'city',
-    select: 'name'
-  })
-  // .populate({
-  //   path: 'user',
-  //   select: 'name photo'
-  // })
-  next()
-})
+// activitySchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'city',
+//     select: 'name'
+//   })
+//   // .populate({
+//   //   path: 'user',
+//   //   select: 'name photo'
+//   // })
+//   next()
+// })
 
 // Model
 const Activity = mongoose.model('Activity', activitySchema)

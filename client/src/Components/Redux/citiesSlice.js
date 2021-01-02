@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // THUNKS
@@ -39,6 +39,25 @@ const citiesSlice = createSlice({
     },
   },
 })
+
+// SELECTORS
+const selectCities = (state) => state.cities.data
+
+export const selectAllCities = createSelector(
+  [selectCities],
+  (cities) => cities,
+)
+
+export const selectFilteredCities = createSelector(
+  [selectAllCities, (state, string) => string],
+  (cities, string) =>
+    cities.filter((city) => city.name.toLowerCase().startsWith(string)),
+)
+
+export const selectCityByName = createSelector(
+  [selectAllCities, (state, name) => name],
+  (cities, name) => cities.find((city) => city.name === name),
+)
 
 // Extract and export each action creator by name
 export const { addCity, deleteCity } = citiesSlice.actions

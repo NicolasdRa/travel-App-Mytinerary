@@ -86,7 +86,7 @@ const usersSlice = createSlice({
       state.currentUser = action.payload.data
     },
     [updateUserProfile.rejected]: (state, action) => {
-      state.loading = 'done'
+      state.loading = 'fail'
       state.error = action.payload
     },
     [updateProfileCoverImage.fulfilled]: (state, action) => {
