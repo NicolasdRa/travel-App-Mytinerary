@@ -20,7 +20,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import theme from './Components/theme/Theme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-import { fetchCities } from './Components/Redux/citiesSlice'
+import { fetchCities, getCitiesGeoDB } from './Components/Redux/citiesSlice'
 import { fetchItineraries } from './Components/Redux/itinerariesSlice'
 import { fetchActivities } from './Components/Redux/activitiesSlice'
 import {
@@ -48,7 +48,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
+const App = ({
+  fetchCities,
+  fetchItineraries,
+  fetchActivities,
+  getCitiesGeoDB,
+}) => {
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useDispatch()
@@ -82,6 +87,10 @@ const App = ({ fetchCities, fetchItineraries, fetchActivities }) => {
   useEffect(() => {
     fetchActivities()
   }, [fetchActivities])
+
+  // useEffect(() => {
+  //   getCitiesGeoDB('Rio')
+  // }, [getCitiesGeoDB])
 
   // console.log('App rendered')
 
@@ -125,4 +134,5 @@ export default connect(null, {
   fetchItineraries,
   fetchActivities,
   loadCurrentUser,
+  getCitiesGeoDB,
 })(App)

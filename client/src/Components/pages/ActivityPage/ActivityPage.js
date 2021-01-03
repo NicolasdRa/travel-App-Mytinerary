@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import { useSelector } from 'react-redux'
+import { selectActivityByTitle } from '../../Redux/activitiesSlice'
+
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
 import {
   Avatar,
@@ -13,52 +15,43 @@ import {
   Divider,
   IconButton,
   Typography,
-} from "@material-ui/core";
-import FavoriteBorderRoundedIcon from "@material-ui/icons/FavoriteBorderRounded";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import EuroIcon from "@material-ui/icons/Euro";
-import CreateIcon from "@material-ui/icons/Create";
+} from '@material-ui/core'
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import EuroIcon from '@material-ui/icons/Euro'
+import CreateIcon from '@material-ui/icons/Create'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
-const ActivityPage = (props) => {
-  const classes = useStyles();
-  const title = props.match.params.title;
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const activity = useSelector((state) =>
-    state.activities.activities.data.filter(
-      (activity) => activity.title === title,
-    ),
-  );
+const ActivityPage = ({ match }) => {
+  const classes = useStyles()
 
-  const {
-    city,
-    category,
-    likes,
-    duration,
-    pricing,
-    img,
-    details,
-  } = activity[0];
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+
+  const { title } = match.params
+
+  const activity = useSelector((state) => selectActivityByTitle(state, title))
+
+  const { city, category, likes, duration, price, img, details } = activity
 
   return (
     <Box className={classes.container}>
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
-        <Typography className={classes.overline} variant='overline'>
+        <Typography className={classes.overline} variant="overline">
           {city.name} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>
-            <Typography variant='h5'>{title}</Typography>
+            <Typography variant="h5">{title}</Typography>
           </Box>
           <Box className={classes.likes}>
             <IconButton
-              aria-label='add to favorites'
+              aria-label="add to favorites"
               className={classes.likes_btn}>
               <FavoriteBorderRoundedIcon className={classes.likes_icon} />
             </IconButton>
-            <Typography variant='body2' color='textSecondary' component='p'>
+            <Typography variant="body2" color="textSecondary" component="p">
               {likes}
             </Typography>
           </Box>
@@ -73,9 +66,9 @@ const ActivityPage = (props) => {
               Author Name
             </Avatar>
             <Typography
-              variant='body2'
-              color='textSecondary'
-              component='p'
+              variant="body2"
+              color="textSecondary"
+              component="p"
               className={classes.author_name}>
               {/* ..still to develop this variable */}
               by John Doe
@@ -84,39 +77,39 @@ const ActivityPage = (props) => {
           <Box className={classes.price_time}>
             <Box className={classes.duration}>
               <AccessTimeIcon className={classes.icons} />
-              <Typography variant='body2' color='textSecondary' component='p'>
+              <Typography variant="body2" color="textSecondary" component="p">
                 {duration}hs
               </Typography>
             </Box>
             <Box className={classes.price}>
               <EuroIcon className={classes.icons} />
-              <Typography variant='body2' color='textSecondary' component='p'>
-                {pricing.price}
+              <Typography variant="body2" color="textSecondary" component="p">
+                {price}
               </Typography>
             </Box>
           </Box>
         </Box>
         <Divider className={classes.divider} />
         <Box className={classes.gallery}>
-          <Typography variant='body2' className={classes.text}>
+          <Typography variant="body2" className={classes.text}>
             {details}
           </Typography>
           <Divider className={classes.divider} />
           <Box className={classes.comment_btns}>
             <Button
-              size='small'
-              color='secondary'
+              size="small"
+              color="secondary"
               component={Link}
-              to={"/activitypage/" + title}
+              to={'/activitypage/' + title}
               className={classes.view_btn}>
               View Reviews (54)
             </Button>
             <Box className={classes.write_btn}>
               <Button
-                size='small'
-                color='secondary'
+                size="small"
+                color="secondary"
                 component={Link}
-                to={"/activitypage/" + title}
+                to={'/activitypage/' + title}
                 className={classes.text_btn}>
                 Leave your comment
               </Button>
@@ -128,8 +121,8 @@ const ActivityPage = (props) => {
       </Box>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
-  );
-};
+  )
+}
 
 ActivityPage.propTypes = {
   match: PropTypes.shape({
@@ -137,6 +130,6 @@ ActivityPage.propTypes = {
       title: PropTypes.string.isRequired,
     }),
   }),
-};
+}
 
-export default ActivityPage;
+export default ActivityPage

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+
 import { useSelector, useDispatch } from 'react-redux'
 import { selectItineraryByTitle } from '../../Redux/itinerariesSlice'
+import { selectActivitiesForItinerary } from '../../Redux/activitiesSlice'
 
 import PropTypes from 'prop-types'
 
@@ -31,33 +33,23 @@ const ItineraryPage = ({ match }) => {
   const { title } = match.params
   const itinerary = useSelector((state) => selectItineraryByTitle(state, title))
 
-  // const itinerary = useSelector((state) =>
-  //   state.itineraries.itineraries.data.filter(
-  //     (itinerary) => itinerary.title === title,
-  //   ),
-  // )
-  const [count, setCount] = useState(0)
+  // variables for ui
+  const { _id, city, category, duration, price, img, details } = itinerary
+
+  const activities = useSelector((state) =>
+    selectActivitiesForItinerary(state, _id),
+  )
 
   //fetches favourites from DB
   useEffect(() => {
-    dispatch(fetchFavourites(itinerary[0].id))
+    dispatch(fetchFavourites(itinerary.id))
   }, [itinerary, dispatch])
 
   // updates count
+  const [count, setCount] = useState(0)
   useEffect(() => {
     return () => setCount(favouriteCount)
   }, [favouriteCount])
-
-  // variables for ui
-  const {
-    city,
-    category,
-    duration,
-    pricing,
-    img,
-    activities,
-    details,
-  } = itinerary[0]
 
   return (
     <Box className={classes.container}>
@@ -102,7 +94,7 @@ const ItineraryPage = ({ match }) => {
             <Box className={classes.price}>
               <EuroIcon className={classes.icons} />
               <Typography variant="body2" color="textSecondary" component="p">
-                {pricing.price}
+                {price}
               </Typography>
             </Box>
           </Box>

@@ -60,9 +60,16 @@ export const selectActivitiesSortedByLikes = createSelector(
   (activities) => activities.sort((a, b) => b.likes - a.likes),
 )
 
-export const selectActivityByName = createSelector(
-  [selectAllActivities, (state, name) => name],
-  (activities, name) => activities.find((activity) => activity.name === name),
+export const selectActivityByTitle = createSelector(
+  [selectAllActivities, (state, title) => title],
+  (activities, title) =>
+    activities.find((activity) => activity.title === title),
+)
+
+export const selectActivitiesForItinerary = createSelector(
+  [selectAllActivities, (state, itineraryId) => itineraryId],
+  (activities, itineraryId) =>
+    activities.filter((activity) => activity.itinerary === itineraryId),
 )
 
 // ACTION EXPORTS

@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
 import { selectCityByName } from '../../Redux/citiesSlice'
+import { selectAllItinerariesForCity } from '../../Redux/itinerariesSlice'
+// import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
 import ItineraryGallery from '../../ui/ItineraryGallery/ItineraryGallery'
 import ImageHeader from '../../ui/Headers/ImageHeader'
@@ -52,17 +55,28 @@ const useStyles = makeStyles((theme) => ({
 
 const CityPage = ({ match }) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+
+  const cityName = match.params.city_name
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 
-  const cityName = match.params.city_name
   const city = useSelector((state) => selectCityByName(state, cityName))
-
   const itineraries = useSelector((state) =>
-    state.itineraries.data.filter(
-      (itineraries) => itineraries.city === cityName,
-    ),
+    selectAllItinerariesForCity(state, cityName),
   )
+  // const itineraries = useSelector((state) =>
+  //   state.itineraries.data.filter(
+  //     (itineraries) => itineraries.city === cityName,
+  //   ),
+  // )
+
+  // useEffect(() => {
+  //   dispatch(getCitiesGeoDB(cityName))
+  //   return () => {
+  //     // cleanup
+  //   }
+  // }, [])
 
   const { name, img, country } = city
 
