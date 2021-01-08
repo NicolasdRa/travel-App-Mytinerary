@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import useImageCropper from '../../customHooks/useImageCropper'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
-import { getCroppedImg, readFile } from '../../utils/imageUtils'
+import { readFile } from '../../utils/imageUtils'
 import './styles.css'
 import {
   Box,
@@ -33,11 +34,17 @@ const UploadCoverImgForm = () => {
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
   const [imageSrc, setImageSrc] = useState(null)
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(0)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
-  const [croppedImageFile, setCroppedImageFile] = useState(null)
+
+  const {
+    zoom,
+    setZoom,
+    crop,
+    setCrop,
+    rotation,
+    setRotation,
+    croppedImageFile,
+    handleCropComplete,
+  } = useImageCropper(imageSrc)
 
   // Ref needed to hide default input and functionalise custom icon btn
   const hiddenInput = useRef(null)
@@ -55,32 +62,6 @@ const UploadCoverImgForm = () => {
     }
   }
 
-  // creates cropped image base64 to show, upload or download
-  const createCroppedImageFile = useCallback(async () => {
-    const croppedImage = await getCroppedImg(
-      imageSrc,
-      croppedAreaPixels,
-      rotation,
-    )
-    // console.log("done", { croppedImage });
-    setCroppedImageFile(croppedImage)
-  }, [imageSrc, croppedAreaPixels, rotation])
-
-  // handles crop complete
-  const handleCropComplete = useCallback(
-    (croppedArea, croppedAreaPixels) => {
-      setCroppedAreaPixels(croppedAreaPixels)
-      // console.log({ area: croppedArea }, { pixels: croppedAreaPixels });
-      createCroppedImageFile()
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [crop],
-  )
-
-  const handleClearImage = (e) => {
-    setImageSrc(null)
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
     // createCroppedImageFile();
@@ -91,6 +72,10 @@ const UploadCoverImgForm = () => {
     dispatch(updateProfileCoverImage(formData))
     dispatch(loadCurrentUser())
     setOpen(false)
+    setImageSrc(null)
+  }
+
+  const handleClearImage = (e) => {
     setImageSrc(null)
   }
 

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { selectCityByName } from '../../Redux/citiesSlice'
 import { selectAllItinerariesForCity } from '../../Redux/itinerariesSlice'
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CityPage = ({ match }) => {
   const classes = useStyles()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const cityName = match.params.city_name
 

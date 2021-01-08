@@ -60,8 +60,8 @@ const itinerariesSlice = createSlice({
       }
     },
     [addItinerary.fulfilled]: (state, action) => {
+      state.itineraries.data.push(action.payload)
       state.loading = 'done'
-      state.newItinerary = action.payload.data
     },
     [addItinerary.rejected]: (state, action) => {
       state.loading = 'fail'
@@ -87,7 +87,7 @@ export const selectAllItinerariesForCity = createSelector(
 export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
   (itineraries, title) =>
-    itineraries.find((itinerary) => itinerary.title === title),
+    itineraries.filter((itinerary) => itinerary.title === title),
 )
 
 // Extract and export each action creator by name

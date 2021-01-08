@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectAllCities } from '../../Redux/citiesSlice'
 import {
   Box,
   Button,
@@ -30,6 +31,8 @@ const CreateItineraryForm = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
+  const cities = useSelector((state) => selectAllCities(state))
+
   // Component level state - profile info
   const [open, setOpen] = useState(false)
   const [itinerary, setItinerary] = useState({
@@ -42,7 +45,7 @@ const CreateItineraryForm = () => {
   })
 
   // Component level state - file
-  const [file, setFile] = useState('')
+  // const [file, setFile] = useState('')
   const [previewFile, setPreviewFile] = useState('')
 
   // const types = ["image/png", "image/jpeg"];
@@ -59,8 +62,8 @@ const CreateItineraryForm = () => {
     fileReader.onload = () => {
       fileReader.readyState === 2 && setPreviewFile(fileReader.result)
     }
-    setFile(e.target.files[0])
     fileReader.readAsDataURL(e.target.files[0])
+    // setFile(e.target.files[0])
   }
 
   const handleClearImage = (e) => {
@@ -76,7 +79,7 @@ const CreateItineraryForm = () => {
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('coverImg', previewFile)
+    formData.append('img', previewFile)
     formData.append('city', itinerary.city)
     formData.append('title', itinerary.title)
     formData.append('category', itinerary.category)
@@ -95,6 +98,8 @@ const CreateItineraryForm = () => {
   const handleClose = () => {
     setOpen(false)
   }
+
+  const cityOptions = cities.map((city) => city.name).sort()
 
   return (
     <div>
@@ -125,12 +130,27 @@ const CreateItineraryForm = () => {
               Add itinerary details, add a photo and submit. You can then add
               activities to your itinerary.
             </Typography>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="city-label">Choose a city</InputLabel>
+              <Select
+                className={classes.select}
+                labelId="city-label"
+                name="city"
+                value={itinerary.city}
+                onChange={handleChange}>
+                {cityOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               required
               autoFocus
               fullWidth
               margin="dense"
-              name="city"
+              name="new-city"
               label="Itinerary City"
               autoComplete="current-city"
               value={itinerary.city}

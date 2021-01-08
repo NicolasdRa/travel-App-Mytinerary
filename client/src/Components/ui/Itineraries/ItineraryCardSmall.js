@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     minWidth: '8rem',
     maxWidth: '8rem',
     // padding: '0.6rem',
-    padding: '0'
+    padding: '0',
   },
 
   media: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     objectFit: 'cover',
     minWidth: '4rem',
     // maxWidth: '100%',
-    borderRadius: 3
+    borderRadius: 3,
     // boxShadow: '0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9',
     // rounded centered image
     // paddingTop: '65%',
@@ -32,37 +32,39 @@ const useStyles = makeStyles({
   },
 
   card_underlineNone: {
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
 
   card_title: {
     padding: '0 .15rem',
     color: 'black',
     textDecoration: 'none',
-    fontWeight: 400
-  }
+    fontWeight: 400,
+  },
 })
 
-const ActivityCardSmall = props => {
+const ActivityCardSmall = (props) => {
   const classes = useStyles()
   const { title, img } = props.itinerary
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia className={classes.media} image={img} title={title} />
+        <CardMedia
+          className={classes.media}
+          image={img ? img : null}
+          title={title}
+        />
         <CardContent
           component={Link}
           to={'/itinerarypage/' + title}
-          className={classes.card_underlineNone}
-        >
+          className={classes.card_underlineNone}>
           <Typography
             className={classes.card_title}
             gutterBottom
-            variant='subtitle2'
-            component='h6'
-            textcolor='primary'
-          >
+            variant="subtitle2"
+            component="h6"
+            textcolor="primary">
             {title}
           </Typography>
         </CardContent>
