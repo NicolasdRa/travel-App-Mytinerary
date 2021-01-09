@@ -18,10 +18,10 @@ const formsSlice = createSlice({
       state.openLogInForm = false
     },
     openSignUpForm(state) {
-      state.openLogInForm = true
+      state.openSignUpForm = true
     },
     closeSignUpForm(state) {
-      state.openLogInForm = false
+      state.openSignUpForm = false
     },
   },
   extraReducers: {

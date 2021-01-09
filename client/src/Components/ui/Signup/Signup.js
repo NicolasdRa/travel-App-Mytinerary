@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
 import {
   Button,
   Dialog,
@@ -10,251 +11,155 @@ import {
   Typography,
 } from '@material-ui/core'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
+
 import { signupUser } from '../../Redux/authSlice'
-import { clearErrors } from '../../Redux/errorsSlice'
 import { openSignUpForm, closeSignUpForm } from '../../Redux/formsSlice'
-import { withStyles } from '@material-ui/core/styles'
 
-const styles = (theme) => ({
-  title: {
-    margin: '1.5rem 0 0 0',
-    padding: 0,
-    textAlign: 'center',
-  },
+import { useStyles } from './styles'
 
-  subtitle: {
-    margin: '2.5rem 0 0 0 ',
-    padding: 0,
-    textAlign: 'center',
-  },
+const Signup = () => {
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  input_field: {
-    margin: '.8rem 0',
-  },
-
-  text: {
-    marginTop: '1rem',
-    textAlign: 'center',
-  },
-
-  google_button: {
-    display: 'flex',
-    margin: '1rem 0',
-    padding: '.8rem',
-  },
-
-  btns: {
-    paddingLeft: '1rem',
-  },
-})
-
-class Signup extends Component {
-  state = {
-    fullWidth: true,
-    maxWidth: 'sm',
+  // Form state
+  const [signupData, setSignupData] = useState({
     userName: '',
     email: '',
     password: '',
     passwordConfirm: '',
-    img: '',
-    isAuthenticated: false,
-    msg: null,
+  })
+
+  // Open form state
+  const open = useSelector((state) => state.forms.openSignUpForm)
+
+  const handleOpenForm = () => dispatch(openSignUpForm())
+  const handleCloseForm = () => dispatch(closeSignUpForm())
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setSignupData({ ...signupData, [name]: value })
   }
 
-  componentDidUpdate(prevProps) {
-    const { errors } = this.props
-    if (errors !== prevProps.errors)
-      if (errors.id === 'SIGNUP_FAIL') {
-        // Check for signup Errors
-        this.setState({ msg: errors.msg.msg })
-      } else {
-        this.setState({ msg: null })
-      }
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    })
-  }
-
-  handleClose = () => {
-    this.props.closeSignUpForm()
-  }
-
-  handleSubmit = (e) => {
-    clearErrors()
-    this.handleClose()
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    const { userName, email, password, passwordConfirm } = this.state
-
-    const newUser = {
+    const { userName, email, password, passwordConfirm } = signupData
+    const user = {
       userName,
       email,
       password,
       passwordConfirm,
     }
 
-    this.props.signupUser(newUser)
-  }
-
-  clearState = (e) => {
-    e.preventDefault()
-    this.setState({
+    dispatch(signupUser(user))
+    setSignupData({
       [e.target.id]: '',
     })
+    handleCloseForm()
   }
 
-  render() {
-    const { classes } = this.props
-    const open = this.props.setOpen
+  return (
+    <div>
+      <Button color="secondary" onClick={handleOpenForm}>
+        Signup
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleCloseForm}
+        aria-labelledby="form-dialog-title">
+        <form onSubmit={handleSubmit}>
+          <DialogTitle
+            id="form-dialog-title"
+            disableTypography
+            className={classes.title}>
+            <Typography variant="body2">Easy Signup</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Button
+              className={classes.google_button}
+              variant="outlined"
+              //   color='secondary'
+              // component={Link}
+              // to='api/auth/google'
+              href="http://localhost:5000/api/v1/auth/google"
+              startIcon={<GoogleSVGIcon />}>
+              Sign up with Google
+            </Button>
 
-    const handleClickOpen = () => {
-      this.props.openSignUpForm()
-    }
-
-    return (
-      <div>
-        <Button color="secondary" onClick={handleClickOpen}>
-          Signup
-        </Button>
-        <Dialog
-          //   TransitionComponent={Transition}
-          //   keepMounted
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title">
-          <form onSubmit={this.handleSubmit}>
             <DialogTitle
               id="form-dialog-title"
               disableTypography
-              className={classes.title}>
-              <Typography variant="body2">Easy Signup</Typography>
+              className={classes.subtitle}>
+              <Typography variant="body2">Sign up with your info</Typography>
             </DialogTitle>
-            <DialogContent>
-              <Button
-                className={classes.google_button}
-                variant="outlined"
-                //   color='secondary'
-                // component={Link}
-                // to='api/auth/google'
-                href="http://localhost:5000/api/v1/auth/google"
-                startIcon={<GoogleSVGIcon />}>
-                Sign up with Google
-              </Button>
 
-              <DialogTitle
-                id="form-dialog-title"
-                disableTypography
-                className={classes.subtitle}>
-                <Typography variant="body2">Sign up with your info</Typography>
-              </DialogTitle>
-              {/* 
-              {errors
-                ? errors.map(error => (
-                    <Box key={uuid()}>
-                      <Alert
-                        severity='error'
-                        style={{ color: 'red', margin: '1.5rem' }}
-                      >
-                        <AlertTitle>Error</AlertTitle>
-                        {error.msg} — <strong>check it out!</strong>
-                      </Alert>
-                    </Box>
-                  ))
-                : null} */}
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="userName"
-                label="User Name"
-                type="userName"
-                autoComplete="current-firstName"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="email"
-                label="Email Address"
-                type="email"
-                autoComplete="current-email"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                minLength="6"
-                margin="dense"
-                id="password"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                minLength="6"
-                margin="dense"
-                id="passwordConfirm"
-                label="Confirm Password"
-                type="password"
-                autoComplete="current-password-confirm"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <Typography variant="body2" className={classes.text}>
-                By proceeding you agree to Mytinerary’s Privacy Policy, User
-                Agreement and T&Cs.
-              </Typography>
-            </DialogContent>
-            <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.handleSubmit} color="secondary">
-                Submit
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    )
-  }
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              name="userName"
+              label="User Name"
+              type="userName"
+              autoComplete="current-firstName"
+              onChange={handleChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              name="email"
+              label="Email Address"
+              type="email"
+              autoComplete="current-email"
+              onChange={handleChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <TextField
+              required
+              autoFocus
+              minLength="6"
+              margin="dense"
+              name="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              onChange={handleChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <TextField
+              required
+              autoFocus
+              minLength="6"
+              margin="dense"
+              name="passwordConfirm"
+              label="Confirm Password"
+              type="password"
+              autoComplete="current-password-confirm"
+              onChange={handleChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <Typography variant="body2" className={classes.text}>
+              By proceeding you agree to Mytinerary’s Privacy Policy, User
+              Agreement and T&Cs.
+            </Typography>
+          </DialogContent>
+          <DialogActions className={classes.btns}>
+            <Button onClick={handleCloseForm} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} color="secondary">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-    authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated,
-    errors: state.errors,
-    setOpen: state.forms.openSignUpForm,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signupUser: (user) => dispatch(signupUser(user)),
-    clearErrors: () => dispatch(clearErrors()),
-    openSignUpForm: () => dispatch(openSignUpForm()),
-    closeSignUpForm: () => dispatch(closeSignUpForm()),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(Signup))
+export default Signup
