@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useImageCropper from '../../customHooks/useImageCropper'
+import useImageCropper from '../../../hooks/useImageCropper'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
 import { readFile } from '../../utils/imageUtils'
@@ -24,7 +24,7 @@ import {
 
 import { useStyles } from './styles'
 
-const UploadCoverImgForm = () => {
+const UploadCoverImgForm = ({ origin, loadFile, loadPreviewFile }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -62,6 +62,7 @@ const UploadCoverImgForm = () => {
     }
   }
 
+  // submits image if in UpdateProfileForm Component
   const handleSubmit = (e) => {
     e.preventDefault()
     // createCroppedImageFile();
@@ -73,6 +74,25 @@ const UploadCoverImgForm = () => {
     dispatch(loadCurrentUser())
     setOpen(false)
     setImageSrc(null)
+  }
+
+  // loads image if in createItineraryComponent
+  // const handleLoadImage = () => {
+  //   loadFile(croppedImageFile)
+
+  // }
+
+  // const handleLoadPreviewFile = () => {
+  //   loadPreviewFile(imageSrc)
+
+  //   console.log(imageSrc)
+  // }
+
+  const handleLoadImage = () => {
+    loadFile(croppedImageFile)
+    loadPreviewFile(imageSrc)
+    console.log(croppedImageFile)
+    console.log(imageSrc)
   }
 
   const handleClearImage = (e) => {
@@ -89,7 +109,16 @@ const UploadCoverImgForm = () => {
 
   return (
     <div>
-      <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
+      {origin === 'profileForm' ? (
+        <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
+      ) : (
+        <Box className={classes.photoIconContainer}>
+          <Typography variant="body2">Add a photo</Typography>
+          <IconButton onClick={handleClickOpen}>
+            <AddAPhotoIcon color="secondary" className={classes.photo_icon} />
+          </IconButton>
+        </Box>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -181,7 +210,11 @@ const UploadCoverImgForm = () => {
                 Clear
               </Button>
             ) : null}
-            <Button onClick={handleSubmit} color="secondary">
+            <Button
+              onClick={
+                origin === 'profileForm' ? handleSubmit : handleLoadImage
+              }
+              color="secondary">
               Upload
             </Button>
           </DialogActions>

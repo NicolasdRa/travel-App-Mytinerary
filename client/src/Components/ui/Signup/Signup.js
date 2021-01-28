@@ -15,46 +15,26 @@ import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import { signupUser } from '../../Redux/authSlice'
 import { openSignUpForm, closeSignUpForm } from '../../Redux/formsSlice'
 
+import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
 
 const Signup = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  // Form state
-  const [signupData, setSignupData] = useState({
-    userName: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  })
+  // useForm hook
+  const [formValues, handleInputChange, reset] = useForm({})
 
   // Open form state
   const open = useSelector((state) => state.forms.openSignUpForm)
-
   const handleOpenForm = () => dispatch(openSignUpForm())
   const handleCloseForm = () => dispatch(closeSignUpForm())
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setSignupData({ ...signupData, [name]: value })
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const { userName, email, password, passwordConfirm } = signupData
-    const user = {
-      userName,
-      email,
-      password,
-      passwordConfirm,
-    }
-
-    dispatch(signupUser(user))
-    setSignupData({
-      [e.target.id]: '',
-    })
+    dispatch(signupUser(formValues))
+    reset()
     handleCloseForm()
   }
 
@@ -101,7 +81,7 @@ const Signup = () => {
               label="User Name"
               type="userName"
               autoComplete="current-firstName"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />
@@ -113,7 +93,7 @@ const Signup = () => {
               label="Email Address"
               type="email"
               autoComplete="current-email"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />
@@ -126,7 +106,7 @@ const Signup = () => {
               label="Password"
               type="password"
               autoComplete="current-password"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />
@@ -139,7 +119,7 @@ const Signup = () => {
               label="Confirm Password"
               type="password"
               autoComplete="current-password-confirm"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />

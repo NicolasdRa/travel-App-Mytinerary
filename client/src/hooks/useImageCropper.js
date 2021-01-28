@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-import { getCroppedImg } from '../utils/imageUtils'
+import { getCroppedImg } from '../Components/utils/imageUtils'
 
 const useImageCropper = (imageSrc) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })

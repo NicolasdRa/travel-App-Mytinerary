@@ -18,16 +18,14 @@ import { openLogInForm, closeLogInForm } from '../../Redux/formsSlice'
 import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 
 import { useStyles } from './styles'
+import { useForm } from '../../../hooks/useForm'
 
 const Login = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  // Form state
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
-  })
+  // useForm hook
+  const [formValues, handleInputChange, reset] = useForm({})
 
   // Open form state
   const open = useSelector((state) => state.forms.openLogInForm)
@@ -35,24 +33,11 @@ const Login = () => {
   const handleOpenForm = () => dispatch(openLogInForm())
   const handleCloseForm = () => dispatch(closeLogInForm())
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setLoginData({ ...loginData, [name]: value })
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const { email, password } = loginData
-    const user = {
-      email,
-      password,
-    }
-
-    dispatch(logInUser(user))
-    setLoginData({
-      [e.target.id]: '',
-    })
+    dispatch(logInUser(formValues))
+    reset()
     handleCloseForm()
   }
 
@@ -102,7 +87,7 @@ const Login = () => {
               label="Email Address"
               type="email"
               autoComplete="current-email"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />
@@ -114,7 +99,7 @@ const Login = () => {
               label="Password"
               type="password"
               autoComplete="current-password"
-              onChange={handleChange}
+              onChange={handleInputChange}
               fullWidth
               className={classes.input_field}
             />

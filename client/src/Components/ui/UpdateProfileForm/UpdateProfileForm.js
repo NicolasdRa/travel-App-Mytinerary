@@ -14,6 +14,7 @@ import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
 import UploadProfileImgForm from '../UploadProfileImgForm/UploadProfileImgForm'
 import { updateUserProfile, loadCurrentUser } from '../../Redux/usersSlice'
 
+import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
 
 const UpdateProfileForm = () => {
@@ -27,29 +28,24 @@ const UpdateProfileForm = () => {
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
-  const [profile, setProfile] = useState({
-    userName: '',
-    firstName: '',
-    lastName: '',
-    details: '',
-  })
 
-  const handleChange = (e) => {
-    const { id, value } = e.target
-    setProfile({ ...profile, [id]: value })
-  }
+  // useForm hook
+  const [formValues, handleInputChange, reset] = useForm({})
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    const { userName, firstName, lastName, details } = formValues
+
     const formData = new FormData()
-    formData.append('userName', profile.userName)
-    formData.append('firstName', profile.firstName)
-    formData.append('lastName', profile.lastName)
-    formData.append('details', profile.details)
+    formData.append('userName', userName)
+    formData.append('firstName', firstName)
+    formData.append('lastName', lastName)
+    formData.append('details', details)
 
     dispatch(updateUserProfile(formData))
     dispatch(loadCurrentUser())
+    reset()
     setOpen(false)
   }
 
@@ -85,7 +81,7 @@ const UpdateProfileForm = () => {
             className={classes.subtitle}>
             Change your images or edit your info
           </Typography>
-          <UploadCoverImgForm />
+          <UploadCoverImgForm origin="profileForm" />
           <UploadProfileImgForm />
           <DialogContent>
             <TextField
@@ -93,12 +89,12 @@ const UpdateProfileForm = () => {
               autoFocus
               fullWidth
               margin="dense"
-              id="userName"
+              name="userName"
               label="User Name"
               type="text"
               autoComplete="current-userName"
               defaultValue={userName}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className={classes.input_field}
             />
             <Grid item container className={classes.price_duration}>
@@ -108,12 +104,12 @@ const UpdateProfileForm = () => {
                   autoFocus
                   fullWidth
                   margin="dense"
-                  id="firstName"
+                  name="firstName"
                   label="First Name"
                   type="text"
                   autoComplete="current-firstName"
                   defaultValue={firstName}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className={classes.input_field}
                 />
               </Grid>
@@ -123,12 +119,12 @@ const UpdateProfileForm = () => {
                   autoFocus
                   fullWidth
                   margin="dense"
-                  id="lastName"
+                  name="lastName"
                   label="Last Name"
                   type="text"
                   autoComplete="current-lastName"
                   defaultValue={lastName}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className={classes.input_field}
                 />
               </Grid>
@@ -138,12 +134,12 @@ const UpdateProfileForm = () => {
               autoFocus
               fullWidth
               margin="dense"
-              id="details"
+              name="details"
               label="Description"
               type="text"
               autoComplete="current-details"
               defaultValue={details}
-              onChange={handleChange}
+              onChange={handleInputChange}
               className={classes.input_field}
             />
           </DialogContent>

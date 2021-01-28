@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useImageCropper from '../../customHooks/useImageCropper'
+import useImageCropper from '../../../hooks/useImageCropper'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
 import { readFile } from '../../utils/imageUtils'

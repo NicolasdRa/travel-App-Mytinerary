@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
-import { readFile } from '../../utils/imageUtils'
 
 import { selectAllCities } from '../../Redux/citiesSlice'
 import {
@@ -29,7 +28,6 @@ import { addItinerary } from '../../Redux/itinerariesSlice'
 
 import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 
-import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
 
 const CreateItineraryForm = () => {
@@ -40,48 +38,56 @@ const CreateItineraryForm = () => {
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
-
-  // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({
+  const [itinerary, setItinerary] = useState({
     city: '',
     title: '',
     category: '',
     price: '',
     duration: '',
     details: '',
+    img: '',
   })
-
-  const { city, title, category, price, duration, details } = formValues
 
   // Component level state - file
   const [file, setFile] = useState('')
   const [previewFile, setPreviewFile] = useState('')
   console.log(previewFile)
-  console.log(file)
-
-  // Ref needed to hide default input and functionalise custom icon btn
+  // Ref needed to hide default input and functionalise custom icon  btn
   const hiddenInput = useRef(null)
 
   const handleClick = (e) => {
     hiddenInput.current.click()
   }
 
+  // converts received file from child component to base 64 for preview
+  useEffect( () => {
+    const imageDataUrl = await readFile(file)
+    setPreviewFile(imageDataUrl)
+    return () => {
+      setPreviewFile('')
+    }
+  }, [file])
+
+  // textfield value handler
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setItinerary({ ...itinerary, [name]: value })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('coverImg', file)
-    console.log(file)
-    formData.append('city', city)
-    formData.append('title', title)
-    formData.append('category', category)
-    formData.append('price', price)
-    formData.append('duration', duration)
-    formData.append('details', details)
+    formData.append('img', file)
+    formData.append('city', itinerary.city)
+    formData.append('title', itinerary.title)
+    formData.append('category', itinerary.category)
+    formData.append('price', itinerary.price)
+    formData.append('duration', itinerary.duration)
+    formData.append('details', itinerary.details)
 
     dispatch(addItinerary(formData))
     setOpen(false)
-    reset()
     setPreviewFile(null)
   }
 
@@ -129,8 +135,8 @@ const CreateItineraryForm = () => {
           </DialogTitle>
           <DialogContent>
             <Typography variant="body2" className={classes.subtitle}>
-              Add details, a photo and submit. You can then add activities from
-              the itinerary page.
+              Add itinerary details, add a photo and submit. You can then add
+              activities to your itinerary.
             </Typography>
             <FormControl className={classes.formControl}>
               <InputLabel id="city-label">Choose a city</InputLabel>
@@ -138,8 +144,8 @@ const CreateItineraryForm = () => {
                 className={classes.select}
                 labelId="city-label"
                 name="city"
-                value={city}
-                onChange={handleInputChange}>
+                value={itinerary.city}
+                onChange={handleChange}>
                 {cityOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option}
@@ -155,8 +161,8 @@ const CreateItineraryForm = () => {
               name="new-city"
               label="Itinerary City"
               autoComplete="current-city"
-              value={city}
-              onChange={handleInputChange}
+              value={itinerary.city}
+              onChange={handleChange}
               className={classes.input_field}
             />
             <TextField
@@ -167,8 +173,8 @@ const CreateItineraryForm = () => {
               name="title"
               label="Title"
               autoComplete="current-title"
-              value={title}
-              onChange={handleInputChange}
+              value={itinerary.title}
+              onChange={handleChange}
               className={classes.input_field}
             />
             <Grid item container className={classes.price_duration}>
@@ -179,8 +185,8 @@ const CreateItineraryForm = () => {
                     className={classes.select}
                     labelId="category-label"
                     name="category"
-                    value={category}
-                    onChange={handleInputChange}>
+                    value={itinerary.category}
+                    onChange={handleChange}>
                     {CategoryOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
@@ -196,8 +202,8 @@ const CreateItineraryForm = () => {
                     className={classes.select}
                     labelId="price-label"
                     name="price"
-                    value={price}
-                    onChange={handleInputChange}>
+                    value={itinerary.price}
+                    onChange={handleChange}>
                     {PriceOptions.map((option, index) => (
                       <MenuItem key={index} id="price" value={option}>
                         {option}
@@ -213,8 +219,8 @@ const CreateItineraryForm = () => {
                     className={classes.select}
                     labelId="duration-label"
                     name="duration"
-                    value={duration}
-                    onChange={handleInputChange}>
+                    value={itinerary.duration}
+                    onChange={handleChange}>
                     {DurationOptions.map((option, index) => (
                       <MenuItem
                         key={index}
@@ -236,8 +242,8 @@ const CreateItineraryForm = () => {
               label="Description"
               type="details"
               autoComplete="current-details"
-              value={details}
-              onChange={handleInputChange}
+              value={itinerary.details}
+              onChange={handleChange}
               className={classes.input_field}
             />
             <div>
@@ -252,7 +258,6 @@ const CreateItineraryForm = () => {
                 <UploadCoverImgForm
                   origin="itineraryForm"
                   loadFile={loadFile}
-                  loadPreviewFile={loadPreviewFile}
                 />
               ) : (
                 <Box className={classes.previewContainer}>
