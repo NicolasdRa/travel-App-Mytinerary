@@ -28,9 +28,9 @@ const itinerarySchema = new mongoose.Schema(
       required: [true, 'An itinerary must have a duration'],
     },
 
-    coverImg: {
+    img: {
       type: String,
-      required: [true, 'An itinerary must have a cover image'],
+      // required: [true, 'An itinerary must have a cover image'],
     },
 
     ratingsAmount: {

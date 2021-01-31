@@ -60,7 +60,8 @@ const itinerariesSlice = createSlice({
       }
     },
     [addItinerary.fulfilled]: (state, action) => {
-      state.itineraries.data.push(action.payload)
+      console.log(action.payload)
+      state.data.push(action.payload)
       state.loading = 'done'
     },
     [addItinerary.rejected]: (state, action) => {

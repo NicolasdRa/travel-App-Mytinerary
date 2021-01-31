@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import 'typeface-roboto'
 import { Box, Typography } from '@material-ui/core'
@@ -25,7 +25,13 @@ const useStyles = makeStyles(() => ({
 
 const UserItinerariesSmall = () => {
   const classes = useStyles()
-  const itineraries = useSelector((state) => state.itineraries.data)
+
+  const data = useSelector((state) => state.itineraries.data)
+  const [itineraries, setItineraries] = useState(data)
+
+  useEffect(() => {
+    setItineraries(data)
+  }, [data])
 
   // const { _id } = user
   // const filteredItineraries = itineraries.filter(

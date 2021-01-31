@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useImageCropper from '../../../hooks/useImageCropper - old'
+import useImageCropper from '../../../hooks/useImageCropper'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
-import { readFile } from '../../utils/imageUtils'
+import { getOrientation } from 'get-orientation/browser'
+import { readFile, getRotatedImage } from '../../utils/imageUtils'
 import './styles.css'
 import {
   Box,
@@ -15,18 +16,21 @@ import {
   IconButton,
   Typography,
 } from '@material-ui/core'
-import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+import ImageButton from '../ImageButton/ImageButton'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
-import { updateUserProfile, loadCurrentUser } from '../../Redux/usersSlice'
+import {
+  updateProfileCoverImage,
+  loadCurrentUser,
+} from '../../Redux/usersSlice'
 
 import { useStyles } from './styles'
 
-const UploadProfileImgForm = () => {
+const UploadCoverImgForm = ({ origin, loadFile, loadPreviewFile }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
   // Global state - user info
-  const { img } = useSelector((state) => state.users.currentUser)
+  const { coverImg } = useSelector((state) => state.users.currentUser)
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
@@ -55,21 +59,37 @@ const UploadProfileImgForm = () => {
       const file = e.target.files[0]
       let imageDataUrl = await readFile(file)
 
+      // apply rotation if needed
+      const orientation = await getOrientation(file)
+      const rotation = ORIENTATION_TO_ANGLE[orientation]
+      if (rotation) {
+        imageDataUrl = await getRotatedImage(imageDataUrl, rotation)
+      }
+
       setImageSrc(imageDataUrl)
     }
   }
 
+  // submits image if in UpdateProfileForm Component
   const handleSubmit = (e) => {
     e.preventDefault()
     // createCroppedImageFile();
 
     const formData = new FormData()
-    formData.append('img', croppedImageFile)
+    formData.append('coverImg', croppedImageFile)
 
-    dispatch(updateUserProfile(formData))
+    dispatch(updateProfileCoverImage(formData))
     dispatch(loadCurrentUser())
     setOpen(false)
     setImageSrc(null)
+  }
+
+  //loads image if in createItineraryComponent
+  const handleLoadImage = () => {
+    loadFile(croppedImageFile)
+    loadPreviewFile(imageSrc)
+    console.log(croppedImageFile)
+    console.log(imageSrc)
   }
 
   const handleClearImage = (e) => {
@@ -86,9 +106,17 @@ const UploadProfileImgForm = () => {
 
   return (
     <div>
-      <ImageButtonRounded img={img} handleClick={handleClickOpen} />
+      {origin === 'profileForm' ? (
+        <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
+      ) : (
+        <Box className={classes.photoIconContainer}>
+          <Typography variant="body2">Add a photo</Typography>
+          <IconButton onClick={handleClickOpen}>
+            <AddAPhotoIcon color="secondary" className={classes.photo_icon} />
+          </IconButton>
+        </Box>
+      )}
       <Dialog
-        className={classes.modal}
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title">
@@ -98,7 +126,7 @@ const UploadProfileImgForm = () => {
             disableTypography
             className={classes.title}>
             <Typography variant="body2">
-              Choose and adjust your Profile image
+              Choose and adjust your cover image
             </Typography>
           </DialogTitle>
           <DialogContent className={classes.contentContainer}>
@@ -110,7 +138,7 @@ const UploadProfileImgForm = () => {
                     crop={crop}
                     zoom={zoom}
                     rotation={rotation}
-                    aspect={1 / 1}
+                    aspect={16 / 9}
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onRotationChange={setRotation}
@@ -175,11 +203,15 @@ const UploadProfileImgForm = () => {
               Cancel
             </Button>
             {imageSrc ? (
-              <Button onClick={handleClearImage} color="primary">
+              <Button onClick={handleClearImage} color="default">
                 Clear
               </Button>
             ) : null}
-            <Button onClick={handleSubmit} color="secondary">
+            <Button
+              onClick={
+                origin === 'profileForm' ? handleSubmit : handleLoadImage
+              }
+              color="secondary">
               Upload
             </Button>
           </DialogActions>
@@ -189,4 +221,4 @@ const UploadProfileImgForm = () => {
   )
 }
 
-export default UploadProfileImgForm
+export default UploadCoverImgForm

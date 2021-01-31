@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -23,7 +23,12 @@ const Signup = () => {
   const dispatch = useDispatch()
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({})
+  const [formValues, handleInputChange, reset] = useForm({
+    userName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  })
 
   // Open form state
   const open = useSelector((state) => state.forms.openSignUpForm)

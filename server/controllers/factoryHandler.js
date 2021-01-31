@@ -23,6 +23,7 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
   asyncErrorCatcher(async (req, res, next) => {
+    console.log('from factory handler update one', req.body)
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -45,8 +46,15 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   asyncErrorCatcher(async (req, res, next) => {
-    // console.log(req.body)
-    const newDoc = await Model.create(req.body)
+    console.log('file', req.file, 'body', req.body)
+
+    // 1. create body from request
+    const body = { ...req.body }
+
+    // 2. if file upload add filename to body const
+    if (req.file) body.img = req.file.filename
+
+    const newDoc = await Model.create(body)
 
     res.status(201).json({
       status: 'success',

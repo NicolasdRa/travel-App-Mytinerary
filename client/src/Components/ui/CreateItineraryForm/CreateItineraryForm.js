@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { selectAllCities } from '../../Redux/citiesSlice'
+import { addItinerary } from '../../Redux/itinerariesSlice'
+
+import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 
 import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
-import { readFile } from '../../utils/imageUtils'
-
-import { selectAllCities } from '../../Redux/citiesSlice'
 import {
   Box,
   Button,
@@ -14,7 +15,6 @@ import {
   DialogTitle,
   FormControl,
   Grid,
-  IconButton,
   Select,
   TextField,
   Typography,
@@ -23,14 +23,10 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
-
-import { addItinerary } from '../../Redux/itinerariesSlice'
-
-import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 
 import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
+import { base64StringtoFile } from '../../utils/imageUtils'
 
 const CreateItineraryForm = () => {
   const classes = useStyles()
@@ -53,11 +49,18 @@ const CreateItineraryForm = () => {
 
   const { city, title, category, price, duration, details } = formValues
 
-  // Component level state - file
-  const [file, setFile] = useState('')
-  const [previewFile, setPreviewFile] = useState('')
+  // Component level - File state
+  const [file, setFile] = useState(null)
+  const [previewFile, setPreviewFile] = useState(null)
   console.log(previewFile)
-  console.log(file)
+
+  useEffect(() => {
+    if (previewFile) {
+      const file = base64StringtoFile(previewFile, 'croppedImg.png')
+      console.log(file)
+      setFile(file)
+    }
+  }, [previewFile])
 
   // Ref needed to hide default input and functionalise custom icon btn
   const hiddenInput = useRef(null)
@@ -70,24 +73,22 @@ const CreateItineraryForm = () => {
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('coverImg', file)
-    console.log(file)
+    formData.append('img', file)
     formData.append('city', city)
     formData.append('title', title)
     formData.append('category', category)
     formData.append('price', price)
     formData.append('duration', duration)
     formData.append('details', details)
-
+    console.log(formData)
     dispatch(addItinerary(formData))
     setOpen(false)
     reset()
     setPreviewFile(null)
   }
 
-  const loadFile = (image) => setFile(image)
-
-  const loadPreviewFile = (dataUrl) => setPreviewFile(dataUrl)
+  // const loadFile = (image) => setFile(image)
+  const loadPreviewFile = (croppedImage) => setPreviewFile(croppedImage)
 
   const handleClearImage = (e) => {
     setPreviewFile(null)
@@ -129,8 +130,8 @@ const CreateItineraryForm = () => {
           </DialogTitle>
           <DialogContent>
             <Typography variant="body2" className={classes.subtitle}>
-              Add details, a photo and submit. You can then add activities from
-              the itinerary page.
+              Add details, a photo and submit. You can add activities from the
+              itinerary page.
             </Typography>
             <FormControl className={classes.formControl}>
               <InputLabel id="city-label">Choose a city</InputLabel>
@@ -147,18 +148,6 @@ const CreateItineraryForm = () => {
                 ))}
               </Select>
             </FormControl>
-            <TextField
-              required
-              autoFocus
-              fullWidth
-              margin="dense"
-              name="new-city"
-              label="Itinerary City"
-              autoComplete="current-city"
-              value={city}
-              onChange={handleInputChange}
-              className={classes.input_field}
-            />
             <TextField
               required
               autoFocus
@@ -230,7 +219,7 @@ const CreateItineraryForm = () => {
               autoFocus
               fullWidth
               multiline
-              rows={5}
+              rows={3}
               margin="dense"
               name="details"
               label="Description"
@@ -251,7 +240,7 @@ const CreateItineraryForm = () => {
               {!previewFile ? (
                 <UploadCoverImgForm
                   origin="itineraryForm"
-                  loadFile={loadFile}
+                  // loadFile={loadFile}
                   loadPreviewFile={loadPreviewFile}
                 />
               ) : (

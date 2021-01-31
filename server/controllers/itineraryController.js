@@ -49,12 +49,12 @@ const multerFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: multerStorage,
-  limits: { fieldSize: 25 * 1024 * 1024 },
   fileFilter: multerFilter,
 })
 
-exports.uploadCoverImg = upload.single('coverImg')
+exports.uploadCoverImg = upload.single('img')
 
+// img resize middleware
 exports.resizeCoverImg = asyncErrorCatcher(async (req, res, next) => {
   if (!req.file) return next()
 

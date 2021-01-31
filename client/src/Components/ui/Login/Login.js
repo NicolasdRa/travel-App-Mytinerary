@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -25,7 +25,10 @@ const Login = () => {
   const dispatch = useDispatch()
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({})
+  const [formValues, handleInputChange, reset] = useForm({
+    email: '',
+    password: '',
+  })
 
   // Open form state
   const open = useSelector((state) => state.forms.openLogInForm)
@@ -88,7 +91,6 @@ const Login = () => {
               type="email"
               autoComplete="current-email"
               onChange={handleInputChange}
-              fullWidth
               className={classes.input_field}
             />
             <TextField
