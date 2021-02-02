@@ -33,7 +33,10 @@ export const getCitiesGeoDB = createAsyncThunk('cities/geoDB', async (name) => {
 // SLICE
 const citiesSlice = createSlice({
   name: 'cities',
-  initialState: { loading: 'idle', geoDB: null },
+  initialState: {
+    loading: 'idle',
+    geoDB: null,
+  },
   reducers: {
     // standard reducer logic, with auto-generated action types
     addCity(state, action) {

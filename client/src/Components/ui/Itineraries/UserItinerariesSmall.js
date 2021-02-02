@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
+
+import ItineraryCardSmall from '../Itineraries/ItineraryCardSmall'
+
+import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import 'typeface-roboto'
-import { Box, Typography } from '@material-ui/core'
-import ItineraryCardSmall from '../Itineraries/ItineraryCardSmall'
-import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -23,26 +25,16 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const UserItinerariesSmall = () => {
+const UserItinerariesSmall = ({ itineraries }) => {
   const classes = useStyles()
 
-  const data = useSelector((state) => state.itineraries.data)
-  const [itineraries, setItineraries] = useState(data)
-
-  useEffect(() => {
-    setItineraries(data)
-  }, [data])
-
-  // const { _id } = user
-  // const filteredItineraries = itineraries.filter(
-  //   itineraries => itineraries.user._id === user._id
-  // )
+  console.log('from small list component', itineraries)
 
   if (itineraries != null) {
     return (
       <Box>
         <Typography variant="body2" className={classes.text}>
-          My contributions
+          My itineraries
         </Typography>
         <Box className={classes.gallery}>
           {/* {filteredItineraries.map(itinerary => ( */}
@@ -60,6 +52,10 @@ const UserItinerariesSmall = () => {
       </Typography>
     )
   }
+}
+
+UserItinerariesSmall.propTypes = {
+  itineraries: PropTypes.array.isRequired,
 }
 
 export default UserItinerariesSmall

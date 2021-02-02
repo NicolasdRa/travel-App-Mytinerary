@@ -33,7 +33,7 @@ export const useImageCropper = () => {
       )
 
       setCroppedImage(croppedImage)
-      console.log('donee', { croppedImage })
+      // console.log('donee', { croppedImage })
     } catch (e) {
       console.error(e)
     }

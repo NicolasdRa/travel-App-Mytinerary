@@ -34,13 +34,16 @@ const itinerariesSlice = createSlice({
   name: 'itineraries',
   initialState: {
     loading: 'idle',
+    status: '',
+    results: '',
+    data: [],
   },
   reducers: {
     // standard reducer logic, with auto-generated action types
-    // addItinerary(state, action) {
-    //   // "mutate" the array by calling push()
-    //   state.data.push(action.payload)
-    // },
+    addItinerary(state, action) {
+      // "mutate" the array by calling push()
+      state.data.push(action.payload)
+    },
     deleteItinerary(state, action) {
       return state.filter((itinerary, i) => i !== action.payload.index)
     },
@@ -60,9 +63,8 @@ const itinerariesSlice = createSlice({
       }
     },
     [addItinerary.fulfilled]: (state, action) => {
-      console.log(action.payload)
-      state.data.push(action.payload)
-      state.loading = 'done'
+      const newItinerary = action.payload.data.data
+      state.data.unshift(newItinerary)
     },
     [addItinerary.rejected]: (state, action) => {
       state.loading = 'fail'
@@ -89,6 +91,12 @@ export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
   (itineraries, title) =>
     itineraries.filter((itinerary) => itinerary.title === title),
+)
+
+export const selectItinerariesByUser = createSelector(
+  [selectAllItineraries, (state, userId) => userId],
+  (itineraries, userId) =>
+    itineraries.filter((itinerary) => itinerary.author === userId),
 )
 
 // Extract and export each action creator by name

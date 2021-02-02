@@ -33,6 +33,7 @@ const CreateItineraryForm = () => {
   const dispatch = useDispatch()
 
   const cities = useSelector((state) => selectAllCities(state))
+  const { _id } = useSelector((state) => state.users.currentUser)
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false)
@@ -45,6 +46,7 @@ const CreateItineraryForm = () => {
     price: '',
     duration: '',
     details: '',
+    author: '',
   })
 
   const { city, title, category, price, duration, details } = formValues
@@ -52,12 +54,10 @@ const CreateItineraryForm = () => {
   // Component level - File state
   const [file, setFile] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
-  console.log(previewFile)
 
   useEffect(() => {
     if (previewFile) {
       const file = base64StringtoFile(previewFile, 'croppedImg.png')
-      console.log(file)
       setFile(file)
     }
   }, [previewFile])
@@ -80,14 +80,14 @@ const CreateItineraryForm = () => {
     formData.append('price', price)
     formData.append('duration', duration)
     formData.append('details', details)
-    console.log(formData)
+    formData.append('author', _id)
+
     dispatch(addItinerary(formData))
     setOpen(false)
     reset()
     setPreviewFile(null)
   }
 
-  // const loadFile = (image) => setFile(image)
   const loadPreviewFile = (croppedImage) => setPreviewFile(croppedImage)
 
   const handleClearImage = (e) => {
@@ -230,13 +230,6 @@ const CreateItineraryForm = () => {
               className={classes.input_field}
             />
             <div>
-              {/* <input
-                style={{ display: 'none' }}
-                id="customFile"
-                onChange={handleChangeFile}
-                type="file"
-                ref={hiddenInput}
-              /> */}
               {!previewFile ? (
                 <UploadCoverImgForm
                   origin="itineraryForm"

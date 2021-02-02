@@ -46,8 +46,6 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   asyncErrorCatcher(async (req, res, next) => {
-    console.log('file', req.file, 'body', req.body)
-
     // 1. create body from request
     const body = { ...req.body }
 

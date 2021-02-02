@@ -30,7 +30,12 @@ const UpdateProfileForm = () => {
   const [open, setOpen] = useState(false)
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({})
+  const [formValues, handleInputChange, reset] = useForm({
+    userName: '',
+    firstName: '',
+    lastName: '',
+    details: '',
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -48,6 +53,8 @@ const UpdateProfileForm = () => {
     reset()
     setOpen(false)
   }
+
+  const loadPreviewFile = () => console.log('from update profile form')
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -81,7 +88,10 @@ const UpdateProfileForm = () => {
             className={classes.subtitle}>
             Change your images or edit your info
           </Typography>
-          <UploadCoverImgForm origin="profileForm" />
+          <UploadCoverImgForm
+            origin="profileForm"
+            loadPreviewFile={loadPreviewFile}
+          />
           <UploadProfileImgForm />
           <DialogContent>
             <TextField

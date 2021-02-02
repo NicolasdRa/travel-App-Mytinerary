@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Avatar, Box, Divider, Typography } from '@material-ui/core'
@@ -14,14 +14,24 @@ import Favourite from '../../ui/Favourite/Favourite'
 import { loadCurrentUser } from '../../Redux/usersSlice'
 
 import { useStyles } from './styles'
+import { selectItinerariesByUser } from '../../Redux/itinerariesSlice'
 
 const Profile = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const user = useSelector((state) => state.users.currentUser)
+  const [data, setData] = useState(null)
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const user = useSelector((state) => state.users.currentUser)
   // const favouriteTotal = useSelector((state) => state.favourites.favourites);
+  const userItineraries = useSelector((state) =>
+    selectItinerariesByUser(state, user._id),
+  )
+
+  useEffect(() => {
+    setData(userItineraries)
+  }, [userItineraries])
 
   useEffect(() => {
     return () => {
@@ -66,7 +76,7 @@ const Profile = () => {
               {details}
             </Typography>
             <Divider className={classes.divider} />
-            <UserItinerariesSmall />
+            <UserItinerariesSmall itineraries={data} />
             <Divider className={classes.divider} />
           </Box>
           <CreateItineraryForm />
