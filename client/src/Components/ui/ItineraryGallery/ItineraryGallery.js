@@ -15,15 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ItineraryGallery = (props) => {
-  const { itineraries, string } = props;
+const ItineraryGallery = ({ itineraries, string }) => {
   const classes = useStyles();
 
   if (itineraries.length > 0) {
     return (
       <div className={classes.gallery}>
         {itineraries.map((itinerary) => (
-          <ItineraryCard itinerary={itinerary} key={itinerary._id} />
+          <ItineraryCard {...itinerary} key={itinerary._id} />
         ))}
       </div>
     );

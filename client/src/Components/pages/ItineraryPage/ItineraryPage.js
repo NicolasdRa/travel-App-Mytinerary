@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, useParams } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectItineraryByTitle } from '../../Redux/itinerariesSlice'
 import { selectActivitiesForItinerary } from '../../Redux/activitiesSlice'
-
-import PropTypes from 'prop-types'
 
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
@@ -21,18 +19,21 @@ import { fetchFavourites } from '../../Redux/favouritesSlice'
 
 import { useStyles } from './styles'
 
-const ItineraryPage = ({ match }) => {
+const ItineraryPage = () => {
   const classes = useStyles()
+
+  const dispatch = useDispatch()
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const favouriteCount = useSelector((state) => state.favourites.results)
 
-  const dispatch = useDispatch()
-
-  // takes params to choose itinerary to display
-  const { title } = match.params
-  const itinerary = useSelector((state) => selectItineraryByTitle(state, title))
-
+  // takes params & chooses itinerary to display
+  const { title } = useParams()
+  console.log(title)
+  const [itinerary] = useSelector((state) =>
+    selectItineraryByTitle(state, title),
+  )
+  console.log(itinerary)
   // variables for ui
   const { _id, city, category, duration, price, img, details } = itinerary
 
@@ -56,7 +57,7 @@ const ItineraryPage = ({ match }) => {
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
         <Typography className={classes.overline} variant="overline">
-          {city.name} - {category}
+          {city} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>
@@ -142,14 +143,6 @@ const ItineraryPage = ({ match }) => {
       </Box>
     </Box>
   )
-}
-
-ItineraryPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }),
-  }),
 }
 
 export default ItineraryPage

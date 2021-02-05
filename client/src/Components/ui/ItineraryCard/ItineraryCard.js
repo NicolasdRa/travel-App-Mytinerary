@@ -20,9 +20,8 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 import { useStyles } from './styles'
 
-const ItineraryCard = (props) => {
+const ItineraryCard = ({ city, title, likes, duration, price, img }) => {
   const classes = useStyles()
-  const { city, title, likes, duration, price, img } = props.itinerary
 
   if (!img) {
     return (
@@ -98,7 +97,7 @@ const ItineraryCard = (props) => {
           size="small"
           color="primary"
           component={Link}
-          to={'/itinerarypage/' + title}
+          to={`./itinerarypage/${title}`}
           className={classes.textBtn}>
           View more
         </Button>
