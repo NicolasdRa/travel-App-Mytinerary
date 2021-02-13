@@ -1,107 +1,107 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 // THUNKS
 
 // load current User
 export const loadCurrentUser = createAsyncThunk(
-  'users/loadCurrentUser',
+  "users/loadCurrentUser",
   async () => {
     const res = await axios({
-      method: 'GET',
+      method: "GET",
       url: `/api/v1/users/me`,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    })
-    return res.data
+    });
+    return res.data;
   },
-)
+);
 
 // update user info & picture
 export const updateUserProfile = createAsyncThunk(
-  'users/updateUserProfile',
+  "users/updateUserProfile",
   async (formData) => {
     const res = await axios({
-      method: 'PATCH',
-      url: '/api/v1/users/updateMe',
+      method: "PATCH",
+      url: "/api/v1/users/updateMe",
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
       data: formData,
-    })
-    return res.data
+    });
+    return res.data;
   },
-)
+);
 
 export const updateProfileCoverImage = createAsyncThunk(
-  'users/updateProfileCoverImage',
+  "users/updateProfileCoverImage",
   async (formData) => {
     const res = await axios({
-      method: 'PATCH',
-      url: '/api/v1/users/updateCover',
+      method: "PATCH",
+      url: "/api/v1/users/updateCover",
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
       data: formData,
       onDownloadProgress: (progressEvent) => {
         console.log(
-          'upload progress: ' +
+          "upload progress: " +
             Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            '%',
-        )
+            "%",
+        );
       },
-    })
-    return res.data
+    });
+    return res.data;
   },
-)
+);
 
 // SLICE
 const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState: {
-    loading: 'idle',
+    loading: "idle",
     currentUser: null,
     error: null,
   },
   reducers: {
     unloadCurrentUser(state, action) {
-      state.loading = 'idle'
-      state.currentUser = null
+      state.loading = "idle";
+      state.currentUser = null;
     },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [loadCurrentUser.fulfilled]: (state, action) => {
-      state.loading = 'done'
-      state.currentUser = action.payload.data
+      state.loading = "done";
+      state.currentUser = action.payload.data;
     },
     [loadCurrentUser.rejected]: (state, action) => {
-      state.loading = 'fail'
-      state.currentUser = null
-      state.error = action.error
+      state.loading = "fail";
+      state.currentUser = null;
+      state.error = action.error;
     },
     [updateUserProfile.fulfilled]: (state, action) => {
-      state.loading = 'done'
-      state.currentUser = action.payload.data
+      state.loading = "done";
+      state.currentUser = action.payload.data;
     },
     [updateUserProfile.rejected]: (state, action) => {
-      state.loading = 'fail'
-      state.error = action.payload
+      state.loading = "fail";
+      state.error = action.payload;
     },
     [updateProfileCoverImage.fulfilled]: (state, action) => {
-      state.loading = 'done'
-      state.currentUser = action.payload.data
+      state.loading = "done";
+      state.currentUser = action.payload.data;
     },
     [updateProfileCoverImage.rejected]: (state, action) => {
-      state.loading = 'done'
-      state.error = action.payload
+      state.loading = "done";
+      state.error = action.payload;
     },
   },
-})
+});
 
 // Extract and export each action creator by name
-export const { unloadCurrentUser } = usersSlice.actions
+export const { unloadCurrentUser } = usersSlice.actions;
 
 // // Export the reducer as a default export
-export default usersSlice.reducer
+export default usersSlice.reducer;

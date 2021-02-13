@@ -1,53 +1,53 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { Avatar, Box, Divider, Typography } from '@material-ui/core'
+import { Avatar, Box, Divider, Typography } from "@material-ui/core";
 
-import Signup from '../../ui/Signup/Signup'
-import Login from '../../ui/Login/Login'
-import CreateItineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
-import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
-import Favourite from '../../ui/Favourite/Favourite'
+import Signup from "../../ui/Signup/Signup";
+import Login from "../../ui/Login/Login";
+import CreateItineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import ImageHeader from "../../ui/Headers/ImageHeader";
+import UserItinerariesSmall from "../../ui/Itineraries/UserItinerariesSmall";
+import UpdateProfileForm from "../../ui/UpdateProfileForm/UpdateProfileForm";
+import Favourite from "../../ui/Favourite/Favourite";
 
-import { loadCurrentUser } from '../../Redux/usersSlice'
+import { loadCurrentUser } from "../../Redux/usersSlice";
 
-import { useStyles } from './styles'
-import { selectItinerariesByUser } from '../../Redux/itinerariesSlice'
+import { useStyles } from "./styles";
+import { selectItinerariesByUser } from "../../Redux/itinerariesSlice";
 
 const Profile = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const user = useSelector((state) => state.users.currentUser)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.users.currentUser);
   // const favouriteTotal = useSelector((state) => state.favourites.favourites);
   const userItineraries = useSelector((state) =>
     selectItinerariesByUser(state, user._id),
-  )
+  );
 
   useEffect(() => {
-    setData(userItineraries)
-  }, [userItineraries])
+    setData(userItineraries);
+  }, [userItineraries]);
 
   useEffect(() => {
     return () => {
-      dispatch(loadCurrentUser())
-    }
-  }, [dispatch])
+      dispatch(loadCurrentUser());
+    };
+  }, [dispatch]);
 
   if (isAuthenticated) {
-    const { userName, firstName, lastName, details, img, coverImg } = user
+    const { userName, firstName, lastName, details, img, coverImg } = user;
 
     return (
       <Box className={classes.container}>
         <ImageHeader img={coverImg} className={classes.header} />
         <Box className={classes.content}>
           <Avatar
-            alt={firstName + '' + lastName}
+            alt={firstName + "" + lastName}
             src={img}
             className={classes.userImg}
           />
@@ -82,7 +82,7 @@ const Profile = () => {
           <CreateItineraryForm />
         </Box>
       </Box>
-    )
+    );
   } else {
     return (
       <Box className={classes.alt_container}>
@@ -96,8 +96,8 @@ const Profile = () => {
           <Login />
         </Box>
       </Box>
-    )
+    );
   }
-}
+};
 
-export default Profile
+export default Profile;

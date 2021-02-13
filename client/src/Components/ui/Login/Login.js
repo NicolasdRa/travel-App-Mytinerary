@@ -1,5 +1,5 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   Button,
@@ -9,40 +9,39 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from '@material-ui/core'
-import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
+} from "@material-ui/core";
+import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
 
-import { logInUser } from '../../Redux/authSlice'
-import { openLogInForm, closeLogInForm } from '../../Redux/formsSlice'
+import { logInUser } from "../../Redux/authSlice";
+import { openLogInForm, closeLogInForm } from "../../Redux/formsSlice";
 
-import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
+import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
 
-import { useStyles } from './styles'
-import { useForm } from '../../../hooks/useForm'
+import { useStyles } from "./styles";
+import { useForm } from "../../../hooks/useForm";
 
 const Login = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  // Open form state
+  const open = useSelector((state) => state.forms.openLogInForm);
+
+  const handleOpenForm = () => dispatch(openLogInForm());
+  const handleCloseForm = () => dispatch(closeLogInForm());
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
-    email: '',
-    password: '',
-  })
-
-  // Open form state
-  const open = useSelector((state) => state.forms.openLogInForm)
-
-  const handleOpenForm = () => dispatch(openLogInForm())
-  const handleCloseForm = () => dispatch(closeLogInForm())
+    email: "",
+    password: "",
+  });
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-
-    dispatch(logInUser(formValues))
-    reset()
-    handleCloseForm()
-  }
+    e.preventDefault();
+    dispatch(logInUser(formValues));
+    reset();
+    handleCloseForm();
+  };
 
   return (
     <div>
@@ -122,7 +121,7 @@ const Login = () => {
         </form>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

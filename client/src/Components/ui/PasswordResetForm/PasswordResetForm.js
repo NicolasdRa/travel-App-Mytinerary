@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Button,
   Dialog,
@@ -9,191 +9,124 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from '@material-ui/core'
-import { openLogInForm } from '../../Redux/formsSlice'
-import { resetPassword } from '../../Redux/authSlice'
-import { withStyles } from '@material-ui/core/styles'
+} from "@material-ui/core";
+import { openLogInForm } from "../../Redux/formsSlice";
+import { resetPassword } from "../../Redux/authSlice";
+import { useForm } from "../../../hooks/useForm";
 
-const styles = (theme) => ({
-  title: {
-    margin: '1rem 1rem 0 1rem',
-    textAlign: 'center',
-  },
+import { useStyles } from "./styles";
 
-  subtitle: {
-    margin: '0 1.5rem',
-    padding: 0,
-    textAlign: 'left',
-  },
+export const PasswordResetForm = ({ match, history }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-  input_field: {
-    margin: '.8rem 0',
-  },
+  const [open, setOpen] = useState(true);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
-  text: {
-    marginTop: '1rem',
-    textAlign: 'center',
-  },
+  const [formValues, handleInputChange] = useForm({
+    password: "",
+    passwordConfirm: "",
+  });
 
-  btns: {
-    paddingLeft: '1rem',
-  },
-})
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-class PasswordResetForm extends Component {
-  state = {
-    fullWidth: true,
-    maxWidth: 'sm',
-    password: '',
-    passwordConfirm: '',
-    isAuthenticated: false,
-    msg: null,
-    setOpen: true,
-    openSnackBar: false,
-  }
+    const data = { ...formValues, resetToken: match.params.resetToken };
 
-  handleChange = (e) => {
-    const { id, value } = e.target
-    this.setState({
-      [id]: value,
-    })
-  }
-
-  handleClose = () => {
-    this.setState({ setOpen: false })
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-
-    const { password, passwordConfirm } = this.state
-
-    const data = {
-      resetToken: this.props.match.params.resetToken,
-      password,
-      passwordConfirm,
-    }
-    this.props.resetPassword(data)
-    this.setState({ openSnackBar: true })
+    dispatch(resetPassword(data));
+    setOpenSnackBar(true);
     setTimeout(() => {
-      this.handleClose()
-      this.setState({ openSnackBar: false })
-      this.props.openLogInForm()
-      this.props.history.push(`/`)
-    }, 3000)
-  }
+      handleClose();
+      setOpenSnackBar(false);
+      openLogInForm();
+      history.push(`/`);
+    }, 3000);
+  };
 
-  handleCloseSnackBar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
-    this.setState({ openSnackBar: false })
-  }
+    setOpenSnackBar(false);
+  };
 
-  clearState = (e) => {
-    e.preventDefault()
-    this.setState({
-      [e.target.id]: '',
-    })
-  }
-
-  render() {
-    const { classes } = this.props
-    const open = this.state.setOpen
-
-    return (
-      <div>
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title">
-          <form onSubmit={this.handleSubmit}>
-            <DialogTitle
-              id="form-dialog-title"
-              disableTypography
-              className={classes.title}>
-              <Typography variant="h6">Reset your password</Typography>
-            </DialogTitle>
-            <DialogTitle
-              id="form-dialog-subtitle"
-              disableTypography
-              className={classes.subtitle}>
-              <Typography variant="body2">
-                Enter a new password, confirm and submit. You will be logged in
-                shortly afterwards.
-              </Typography>
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="password"
-                label="New Password"
-                type="password"
-                autoComplete="current-password"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <TextField
-                required
-                autoFocus
-                minLength="6"
-                margin="dense"
-                id="passwordConfirm"
-                label="Confirm New Password"
-                type="password"
-                autoComplete="current-password-confirm"
-                onChange={this.handleChange}
-                fullWidth
-                className={classes.input_field}
-              />
-              <Snackbar
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={this.state.openSnackBar}
-                autoHideDuration={4000}
-                onClose={this.handleCloseSnackBar}
-                message="Your password has been reset, you will be logged in"
-              />
-              <Typography variant="body2" className={classes.text}>
-                By proceeding you agree to Mytinerary’s Privacy Policy, User
-                Agreement and T&Cs.
-              </Typography>
-            </DialogContent>
-            <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.handleSubmit} color="secondary">
-                Submit
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetPassword: (data) => dispatch(resetPassword(data)),
-    openLogInForm: () => dispatch(openLogInForm()),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(PasswordResetForm))
+  return (
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title">
+        <form>
+          <DialogTitle
+            id="form-dialog-title"
+            disableTypography
+            className={classes.title}>
+            <Typography variant="h6">Reset your password</Typography>
+          </DialogTitle>
+          <DialogTitle
+            id="form-dialog-subtitle"
+            disableTypography
+            className={classes.subtitle}>
+            <Typography variant="body2">
+              Enter a new password, confirm and submit. You will be re-directed
+              to the log in page shortly afterwards.
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              name="password"
+              label="New Password"
+              type="password"
+              autoComplete="current-password"
+              onChange={handleInputChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <TextField
+              required
+              autoFocus
+              minLength="6"
+              margin="dense"
+              name="passwordConfirm"
+              label="Confirm New Password"
+              type="password"
+              autoComplete="current-password-confirm"
+              onChange={handleInputChange}
+              fullWidth
+              className={classes.input_field}
+            />
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              open={openSnackBar}
+              autoHideDuration={4000}
+              onClose={handleCloseSnackBar}
+              message="Your password has been reset, please log in with your new password"
+            />
+            <Typography variant="body2" className={classes.text}>
+              By proceeding you agree to Mytinerary’s Privacy Policy, User
+              Agreement and T&Cs.
+            </Typography>
+          </DialogContent>
+          <DialogActions className={classes.btns}>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} color="secondary">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  );
+};

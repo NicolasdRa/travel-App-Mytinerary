@@ -1,70 +1,31 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import React from "react";
+import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-import { selectCityByName } from '../../Redux/citiesSlice'
-import { selectAllItinerariesForCity } from '../../Redux/itinerariesSlice'
+import { selectCityByName } from "../../Redux/citiesSlice";
+import { selectAllItinerariesForCity } from "../../Redux/itinerariesSlice";
 // import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
-import ItineraryGallery from '../../ui/ItineraryGallery/ItineraryGallery'
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import ItineraryGallery from "../../ui/ItineraryGallery/ItineraryGallery";
+import ImageHeader from "../../ui/Headers/ImageHeader";
+import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
 
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from "@material-ui/core";
 
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    width: '100%',
-  },
-
-  header: {
-    height: '20rem',
-    width: '100%',
-  },
-
-  city_title: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    textAlign: 'left',
-    marginTop: '1.5rem',
-    marginLeft: '1rem',
-  },
-
-  subtitle: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    textAlign: 'left',
-    marginLeft: '1rem',
-  },
-
-  gallery: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    textAlign: 'left',
-    marginTop: '1.5rem',
-  },
-}))
+import { useStyles } from "./styles";
 
 const CityPage = ({ match }) => {
-  const classes = useStyles()
+  const classes = useStyles();
   // const dispatch = useDispatch()
 
-  const cityName = match.params.city_name
+  const cityName = match.params.city_name;
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const city = useSelector((state) => selectCityByName(state, cityName))
+  const city = useSelector((state) => selectCityByName(state, cityName));
   const itineraries = useSelector((state) =>
     selectAllItinerariesForCity(state, cityName),
-  )
+  );
   // const itineraries = useSelector((state) =>
   //   state.itineraries.data.filter(
   //     (itineraries) => itineraries.city === cityName,
@@ -78,7 +39,7 @@ const CityPage = ({ match }) => {
   //   }
   // }, [])
 
-  const { name, img, country } = city
+  const { name, img, country } = city;
 
   return (
     <Box className={classes.content}>
@@ -97,8 +58,8 @@ const CityPage = ({ match }) => {
       </Box>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
-  )
-}
+  );
+};
 
 CityPage.propTypes = {
   match: PropTypes.shape({
@@ -106,6 +67,6 @@ CityPage.propTypes = {
       city_name: PropTypes.string.isRequired,
     }),
   }),
-}
+};
 
-export default CityPage
+export default CityPage;

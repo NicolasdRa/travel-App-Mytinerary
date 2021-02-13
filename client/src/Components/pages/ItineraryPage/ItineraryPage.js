@@ -1,56 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { Link, Redirect, useParams } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { Link, Redirect, useParams } from "react-router-dom";
 
-import { useSelector, useDispatch } from 'react-redux'
-import { selectItineraryByTitle } from '../../Redux/itinerariesSlice'
-import { selectActivitiesForItinerary } from '../../Redux/activitiesSlice'
+import { useSelector, useDispatch } from "react-redux";
+import { selectItineraryByTitle } from "../../Redux/itinerariesSlice";
+import { selectActivitiesForItinerary } from "../../Redux/activitiesSlice";
 
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
-import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
-import Favourite from '../../ui/Favourite/Favourite'
+import ImageHeader from "../../ui/Headers/ImageHeader";
+import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import ActivityGallerySmall from "../../ui/Activities/ActivityGallerySmall";
+import Favourite from "../../ui/Favourite/Favourite";
 
-import { Avatar, Box, Button, Divider, Typography } from '@material-ui/core'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import EuroIcon from '@material-ui/icons/Euro'
-import CreateIcon from '@material-ui/icons/Create'
+import { Avatar, Box, Button, Divider, Typography } from "@material-ui/core";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import EuroIcon from "@material-ui/icons/Euro";
+import CreateIcon from "@material-ui/icons/Create";
 
-import { fetchFavourites } from '../../Redux/favouritesSlice'
+import { fetchFavourites } from "../../Redux/favouritesSlice";
 
-import { useStyles } from './styles'
+import { useStyles } from "./styles";
 
 const ItineraryPage = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const favouriteCount = useSelector((state) => state.favourites.results)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const favouriteCount = useSelector((state) => state.favourites.results);
 
   // takes params & chooses itinerary to display
-  const { title } = useParams()
-  console.log(title)
+  const { title } = useParams();
+  console.log(title);
   const [itinerary] = useSelector((state) =>
     selectItineraryByTitle(state, title),
-  )
-  console.log(itinerary)
+  );
+  console.log(itinerary);
   // variables for ui
-  const { _id, city, category, duration, price, img, details } = itinerary
+  const { _id, city, category, duration, price, img, details } = itinerary;
 
   const activities = useSelector((state) =>
     selectActivitiesForItinerary(state, _id),
-  )
+  );
 
   //fetches favourites from DB
   useEffect(() => {
-    dispatch(fetchFavourites(itinerary.id))
-  }, [itinerary, dispatch])
+    dispatch(fetchFavourites(itinerary.id));
+  }, [itinerary, dispatch]);
 
   // updates count
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    return () => setCount(favouriteCount)
-  }, [favouriteCount])
+    return () => setCount(favouriteCount);
+  }, [favouriteCount]);
 
   return (
     <Box className={classes.container}>
@@ -121,7 +121,7 @@ const ItineraryPage = () => {
               size="small"
               color="secondary"
               component={Link}
-              to={'/activitypage/' + title}
+              to={"/activitypage/" + title}
               className={classes.view_btn}>
               View Reviews (54)
             </Button>
@@ -130,7 +130,7 @@ const ItineraryPage = () => {
                 size="small"
                 color="secondary"
                 component={Link}
-                to={'/activitypage/' + title}
+                to={"/activitypage/" + title}
                 className={classes.text_btn}>
                 Leave your comment
               </Button>
@@ -142,7 +142,7 @@ const ItineraryPage = () => {
         {isAuthenticated ? <CreateIitineraryForm /> : null}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default ItineraryPage
+export default ItineraryPage;

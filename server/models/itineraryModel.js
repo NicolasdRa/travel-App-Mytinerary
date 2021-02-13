@@ -1,19 +1,19 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // Schema
 const itinerarySchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'An itinerary must have a title'],
+      required: [true, "An itinerary must have a title"],
       unique: true,
       maxlength: [
         40,
-        'An itinerary title must be a maximum of 40 characters long',
+        "An itinerary title must be a maximum of 40 characters long",
       ],
       minlength: [
         10,
-        'An itinerary title must be a minimum of 10 characters long',
+        "An itinerary title must be a minimum of 10 characters long",
       ],
       trim: true,
     },
@@ -25,7 +25,7 @@ const itinerarySchema = new mongoose.Schema(
     duration: {
       // type: Number,
       type: String,
-      required: [true, 'An itinerary must have a duration'],
+      required: [true, "An itinerary must have a duration"],
     },
 
     img: {
@@ -41,8 +41,8 @@ const itinerarySchema = new mongoose.Schema(
     ratingAvg: {
       type: Number,
       default: 3,
-      min: [1, 'Lowest rating must be 1'],
-      max: [5, 'Top rating must be 5'],
+      min: [1, "Lowest rating must be 1"],
+      max: [5, "Top rating must be 5"],
       set: (val) => Math.round(val * 10) / 10, // rounds up value
     },
 
@@ -83,35 +83,35 @@ const itinerarySchema = new mongoose.Schema(
       trim: true,
       maxlength: [
         1000,
-        'An itinerary description must be a maximum of 1000 characters long',
+        "An itinerary description must be a maximum of 1000 characters long",
       ],
     },
 
     price: {
       type: String,
-      required: [true, 'An itinerary must have a price'],
+      required: [true, "An itinerary must have a price"],
       enum: {
-        values: ['€', '€€', '€€€'],
+        values: ["€", "€€", "€€€"],
       },
     },
 
     category: {
       type: String,
-      required: [true, 'An itinerary must belong to a category'],
+      required: [true, "An itinerary must belong to a category"],
       enum: {
         values: [
-          'Arts & Culture',
-          'Popular Attractions',
-          'Pubs & Bars',
-          'Food & Nightlife',
-          'Tours & Sightseeing',
-          'Spa & Wellness',
-          'Sports & Outdoors',
-          'Nature & Wildlife',
-          'Unique Experiences',
+          "Arts & Culture",
+          "Popular Attractions",
+          "Pubs & Bars",
+          "Food & Nightlife",
+          "Tours & Sightseeing",
+          "Spa & Wellness",
+          "Sports & Outdoors",
+          "Nature & Wildlife",
+          "Unique Experiences",
         ],
         message:
-          'Category must be one of these options: Arts & Culture, Popular Attractions, Pubs & Bars, Food & Nightlife, Tours & Sightseeing, Spa & Wellness, Sports & Outdoors, Nature & Wildlife or Unique Experiences',
+          "Category must be one of these options: Arts & Culture, Popular Attractions, Pubs & Bars, Food & Nightlife, Tours & Sightseeing, Spa & Wellness, Sports & Outdoors, Nature & Wildlife or Unique Experiences",
       },
     },
 
@@ -130,14 +130,14 @@ const itinerarySchema = new mongoose.Schema(
     activities: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'Activity',
+        ref: "Activity",
         // required: [true, 'An itinerary must have an activity']
       },
     ],
 
     author: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
+      ref: "User",
       // required: [true, 'An itinerary must have an author']
     },
 
@@ -148,24 +148,24 @@ const itinerarySchema = new mongoose.Schema(
   },
   // options object for virtual properties
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
-)
+);
 
 // query middleware to populate referenced fields
-// itinerarySchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: 'activities',
-//   })
-//   // .populate({
-//   //   path: 'city',
-//   //   select: 'name',
-//   // })
-//   // .populate({
-//   //   path: 'author',
-//   //   select: 'name photo'
-//   // })
-//   next()
-// })
+itinerarySchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "activities",
+  });
+  //   // .populate({
+  //   //   path: 'city',
+  //   //   select: 'name',
+  //   // })
+  //   // .populate({
+  //   //   path: 'author',
+  //   //   select: 'name photo'
+  //   // })
+  next();
+});
 
 // Model
-const Itinerary = mongoose.model('Itinerary', itinerarySchema)
-module.exports = Itinerary
+const Itinerary = mongoose.model("Itinerary", itinerarySchema);
+module.exports = Itinerary;

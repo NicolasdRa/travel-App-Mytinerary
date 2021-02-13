@@ -1,106 +1,140 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
-import axios from 'axios'
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
+import axios from "axios";
 
 // THUNKS
 export const fetchItineraries = createAsyncThunk(
-  'itineraries/fetchAll',
+  "itineraries/fetchAll",
   async (thunkAPI) => {
     const res = await axios({
-      method: 'get',
-      url: '/api/v1/itineraries',
-      responseType: 'json',
-    })
-    return res.data
+      method: "get",
+      url: "/api/v1/itineraries",
+      responseType: "json",
+    });
+    return res.data;
   },
-)
+);
+
+export const fetchItineraryById = createAsyncThunk(
+  "itineraries/fetchItineraryById",
+  async (thunkAPI) => {
+    const res = await axios({
+      method: "get",
+      url: "/api/v1/itineraries/:id",
+      responseType: "json",
+    });
+    return res.data;
+  },
+);
+
+export const fetchItineraryByTitle = createAsyncThunk(
+  "itineraries/fetchItineraryByTitle",
+  async (thunkAPI) => {
+    const res = await axios({
+      method: "get",
+      url: "/api/v1/itineraries/:title",
+      responseType: "json",
+    });
+    return res.data;
+  },
+);
 
 export const addItinerary = createAsyncThunk(
-  'itineraries/addOne',
+  "itineraries/addOne",
   async (formData, thunkAPI) => {
     const res = await axios({
-      method: 'POST',
-      url: '/api/v1/itineraries',
+      method: "POST",
+      url: "/api/v1/itineraries",
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
       data: formData,
-    })
-    return res.data
+    });
+    return res.data;
   },
-)
+);
 
 // SLICE
 const itinerariesSlice = createSlice({
-  name: 'itineraries',
+  name: "itineraries",
   initialState: {
-    loading: 'idle',
-    status: '',
-    results: '',
+    loading: "idle",
+    status: "",
+    results: "",
     data: [],
   },
   reducers: {
     // standard reducer logic, with auto-generated action types
     addItinerary(state, action) {
       // "mutate" the array by calling push()
-      state.data.push(action.payload)
+      state.data.push(action.payload);
     },
     deleteItinerary(state, action) {
-      return state.filter((itinerary, i) => i !== action.payload.index)
+      return state.filter((itinerary, i) => i !== action.payload.index);
     },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [fetchItineraries.fulfilled]: (state, action) => {
       return {
-        loading: 'done',
+        loading: "done",
         ...action.payload,
-      }
+      };
     },
     [fetchItineraries.rejected]: (state, action) => {
       return {
-        loading: 'fail',
+        loading: "fail",
         error: action.payload,
-      }
+      };
     },
     [addItinerary.fulfilled]: (state, action) => {
-      const newItinerary = action.payload.data.data
-      state.data.unshift(newItinerary)
+      const newItinerary = action.payload.data.data;
+      state.data.unshift(newItinerary);
     },
     [addItinerary.rejected]: (state, action) => {
-      state.loading = 'fail'
-      state.error = action.payload
+      state.loading = "fail";
+      state.error = action.payload;
     },
   },
-})
+});
 
 // SELECTORS
-const selectItineraries = (state) => state.itineraries.data
+const selectItineraries = (state) => state.itineraries.data;
 
 export const selectAllItineraries = createSelector(
   [selectItineraries],
   (itineraries) => itineraries,
-)
+);
 
 export const selectAllItinerariesForCity = createSelector(
   [selectAllItineraries, (state, city) => city],
   (itineraries, city) =>
-    itineraries.filter((itinerary) => itinerary.city === city),
-)
+    itineraries && city
+      ? itineraries.filter((itinerary) => itinerary.city === city)
+      : [],
+);
 
 export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
   (itineraries, title) =>
-    itineraries.filter((itinerary) => itinerary.title === title),
-)
+    itineraries && title
+      ? itineraries.filter((itinerary) => itinerary.title === title)
+      : [],
+);
 
 export const selectItinerariesByUser = createSelector(
   [selectAllItineraries, (state, userId) => userId],
   (itineraries, userId) =>
-    itineraries.filter((itinerary) => itinerary.author === userId),
-)
+    itineraries && userId
+      ? itineraries.filter((itinerary) => itinerary.author === userId)
+      : [],
+);
 
 // Extract and export each action creator by name
-export const { deleteItinerary } = itinerariesSlice.actions
+export const { deleteItinerary } = itinerariesSlice.actions;
 
 // // Export the reducer as a default export
-export default itinerariesSlice.reducer
+export default itinerariesSlice.reducer;

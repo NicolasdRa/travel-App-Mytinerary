@@ -1,18 +1,19 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 const {
   getAllItineraries,
   getItinerary,
   createItinerary,
   updateItinerary,
   deleteItinerary,
+  getItineraryByTitle,
   getCityItineraries,
   resizeCoverImg,
   uploadCoverImg,
-} = require('../controllers/itineraryController')
-const { protect } = require('../controllers/authController')
-const activityRouter = require('../routes/activityRoutes')
-const favouriteRouter = require('../routes/favouriteRoutes')
+} = require("../controllers/itineraryController");
+const { protect } = require("../controllers/authController");
+const activityRouter = require("../routes/activityRoutes");
+const favouriteRouter = require("../routes/favouriteRoutes");
 
 // ------------------------------------- //
 
@@ -22,21 +23,22 @@ const favouriteRouter = require('../routes/favouriteRoutes')
 // ------------------------------------- //
 
 // Nested routes
-router.use('/:itineraryId/activities', activityRouter)
-router.use('/:itineraryId/favourites', favouriteRouter)
+router.use("/:itineraryId/activities", activityRouter);
+router.use("/:itineraryId/favourites", favouriteRouter);
 
 // Routes
 router
-  .route('/')
+  .route("/")
   .get(getAllItineraries)
-  .post(protect, uploadCoverImg, resizeCoverImg, createItinerary)
+  .post(protect, uploadCoverImg, resizeCoverImg, createItinerary);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(getItinerary)
   .patch(protect, updateItinerary)
-  .delete(protect, deleteItinerary)
+  .delete(protect, deleteItinerary);
 
-router.route('/:city_name').get(getCityItineraries)
+router.route("/city/:city_name").get(getCityItineraries);
+router.route("/title/:title").get(getItineraryByTitle);
 
-module.exports = router
+module.exports = router;

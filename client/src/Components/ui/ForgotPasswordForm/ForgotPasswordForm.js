@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Button,
   Dialog,
@@ -9,189 +9,112 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from '@material-ui/core'
-import { forgotPassword } from '../../Redux/authSlice'
-import { clearErrors } from '../../Redux/errorsSlice'
-import { withStyles } from '@material-ui/core/styles'
+} from "@material-ui/core";
+import { forgotPassword } from "../../Redux/authSlice";
+import { clearErrors } from "../../Redux/errorsSlice";
 
-const styles = (theme) => ({
-  btnContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    fontStyle: 'lowercase',
-  },
+import { useStyles } from "./styles";
+import { useForm } from "../../../hooks/useForm";
 
-  btn: {
-    textTransform: 'none',
-  },
+const ForgotPasswordForm = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-  title: {
-    margin: '1rem 0 0 0',
-    padding: 0,
-    textAlign: 'center',
-  },
+  const [open, setOpen] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
-  subtitle: {
-    margin: '1.5rem 1.5rem 0 1.5rem',
-    padding: 0,
-    textAlign: 'left',
-  },
+  const [formValues, handleInputChange] = useForm({
+    email: "",
+  });
 
-  input_field: {
-    margin: '.8rem 0',
-  },
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  text: {
-    marginTop: '1rem',
-    textAlign: 'center',
-  },
+    dispatch(forgotPassword(formValues));
 
-  btns: {
-    paddingLeft: '1rem',
-  },
-})
-
-class ForgotPasswordForm extends Component {
-  state = {
-    fullWidth: true,
-    maxWidth: 'sm',
-    email: '',
-    isAuthenticated: false,
-    msg: null,
-    setOpen: false,
-    openSnackBar: false,
-  }
-
-  handleChange = (e) => {
-    const { id, value } = e.target
-    this.setState({
-      [id]: value,
-    })
-  }
-
-  handleClose = () => {
-    this.setState({ setOpen: false })
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-
-    const { email } = this.state
-    const data = { email }
-
-    this.props.forgotPassword(data)
-    this.setState({ openSnackBar: true })
+    setOpenSnackBar(true);
     setTimeout(() => {
-      this.handleClose()
-      this.setState({ openSnackBar: false })
-    }, 3000)
-  }
+      setOpenSnackBar(false);
+      handleClose();
+    }, 2500);
+  };
 
-  handleCloseSnackBar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
-    this.setState({ openSnackBar: false })
-  }
+    setOpenSnackBar(false);
+  };
 
-  clearState = (e) => {
-    e.preventDefault()
-    this.setState({
-      [e.target.id]: '',
-    })
-  }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  render() {
-    const { classes } = this.props
-    const open = this.state.setOpen
+  return (
+    <div className={classes.btnContainer}>
+      <Button className={classes.btn} color="primary" onClick={handleClickOpen}>
+        Forgot Password?
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title">
+        <form>
+          <DialogTitle
+            id="form-dialog-title"
+            disableTypography
+            className={classes.title}>
+            <Typography variant="h6">Forgot your Password?</Typography>
+          </DialogTitle>
+          <DialogTitle
+            id="form-dialog-subtitle"
+            disableTypography
+            className={classes.subtitle}>
+            <Typography variant="body2">
+              Enter your email address and submit. You will be sent an email to
+              the address provided with a password reset link.
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              required
+              autoFocus
+              fullWidth
+              margin="dense"
+              name="email"
+              label="Email Address"
+              type="email"
+              autoComplete="current-email"
+              onChange={handleInputChange}
+              className={classes.input_field}
+            />
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              open={openSnackBar}
+              autoHideDuration={4000}
+              onClose={handleCloseSnackBar}
+              message="A message with a password reset link has been sent to your email account."
+            />
+          </DialogContent>
+          <DialogActions className={classes.btns}>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} color="secondary">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  );
+};
 
-    const handleClickOpen = () => {
-      this.setState({ setOpen: true })
-    }
-
-    return (
-      <div className={classes.btnContainer}>
-        <Button
-          className={classes.btn}
-          color="primary"
-          onClick={handleClickOpen}>
-          Forgot Password?
-        </Button>
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title">
-          <form onSubmit={this.handleSubmit}>
-            <DialogTitle
-              id="form-dialog-title"
-              disableTypography
-              className={classes.title}>
-              <Typography variant="h6">Forgot your Password?</Typography>
-            </DialogTitle>
-            <DialogTitle
-              id="form-dialog-subtitle"
-              disableTypography
-              className={classes.subtitle}>
-              <Typography variant="body2">
-                Enter your email address and submit. You will be sent an email
-                to the address provided with a password reset link.
-              </Typography>
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                required
-                autoFocus
-                fullWidth
-                margin="dense"
-                id="email"
-                label="Email Address"
-                type="email"
-                autoComplete="current-email"
-                onChange={this.handleChange}
-                className={classes.input_field}
-              />
-              <Snackbar
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={this.state.openSnackBar}
-                autoHideDuration={4000}
-                onClose={this.handleCloseSnackBar}
-                message="A message with a password reset link has been sent to your email account."
-              />
-            </DialogContent>
-            <DialogActions className={classes.btns}>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.handleSubmit} color="secondary">
-                Submit
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    authError: state.auth.error,
-    isAuthenticated: state.isAuthenticated,
-    errors: state.errors,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    forgotPassword: (data) => dispatch(forgotPassword(data)),
-    clearErrors: () => dispatch(clearErrors()),
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(ForgotPasswordForm))
+export default ForgotPasswordForm;
