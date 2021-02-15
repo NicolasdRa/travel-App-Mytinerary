@@ -92,19 +92,9 @@ const authSlice = createSlice({
     // standard reducer logic, with auto-generated action types
     isLoggedIn: {
       reducer(state, action) {
-        const user = action.payload;
-        if (!user) {
-          return {
-            loading: "idle",
-            isAuthenticated: false,
-            user: null,
-          };
-        }
-        return {
-          loading: "done",
-          isAuthenticated: true,
-          user: action.payload,
-        };
+        state.loading = "done";
+        state.isAuthenticated = true;
+        state.user = action.payload._id;
       },
       prepare(user) {
         return {

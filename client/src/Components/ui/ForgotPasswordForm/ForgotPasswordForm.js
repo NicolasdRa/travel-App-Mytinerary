@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import { forgotPassword } from "../../Redux/authSlice";
-import { clearErrors } from "../../Redux/errorsSlice";
 
 import { useStyles } from "./styles";
 import { useForm } from "../../../hooks/useForm";

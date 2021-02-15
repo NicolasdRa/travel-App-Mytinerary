@@ -17,6 +17,7 @@ import { logOutUser } from "../../Redux/authSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { unloadCurrentUser } from "../../Redux/usersSlice";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -31,6 +32,7 @@ export const MenuMobile = () => {
   const handleLogOut = (e) => {
     e.preventDefault();
     dispatch(logOutUser());
+    dispatch(unloadCurrentUser());
     history.push("/");
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectItineraryByTitle } from "../../Redux/itinerariesSlice";

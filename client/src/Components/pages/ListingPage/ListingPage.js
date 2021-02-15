@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { Paper, Tabs, Tab, Typography, Box } from '@material-ui/core'
-import { useSelector } from 'react-redux'
+import React from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import { Paper, Tabs, Tab, Typography, Box } from "@material-ui/core";
+import { useSelector } from "react-redux";
 
-import Cities from '../../ui/Cities/Cities'
-import Itineraries from '../../ui/Itineraries/Itineraries'
-import Activities from '../../ui/Activities/Activities'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import Cities from "../../ui/Cities/Cities";
+import Itineraries from "../../ui/Itineraries/Itineraries";
+import Activities from "../../ui/Activities/Activities";
+import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props
+  const { children, value, index, ...other } = props;
 
   return (
     <Typography
@@ -23,27 +23,27 @@ function TabPanel(props) {
       {value === index && (
         <Box
           style={{
-            padding: '1rem',
+            padding: "1rem",
           }}
           p={3}>
           {children}
         </Box>
       )}
     </Typography>
-  )
+  );
 }
 
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
-}
+};
 
 function a11yProps(index) {
   return {
     id: `nav-tab-${index}`,
-    'aria-controls': `nav-tabpanel-${index}`,
-  }
+    "aria-controls": `nav-tabpanel-${index}`,
+  };
 }
 
 function LinkTab(props) {
@@ -51,34 +51,32 @@ function LinkTab(props) {
     <Tab
       component="a"
       onClick={(event) => {
-        event.preventDefault()
+        event.preventDefault();
       }}
       {...props}
     />
-  )
+  );
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    width: '100%',
-    margin: '0 1rem',
+    display: "flex",
+    flexDirection: "column",
+    flex: "0 0 auto",
+    width: "100%",
+    margin: "0 1rem",
   },
-}))
+}));
 
 const ListingPage = () => {
-  const classes = useStyles()
-  const [value, setValue] = React.useState(0)
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
-
-  // console.log('Listings rendered')
+    setValue(newValue);
+  };
 
   return (
     <Box className={classes.root}>
@@ -104,7 +102,7 @@ const ListingPage = () => {
       </TabPanel>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
-  )
-}
+  );
+};
 
-export default ListingPage
+export default ListingPage;

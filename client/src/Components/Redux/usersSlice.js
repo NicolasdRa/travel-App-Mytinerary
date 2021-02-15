@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  createSelector,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 // THUNKS
@@ -99,6 +103,14 @@ const usersSlice = createSlice({
     },
   },
 });
+
+// SELECTORS
+const selectUser = (state) => state.users.currentUserdata;
+
+export const selectCurrentUser = createSelector(
+  [selectUser],
+  (currentUser) => currentUser,
+);
 
 // Extract and export each action creator by name
 export const { unloadCurrentUser } = usersSlice.actions;

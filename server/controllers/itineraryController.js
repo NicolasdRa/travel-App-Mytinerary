@@ -53,6 +53,22 @@ exports.getItineraryByTitle = asyncErrorCatcher(async (req, res, next) => {
   });
 });
 
+// gets ITINERARY by user
+exports.getItinerariesByUser = asyncErrorCatcher(async (req, res, next) => {
+  const itineraries = await Itinerary.find({ user: req.params.user });
+  res.status(200).json({
+    status: "success",
+    data: { itineraries },
+  });
+  if (!itineraries) {
+    return next(new AppError("No documents found", 404));
+  }
+  res.status(200).json({
+    status: "success",
+    data: itineraries,
+  });
+});
+
 // multer middleware set up - upload images
 const multerStorage = multer.memoryStorage();
 

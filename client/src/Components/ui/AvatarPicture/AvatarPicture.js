@@ -1,7 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
+
 import Avatar from "@material-ui/core/Avatar";
-import { useSelector } from "react-redux";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ImageAvatars() {
+const AvatarPicture = ({ user }) => {
   const classes = useStyles();
 
-  const { userName, img } = useSelector((state) => state.users.currentUser);
+  const { userName, img } = user;
 
   let initials;
   userName ? (initials = userName.charAt(0).toUpperCase()) : (initials = "U");
@@ -32,4 +34,10 @@ export default function ImageAvatars() {
       </Avatar>
     </div>
   );
-}
+};
+
+AvatarPicture.propTypes = {
+  user: PropTypes.object.isRequired,
+};
+
+export default AvatarPicture;

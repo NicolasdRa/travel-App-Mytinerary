@@ -10,6 +10,7 @@ const {
   getCityItineraries,
   resizeCoverImg,
   uploadCoverImg,
+  getItinerariesByUser,
 } = require("../controllers/itineraryController");
 const { protect } = require("../controllers/authController");
 const activityRouter = require("../routes/activityRoutes");
@@ -40,5 +41,6 @@ router
 
 router.route("/city/:city_name").get(getCityItineraries);
 router.route("/title/:title").get(getItineraryByTitle);
+router.route("/user/:userId").get(getItinerariesByUser);
 
 module.exports = router;

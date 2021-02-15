@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -25,10 +25,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { fetchCities } from "../Components/Redux/citiesSlice";
 import { fetchItineraries } from "../Components/Redux/itinerariesSlice";
 import { fetchActivities } from "../Components/Redux/activitiesSlice";
-import {
-  loadCurrentUser,
-  unloadCurrentUser,
-} from "../Components/Redux/usersSlice";
+import { loadCurrentUser } from "../Components/Redux/usersSlice";
 import { isLoggedIn } from "../Components/Redux/authSlice";
 
 const useStyles = makeStyles((theme) => ({
@@ -56,28 +53,16 @@ export const AppRouter = () => {
 
   const dispatch = useDispatch();
 
-  const itineraries = useSelector((state) => state.itineraries.data);
-  const cities = useSelector((state) => state.cities.data);
-  const activities = useSelector((state) => state.activities.data);
-
-  const [loadingData, setLoadingData] = useState(true);
-
-  //logs in user
-  const user = useSelector((state) => state.users.currentUser);
-  useEffect(() => {
-    if (user) dispatch(isLoggedIn(user));
-  }, [dispatch, user]);
-
-  // authenticates user
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   useEffect(() => {
     dispatch(loadCurrentUser());
+  }, [isAuthenticated]);
 
-    // clean-up
-    return () => {
-      dispatch(unloadCurrentUser());
-    };
-  }, [dispatch, isAuthenticated]);
+  //logs in user if GoogleAuth
+  const user = useSelector((state) => state.users.currentUser);
+  useEffect(() => {
+    if (user) dispatch(isLoggedIn(user));
+  }, [user, dispatch]);
 
   // fetches data from DB
   useEffect(() => {
@@ -85,20 +70,6 @@ export const AppRouter = () => {
     dispatch(fetchItineraries());
     dispatch(fetchActivities());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (itineraries && activities && cities) {
-      setLoadingData(false);
-    }
-  }, [itineraries, activities, cities]);
-
-  if (loadingData) {
-    return (
-      <div>
-        <h1>Loading data...</h1>
-      </div>
-    );
-  }
 
   return (
     <Router>
@@ -138,7 +109,7 @@ export const AppRouter = () => {
             />
             <PrivateRoute
               exact
-              path="/profile"
+              path="/user/:userName"
               isAuthenticated={true}
               component={ProfilePage}
             />
