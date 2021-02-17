@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
+import PuffLoader from "react-spinners/PuffLoader";
 import { Avatar, Box, Divider, Typography } from "@material-ui/core";
 
 import CreateItineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
@@ -11,22 +13,31 @@ import Favourite from "../../ui/Favourite/Favourite";
 
 import { useStyles } from "./styles";
 import { selectItinerariesByUser } from "../../Redux/itinerariesSlice";
+import { selectCurrentUser } from "../../Redux/usersSlice";
 
-const Profile = ({ match }) => {
+const Profile = () => {
   const classes = useStyles();
 
-  const user = useSelector((state) => state.users.currentUser);
-  const { userName, firstName, lastName, details, img, coverImg } = user;
+  // sets user to display
+  const user = useSelector(selectCurrentUser);
 
-  const userItineraries = useSelector((state) =>
-    selectItinerariesByUser(state, user._id),
+  const { userName: name } = useParams();
+
+  // selects itineraries by user
+  const itineraries = useSelector((state) =>
+    selectItinerariesByUser(state, name),
   );
 
-  const [data, setData] = useState(null);
+  if (!user || !itineraries) {
+    return (
+      <div className={classes.loader}>
+        <PuffLoader color="red" loading={true} size={80} />
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    setData(userItineraries);
-  }, [userItineraries]);
+  // variables for ui
+  const { userName, firstName, lastName, details, img, coverImg } = user;
 
   return (
     <Box className={classes.container}>
@@ -62,7 +73,7 @@ const Profile = ({ match }) => {
             {details}
           </Typography>
           <Divider className={classes.divider} />
-          <UserItinerariesSmall itineraries={data} />
+          <UserItinerariesSmall itineraries={itineraries} />
           <Divider className={classes.divider} />
         </Box>
         <CreateItineraryForm />

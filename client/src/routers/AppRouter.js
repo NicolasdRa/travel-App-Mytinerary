@@ -56,7 +56,7 @@ export const AppRouter = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   useEffect(() => {
     dispatch(loadCurrentUser());
-  }, [isAuthenticated]);
+  }, [isAuthenticated, dispatch]);
 
   //logs in user if GoogleAuth
   const user = useSelector((state) => state.users.currentUser);

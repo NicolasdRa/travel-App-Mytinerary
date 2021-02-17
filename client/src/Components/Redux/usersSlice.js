@@ -105,7 +105,10 @@ const usersSlice = createSlice({
 });
 
 // SELECTORS
-const selectUser = (state) => state.users.currentUserdata;
+
+const selectUser = (state) => state.users.currentUser;
+
+export const selectUserLoading = (state) => state.users.loading;
 
 export const selectCurrentUser = createSelector(
   [selectUser],

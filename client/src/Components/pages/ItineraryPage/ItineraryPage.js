@@ -29,11 +29,11 @@ const ItineraryPage = () => {
 
   // takes params & chooses itinerary to display
   const { title } = useParams();
-  console.log(title);
+
   const [itinerary] = useSelector((state) =>
     selectItineraryByTitle(state, title),
   );
-  console.log(itinerary);
+
   // variables for ui
   const { _id, city, category, duration, price, img, details } = itinerary;
 

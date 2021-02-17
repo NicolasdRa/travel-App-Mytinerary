@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
-import Slider from '@material-ui/core/Slider'
-import Cropper from 'react-easy-crop'
-import './styles.css'
+import React, { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import Slider from "@material-ui/core/Slider";
+import Cropper from "react-easy-crop";
+import "./styles.css";
 import {
   Box,
   Button,
@@ -13,17 +13,17 @@ import {
   DialogTitle,
   IconButton,
   Typography,
-} from '@material-ui/core'
-import ImageButton from '../ImageButton/ImageButton'
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
+} from "@material-ui/core";
+import ImageButton from "../ImageButton/ImageButton";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
-import { useStyles } from './styles'
-import { useImageCropper } from '../../../hooks/useImageCropper'
+import { useStyles } from "./styles";
+import { useImageCropper } from "../../../hooks/useImageCropper";
 
 const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
-  const classes = useStyles()
-  const [open, setOpen] = useState(false)
-  const { coverImg } = useSelector((state) => state.users.currentUser)
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const { coverImg } = useSelector((state) => state.users.currentUser);
 
   const {
     imageSrc,
@@ -38,37 +38,41 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
     onCropComplete,
     onFileChange,
     clearImage,
-  } = useImageCropper()
+  } = useImageCropper();
 
   // loads image
-  useEffect(() => {
-    loadPreviewFile(croppedImage)
-    return () => {}
-  }, [croppedImage])
+  useEffect(
+    () => {
+      loadPreviewFile(croppedImage);
+      return () => {};
+    },
+    [croppedImage],
+    loadPreviewFile,
+  );
 
   // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef(null)
+  const hiddenInput = useRef(null);
   const handleClick = (e) => {
-    hiddenInput.current.click()
-  }
+    hiddenInput.current.click();
+  };
 
   const handleClickOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-    clearImage()
-  }
+    setOpen(false);
+    clearImage();
+  };
 
   const handleLoadPreviewFile = () => {
-    showCroppedImage()
-    clearImage()
-  }
+    showCroppedImage();
+    clearImage();
+  };
 
   return (
     <div>
-      {origin === 'profileForm' ? (
+      {origin === "profileForm" ? (
         <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
       ) : (
         <Box className={classes.photoIconContainer}>
@@ -147,7 +151,7 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
           ) : (
             <Box className={classes.photoIconContainer}>
               <input
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 id="customFile"
                 onChange={onFileChange}
                 type="file"
@@ -176,8 +180,8 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                 //     origin === 'profileForm' ? handleSubmit : handleLoadImage
                 //   }
                 onClick={() => {
-                  handleLoadPreviewFile()
-                  handleClose()
+                  handleLoadPreviewFile();
+                  handleClose();
                 }}
                 color="secondary">
                 Confirm
@@ -187,11 +191,11 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
 UploadCoverImgForm.propTypes = {
   loadPreviewFile: PropTypes.func.isRequired,
-}
+};
 
-export default UploadCoverImgForm
+export default UploadCoverImgForm;

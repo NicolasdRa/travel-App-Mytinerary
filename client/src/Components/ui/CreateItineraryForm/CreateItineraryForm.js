@@ -33,7 +33,7 @@ const CreateItineraryForm = () => {
   const dispatch = useDispatch();
 
   const cities = useSelector((state) => selectAllCities(state));
-  const { _id } = useSelector((state) => state.users.currentUser);
+  const { _id, userName } = useSelector((state) => state.users.currentUser);
 
   // Component level state - profile info & file
   const [open, setOpen] = useState(false);
@@ -80,7 +80,8 @@ const CreateItineraryForm = () => {
     formData.append("price", price);
     formData.append("duration", duration);
     formData.append("details", details);
-    formData.append("author", _id);
+    formData.append("userId", _id);
+    formData.append("userName", userName);
 
     dispatch(addItinerary(formData));
     setOpen(false);

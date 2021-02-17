@@ -104,6 +104,8 @@ const itinerariesSlice = createSlice({
 // SELECTORS
 const selectItineraries = (state) => state.itineraries.data;
 
+export const selectItinerariesLoading = (state) => state.itineraries.loading;
+
 export const selectAllItineraries = createSelector(
   [selectItineraries],
   (itineraries) => itineraries,
@@ -126,10 +128,10 @@ export const selectItineraryByTitle = createSelector(
 );
 
 export const selectItinerariesByUser = createSelector(
-  [selectAllItineraries, (state, userId) => userId],
-  (itineraries, userId) =>
-    itineraries && userId
-      ? itineraries.filter((itinerary) => itinerary.author === userId)
+  [selectAllItineraries, (state, userName) => userName],
+  (itineraries, userName) =>
+    itineraries && userName
+      ? itineraries.filter((itinerary) => itinerary.userName === userName)
       : [],
 );
 
