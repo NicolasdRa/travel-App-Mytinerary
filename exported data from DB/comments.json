@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "60323e2c6c69846a8c8058e6"
+  },
+  "rating": 5,
+  "summary": "incredible place",
+  "description": "would love to go back as soon as possible",
+  "author": {
+    "$oid": "5e613596f5092119dc828ddb"
+  },
+  "itinerary": {
+    "$oid": "5eb4a2fcc5a057466ca314ae"
+  },
+  "createdAt": {
+    "$date": "2021-02-21T11:04:12.134Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60335f4d59346e53d49ef2e2"
+  },
+  "rating": 5,
+  "summary": "a burst of flavours",
+  "description": "this itinerary is a must if you visit Barcelona",
+  "author": {
+    "$oid": "5e613596f5092119dc828ddb"
+  },
+  "itinerary": {
+    "$oid": "5e134aee1c9d44000043e830"
+  },
+  "createdAt": {
+    "$date": "2021-02-22T07:37:49.743Z"
+  },
+  "__v": 0
+}]

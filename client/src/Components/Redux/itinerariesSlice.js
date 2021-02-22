@@ -20,10 +20,10 @@ export const fetchItineraries = createAsyncThunk(
 
 export const fetchItineraryById = createAsyncThunk(
   "itineraries/fetchItineraryById",
-  async (thunkAPI) => {
+  async (id, thunkAPI) => {
     const res = await axios({
       method: "get",
-      url: "/api/v1/itineraries/:id",
+      url: `/api/v1/itineraries/${id}`,
       responseType: "json",
     });
     return res.data;
@@ -32,10 +32,10 @@ export const fetchItineraryById = createAsyncThunk(
 
 export const fetchItineraryByTitle = createAsyncThunk(
   "itineraries/fetchItineraryByTitle",
-  async (thunkAPI) => {
+  async (title, thunkAPI) => {
     const res = await axios({
       method: "get",
-      url: "/api/v1/itineraries/:title",
+      url: `/api/v1/itineraries/title/${title}`,
       responseType: "json",
     });
     return res.data;
@@ -92,9 +92,28 @@ const itinerariesSlice = createSlice({
     },
     [addItinerary.fulfilled]: (state, action) => {
       const newItinerary = action.payload.data.data;
+      state.loading = "done";
       state.data.unshift(newItinerary);
     },
     [addItinerary.rejected]: (state, action) => {
+      state.loading = "fail";
+      state.error = action.payload;
+    },
+
+    [fetchItineraryByTitle.fulfilled]: (state, action) => {
+      state.loading = "done";
+      state.currentItinerary = action.payload.data;
+    },
+    [fetchItineraryByTitle.rejected]: (state, action) => {
+      state.loading = "fail";
+      state.error = action.payload;
+    },
+
+    [fetchItineraryById.fulfilled]: (state, action) => {
+      state.loading = "done";
+      state.currentItinerary = action.payload.data;
+    },
+    [fetchItineraryById.rejected]: (state, action) => {
       state.loading = "fail";
       state.error = action.payload;
     },
@@ -104,12 +123,21 @@ const itinerariesSlice = createSlice({
 // SELECTORS
 const selectItineraries = (state) => state.itineraries.data;
 
+export const selectCurrentItinerary = (state) =>
+  state.itineraries.currentItinerary;
+
 export const selectItinerariesLoading = (state) => state.itineraries.loading;
 
 export const selectAllItineraries = createSelector(
   [selectItineraries],
   (itineraries) => itineraries,
 );
+
+// FIXME: fix this selector or leave the one above without createSelector
+// export const selectCurrentItinerary = createSelector(
+//   [selectItineraries],
+//   (itineraries) => itineraries.currentItinerary,
+// );
 
 export const selectAllItinerariesForCity = createSelector(
   [selectAllItineraries, (state, city) => city],
@@ -131,7 +159,9 @@ export const selectItinerariesByUser = createSelector(
   [selectAllItineraries, (state, userName) => userName],
   (itineraries, userName) =>
     itineraries && userName
-      ? itineraries.filter((itinerary) => itinerary.userName === userName)
+      ? itineraries.filter(
+          (itinerary) => itinerary.author.userName === userName,
+        )
       : [],
 );
 

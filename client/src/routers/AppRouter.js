@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+import PuffLoader from "react-spinners/PuffLoader";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./PrivateRoute";
 import TopNav from "../Components/ui/TopNav/TopNav";
@@ -41,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
 
+  loader: {
+    display: "flex",
+    margin: "35vh auto",
+  },
+
   bottomNav: {
     position: "fixed",
     top: 0,
@@ -70,6 +76,17 @@ export const AppRouter = () => {
     dispatch(fetchItineraries());
     dispatch(fetchActivities());
   }, [dispatch]);
+
+  // TODO add general loader
+  // TODO redirect when itinerary name is not found in route
+
+  // if (isLoading) {
+  //   return (
+  //     <div className={classes.loader}>
+  //       <PuffLoader color="red" loading={true} size={80} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <Router>

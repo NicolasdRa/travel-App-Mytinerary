@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 
-import { useSelector } from 'react-redux'
-import { selectAllItineraries } from '../../Redux/itinerariesSlice'
+import { useSelector } from "react-redux";
+import { selectAllItineraries } from "../../Redux/itinerariesSlice";
 
 import {
   Grid,
@@ -9,93 +9,91 @@ import {
   TextField,
   Typography,
   Paper,
-} from '@material-ui/core'
+} from "@material-ui/core";
 
-import ItineraryGallery from '../ItineraryGallery/ItineraryGallery'
-import ListingHeader from '../Headers/ListingHeader'
+import ItineraryGallery from "../ItineraryGallery/ItineraryGallery";
+import ListingHeader from "../Headers/ListingHeader";
 
-import { randomNumberGenerator } from '../../utils/utils'
+import { randomNumberGenerator } from "../../utils/utils";
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingBottom: '3rem',
+    paddingBottom: "3rem",
   },
 
   searchbarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     backgroundColor: theme.palette.common.beigeLight,
-    padding: '1rem 1rem',
-    margin: '-.5rem 0 0 0',
+    padding: "1rem 1rem",
+    margin: "-.5rem 0 0 0",
   },
 
   searchBarTitle: {
     color: theme.palette.primary.main,
-    fontSize: '.9rem',
-    fontWeight: '500',
-    textAlign: 'left',
-    margin: '0 0 .5rem .5rem',
+    fontSize: ".9rem",
+    fontWeight: "500",
+    textAlign: "left",
+    margin: "0 0 .5rem .5rem",
   },
 
   searchBar: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: '5px',
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: "5px",
   },
 
   subtitle: {
-    margin: '2rem auto .5rem 1.5rem',
-    textAlign: 'start',
+    margin: "2rem auto .5rem 1.5rem",
+    textAlign: "start",
   },
 
   loader: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '5rem 5rem',
+    display: "flex",
+    flexDirection: "column",
+    margin: "5rem 5rem",
   },
-}))
+}));
 
 const Itineraries = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const itineraries = useSelector(selectAllItineraries)
+  const itineraries = useSelector(selectAllItineraries);
 
-  const [string, setString] = useState('')
-  const [headerItinerary, setHeaderItinerary] = useState(null)
-  const [filteredItineraries, setFilteredItineraries] = useState(null)
+  const [string, setString] = useState("");
+  const [headerItinerary, setHeaderItinerary] = useState(null);
+  const [filteredItineraries, setFilteredItineraries] = useState(null);
 
   useEffect(() => {
     // random cover image
-    const randomNumber = randomNumberGenerator(0, itineraries.length - 1)
+    const randomNumber = randomNumberGenerator(0, itineraries.length - 1);
 
     filteredItineraries === null
       ? setHeaderItinerary(itineraries[randomNumber])
-      : setHeaderItinerary(filteredItineraries[0])
-  }, [itineraries, filteredItineraries])
+      : setHeaderItinerary(filteredItineraries[0]);
+  }, [itineraries, filteredItineraries]);
 
   useEffect(() => {
     // itinerary filter
-    if (string !== '') {
+    if (string !== "") {
       const filtered = itineraries.filter((itinerary) =>
         itinerary.city.toLowerCase().startsWith(string),
-      )
-      setFilteredItineraries(filtered)
+      );
+      setFilteredItineraries(filtered);
     }
     // clean up: when string is empty
     return () => {
-      setFilteredItineraries(null)
-    }
-  }, [itineraries, string])
+      setFilteredItineraries(null);
+    };
+  }, [itineraries, string]);
 
   const handleChange = (e) => {
     // updates string in state
-    setString(e.target.value.toLowerCase())
-  }
-
-  console.log('Itineraries Tab Rendered')
+    setString(e.target.value.toLowerCase());
+  };
 
   if (!itineraries) {
     return (
@@ -108,7 +106,7 @@ const Itineraries = () => {
         <Typography>Loading itineraries...</Typography>
         <CircularProgress color="secondary" />
       </Grid>
-    )
+    );
   }
 
   return (
@@ -142,7 +140,7 @@ const Itineraries = () => {
       </Grid>
       <Grid container item xs={12}>
         <Typography variant="subtitle2" className={classes.subtitle}>
-          {string === '' ? 'Most popular Itineraries' : 'Search results'}
+          {string === "" ? "Most popular Itineraries" : "Search results"}
         </Typography>
         <ItineraryGallery
           string={string}
@@ -150,7 +148,7 @@ const Itineraries = () => {
         />
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default Itineraries
+export default Itineraries;

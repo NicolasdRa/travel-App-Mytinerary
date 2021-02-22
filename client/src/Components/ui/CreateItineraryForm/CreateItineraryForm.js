@@ -80,8 +80,9 @@ const CreateItineraryForm = () => {
     formData.append("price", price);
     formData.append("duration", duration);
     formData.append("details", details);
-    formData.append("userId", _id);
-    formData.append("userName", userName);
+    formData.append("author", _id);
+    // formData.append("userId", _id);
+    // formData.append("userName", userName);
 
     dispatch(addItinerary(formData));
     setOpen(false);

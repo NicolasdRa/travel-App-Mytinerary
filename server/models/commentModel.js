@@ -1,16 +1,59 @@
 const mongoose = require('mongoose')
 
 // schema
-const commentSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: [true, 'A comment must have a text'],
-    maxlength: [600, 'A tour name must have a maximum of 40 characters']
+const commentSchema = new mongoose.Schema(
+  {
+    rating: {
+      type: Number,
+      required: [true, 'A comment must have a rating'],
+    },
+
+    summary: {
+      type: String,
+      required: [true, 'A comment must have a summary'],
+      maxlength: [60, 'A tour name must have a maximum of 60 characters'],
+    },
+
+    description: {
+      type: String,
+      required: [true, 'A comment must have a description'],
+      maxlength: [600, 'A tour name must have a maximum of 600 characters'],
+    },
+
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'A comment must belong to an author'],
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    itinerary: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Itinerary',
+      required: [true, 'A comment must belong to an itinerary'],
+    },
   },
-  city: [{ type: mongoose.Schema.ObjectId, ref: 'City' }],
-  itinerary: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
-  activity: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }],
-  author: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
+  // options object for virtual properties
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+)
+
+// TODO fix bug select doesnt choose the specified fields in itinerary -- due to is having an array as field?
+
+// query middleware to populate referenced fields
+commentSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'author',
+    select: 'userName img _id',
+  })
+  this.populate({
+    path: 'itinerary',
+    select: '_id title',
+  })
+  next()
 })
 
 // Model

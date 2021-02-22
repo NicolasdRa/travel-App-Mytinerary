@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
+import PuffLoader from "react-spinners/PuffLoader";
 import { useSelector, useDispatch } from "react-redux";
-import { selectItineraryByTitle } from "../../Redux/itinerariesSlice";
-import { selectActivitiesForItinerary } from "../../Redux/activitiesSlice";
+import {
+  fetchItineraryByTitle,
+  fetchItineraryById,
+  selectItineraryByTitle,
+  selectCurrentItinerary,
+} from "../../Redux/itinerariesSlice";
 
 import ImageHeader from "../../ui/Headers/ImageHeader";
 import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
@@ -13,48 +18,80 @@ import Favourite from "../../ui/Favourite/Favourite";
 import { Avatar, Box, Button, Divider, Typography } from "@material-ui/core";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import EuroIcon from "@material-ui/icons/Euro";
-import CreateIcon from "@material-ui/icons/Create";
 
 import { fetchFavourites } from "../../Redux/favouritesSlice";
+import { fetchCommentsForItinerary } from "../../Redux/commentsSlice";
 
 import { useStyles } from "./styles";
+import CreateCommentForm from "../../ui/CreateCommentForm/CreateCommentForm";
+import { selectCurrentUser } from "../../Redux/usersSlice";
+import { CommentCard } from "../../ui/CommentCard/CommentCard";
+
+// TODO load comments in the bottom div
+// TODO continue brushing up DB
+// TODO fix cover img not loading
+// TODO edit itinerary functionality
+// TODO add view reviews
+// TODO add delete itinerary btn and functionality
 
 const ItineraryPage = () => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const favouriteCount = useSelector((state) => state.favourites.results);
+  const currentUser = useSelector(selectCurrentUser);
 
   // takes params & chooses itinerary to display
-  const { title } = useParams();
+  const { title: itineraryTitle } = useParams();
 
-  const [itinerary] = useSelector((state) =>
-    selectItineraryByTitle(state, title),
-  );
+  // fetches data from DB
+  useEffect(() => {
+    dispatch(fetchItineraryByTitle(itineraryTitle));
+  }, []);
+
+  const itinerary = useSelector(selectCurrentItinerary);
+
+  // //fetches favourites from DB
+  // useEffect(() => {
+  //   dispatch(fetchFavourites(itinerary.id));
+  // }, [itinerary, dispatch]);
+
+  // // updates count
+  // const [count, setCount] = useState(0);
+  // useEffect(() => {
+  //   return () => setCount(favouriteCount);
+  // }, [favouriteCount]);
+
+  if (!itinerary) {
+    return (
+      <div className={classes.loader}>
+        <PuffLoader color="red" loading={true} size={80} />
+      </div>
+    );
+  }
 
   // variables for ui
-  const { _id, city, category, duration, price, img, details } = itinerary;
+  const {
+    _id,
+    title,
+    city,
+    category,
+    duration,
+    price,
+    img,
+    details,
+    activities,
+    author: { userName: authorName } = "",
+    author: { img: authorImg } = "",
+  } = itinerary;
 
-  const activities = useSelector((state) =>
-    selectActivitiesForItinerary(state, _id),
-  );
-
-  //fetches favourites from DB
-  useEffect(() => {
-    dispatch(fetchFavourites(itinerary.id));
-  }, [itinerary, dispatch]);
-
-  // updates count
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    return () => setCount(favouriteCount);
-  }, [favouriteCount]);
+  // variable to pass in create comment form
+  const userId = currentUser._id;
 
   return (
     <Box className={classes.container}>
       <ImageHeader img={img} className={classes.header} />
+
       <Box className={classes.content}>
         <Typography className={classes.overline} variant="overline">
           {city} - {category}
@@ -64,7 +101,7 @@ const ItineraryPage = () => {
             <Typography variant="h5">{title}</Typography>
           </Box>
           <Box className={classes.likes}>
-            <Favourite data={count} />
+            {/* <Favourite data={count} /> */}
           </Box>
         </Box>
         <Box className={classes.extra_info}>
@@ -72,24 +109,23 @@ const ItineraryPage = () => {
             <Avatar
               // aria-label='recipe'
               // variant='rounded'
-              className={classes.avatar}>
-              {/* (get from author_id) */}
-              Author Name
-            </Avatar>
+              alt={authorName}
+              src={authorImg}
+              className={classes.avatar}
+            />
             <Typography
               variant="body2"
               color="textSecondary"
               component="p"
               className={classes.author_name}>
-              {/* ..still to develop this variable */}
-              by John Doe
+              {authorName ? `by ${authorName}` : "by anonymous"}
             </Typography>
           </Box>
           <Box className={classes.price_time}>
             <Box className={classes.duration}>
               <AccessTimeIcon className={classes.icons} />
               <Typography variant="body2" color="textSecondary" component="p">
-                {duration}hs
+                {duration}
               </Typography>
             </Box>
             <Box className={classes.price}>
@@ -105,41 +141,36 @@ const ItineraryPage = () => {
           <Typography variant="body2" className={classes.text}>
             {details}
           </Typography>
+          <CreateCommentForm userId={userId} itineraryId={_id} />
           <Divider className={classes.divider} />
           <Box className={classes.gallery}>
-            {activities.length > 0 && (
-              <Typography className={classes.subtitle}>
-                Available activities for {title}
-              </Typography>
-            )}
+            <Typography variant="body2" className={classes.subtitle}>
+              {activities.length > 0
+                ? "Available activities"
+                : "No activities found"}{" "}
+              for {title}
+            </Typography>
+
             <ActivityGallerySmall activities={activities} />
           </Box>
 
           <Divider className={classes.divider} />
           <Box className={classes.comment_btns}>
-            <Button
+            {/* <Button
               size="small"
               color="secondary"
               component={Link}
               to={"/activitypage/" + title}
               className={classes.view_btn}>
               View Reviews (54)
-            </Button>
-            <Box className={classes.write_btn}>
-              <Button
-                size="small"
-                color="secondary"
-                component={Link}
-                to={"/activitypage/" + title}
-                className={classes.text_btn}>
-                Leave your comment
-              </Button>
-              <CreateIcon className={classes.write_icon} />
-            </Box>
+            </Button> */}
+            {itinerary.comments.map((comment) => (
+              <CommentCard key={comment._id} comment={comment} />
+            ))}
           </Box>
           <Divider className={classes.divider} />
         </Box>
-        {isAuthenticated ? <CreateIitineraryForm /> : null}
+        {isAuthenticated && <CreateIitineraryForm />}
       </Box>
     </Box>
   );

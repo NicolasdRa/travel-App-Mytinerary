@@ -84,6 +84,8 @@ exports.getAll = (Model) =>
     // creates filter object for nested routes
     let filter = {};
     if (req.params.itineraryId) filter = { itinerary: req.params.itineraryId };
+    if (req.params.itineraryTitle)
+      filter = { itinerary: req.params.itineraryTitle };
     if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIfeatures(Model.find(filter), req.query)

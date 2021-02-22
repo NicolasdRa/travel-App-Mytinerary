@@ -1,5 +1,5 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   Button,
@@ -9,39 +9,39 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from '@material-ui/core'
-import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
+} from "@material-ui/core";
+import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
 
-import { signupUser } from '../../Redux/authSlice'
-import { openSignUpForm, closeSignUpForm } from '../../Redux/formsSlice'
+import { signupUser } from "../../Redux/authSlice";
+import { openSignUpForm, closeSignUpForm } from "../../Redux/formsSlice";
 
-import { useForm } from '../../../hooks/useForm'
-import { useStyles } from './styles'
+import { useForm } from "../../../hooks/useForm";
+import { useStyles } from "./styles";
 
 const Signup = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
-    userName: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  })
+    userName: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
 
   // Open form state
-  const open = useSelector((state) => state.forms.openSignUpForm)
-  const handleOpenForm = () => dispatch(openSignUpForm())
-  const handleCloseForm = () => dispatch(closeSignUpForm())
+  const open = useSelector((state) => state.forms.openSignUpForm);
+  const handleOpenForm = () => dispatch(openSignUpForm());
+  const handleCloseForm = () => dispatch(closeSignUpForm());
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    dispatch(signupUser(formValues))
-    reset()
-    handleCloseForm()
-  }
+    dispatch(signupUser(formValues));
+    reset();
+    handleCloseForm();
+  };
 
   return (
     <div>
@@ -52,7 +52,7 @@ const Signup = () => {
         open={open}
         onClose={handleCloseForm}
         aria-labelledby="form-dialog-title">
-        <form onSubmit={handleSubmit}>
+        <form>
           <DialogTitle
             id="form-dialog-title"
             disableTypography
@@ -144,7 +144,7 @@ const Signup = () => {
         </form>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

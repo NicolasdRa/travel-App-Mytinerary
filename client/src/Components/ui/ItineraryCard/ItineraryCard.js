@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -14,14 +14,14 @@ import {
   Typography,
   Grid,
   CircularProgress,
-} from '@material-ui/core'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import EuroIcon from '@material-ui/icons/Euro'
-import { useStyles } from './styles'
+} from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import EuroIcon from "@material-ui/icons/Euro";
+import { useStyles } from "./styles";
 
-const ItineraryCard = ({ city, title, likes, duration, price, img }) => {
-  const classes = useStyles()
+const ItineraryCard = ({ _id, city, title, likes, duration, price, img }) => {
+  const classes = useStyles();
 
   if (!img) {
     return (
@@ -34,7 +34,7 @@ const ItineraryCard = ({ city, title, likes, duration, price, img }) => {
         <Typography>Loading itinearies...</Typography>
         <CircularProgress color="secondary" />
       </Grid>
-    )
+    );
   }
 
   return (
@@ -97,17 +97,17 @@ const ItineraryCard = ({ city, title, likes, duration, price, img }) => {
           size="small"
           color="primary"
           component={Link}
-          to={`./itinerarypage/${title}`}
+          to={`/itinerarypage/${_id}`}
           className={classes.textBtn}>
           View more
         </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
 ItineraryCard.propTypes = {
   itinerary: PropTypes.object.isRequired,
-}
+};
 
-export default ItineraryCard
+export default ItineraryCard;

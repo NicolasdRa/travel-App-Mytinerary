@@ -52,7 +52,7 @@ const Login = () => {
         open={open}
         onClose={handleCloseForm}
         aria-labelledby="form-dialog-title">
-        <form onSubmit={handleSubmit}>
+        <form>
           <DialogTitle
             id="form-dialog-title"
             disableTypography

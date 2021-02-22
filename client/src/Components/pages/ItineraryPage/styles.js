@@ -1,6 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
+  loader: {
+    display: "flex",
+    margin: "35vh auto",
+  },
+
   container: {
     display: "flex",
     flexDirection: "column",
@@ -47,7 +52,7 @@ export const useStyles = makeStyles((theme) => ({
   extra_info: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "0 2rem",
+    padding: "0 1rem",
   },
 
   user_info: {
@@ -57,8 +62,8 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   avatar: {
-    height: "2rem",
-    width: "2rem",
+    height: "1.5rem",
+    width: "1.5rem",
     marginRight: ".5rem",
   },
 
@@ -67,6 +72,12 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     alignItems: "center",
     padding: "1rem 0",
+  },
+
+  icons: {
+    fontSize: "1rem",
+    marginRight: ".2rem",
+    color: "grey",
   },
 
   duration: {
@@ -103,12 +114,15 @@ export const useStyles = makeStyles((theme) => ({
     flex: "0 0 auto",
   },
 
+  subtitle: {
+    display: "flex",
+    justifySelf: "start",
+    marginLeft: "1rem",
+  },
   comment_btns: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: ".5rem 1.5rem",
+    marginLeft: "1rem",
   },
 
   view_btn: {
@@ -116,13 +130,6 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   text_btn: {
-    alignItems: "center",
-  },
-
-  write_btn: {
-    display: "flex",
-    color: "grey",
-    paddingLeft: ".5rem",
     alignItems: "center",
   },
 

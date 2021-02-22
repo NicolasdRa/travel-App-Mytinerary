@@ -38,6 +38,7 @@ export const updateUserProfile = createAsyncThunk(
   },
 );
 
+// update profile cover image
 export const updateProfileCoverImage = createAsyncThunk(
   "users/updateProfileCoverImage",
   async (formData) => {
@@ -59,6 +60,18 @@ export const updateProfileCoverImage = createAsyncThunk(
     return res.data;
   },
 );
+
+// get user By Id
+export const getUserById = createAsyncThunk("users/getUserById", async () => {
+  const res = await axios({
+    method: "GET",
+    url: `/api/v1/users/:id`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
+});
 
 // SLICE
 const usersSlice = createSlice({

@@ -20,15 +20,16 @@ const Profile = () => {
 
   // sets user to display
   const user = useSelector(selectCurrentUser);
-
-  const { userName: name } = useParams();
+  const { userName: nameParam } = useParams();
 
   // selects itineraries by user
   const itineraries = useSelector((state) =>
-    selectItinerariesByUser(state, name),
+    selectItinerariesByUser(state, nameParam),
   );
 
-  if (!user || !itineraries) {
+  // TODO load favourites
+
+  if (!user) {
     return (
       <div className={classes.loader}>
         <PuffLoader color="red" loading={true} size={80} />
