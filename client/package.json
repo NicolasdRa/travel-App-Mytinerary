@@ -15,6 +15,7 @@
     "get-orientation": "^1.1.2",
     "jwt-decode": "^2.2.0",
     "mdi-material-ui": "^6.21.0",
+    "moment": "^2.29.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-easy-crop": "^3.3.1",
@@ -64,5 +65,11 @@
       "enzyme-to-json/serializer"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  }
 }

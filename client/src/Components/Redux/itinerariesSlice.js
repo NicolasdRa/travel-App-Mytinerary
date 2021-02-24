@@ -75,7 +75,18 @@ const itinerariesSlice = createSlice({
     deleteItinerary(state, action) {
       return state.filter((itinerary, i) => i !== action.payload.index);
     },
+    updateItineraryComments: {
+      reducer(state, action) {
+        state.currentItinerary.comments.push(action.payload);
+      },
+      prepare(comment) {
+        return {
+          payload: comment,
+        };
+      },
+    },
   },
+
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [fetchItineraries.fulfilled]: (state, action) => {
@@ -166,7 +177,10 @@ export const selectItinerariesByUser = createSelector(
 );
 
 // Extract and export each action creator by name
-export const { deleteItinerary } = itinerariesSlice.actions;
+export const {
+  deleteItinerary,
+  updateItineraryComments,
+} = itinerariesSlice.actions;
 
 // // Export the reducer as a default export
 export default itinerariesSlice.reducer;

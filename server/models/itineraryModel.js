@@ -121,17 +121,7 @@ const itinerarySchema = new mongoose.Schema(
   }
 )
 
-itinerarySchema.virtual('testVirtual').get(function () {
-  return this.ratingAvg / 2
-})
-
 // Virtual populate (to populate comments which in turn hold the reference to itineraries)
-// itinerarySchema.virtual('comments', {
-//   ref: 'Comment',
-//   foreignField: 'itinerary',
-//   localField: 'id',
-// })
-
 itinerarySchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',

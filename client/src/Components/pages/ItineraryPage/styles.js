@@ -119,10 +119,15 @@ export const useStyles = makeStyles((theme) => ({
     justifySelf: "start",
     marginLeft: "1rem",
   },
-  comment_btns: {
+  viewComments: {
     display: "flex",
     alignItems: "center",
     marginLeft: "1rem",
+  },
+
+  comments: {
+    display: "flex",
+    flexDirection: "column",
   },
 
   view_btn: {

@@ -41,7 +41,7 @@ const commentSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
 
-// TODO fix bug select doesnt choose the specified fields in itinerary -- due to is having an array as field?
+// FIXME: select doesnt choose the specified fields in itinerary -- due to is having an array as field?
 
 // query middleware to populate referenced fields
 commentSchema.pre(/^find/, function (next) {

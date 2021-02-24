@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import PuffLoader from "react-spinners/PuffLoader";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchItineraryByTitle,
-  fetchItineraryById,
-  selectItineraryByTitle,
   selectCurrentItinerary,
 } from "../../Redux/itinerariesSlice";
 
@@ -20,16 +18,13 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import EuroIcon from "@material-ui/icons/Euro";
 
 import { fetchFavourites } from "../../Redux/favouritesSlice";
-import { fetchCommentsForItinerary } from "../../Redux/commentsSlice";
 
 import { useStyles } from "./styles";
 import CreateCommentForm from "../../ui/CreateCommentForm/CreateCommentForm";
 import { selectCurrentUser } from "../../Redux/usersSlice";
 import { CommentCard } from "../../ui/CommentCard/CommentCard";
 
-// TODO load comments in the bottom div
 // TODO continue brushing up DB
-// TODO fix cover img not loading
 // TODO edit itinerary functionality
 // TODO add view reviews
 // TODO add delete itinerary btn and functionality
@@ -47,6 +42,7 @@ const ItineraryPage = () => {
   // fetches data from DB
   useEffect(() => {
     dispatch(fetchItineraryByTitle(itineraryTitle));
+    // loads itinerary comments to redux comment resource
   }, []);
 
   const itinerary = useSelector(selectCurrentItinerary);

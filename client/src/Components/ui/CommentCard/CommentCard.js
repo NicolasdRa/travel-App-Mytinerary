@@ -1,66 +1,79 @@
-import React from "react";
+import React from 'react'
+import moment from 'moment'
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  CardHeader,
+  Typography,
+} from '@material-ui/core'
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Rating from '@material-ui/lab/Rating'
 
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
+import { useStyles } from './styles'
 
 export const CommentCard = ({ comment }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  console.log(comment);
   const {
     rating,
     summary,
     description,
     author: { userName: authorName },
-  } = comment;
+    author: { img: authorImg },
+    createdAt,
+  } = comment
 
-  console.log(rating, summary, description, authorName);
+  const date = moment(createdAt).startOf('day').fromNow()
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
+    <Card raised={false} className={classes.card}>
+      <CardContent className={classes.userInfo}>
+        <Avatar
+          aria-label="recipe"
+          alt={authorName}
+          src={authorImg}
+          className={classes.avatar}
+        ></Avatar>
         <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom>
-          {rating}
-        </Typography>
-        <Typography variant="h5" component="h2">
-          {summary}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
+          className={classes.userName}
+          color="primary"
+          variant="caption"
+        >
           {authorName}
         </Typography>
-        <Typography variant="body2" component="p">
+      </CardContent>
+      <CardContent className={classes.content}>
+        <Typography className={classes.summary} variant="body2" color="primary">
+          {summary}
+        </Typography>
+        <Box className={classes.ratingContainer}>
+          <Rating
+            name="read-only"
+            value={rating}
+            precision={0.5}
+            size="small"
+            readOnly
+            className={classes.rating}
+          />
+          <Typography
+            className={classes.number}
+            color="primary"
+            variant="caption"
+          >
+            ({rating})
+          </Typography>
+          <Typography variant="caption" className={classes.date}>
+            {date}
+          </Typography>
+        </Box>
+        <Typography variant="body2" className={classes.description}>
           {description}
-          <br />
-          {'"a benevolent smile"'}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
+      {/* <Divider /> */}
     </Card>
-  );
-};
+  )
+}

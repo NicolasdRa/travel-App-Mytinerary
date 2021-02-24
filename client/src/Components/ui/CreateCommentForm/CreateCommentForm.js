@@ -21,6 +21,7 @@ import { useStyles } from "./styles";
 import { useForm } from "../../../hooks/useForm";
 import { selectCurrentUser } from "../../Redux/usersSlice";
 import { addComment } from "../../Redux/commentsSlice";
+import { updateItineraryComments } from "../../Redux/itinerariesSlice";
 
 const CreateCommentForm = ({ userId, itineraryId }) => {
   const classes = useStyles();
@@ -43,6 +44,7 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
     console.log("comment created", formValues);
 
     dispatch(addComment(formValues));
+    dispatch(updateItineraryComments(formValues));
 
     setOpenSnackBar(true);
     setTimeout(() => {
