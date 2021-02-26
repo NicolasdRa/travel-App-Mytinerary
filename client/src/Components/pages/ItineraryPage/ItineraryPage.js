@@ -1,51 +1,61 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
-import PuffLoader from "react-spinners/PuffLoader";
-import { useSelector, useDispatch } from "react-redux";
+import PuffLoader from 'react-spinners/PuffLoader'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchItineraryByTitle,
   selectCurrentItinerary,
-} from "../../Redux/itinerariesSlice";
+} from '../../Redux/itinerariesSlice'
 
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
-import ActivityGallerySmall from "../../ui/Activities/ActivityGallerySmall";
-import Favourite from "../../ui/Favourite/Favourite";
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
+import Favourite from '../../ui/Favourite/Favourite'
 
-import { Avatar, Box, Button, Divider, Typography } from "@material-ui/core";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import EuroIcon from "@material-ui/icons/Euro";
+import {
+  Avatar,
+  Box,
+  Collapse,
+  Divider,
+  IconButton,
+  Typography,
+} from '@material-ui/core'
+import Rating from '@material-ui/lab/Rating'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import EuroIcon from '@material-ui/icons/Euro'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import { fetchFavourites } from "../../Redux/favouritesSlice";
+import { fetchFavourites } from '../../Redux/favouritesSlice'
 
-import { useStyles } from "./styles";
-import CreateCommentForm from "../../ui/CreateCommentForm/CreateCommentForm";
-import { selectCurrentUser } from "../../Redux/usersSlice";
-import { CommentCard } from "../../ui/CommentCard/CommentCard";
+import { useStyles } from './styles'
+import clsx from 'clsx'
 
-// TODO continue brushing up DB
-// TODO edit itinerary functionality
-// TODO add view reviews
-// TODO add delete itinerary btn and functionality
+import CreateCommentForm from '../../ui/CreateCommentForm/CreateCommentForm'
+import { selectCurrentUser } from '../../Redux/usersSlice'
+import { CommentCard } from '../../ui/CommentCard/CommentCard'
+
+// TODO: itinerary Reducer action to keep track of likes
 
 const ItineraryPage = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const currentUser = useSelector(selectCurrentUser);
+  const [expanded, setExpanded] = React.useState(false)
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const currentUser = useSelector(selectCurrentUser)
 
   // takes params & chooses itinerary to display
-  const { title: itineraryTitle } = useParams();
+  const { title: itineraryTitle } = useParams()
 
   // fetches data from DB
   useEffect(() => {
-    dispatch(fetchItineraryByTitle(itineraryTitle));
+    dispatch(fetchItineraryByTitle(itineraryTitle))
     // loads itinerary comments to redux comment resource
-  }, []);
+  }, [])
 
-  const itinerary = useSelector(selectCurrentItinerary);
+  const itinerary = useSelector(selectCurrentItinerary)
 
   // //fetches favourites from DB
   // useEffect(() => {
@@ -58,12 +68,17 @@ const ItineraryPage = () => {
   //   return () => setCount(favouriteCount);
   // }, [favouriteCount]);
 
+  // handles expand reviews
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
+  }
+
   if (!itinerary) {
     return (
       <div className={classes.loader}>
         <PuffLoader color="red" loading={true} size={80} />
       </div>
-    );
+    )
   }
 
   // variables for ui
@@ -77,12 +92,15 @@ const ItineraryPage = () => {
     img,
     details,
     activities,
-    author: { userName: authorName } = "",
-    author: { img: authorImg } = "",
-  } = itinerary;
+    ratingAvg,
+    likes,
+    author: { userName: authorName } = '',
+    author: { img: authorImg } = '',
+    comments,
+  } = itinerary
 
   // variable to pass in create comment form
-  const userId = currentUser._id;
+  const userId = currentUser._id
 
   return (
     <Box className={classes.container}>
@@ -97,8 +115,29 @@ const ItineraryPage = () => {
             <Typography variant="h5">{title}</Typography>
           </Box>
           <Box className={classes.likes}>
-            {/* <Favourite data={count} /> */}
+            <Favourite data={likes} />
           </Box>
+        </Box>
+        <Box
+          component="fieldset"
+          borderColor="transparent"
+          className={classes.ratingContainer}
+        >
+          <Rating
+            name="read-only"
+            size="small"
+            precision={0.5}
+            value={ratingAvg}
+            readOnly
+            className={classes.rating}
+          />
+          <Typography
+            className={classes.ratingNumber}
+            color="primary"
+            variant="body2"
+          >
+            ({ratingAvg})
+          </Typography>
         </Box>
         <Box className={classes.extra_info}>
           <Box className={classes.user_info}>
@@ -113,8 +152,9 @@ const ItineraryPage = () => {
               variant="body2"
               color="textSecondary"
               component="p"
-              className={classes.author_name}>
-              {authorName ? `by ${authorName}` : "by anonymous"}
+              className={classes.author_name}
+            >
+              {authorName ? `by ${authorName}` : 'by anonymous'}
             </Typography>
           </Box>
           <Box className={classes.price_time}>
@@ -137,13 +177,12 @@ const ItineraryPage = () => {
           <Typography variant="body2" className={classes.text}>
             {details}
           </Typography>
-          <CreateCommentForm userId={userId} itineraryId={_id} />
           <Divider className={classes.divider} />
           <Box className={classes.gallery}>
             <Typography variant="body2" className={classes.subtitle}>
               {activities.length > 0
-                ? "Available activities"
-                : "No activities found"}{" "}
+                ? 'Available activities'
+                : 'No activities found'}{' '}
               for {title}
             </Typography>
 
@@ -151,25 +190,40 @@ const ItineraryPage = () => {
           </Box>
 
           <Divider className={classes.divider} />
-          <Box className={classes.comment_btns}>
-            {/* <Button
-              size="small"
-              color="secondary"
-              component={Link}
-              to={"/activitypage/" + title}
-              className={classes.view_btn}>
-              View Reviews (54)
-            </Button> */}
+          <Box className={classes.reviewContainer}>
+            <Box className={classes.viewReviews}>
+              <Typography variant="body2" className={classes.reviewText}>
+                View all Reviews ({comments.length})
+              </Typography>
+              <IconButton
+                style={{ padding: 0, marginRight: 'auto' }}
+                className={clsx(classes.expand, {
+                  [classes.expandOpen]: expanded,
+                })}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </Box>
+            <CreateCommentForm
+              userId={userId}
+              itineraryId={_id}
+              className={classes.postReview}
+            />
+          </Box>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
             {itinerary.comments.map((comment) => (
               <CommentCard key={comment._id} comment={comment} />
             ))}
-          </Box>
+          </Collapse>
           <Divider className={classes.divider} />
         </Box>
         {isAuthenticated && <CreateIitineraryForm />}
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default ItineraryPage;
+export default ItineraryPage

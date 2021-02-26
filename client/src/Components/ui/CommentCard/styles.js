@@ -3,45 +3,59 @@ import { makeStyles } from '@material-ui/core/styles'
 export const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     boxShadow: 'none',
   },
 
-  userInfo: {
-    display: 'flex',
+  avatar: {
+    height: '2rem',
+    width: '2rem',
+    margin: 'auto 0',
+  },
+
+  userInfo: { display: 'flex', flexDirection: 'row' },
+
+  header: {
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     flexGrow: 1,
-  },
-
-  avatar: {
-    height: '1.5rem',
-    width: '1.5rem',
-    marginBottom: '.5rem',
-  },
-
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 2,
-    padding: '.5rem .5rem 0 .5rem',
-  },
-
-  summary: {
+    marginLeft: '1rem',
     textAlign: 'start',
+  },
+
+  userName: {
+    marginLeft: '.3rem',
     fontWeight: 'bolder',
   },
 
   ratingContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: '1rem',
   },
 
   rating: {
     marginRight: '.5rem',
     textAlign: 'start',
+  },
+
+  date: {
+    margin: '0 .5rem 0 auto',
+    alignSelf: 'flex-end',
+    textAlign: 'end',
+  },
+
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 2,
+    paddingTop: '0',
+    paddingBottom: '16px !important',
+  },
+
+  summary: {
+    textAlign: 'start',
+    fontWeight: 'bolder',
   },
 
   description: {
@@ -51,11 +65,5 @@ export const useStyles = makeStyles((theme) => ({
   actions: {
     display: 'flex',
     justifyContent: 'flex-end',
-  },
-
-  date: {
-    margin: '0 .5rem 0 auto',
-    alignSelf: 'flex-end',
-    textAlign: 'end',
   },
 }))

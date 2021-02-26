@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux'
 import {
   Box,
   Button,
@@ -12,87 +12,91 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from "@material-ui/core";
-import Rating from "@material-ui/lab/Rating";
-import CreateIcon from "@material-ui/icons/Create";
-import { forgotPassword } from "../../Redux/authSlice";
+} from '@material-ui/core'
+import Rating from '@material-ui/lab/Rating'
+import CreateIcon from '@material-ui/icons/Create'
+import { forgotPassword } from '../../Redux/authSlice'
 
-import { useStyles } from "./styles";
-import { useForm } from "../../../hooks/useForm";
-import { selectCurrentUser } from "../../Redux/usersSlice";
-import { addComment } from "../../Redux/commentsSlice";
-import { updateItineraryComments } from "../../Redux/itinerariesSlice";
+import { useStyles } from './styles'
+import { useForm } from '../../../hooks/useForm'
+import { selectCurrentUser } from '../../Redux/usersSlice'
+import { addComment } from '../../Redux/commentsSlice'
+import { updateItineraryComments } from '../../Redux/itinerariesSlice'
 
 const CreateCommentForm = ({ userId, itineraryId }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const [open, setOpen] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [openSnackBar, setOpenSnackBar] = useState(false)
 
   const [formValues, handleInputChange] = useForm({
-    rating: "",
-    summary: "",
-    description: "",
+    rating: '',
+    summary: '',
+    description: '',
     author: userId,
     itinerary: itineraryId,
-  });
+  })
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    console.log("comment created", formValues);
+    console.log('comment created', formValues)
 
-    dispatch(addComment(formValues));
-    dispatch(updateItineraryComments(formValues));
+    dispatch(addComment(formValues))
+    dispatch(updateItineraryComments(formValues))
 
-    setOpenSnackBar(true);
+    setOpenSnackBar(true)
     setTimeout(() => {
-      setOpenSnackBar(false);
-      handleClose();
-    }, 2500);
-  };
+      setOpenSnackBar(false)
+      handleClose()
+    }, 2500)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   const handleCloseSnackBar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
-    setOpenSnackBar(false);
-  };
+    setOpenSnackBar(false)
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   return (
     <div className={classes.btnContainer}>
       <Button
         className={classes.btn}
         color="secondary"
-        onClick={handleClickOpen}>
-        Leave your Comment
+        onClick={handleClickOpen}
+      >
+        Post Review
         <CreateIcon color="secondary" className={classes.createIcon} />
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.modal}>
+        className={classes.modal}
+      >
         <form>
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="h6">Share your experience</Typography>
           </DialogTitle>
           <DialogTitle
             id="form-dialog-subtitle"
             disableTypography
-            className={classes.subtitle}>
+            className={classes.subtitle}
+          >
             <Typography variant="body2">
               Help the community with your review
             </Typography>
@@ -140,8 +144,8 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
             />
             <Snackbar
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
+                vertical: 'top',
+                horizontal: 'center',
               }}
               open={openSnackBar}
               autoHideDuration={4000}
@@ -160,13 +164,13 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
 CreateCommentForm.propTypes = {
   userId: PropTypes.string.isRequired,
   city: PropTypes.string.isRequired,
   itinerary: PropTypes.string.isRequired,
-};
+}
 
-export default CreateCommentForm;
+export default CreateCommentForm

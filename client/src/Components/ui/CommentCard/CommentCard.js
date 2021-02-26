@@ -36,39 +36,42 @@ export const CommentCard = ({ comment }) => {
           alt={authorName}
           src={authorImg}
           className={classes.avatar}
-        ></Avatar>
-        <Typography
-          className={classes.userName}
-          color="primary"
-          variant="caption"
-        >
-          {authorName}
-        </Typography>
+        />
+        <Box className={classes.header}>
+          <Typography
+            className={classes.userName}
+            color="primary"
+            variant="body2"
+          >
+            {authorName}
+          </Typography>
+          <Box className={classes.ratingContainer}>
+            <Rating
+              name="read-only"
+              value={rating}
+              precision={0.5}
+              size="small"
+              readOnly
+              className={classes.rating}
+            />
+            <Typography
+              className={classes.number}
+              color="primary"
+              variant="caption"
+            >
+              ({rating})
+            </Typography>
+            <Typography variant="caption" className={classes.date}>
+              {date}
+            </Typography>
+          </Box>
+        </Box>
       </CardContent>
       <CardContent className={classes.content}>
         <Typography className={classes.summary} variant="body2" color="primary">
           {summary}
         </Typography>
-        <Box className={classes.ratingContainer}>
-          <Rating
-            name="read-only"
-            value={rating}
-            precision={0.5}
-            size="small"
-            readOnly
-            className={classes.rating}
-          />
-          <Typography
-            className={classes.number}
-            color="primary"
-            variant="caption"
-          >
-            ({rating})
-          </Typography>
-          <Typography variant="caption" className={classes.date}>
-            {date}
-          </Typography>
-        </Box>
+
         <Typography variant="body2" className={classes.description}>
           {description}
         </Typography>
