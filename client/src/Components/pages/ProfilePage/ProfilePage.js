@@ -1,31 +1,22 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import React from 'react'
+import { useSelector } from 'react-redux'
 
-import PuffLoader from "react-spinners/PuffLoader";
-import { Avatar, Box, Divider, Typography } from "@material-ui/core";
+import PuffLoader from 'react-spinners/PuffLoader'
+import { Avatar, Box, Divider, Typography } from '@material-ui/core'
 
-import CreateItineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import UserItinerariesSmall from "../../ui/Itineraries/UserItinerariesSmall";
-import UpdateProfileForm from "../../ui/UpdateProfileForm/UpdateProfileForm";
-import Favourite from "../../ui/Favourite/Favourite";
+import CreateItineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
+import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
+import Favourite from '../../ui/Favourite/Favourite'
 
-import { useStyles } from "./styles";
-import { selectItinerariesByUser } from "../../Redux/itinerariesSlice";
-import { selectCurrentUser } from "../../Redux/usersSlice";
+import { useStyles } from './styles'
+import { selectCurrentUser } from '../../Redux/usersSlice'
 
 const Profile = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  // sets user to display
-  const user = useSelector(selectCurrentUser);
-  const { userName: nameParam } = useParams();
-
-  // selects itineraries by user
-  const itineraries = useSelector((state) =>
-    selectItinerariesByUser(state, nameParam),
-  );
+  const user = useSelector(selectCurrentUser)
 
   // TODO load favourites
 
@@ -34,18 +25,18 @@ const Profile = () => {
       <div className={classes.loader}>
         <PuffLoader color="red" loading={true} size={80} />
       </div>
-    );
+    )
   }
 
   // variables for ui
-  const { userName, firstName, lastName, details, img, coverImg } = user;
+  const { userName, firstName, lastName, details, img, coverImg } = user
 
   return (
     <Box className={classes.container}>
       <ImageHeader img={coverImg} className={classes.header} />
       <Box className={classes.content}>
         <Avatar
-          alt={firstName + "" + lastName}
+          alt={firstName + '' + lastName}
           src={img}
           className={classes.userImg}
         />
@@ -65,7 +56,8 @@ const Profile = () => {
             variant="body2"
             color="textSecondary"
             component="p"
-            className={classes.userName}>
+            className={classes.userName}
+          >
             {userName}
           </Typography>
         </Box>
@@ -74,13 +66,13 @@ const Profile = () => {
             {details}
           </Typography>
           <Divider className={classes.divider} />
-          <UserItinerariesSmall itineraries={itineraries} />
+          <UserItinerariesSmall />
           <Divider className={classes.divider} />
         </Box>
         <CreateItineraryForm />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

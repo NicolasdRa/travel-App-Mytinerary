@@ -1,10 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useImageCropper from '../../../hooks/useImageCropper - old'
-import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
-import { readFile } from '../../utils/imageUtils'
-import './styles.css'
+
 import {
   Box,
   Button,
@@ -13,35 +10,61 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Slider,
   Typography,
 } from '@material-ui/core'
-import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
-import { updateUserProfile, loadCurrentUser } from '../../Redux/usersSlice'
 
+import { useImageCropper } from '../../../hooks/useImageCropper'
+import { base64StringtoFile } from '../../utils/imageUtils'
+import { updateUserProfile, selectCurrentUser } from '../../Redux/usersSlice'
+import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+
+import './styles.css'
 import { useStyles } from './styles'
 
 const UploadProfileImgForm = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-
-  // Global state - user info
-  const { img } = useSelector((state) => state.users.currentUser)
-
-  // Component level state - profile info & file
   const [open, setOpen] = useState(false)
-  const [imageSrc, setImageSrc] = useState(null)
 
+  // displays profile img at start
+  const { img } = useSelector(selectCurrentUser)
+
+  // Component level - File state
+  const [file, setFile] = useState(null)
+  const [previewFile, setPreviewFile] = useState(null)
+
+  console.log('previewFile', previewFile)
+
+  // cropper
   const {
+    imageSrc,
     zoom,
     setZoom,
     crop,
     setCrop,
     rotation,
     setRotation,
-    croppedImageFile,
-    handleCropComplete,
-  } = useImageCropper(imageSrc)
+    croppedImage,
+    showCroppedImage,
+    onCropComplete,
+    onFileChange,
+    clearImage,
+  } = useImageCropper()
+
+  // loads image to show
+  useEffect(() => {
+    setPreviewFile(croppedImage)
+  }, [croppedImage])
+
+  // // converts base64 to file for upload
+  // useEffect(() => {
+  //   if (previewFile) {
+  //     const file = base64StringtoFile(croppedImage, 'croppedImg.png')
+  //     setFile(file)
+  //   }
+  // }, [previewFile])
 
   // Ref needed to hide default input and functionalise custom icon btn
   const hiddenInput = useRef(null)
@@ -49,31 +72,28 @@ const UploadProfileImgForm = () => {
     hiddenInput.current.click()
   }
 
-  // handles file input changes
-  const handleChangeFile = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0]
-      let imageDataUrl = await readFile(file)
+  // //handles file input changes
+  // const handleChangeFile = async (e) => {
+  //   if (e.target.files && e.target.files.length > 0) {
+  //     const file = e.target.files[0]
+  //     let imageDataUrl = await readFile(file)
 
-      setImageSrc(imageDataUrl)
-    }
-  }
+  //     setImageSrc(imageDataUrl)
+  //   }
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // createCroppedImageFile();
 
-    const formData = new FormData()
-    formData.append('img', croppedImageFile)
+    if (file) {
+      const formData = new FormData()
+      formData.append('img', file)
 
-    dispatch(updateUserProfile(formData))
-    dispatch(loadCurrentUser())
-    setOpen(false)
-    setImageSrc(null)
-  }
-
-  const handleClearImage = (e) => {
-    setImageSrc(null)
+      dispatch(updateUserProfile(formData))
+      // updateProfileImg(formData)
+      setOpen(false)
+      setPreviewFile(null)
+    } else console.log('no file')
   }
 
   const handleClickOpen = () => {
@@ -82,6 +102,12 @@ const UploadProfileImgForm = () => {
 
   const handleClose = () => {
     setOpen(false)
+    clearImage()
+  }
+
+  const handleLoadPreviewFile = () => {
+    showCroppedImage()
+    clearImage()
   }
 
   return (
@@ -91,12 +117,14 @@ const UploadProfileImgForm = () => {
         className={classes.modal}
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        aria-labelledby="form-dialog-title"
+      >
+        <form encType="multipart/form-data">
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="body2">
               Choose and adjust your Profile image
             </Typography>
@@ -114,14 +142,15 @@ const UploadProfileImgForm = () => {
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onRotationChange={setRotation}
-                    onCropComplete={handleCropComplete}
+                    onCropComplete={onCropComplete}
                   />
                 </div>
                 <div className={classes.controls}>
                   <div className={classes.sliderContainer}>
                     <Typography
                       variant="overline"
-                      classes={{ root: classes.sliderLabel }}>
+                      classes={{ root: classes.sliderLabel }}
+                    >
                       Zoom
                     </Typography>
                     <Slider
@@ -137,7 +166,8 @@ const UploadProfileImgForm = () => {
                   <div className={classes.sliderContainer}>
                     <Typography
                       variant="overline"
-                      classes={{ root: classes.sliderLabel }}>
+                      classes={{ root: classes.sliderLabel }}
+                    >
                       Rotate
                     </Typography>
                     <Slider
@@ -157,7 +187,7 @@ const UploadProfileImgForm = () => {
                 <input
                   style={{ display: 'none' }}
                   id="customFile"
-                  onChange={handleChangeFile}
+                  onChange={onFileChange}
                   type="file"
                   ref={hiddenInput}
                 />
@@ -175,7 +205,7 @@ const UploadProfileImgForm = () => {
               Cancel
             </Button>
             {imageSrc ? (
-              <Button onClick={handleClearImage} color="primary">
+              <Button onClick={clearImage} color="primary">
                 Clear
               </Button>
             ) : null}

@@ -1,30 +1,35 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import ItineraryCardSmall from "../Itineraries/ItineraryCardSmall";
+import { Box, Typography } from '@material-ui/core'
 
-import { Box, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import "typeface-roboto";
+import ItineraryCardSmall from '../Itineraries/ItineraryCardSmall'
+import { selectCurrentUser } from '../../Redux/usersSlice'
+import { selectItinerariesByUserId } from '../../Redux/itinerariesSlice'
+
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(() => ({
   text: {
-    margin: ".5rem",
-    textAlign: "left",
+    margin: '.5rem',
+    textAlign: 'left',
   },
 
   gallery: {
-    position: "relative",
-    display: "flex",
-    flex: "0 1 auto",
-    flexDirection: "row",
-    width: "auto",
-    overflowX: "auto",
+    position: 'relative',
+    display: 'flex',
+    flex: '0 1 auto',
+    flexDirection: 'row',
+    width: 'auto',
+    overflowX: 'auto',
   },
-}));
+}))
 
-const UserItinerariesSmall = ({ itineraries }) => {
-  const classes = useStyles();
+const UserItinerariesSmall = () => {
+  const classes = useStyles()
+
+  const { itineraries } = useSelector(selectCurrentUser)
 
   if (itineraries.length > 0) {
     return (
@@ -38,19 +43,15 @@ const UserItinerariesSmall = ({ itineraries }) => {
           ))}
         </Box>
       </Box>
-    );
+    )
   } else {
     return (
       <Typography variant="body1" className={classes.text}>
         No contributions found. Create your itineraries and help the community
         grow.
       </Typography>
-    );
+    )
   }
-};
+}
 
-UserItinerariesSmall.propTypes = {
-  itineraries: PropTypes.array.isRequired,
-};
-
-export default UserItinerariesSmall;
+export default UserItinerariesSmall

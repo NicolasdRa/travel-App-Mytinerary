@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAllCities } from "../../Redux/citiesSlice";
-import { addItinerary } from "../../Redux/itinerariesSlice";
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { CategoryOptions, PriceOptions, DurationOptions } from "./data";
-
-import UploadCoverImgForm from "../UploadCoverImgForm/UploadCoverImgForm";
 import {
   Box,
   Button,
@@ -13,98 +8,100 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Fab,
   FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
+} from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
 
-import { useForm } from "../../../hooks/useForm";
-import { useStyles } from "./styles";
-import { base64StringtoFile } from "../../utils/imageUtils";
+import { selectAllCities } from '../../Redux/citiesSlice'
+import {
+  selectCurrentUser,
+  updateUserItineraries,
+} from '../../Redux/usersSlice'
+import { addItinerary } from '../../Redux/itinerariesSlice'
+import { CategoryOptions, PriceOptions, DurationOptions } from './data'
+import { base64StringtoFile } from '../../utils/imageUtils'
+import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
+import { useForm } from '../../../hooks/useForm'
+
+import { useStyles } from './styles'
 
 const CreateItineraryForm = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const cities = useSelector((state) => selectAllCities(state));
-  const { _id, userName } = useSelector((state) => state.users.currentUser);
+  const cities = useSelector((state) => selectAllCities(state))
+  const { _id } = useSelector(selectCurrentUser)
 
   // Component level state - profile info & file
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
-    city: "",
-    title: "",
-    category: "",
-    price: "",
-    duration: "",
-    details: "",
-    author: "",
-  });
+    city: '',
+    title: '',
+    category: '',
+    price: '',
+    duration: '',
+    details: '',
+    author: '',
+  })
 
-  const { city, title, category, price, duration, details } = formValues;
+  const { city, title, category, price, duration, details } = formValues
 
   // Component level - File state
-  const [file, setFile] = useState(null);
-  const [previewFile, setPreviewFile] = useState(null);
+  const [file, setFile] = useState(null)
+  const [previewFile, setPreviewFile] = useState(null)
+  console.log(file)
 
   useEffect(() => {
     if (previewFile) {
-      const file = base64StringtoFile(previewFile, "croppedImg.png");
-      setFile(file);
+      const file = base64StringtoFile(previewFile, 'croppedImg.png')
+      setFile(file)
     }
-  }, [previewFile]);
-
-  // Ref needed to hide default input and functionalise custom icon btn
-  // const hiddenInput = useRef(null);
-
-  // const handleClick = (e) => {
-  //   hiddenInput.current.click()
-  // }
+  }, [previewFile])
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const formData = new FormData();
-    formData.append("img", file);
-    formData.append("city", city);
-    formData.append("title", title);
-    formData.append("category", category);
-    formData.append("price", price);
-    formData.append("duration", duration);
-    formData.append("details", details);
-    formData.append("author", _id);
-    // formData.append("userId", _id);
-    // formData.append("userName", userName);
+    const formData = new FormData()
+    formData.append('img', file)
+    formData.append('city', city)
+    formData.append('title', title)
+    formData.append('category', category)
+    formData.append('price', price)
+    formData.append('duration', duration)
+    formData.append('details', details)
+    formData.append('author', _id)
 
-    dispatch(addItinerary(formData));
-    setOpen(false);
-    reset();
-    setPreviewFile(null);
-  };
+    dispatch(addItinerary(formData))
+    dispatch(updateUserItineraries({ ...formValues, img: previewFile }))
+    setOpen(false)
+    reset()
+    setPreviewFile(null)
+  }
 
-  const loadPreviewFile = (croppedImage) => setPreviewFile(croppedImage);
+  const loadPreviewFile = (croppedImage) => setPreviewFile(croppedImage)
 
   const handleClearImage = (e) => {
-    setPreviewFile(null);
-  };
+    setPreviewFile(null)
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  const cityOptions = cities.map((city) => city.name).sort();
+  const cityOptions = cities.map((city) => city.name).sort()
 
   return (
     <div>
@@ -112,7 +109,8 @@ const CreateItineraryForm = () => {
         color="secondary"
         aria-label="add"
         onClick={handleClickOpen}
-        className={classes.add_btn}>
+        className={classes.add_btn}
+      >
         <AddIcon />
       </Fab>
       <Dialog
@@ -120,12 +118,14 @@ const CreateItineraryForm = () => {
         //   keepMounted
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="h6" color="primary">
               Create Your Itinerary
             </Typography>
@@ -142,7 +142,8 @@ const CreateItineraryForm = () => {
                 labelId="city-label"
                 name="city"
                 value={city}
-                onChange={handleInputChange}>
+                onChange={handleInputChange}
+              >
                 {cityOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option}
@@ -171,7 +172,8 @@ const CreateItineraryForm = () => {
                     labelId="category-label"
                     name="category"
                     value={category}
-                    onChange={handleInputChange}>
+                    onChange={handleInputChange}
+                  >
                     {CategoryOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
@@ -188,7 +190,8 @@ const CreateItineraryForm = () => {
                     labelId="price-label"
                     name="price"
                     value={price}
-                    onChange={handleInputChange}>
+                    onChange={handleInputChange}
+                  >
                     {PriceOptions.map((option, index) => (
                       <MenuItem key={index} id="price" value={option}>
                         {option}
@@ -205,12 +208,14 @@ const CreateItineraryForm = () => {
                     labelId="duration-label"
                     name="duration"
                     value={duration}
-                    onChange={handleInputChange}>
+                    onChange={handleInputChange}
+                  >
                     {DurationOptions.map((option, index) => (
                       <MenuItem
                         key={index}
                         id="duration"
-                        value={`${option}hs`}>{`${option}hs`}</MenuItem>
+                        value={`${option}hs`}
+                      >{`${option}hs`}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -250,7 +255,8 @@ const CreateItineraryForm = () => {
                   <Button
                     onClick={handleClearImage}
                     color="primary"
-                    className={classes.clearButton}>
+                    className={classes.clearButton}
+                  >
                     Clear photo
                   </Button>
                 </Box>
@@ -268,7 +274,7 @@ const CreateItineraryForm = () => {
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default CreateItineraryForm;
+export default CreateItineraryForm

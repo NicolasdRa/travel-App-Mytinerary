@@ -15,11 +15,10 @@ import {
 } from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating'
 import CreateIcon from '@material-ui/icons/Create'
-import { forgotPassword } from '../../Redux/authSlice'
 
 import { useStyles } from './styles'
 import { useForm } from '../../../hooks/useForm'
-import { selectCurrentUser } from '../../Redux/usersSlice'
+
 import { addComment } from '../../Redux/commentsSlice'
 import { updateItineraryComments } from '../../Redux/itinerariesSlice'
 
@@ -40,8 +39,6 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    console.log('comment created', formValues)
 
     dispatch(addComment(formValues))
     dispatch(updateItineraryComments(formValues))
@@ -169,8 +166,6 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
 
 CreateCommentForm.propTypes = {
   userId: PropTypes.string.isRequired,
-  city: PropTypes.string.isRequired,
-  itinerary: PropTypes.string.isRequired,
 }
 
 export default CreateCommentForm

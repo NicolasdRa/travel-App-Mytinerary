@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
-import Slider from "@material-ui/core/Slider";
-import Cropper from "react-easy-crop";
-import "./styles.css";
+import React, { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import Slider from '@material-ui/core/Slider'
+import Cropper from 'react-easy-crop'
+import './styles.css'
 import {
   Box,
   Button,
@@ -13,17 +13,18 @@ import {
   DialogTitle,
   IconButton,
   Typography,
-} from "@material-ui/core";
-import ImageButton from "../ImageButton/ImageButton";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+} from '@material-ui/core'
+import ImageButton from '../ImageButton/ImageButton'
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
-import { useStyles } from "./styles";
-import { useImageCropper } from "../../../hooks/useImageCropper";
+import { useStyles } from './styles'
+import { useImageCropper } from '../../../hooks/useImageCropper'
+import { selectCurrentUser } from '../../Redux/usersSlice'
 
 const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const { coverImg } = useSelector((state) => state.users.currentUser);
+  const classes = useStyles()
+  const [open, setOpen] = useState(false)
+  const { coverImg } = useSelector(selectCurrentUser)
 
   const {
     imageSrc,
@@ -38,41 +39,41 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
     onCropComplete,
     onFileChange,
     clearImage,
-  } = useImageCropper();
+  } = useImageCropper()
 
   // loads image
   useEffect(
     () => {
-      loadPreviewFile(croppedImage);
-      return () => {};
+      loadPreviewFile(croppedImage)
+      return () => {}
     },
-    [croppedImage],
-    loadPreviewFile,
-  );
+    [croppedImage]
+    // loadPreviewFile
+  )
 
   // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef(null);
+  const hiddenInput = useRef(null)
   const handleClick = (e) => {
-    hiddenInput.current.click();
-  };
+    hiddenInput.current.click()
+  }
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-    clearImage();
-  };
+    setOpen(false)
+    clearImage()
+  }
 
   const handleLoadPreviewFile = () => {
-    showCroppedImage();
-    clearImage();
-  };
+    showCroppedImage()
+    clearImage()
+  }
 
   return (
     <div>
-      {origin === "profileForm" ? (
+      {origin === 'profileForm' ? (
         <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
       ) : (
         <Box className={classes.photoIconContainer}>
@@ -85,11 +86,13 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle
           id="form-dialog-title"
           disableTypography
-          className={classes.title}>
+          className={classes.title}
+        >
           <Typography variant="body2">
             Choose and adjust your cover image
           </Typography>
@@ -117,7 +120,8 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                 <div className={classes.sliderContainer}>
                   <Typography
                     variant="overline"
-                    classes={{ root: classes.sliderLabel }}>
+                    classes={{ root: classes.sliderLabel }}
+                  >
                     Zoom
                   </Typography>
                   <Slider
@@ -133,7 +137,8 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                 <div className={classes.sliderContainer}>
                   <Typography
                     variant="overline"
-                    classes={{ root: classes.sliderLabel }}>
+                    classes={{ root: classes.sliderLabel }}
+                  >
                     Rotate
                   </Typography>
                   <Slider
@@ -151,7 +156,7 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
           ) : (
             <Box className={classes.photoIconContainer}>
               <input
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 id="customFile"
                 onChange={onFileChange}
                 type="file"
@@ -180,10 +185,11 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                 //     origin === 'profileForm' ? handleSubmit : handleLoadImage
                 //   }
                 onClick={() => {
-                  handleLoadPreviewFile();
-                  handleClose();
+                  handleLoadPreviewFile()
+                  handleClose()
                 }}
-                color="secondary">
+                color="secondary"
+              >
                 Confirm
               </Button>
             </>
@@ -191,11 +197,12 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
         </DialogActions>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
 UploadCoverImgForm.propTypes = {
   loadPreviewFile: PropTypes.func.isRequired,
-};
+  origin: PropTypes.string.isRequired,
+}
 
-export default UploadCoverImgForm;
+export default UploadCoverImgForm

@@ -106,7 +106,7 @@ const itinerarySchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
-      // required: [true, 'An itinerary must have an author']
+      required: [true, 'An itinerary must have an author'],
     },
 
     createdAt: {

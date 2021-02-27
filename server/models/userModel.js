@@ -6,117 +6,132 @@ const bcrypt = require('bcrypt')
 const AppError = require('./../utils/appError')
 
 // Schema
-const userSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    // required: [true, 'Please, include user name!'],
-    unique: true,
-    trim: true,
-  },
+const userSchema = new mongoose.Schema(
+  {
+    userName: {
+      type: String,
+      // required: [true, 'Please, include user name!'],
+      unique: true,
+      trim: true,
+    },
 
-  firstName: {
-    type: String,
-    default: '',
-  },
+    firstName: {
+      type: String,
+      default: '',
+    },
 
-  lastName: {
-    type: String,
-    default: '',
-  },
+    lastName: {
+      type: String,
+      default: '',
+    },
 
-  email: {
-    type: String,
-    required: true,
-    unique: [
-      true,
-      'there is already an account registered under that email address, please provide another email!',
-    ],
-    lowercase: true,
-    validate: [
-      validator.isEmail,
-      'Invalid Email, please provide a valid email address',
-    ],
-  },
+    email: {
+      type: String,
+      required: true,
+      unique: [
+        true,
+        'there is already an account registered under that email address, please provide another email!',
+      ],
+      lowercase: true,
+      validate: [
+        validator.isEmail,
+        'Invalid Email, please provide a valid email address',
+      ],
+    },
 
-  img: {
-    type: String,
-  },
+    img: {
+      type: String,
+    },
 
-  coverImg: {
-    type: String,
-    default: '../public/defaultProfileCover.png',
-  },
+    coverImg: {
+      type: String,
+      default: '../public/defaultProfileCover.png',
+    },
 
-  password: {
-    type: String,
-    // required: [true, 'Please provide a valid password'],
-    minlength: 6,
-    select: false,
-  },
+    password: {
+      type: String,
+      // required: [true, 'Please provide a valid password'],
+      minlength: 6,
+      select: false,
+    },
 
-  passwordConfirm: {
-    type: String,
-    // required: [true, 'Please provide a valid password'],
-    minlength: 6,
-    validate: {
-      // works only on create and save
-      validator: function (el) {
-        return el === this.password
+    passwordConfirm: {
+      type: String,
+      // required: [true, 'Please provide a valid password'],
+      minlength: 6,
+      validate: {
+        // works only on create and save
+        validator: function (el) {
+          return el === this.password
+        },
+        message: 'Passwords do not match',
       },
-      message: 'Passwords do not match',
+      select: false,
     },
-    select: false,
-  },
 
-  role: {
-    type: String,
-    enum: ['user', 'guide', 'admin'],
-    default: 'user',
-  },
-
-  details: {
-    type: String,
-    trim: true,
-    default: '',
-  },
-
-  googleId: {
-    type: String,
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    select: false,
-  },
-
-  passwordChangedAt: {
-    type: Date,
-    select: false,
-  },
-
-  passwordResetToken: {
-    type: String,
-    select: false,
-  },
-
-  passwordResetExpires: {
-    type: Date,
-    select: false,
-  },
-
-  favourites: [
-    {
-      itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
-      activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }],
+    role: {
+      type: String,
+      enum: ['user', 'guide', 'admin'],
+      default: 'user',
     },
-  ],
 
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
+    details: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+
+    googleId: {
+      type: String,
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      select: false,
+    },
+
+    passwordChangedAt: {
+      type: Date,
+      select: false,
+    },
+
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
+
+    favourites: [
+      {
+        itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
+        activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }],
+      },
+    ],
+
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
+
+  // options object for virtual properties
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+)
+
+// Virtual populate (to populate comments which in turn hold the reference to itineraries)
+userSchema.virtual('itineraries', {
+  ref: 'Itinerary',
+  localField: '_id',
+  foreignField: 'author',
 })
 
 // password hash pre-middleware
@@ -151,7 +166,7 @@ userSchema.pre(/^find/, function (next) {
 // instance method - bycript compare passwords
 userSchema.methods.correctPassword = async function (
   candidatePassword,
-  userPassword,
+  userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword)
 }
@@ -161,7 +176,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
     const changedTimeStamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
-      10,
+      10
     )
     return JWTTimeStamp < changedTimeStamp
   }
