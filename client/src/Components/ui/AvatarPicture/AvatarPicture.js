@@ -1,31 +1,35 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import { useSelector } from 'react-redux'
 
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from '@material-ui/core/Avatar'
 
-import { makeStyles } from "@material-ui/core/styles";
+import { selectCurrentUser } from '../../Redux/usersSlice'
+
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    "& > *": {
+    display: 'flex',
+    '& > *': {
       margin: theme.spacing(0.4),
-      backgroundColor: "orangered",
+      backgroundColor: 'orangered',
     },
   },
   small: {
     width: theme.spacing(4),
     height: theme.spacing(4),
   },
-}));
+}))
 
-const AvatarPicture = ({ user }) => {
-  const classes = useStyles();
+const AvatarPicture = () => {
+  const classes = useStyles()
 
-  const { userName, img } = user;
+  const user = useSelector(selectCurrentUser)
 
-  let initials;
-  userName ? (initials = userName.charAt(0).toUpperCase()) : (initials = "U");
+  const { userName, img } = user
+
+  let initials
+  userName ? (initials = userName.charAt(0).toUpperCase()) : (initials = 'U')
 
   return (
     <div className={classes.root}>
@@ -33,11 +37,7 @@ const AvatarPicture = ({ user }) => {
         {initials}
       </Avatar>
     </div>
-  );
-};
+  )
+}
 
-AvatarPicture.propTypes = {
-  user: PropTypes.object.isRequired,
-};
-
-export default AvatarPicture;
+export default AvatarPicture

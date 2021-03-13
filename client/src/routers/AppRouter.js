@@ -1,81 +1,68 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
-import PuffLoader from "react-spinners/PuffLoader";
-import { PublicRoute } from "./PublicRoute";
-import { PrivateRoute } from "./PrivateRoute";
-import TopNav from "../Components/ui/TopNav/TopNav";
-import BottomNav from "../Components/ui/BottomNav/BottomNav";
-import Footer from "../Components/ui/footer/Footer";
-import LandingPage from "../Components/pages/LandingPage/LandingPage";
-import ProfilePage from "../Components/pages/ProfilePage/ProfilePage";
-import ListingPage from "../Components/pages/ListingPage/ListingPage";
-import CityPage from "../Components/pages/CityPage/CityPage";
-import ItineraryPage from "../Components/pages/ItineraryPage/ItineraryPage";
-import ActivityPage from "../Components/pages/ActivityPage/ActivityPage";
-import { PasswordResetForm } from "../Components/ui/PasswordResetForm/PasswordResetForm";
+import PuffLoader from 'react-spinners/PuffLoader'
+import { PublicRoute } from './PublicRoute'
+import { PrivateRoute } from './PrivateRoute'
+import TopNav from '../Components/ui/TopNav/TopNav'
+import BottomNav from '../Components/ui/BottomNav/BottomNav'
+import Footer from '../Components/ui/footer/Footer'
+import LandingPage from '../Components/pages/LandingPage/LandingPage'
+import ProfilePage from '../Components/pages/ProfilePage/ProfilePage'
+import ListingPage from '../Components/pages/ListingPage/ListingPage'
+import CityPage from '../Components/pages/CityPage/CityPage'
+import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
+import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
+import { PasswordResetForm } from '../Components/ui/PasswordResetForm/PasswordResetForm'
 
-import { Grid } from "@material-ui/core";
+import { Grid, Snackbar } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert'
 
-import { makeStyles } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
-import theme from "../Components/theme/Theme";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
+import theme from '../Components/theme/Theme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-import { fetchCities } from "../Components/Redux/citiesSlice";
-import { fetchItineraries } from "../Components/Redux/itinerariesSlice";
-import { fetchActivities } from "../Components/Redux/activitiesSlice";
-import { loadCurrentUser } from "../Components/Redux/usersSlice";
-import { isLoggedIn } from "../Components/Redux/authSlice";
+import { fetchCities } from '../Components/Redux/citiesSlice'
+import { fetchItineraries } from '../Components/Redux/itinerariesSlice'
+import { fetchActivities } from '../Components/Redux/activitiesSlice'
+import { loadCurrentUser } from '../Components/Redux/usersSlice'
+import { isLoggedIn } from '../Components/Redux/authSlice'
 
-const useStyles = makeStyles((theme) => ({
-  topNav: {
-    position: "fixed",
-    bottom: 0,
-  },
-
-  main: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-  },
-
-  loader: {
-    display: "flex",
-    margin: "35vh auto",
-  },
-
-  bottomNav: {
-    position: "fixed",
-    top: 0,
-  },
-}));
+import { useStyles } from './styles'
 
 export const AppRouter = () => {
-  const classes = useStyles();
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const classes = useStyles()
+  const matches = useMediaQuery(theme.breakpoints.down('md'))
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // manages alerts
+  const [alert, setAlert] = useState(false)
+  const { error: authError } = useSelector((state) => state.auth)
   useEffect(() => {
-    dispatch(loadCurrentUser());
-  }, [isAuthenticated, dispatch]);
+    setAlert(true)
+  }, [authError])
+
+  // manages authenticated
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  useEffect(() => {
+    dispatch(loadCurrentUser())
+  }, [isAuthenticated, dispatch])
 
   //logs in user if GoogleAuth
-  const user = useSelector((state) => state.users.currentUser);
+  const user = useSelector((state) => state.users.currentUser)
   useEffect(() => {
-    if (user) dispatch(isLoggedIn(user));
-  }, [user, dispatch]);
+    if (user) dispatch(isLoggedIn(user))
+  }, [user, dispatch])
 
   // fetches data from DB
   useEffect(() => {
-    dispatch(fetchCities());
-    dispatch(fetchItineraries());
-    dispatch(fetchActivities());
-  }, [dispatch]);
+    dispatch(fetchCities())
+    dispatch(fetchItineraries())
+    dispatch(fetchActivities())
+  }, [dispatch])
 
   // TODO add general loader
   // TODO redirect when itinerary name is not found in route
@@ -87,6 +74,18 @@ export const AppRouter = () => {
   //     </div>
   //   );
   // }
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />
+  }
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setAlert(false)
+  }
 
   return (
     <Router>
@@ -138,9 +137,23 @@ export const AppRouter = () => {
             />
             <Redirect to="/" />
           </Switch>
+          {authError && (
+            <Snackbar
+              open={alert}
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              autoHideDuration={4000}
+              onClose={handleCloseAlert}
+              className={classes.alert}
+            >
+              <Alert onClose={handleCloseAlert} severity="error">
+                {authError.message}
+              </Alert>
+            </Snackbar>
+          )}
         </Grid>
+
         {matches ? <BottomNav className={classes.bottomNav} /> : <Footer />}
       </ThemeProvider>
     </Router>
-  );
-};
+  )
+}

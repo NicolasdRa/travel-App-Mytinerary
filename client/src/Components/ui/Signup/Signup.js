@@ -1,5 +1,6 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 import {
   Button,
@@ -9,39 +10,46 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "@material-ui/core";
-import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
+} from '@material-ui/core'
+import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 
-import { signupUser } from "../../Redux/authSlice";
-import { openSignUpForm, closeSignUpForm } from "../../Redux/formsSlice";
+import { signupUser } from '../../Redux/authSlice'
+import { openSignUpForm, closeSignUpForm } from '../../Redux/formsSlice'
 
-import { useForm } from "../../../hooks/useForm";
-import { useStyles } from "./styles";
+import { useForm } from '../../../hooks/useForm'
+import { useStyles } from './styles'
 
 const Signup = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
-    userName: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  });
+    userName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  })
 
   // Open form state
-  const open = useSelector((state) => state.forms.openSignUpForm);
-  const handleOpenForm = () => dispatch(openSignUpForm());
-  const handleCloseForm = () => dispatch(closeSignUpForm());
+  const open = useSelector((state) => state.forms.openSignUpForm)
+
+  // TODO: replace these two action with a toggle action
+  const handleOpenForm = () => dispatch(openSignUpForm())
+  const handleCloseForm = () => dispatch(closeSignUpForm())
+
+  // must be outside handleSubmit
+  const redirectPath = localStorage.getItem('lastPath')
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    dispatch(signupUser(formValues));
-    reset();
-    handleCloseForm();
-  };
+    dispatch(signupUser(formValues))
+    reset()
+    handleCloseForm()
+    history.replace(redirectPath)
+  }
 
   return (
     <div>
@@ -51,12 +59,14 @@ const Signup = () => {
       <Dialog
         open={open}
         onClose={handleCloseForm}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <form>
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="body2">Easy Signup</Typography>
           </DialogTitle>
           <DialogContent>
@@ -67,14 +77,16 @@ const Signup = () => {
               // component={Link}
               // to='api/auth/google'
               href="http://localhost:5000/api/v1/auth/google"
-              startIcon={<GoogleSVGIcon />}>
+              startIcon={<GoogleSVGIcon />}
+            >
               Sign up with Google
             </Button>
 
             <DialogTitle
               id="form-dialog-title"
               disableTypography
-              className={classes.subtitle}>
+              className={classes.subtitle}
+            >
               <Typography variant="body2">Sign up with your info</Typography>
             </DialogTitle>
 
@@ -144,7 +156,7 @@ const Signup = () => {
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

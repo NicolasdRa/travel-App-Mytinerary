@@ -1,5 +1,6 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 import {
   Button,
@@ -9,54 +10,61 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "@material-ui/core";
-import GoogleSVGIcon from "../Icons/GoogleSVGIcon";
+} from '@material-ui/core'
+import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 
-import { logInUser } from "../../Redux/authSlice";
-import { openLogInForm, closeLogInForm } from "../../Redux/formsSlice";
+import { logInUser } from '../../Redux/authSlice'
+import { openLogInForm, closeLogInForm } from '../../Redux/formsSlice'
 
-import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
+import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 
-import { useStyles } from "./styles";
-import { useForm } from "../../../hooks/useForm";
+import { useStyles } from './styles'
+import { useForm } from '../../../hooks/useForm'
 
 const Login = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   // Open form state
-  const open = useSelector((state) => state.forms.openLogInForm);
+  const open = useSelector((state) => state.forms.openLogInForm)
 
-  const handleOpenForm = () => dispatch(openLogInForm());
-  const handleCloseForm = () => dispatch(closeLogInForm());
+  const handleOpenForm = () => dispatch(openLogInForm())
+  const handleCloseForm = () => dispatch(closeLogInForm())
+
+  // must be outside handleSubmit
+  const redirectPath = localStorage.getItem('lastPath')
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
-    email: "",
-    password: "",
-  });
+    email: '',
+    password: '',
+  })
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(logInUser(formValues));
-    reset();
-    handleCloseForm();
-  };
+    e.preventDefault()
+    dispatch(logInUser(formValues))
+    reset()
+    handleCloseForm()
+    history.replace(redirectPath)
+  }
 
   return (
-    <div>
+    <>
       <Button color="secondary" onClick={handleOpenForm}>
         LOGIN
       </Button>
       <Dialog
         open={open}
         onClose={handleCloseForm}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <form>
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="body2">Easy Login</Typography>
           </DialogTitle>
           <DialogContent>
@@ -67,14 +75,16 @@ const Login = () => {
               // component={Link}
               // to='api/auth/google'
               href="http://localhost:5000/api/v1/auth/google"
-              startIcon={<GoogleSVGIcon />}>
+              startIcon={<GoogleSVGIcon />}
+            >
               Log in with Google
             </Button>
 
             <DialogTitle
               id="form-dialog-title"
               disableTypography
-              className={classes.subtitle}>
+              className={classes.subtitle}
+            >
               <Typography variant="body2">
                 Login with email & password
               </Typography>
@@ -120,8 +130,8 @@ const Login = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default Login;
+export default Login
