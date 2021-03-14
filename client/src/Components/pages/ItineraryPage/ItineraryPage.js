@@ -57,7 +57,7 @@ const ItineraryPage = () => {
 
   const itinerary = useSelector(selectCurrentItinerary)
 
-  // //fetches favourites from DB
+  // TODO: fetch favourites from DB
   // useEffect(() => {
   //   dispatch(fetchFavourites(itinerary.id));
   // }, [itinerary, dispatch]);

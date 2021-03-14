@@ -1,8 +1,11 @@
 const Itinerary = require('../models/itineraryModel')
 const asyncErrorCatcher = require('../utils/asyncErrorCatcher')
 const AppError = require('../utils/appError')
-const multer = require('multer')
-const sharp = require('sharp')
+
+// const sharp = require('sharp')
+const uploadCoverImageCloudinary = require('../middleware/cloudinary')
+const formatBufferToBase64 = require('../utils/dataUri')
+
 const {
   getAll,
   getOne,
@@ -90,37 +93,34 @@ exports.getItineraryById = asyncErrorCatcher(async (req, res, next) => {
   })
 })
 
-// multer middleware set up - upload images
-const multerStorage = multer.memoryStorage()
-
-// test for file type
-const multerFilter = (req, file, cb) => {
-  file.mimetype.startsWith('image')
-    ? cb(null, true)
-    : cb(
-        new AppError('Not an image! Please upload image type file only', 400),
-        false
-      )
-}
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-})
-
-exports.uploadCoverImg = upload.single('img')
-
-// img resize middleware
-exports.resizeCoverImg = asyncErrorCatcher(async (req, res, next) => {
+// upload to cloudinary
+exports.uploadCoverImage = asyncErrorCatcher(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `itineraryCover-${req.body.title}-${Date.now()}.jpeg`
+  const base64 = formatBufferToBase64(req.file)
+  const result = await uploadCoverImageCloudinary(base64.content)
 
-  await sharp(req.file.buffer)
-    .resize(1300, 800)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/${req.file.filename}`)
+  req.body.img = result.secure_url
+  req.body.cloudinary_id = result.public_id
 
   next()
 })
+
+// unnecessay after implementing upload to cloudinary
+// // img resize middleware
+// exports.resizeCoverImg = asyncErrorCatcher(async (req, res, next) => {
+//   if (!req.file) return next()
+
+//   req.file.filename = `itineraryCover-${req.body.title}-${Date.now()}.jpeg`
+
+//   await sharp(req.file.buffer)
+//     .resize(1300, 800)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     // .toFile(`public/${req.file.filename}`)
+//     .toBuffer((err, data, info) => {
+//       return data
+//     })
+
+//   next()
+// })

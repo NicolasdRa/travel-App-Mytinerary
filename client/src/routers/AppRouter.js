@@ -16,10 +16,9 @@ import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
 import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
 import { PasswordResetForm } from '../Components/ui/PasswordResetForm/PasswordResetForm'
 
-import { Grid, Snackbar } from '@material-ui/core'
+import { Box, Grid, Snackbar, Typography } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 
-import { makeStyles } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import theme from '../Components/theme/Theme'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
@@ -35,8 +34,9 @@ import { useStyles } from './styles'
 export const AppRouter = () => {
   const classes = useStyles()
   const matches = useMediaQuery(theme.breakpoints.down('md'))
-
   const dispatch = useDispatch()
+
+  const [isLoading, setisLoading] = useState(true)
 
   // manages alerts
   const [alert, setAlert] = useState(false)
@@ -62,18 +62,25 @@ export const AppRouter = () => {
     dispatch(fetchCities())
     dispatch(fetchItineraries())
     dispatch(fetchActivities())
+    setisLoading(false)
   }, [dispatch])
 
-  // TODO add general loader
   // TODO redirect when itinerary name is not found in route
 
-  // if (isLoading) {
-  //   return (
-  //     <div className={classes.loader}>
-  //       <PuffLoader color="red" loading={true} size={80} />
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <Box className={classes.loader}>
+        <PuffLoader color="red" loading={true} size={80} />
+        <Typography
+          color="secondary"
+          variant="caption"
+          className={classes.loaderMessage}
+        >
+          Mytinerary is loading...
+        </Typography>
+      </Box>
+    )
+  }
 
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />

@@ -72,6 +72,7 @@ const CreateItineraryForm = () => {
 
     const formData = new FormData()
     formData.append('img', file)
+    formData.append('upload_preset', 'travel-app')
     formData.append('city', city)
     formData.append('title', title)
     formData.append('category', category)

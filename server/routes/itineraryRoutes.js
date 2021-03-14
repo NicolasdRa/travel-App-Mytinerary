@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const {
   getAllItineraries,
   getItinerary,
@@ -8,13 +8,13 @@ const {
   deleteItinerary,
   getItineraryByTitle,
   getCityItineraries,
-  resizeCoverImg,
-  uploadCoverImg,
+  uploadCoverImage,
   getItinerariesByUser,
-} = require("../controllers/itineraryController");
-const { protect } = require("../controllers/authController");
-const activityRouter = require("../routes/activityRoutes");
-const favouriteRouter = require("../routes/favouriteRoutes");
+} = require('../controllers/itineraryController')
+const upload = require('../middleware/multer')
+const { protect } = require('../controllers/authController')
+const activityRouter = require('../routes/activityRoutes')
+const favouriteRouter = require('../routes/favouriteRoutes')
 
 // ------------------------------------- //
 
@@ -24,23 +24,23 @@ const favouriteRouter = require("../routes/favouriteRoutes");
 // ------------------------------------- //
 
 // Nested routes
-router.use("/:itineraryId/activities", activityRouter);
-router.use("/:itineraryId/favourites", favouriteRouter);
+router.use('/:itineraryId/activities', activityRouter)
+router.use('/:itineraryId/favourites', favouriteRouter)
 
 // Routes
 router
-  .route("/")
+  .route('/')
   .get(getAllItineraries)
-  .post(protect, uploadCoverImg, resizeCoverImg, createItinerary);
+  .post(protect, upload.single('img'), uploadCoverImage, createItinerary)
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(getItinerary)
   .patch(protect, updateItinerary)
-  .delete(protect, deleteItinerary);
+  .delete(protect, deleteItinerary)
 
-router.route("/city/:city_name").get(getCityItineraries);
-router.route("/title/:title").get(getItineraryByTitle);
-router.route("/user/:userId").get(getItinerariesByUser);
+router.route('/city/:city_name').get(getCityItineraries)
+router.route('/title/:title').get(getItineraryByTitle)
+router.route('/user/:userId').get(getItinerariesByUser)
 
-module.exports = router;
+module.exports = router
