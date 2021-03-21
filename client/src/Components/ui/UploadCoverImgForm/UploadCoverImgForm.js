@@ -41,7 +41,7 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
     clearImage,
   } = useImageCropper()
 
-  // loads image
+  // loads image to show
   useEffect(
     () => {
       loadPreviewFile(croppedImage)

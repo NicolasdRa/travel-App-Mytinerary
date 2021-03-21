@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   Button,
   Dialog,
@@ -9,25 +9,25 @@ import {
   Grid,
   TextField,
   Typography,
-} from "@material-ui/core";
-import UploadCoverImgForm from "../UploadCoverImgForm/UploadCoverImgForm";
-import UploadProfileImgForm from "../UploadProfileImgForm/UploadProfileImgForm";
-import { updateUserProfile } from "../../Redux/usersSlice";
+} from '@material-ui/core'
+import UpdateProfileCoverImgForm from '../UpdateProfileCoverImgForm/UpdateProfileCoverImgForm'
+import UpdateProfileImgForm from '../UpdateProfileImgForm/UpdateProfileImgForm'
+import { updateUserProfile } from '../../Redux/usersSlice'
 
-import { useForm } from "../../../hooks/useForm";
-import { useStyles } from "./styles";
+import { useForm } from '../../../hooks/useForm'
+import { useStyles } from './styles'
 
 const UpdateProfileForm = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
   // Global state - user info
   const { userName, firstName, lastName, details } = useSelector(
-    (state) => state.users.currentUser,
-  );
+    (state) => state.users.currentUser
+  )
 
   // Component level state - profile info & file
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
@@ -35,33 +35,33 @@ const UpdateProfileForm = () => {
     firstName: firstName,
     lastName: lastName,
     details: details,
-  });
+  })
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { userName, firstName, lastName, details } = formValues;
+    const { userName, firstName, lastName, details } = formValues
 
-    const formData = new FormData();
-    formData.append("userName", userName);
-    formData.append("firstName", firstName);
-    formData.append("lastName", lastName);
-    formData.append("details", details);
+    const formData = new FormData()
+    formData.append('userName', userName)
+    formData.append('firstName', firstName)
+    formData.append('lastName', lastName)
+    formData.append('details', details)
 
-    dispatch(updateUserProfile(formData));
-    reset();
-    setOpen(false);
-  };
+    dispatch(updateUserProfile(formData))
+    reset()
+    setOpen(false)
+  }
 
-  const loadPreviewFile = () => console.log("from update profile form");
+  const loadPreviewFile = () => console.log('from update profile form')
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <div>
@@ -71,12 +71,14 @@ const UpdateProfileForm = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <DialogTitle
             id="form-dialog-title"
             disableTypography
-            className={classes.title}>
+            className={classes.title}
+          >
             <Typography variant="h6" color="primary">
               Update your profile
             </Typography>
@@ -84,14 +86,15 @@ const UpdateProfileForm = () => {
           <Typography
             variant="body1"
             color="inherit"
-            className={classes.subtitle}>
+            className={classes.subtitle}
+          >
             Change your images or edit your info
           </Typography>
-          <UploadCoverImgForm
+          <UpdateProfileCoverImgForm
             origin="profileForm"
             loadPreviewFile={loadPreviewFile}
           />
-          <UploadProfileImgForm />
+          <UpdateProfileImgForm />
           <DialogContent>
             <TextField
               required
@@ -163,7 +166,7 @@ const UpdateProfileForm = () => {
         </form>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateProfileForm;
+export default UpdateProfileForm

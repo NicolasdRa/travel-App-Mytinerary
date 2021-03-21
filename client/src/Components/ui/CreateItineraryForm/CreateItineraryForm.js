@@ -58,7 +58,6 @@ const CreateItineraryForm = () => {
   // Component level - File state
   const [file, setFile] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
-  console.log(file)
 
   useEffect(() => {
     if (previewFile) {
@@ -241,7 +240,6 @@ const CreateItineraryForm = () => {
               {!previewFile ? (
                 <UploadCoverImgForm
                   origin="itineraryForm"
-                  // loadFile={loadFile}
                   loadPreviewFile={loadPreviewFile}
                 />
               ) : (

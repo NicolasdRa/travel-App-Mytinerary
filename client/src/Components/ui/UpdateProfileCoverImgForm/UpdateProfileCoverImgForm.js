@@ -17,24 +17,28 @@ import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
 import { useImageCropper } from '../../../hooks/useImageCropper'
 import { base64StringtoFile } from '../../utils/imageUtils'
-import { updateUserProfile, selectCurrentUser } from '../../Redux/usersSlice'
-import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+import {
+  updateProfileCoverImage,
+  selectCurrentUser,
+} from '../../Redux/usersSlice'
+import ImageButton from '../ImageButton/ImageButton'
 
-import './styles.css'
 import { useStyles } from './styles'
+// import './styles.css'
 
-const UploadProfileImgForm = () => {
+const UpdateProfileCoverImgForm = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
 
   // displays profile img at start
-  const { img } = useSelector(selectCurrentUser)
+  const { coverImg } = useSelector(selectCurrentUser)
 
   // Component level - File state
-  const [file, setFile] = useState(null)
   const [previewFile, setPreviewFile] = useState(null)
+  const [file, setFile] = useState(null)
 
+  console.log('file', file)
   console.log('previewFile', previewFile)
 
   // cropper
@@ -58,13 +62,13 @@ const UploadProfileImgForm = () => {
     setPreviewFile(croppedImage)
   }, [croppedImage])
 
-  // // converts base64 to file for upload
-  // useEffect(() => {
-  //   if (previewFile) {
-  //     const file = base64StringtoFile(croppedImage, 'croppedImg.png')
-  //     setFile(file)
-  //   }
-  // }, [previewFile])
+  // converts base64 to file for upload
+  useEffect(() => {
+    if (previewFile) {
+      const file = base64StringtoFile(croppedImage, 'croppedImg.png')
+      setFile(file)
+    }
+  }, [previewFile])
 
   // Ref needed to hide default input and functionalise custom icon btn
   const hiddenInput = useRef(null)
@@ -72,25 +76,15 @@ const UploadProfileImgForm = () => {
     hiddenInput.current.click()
   }
 
-  // //handles file input changes
-  // const handleChangeFile = async (e) => {
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     const file = e.target.files[0]
-  //     let imageDataUrl = await readFile(file)
-
-  //     setImageSrc(imageDataUrl)
-  //   }
-  // }
-
   const handleSubmit = (e) => {
     e.preventDefault()
 
     if (file) {
       const formData = new FormData()
-      formData.append('img', file)
+      formData.append('coverImg', file)
+      formData.append('upload_preset', 'travel-app')
 
-      dispatch(updateUserProfile(formData))
-      // updateProfileImg(formData)
+      dispatch(updateProfileCoverImage(formData))
       setOpen(false)
       setPreviewFile(null)
     } else console.log('no file')
@@ -110,9 +104,13 @@ const UploadProfileImgForm = () => {
     clearImage()
   }
 
+  const handleClearImage = (e) => {
+    setPreviewFile(null)
+  }
+
   return (
     <div>
-      <ImageButtonRounded img={img} handleClick={handleClickOpen} />
+      <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
       <Dialog
         className={classes.modal}
         open={open}
@@ -126,7 +124,10 @@ const UploadProfileImgForm = () => {
             className={classes.title}
           >
             <Typography variant="body2">
-              Choose and adjust your Profile image
+              {!imageSrc && !previewFile && 'Choose '}
+              {imageSrc && 'Adjust '}
+              {file && previewFile && 'Upload '}
+              your profile cover image
             </Typography>
           </DialogTitle>
           <DialogContent className={classes.contentContainer}>
@@ -138,11 +139,12 @@ const UploadProfileImgForm = () => {
                     crop={crop}
                     zoom={zoom}
                     rotation={rotation}
-                    aspect={1 / 1}
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onRotationChange={setRotation}
                     onCropComplete={onCropComplete}
+                    showGrid={false}
+                    aspect={16 / 9}
                   />
                 </div>
                 <div className={classes.controls}>
@@ -191,12 +193,26 @@ const UploadProfileImgForm = () => {
                   type="file"
                   ref={hiddenInput}
                 />
-                <IconButton onClick={handleClick}>
-                  <AddAPhotoIcon
-                    color="secondary"
-                    className={classes.photo_icon}
+                {!previewFile && (
+                  <IconButton onClick={handleClick}>
+                    <AddAPhotoIcon
+                      color="secondary"
+                      className={classes.photo_icon}
+                    />
+                  </IconButton>
+                )}
+              </Box>
+            )}
+
+            {previewFile && (
+              <Box className={classes.previewContainer}>
+                <Box className={classes.previewImgContainer}>
+                  <img
+                    src={previewFile}
+                    alt="preview file"
+                    className={classes.previewImg}
                   />
-                </IconButton>
+                </Box>
               </Box>
             )}
           </DialogContent>
@@ -204,14 +220,34 @@ const UploadProfileImgForm = () => {
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            {imageSrc ? (
-              <Button onClick={clearImage} color="primary">
-                Clear
-              </Button>
-            ) : null}
-            <Button onClick={handleSubmit} color="secondary">
-              Upload
-            </Button>
+
+            {(previewFile || imageSrc) && (
+              <>
+                <Button
+                  onClick={() => clearImage()}
+                  onClick={handleClearImage}
+                  className={classes.clearButton}
+                  color="default"
+                >
+                  Clear
+                </Button>
+                {imageSrc ? (
+                  <Button
+                    onClick={() => {
+                      handleLoadPreviewFile()
+                      // handleClose()
+                    }}
+                    color="secondary"
+                  >
+                    Confirm
+                  </Button>
+                ) : (
+                  <Button onClick={handleSubmit} color="secondary">
+                    Upload
+                  </Button>
+                )}
+              </>
+            )}
           </DialogActions>
         </form>
       </Dialog>
@@ -219,4 +255,4 @@ const UploadProfileImgForm = () => {
   )
 }
 
-export default UploadProfileImgForm
+export default UpdateProfileCoverImgForm

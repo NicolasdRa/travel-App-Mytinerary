@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
 
 import { Box, Typography } from '@material-ui/core'
 
@@ -31,7 +30,9 @@ const UserItinerariesSmall = () => {
 
   const { itineraries } = useSelector(selectCurrentUser)
 
-  if (itineraries.length > 0) {
+  // FIXME: when user loads for the first time profile page loads user itinerarie, but when it from profile screen it updates profile image or cover image it doesnt loads itineraries: implemented quick fix below: itineraries && itineraries.length > 0
+
+  if (itineraries && itineraries.length > 0) {
     return (
       <Box>
         <Typography variant="body2" className={classes.text}>

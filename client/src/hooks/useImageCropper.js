@@ -29,7 +29,7 @@ export const useImageCropper = () => {
       const croppedImage = await getCroppedImg(
         imageSrc,
         croppedAreaPixels,
-        rotation,
+        rotation
       )
 
       setCroppedImage(croppedImage)

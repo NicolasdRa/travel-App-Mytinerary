@@ -43,7 +43,6 @@ exports.getCityItineraries = asyncErrorCatcher(async (req, res, next) => {
 // gets ITINERARIES by userId
 exports.getItinerariesByUser = asyncErrorCatcher(async (req, res, next) => {
   const itineraries = await Itinerary.find({ author: req.params.user })
-  console.log(req.params)
 
   if (!itineraries) {
     return next(new AppError('No documents found', 404))
