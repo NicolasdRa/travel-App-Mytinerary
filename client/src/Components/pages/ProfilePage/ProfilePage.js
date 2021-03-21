@@ -7,7 +7,7 @@ import { Avatar, Box, Divider, Typography } from '@material-ui/core'
 import CreateItineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
-import UpdateProfileForm from '../../ui/UpdateProfileForm/UpdateProfileForm'
+import EditProfileForm from '../../ui/EditProfileForm/EditProfileForm'
 import Favourite from '../../ui/Favourite/Favourite'
 
 import { useStyles } from './styles'
@@ -42,7 +42,7 @@ const Profile = () => {
         />
         <Box className={classes.info}>
           <Box className={classes.edit_btn}>
-            <UpdateProfileForm />
+            <EditProfileForm />
           </Box>
           <Box className={classes.likes}>
             <Favourite data={23} />
