@@ -1,4 +1,5 @@
 const express = require('express')
+const router = express.Router({ mergeParams: true })
 const {
   getAllUsers,
   getUser,
@@ -8,16 +9,14 @@ const {
   updateMe,
   deleteMe,
   getMe,
-  uploadUserImg,
-  resizeUserImg,
-  uploadCoverImg,
-  resizeCoverImg,
+  uploadProfileImage,
+  uploadProfileCoverImage,
   updateCoverImg,
 } = require('../controllers/userController')
+
+const upload = require('../middleware/multer')
 const { protect, restrict } = require('../controllers/authController')
 const favouriteRouter = require('../routes/favouriteRoutes')
-
-const router = express.Router({ mergeParams: true })
 
 // Nested routers
 router.use('/:userId/favourites', favouriteRouter)
@@ -26,8 +25,12 @@ router.use('/:userId/favourites', favouriteRouter)
 router.use(protect)
 
 router.route('/me').get(getMe, getUser)
-router.patch('/updateMe', uploadUserImg, resizeUserImg, updateMe)
-router.patch('/updateCover', uploadCoverImg, resizeCoverImg, updateCoverImg)
+router
+  .route('/updateMe')
+  .patch(upload.single('img'), uploadProfileImage, updateMe)
+router
+  .route('/updateCover')
+  .patch(upload.single('coverImg'), uploadProfileCoverImage, updateCoverImg)
 
 router.delete('/deleteMe', deleteMe)
 

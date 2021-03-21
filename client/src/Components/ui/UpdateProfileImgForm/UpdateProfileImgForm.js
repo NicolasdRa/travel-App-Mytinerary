@@ -35,9 +35,6 @@ const UpdateProfileImgForm = () => {
   const [previewFile, setPreviewFile] = useState(null)
   const [file, setFile] = useState(null)
 
-  console.log('file', file)
-  console.log('previewFile', previewFile)
-
   // cropper
   const {
     imageSrc,

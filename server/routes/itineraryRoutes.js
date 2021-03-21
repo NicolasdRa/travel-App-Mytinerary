@@ -11,6 +11,7 @@ const {
   uploadCoverImage,
   getItinerariesByUser,
 } = require('../controllers/itineraryController')
+
 const upload = require('../middleware/multer')
 const { protect } = require('../controllers/authController')
 const activityRouter = require('../routes/activityRoutes')

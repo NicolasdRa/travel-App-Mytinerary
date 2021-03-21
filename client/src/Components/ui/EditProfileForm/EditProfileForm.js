@@ -17,7 +17,7 @@ import { updateUserProfile } from '../../Redux/usersSlice'
 import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
 
-const UpdateProfileForm = () => {
+const EditProfileForm = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -80,7 +80,7 @@ const UpdateProfileForm = () => {
             className={classes.title}
           >
             <Typography variant="h6" color="primary">
-              Update your profile
+              Edit your profile info
             </Typography>
           </DialogTitle>
           <Typography
@@ -169,4 +169,4 @@ const UpdateProfileForm = () => {
   )
 }
 
-export default UpdateProfileForm
+export default EditProfileForm

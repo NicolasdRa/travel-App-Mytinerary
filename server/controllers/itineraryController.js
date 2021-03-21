@@ -3,7 +3,7 @@ const asyncErrorCatcher = require('../utils/asyncErrorCatcher')
 const AppError = require('../utils/appError')
 
 // const sharp = require('sharp')
-const uploadCoverImageCloudinary = require('../middleware/cloudinary')
+const { uploadCoverImageCloudinary } = require('../middleware/cloudinary')
 const formatBufferToBase64 = require('../utils/dataUri')
 
 const {

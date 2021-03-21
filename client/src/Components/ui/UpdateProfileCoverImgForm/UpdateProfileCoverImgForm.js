@@ -24,7 +24,6 @@ import {
 import ImageButton from '../ImageButton/ImageButton'
 
 import { useStyles } from './styles'
-// import './styles.css'
 
 const UpdateProfileCoverImgForm = () => {
   const classes = useStyles()
@@ -37,9 +36,6 @@ const UpdateProfileCoverImgForm = () => {
   // Component level - File state
   const [previewFile, setPreviewFile] = useState(null)
   const [file, setFile] = useState(null)
-
-  console.log('file', file)
-  console.log('previewFile', previewFile)
 
   // cropper
   const {

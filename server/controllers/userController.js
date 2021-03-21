@@ -1,8 +1,14 @@
 const User = require('../models/userModel')
 const asyncErrorCatcher = require('../utils/asyncErrorCatcher')
 const AppError = require('../utils/appError')
-const multer = require('multer')
-const sharp = require('sharp')
+
+// const sharp = require('sharp')
+const {
+  uploadCoverImageCloudinary,
+  uploadProfileImageCloudinary,
+} = require('../middleware/cloudinary')
+const formatBufferToBase64 = require('../utils/dataUri')
+
 const {
   getAll,
   getOne,
@@ -18,54 +24,80 @@ exports.createUser = createOne(User)
 exports.deleteUser = deleteOne(User)
 exports.updateUser = updateOne(User)
 
-// current user controllers
+// CRUD controllers for custom routes
 
-// multer middleware set up - upload images
-const multerStorage = multer.memoryStorage()
-
-// test for file type
-const multerFilter = (req, file, cb) => {
-  file.mimetype.startsWith('image')
-    ? cb(null, true)
-    : cb(
-        new AppError('Not an image! Please upload image type file only', 400),
-        false
-      )
-}
-
-const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
-
-exports.uploadUserImg = upload.single('img')
-exports.uploadCoverImg = upload.single('coverImg')
-
-// img resize middleware
-exports.resizeUserImg = asyncErrorCatcher(async (req, res, next) => {
+// upload to cloudinary
+exports.uploadProfileCoverImage = asyncErrorCatcher(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `userProfile-${req.user.id}-${Date.now()}.jpeg`
+  const base64 = formatBufferToBase64(req.file)
+  const result = await uploadCoverImageCloudinary(base64.content)
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/${req.file.filename}`)
+  req.body.coverImg = result.secure_url
+  req.body.cloudinary_id = result.public_id
 
   next()
 })
 
-exports.resizeCoverImg = asyncErrorCatcher(async (req, res, next) => {
+// upload to cloudinary
+exports.uploadProfileImage = asyncErrorCatcher(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `userCover-${req.user.id}-${Date.now()}.jpeg`
+  const base64 = formatBufferToBase64(req.file)
+  const result = await uploadProfileImageCloudinary(base64.content)
 
-  await sharp(req.file.buffer)
-    .resize(1300, 800)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/${req.file.filename}`)
+  req.body.img = result.secure_url
+  req.body.cloudinary_id = result.public_id
 
   next()
 })
+
+// // multer middleware set up - upload images
+// const multerStorage = multer.memoryStorage()
+
+// // test for file type
+// const multerFilter = (req, file, cb) => {
+//   file.mimetype.startsWith('image')
+//     ? cb(null, true)
+//     : cb(
+//         new AppError('Not an image! Please upload image type file only', 400),
+//         false
+//       )
+// }
+
+// const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
+
+// exports.uploadUserImg = upload.single('img')
+// exports.uploadCoverImg = upload.single('coverImg')
+
+// // img resize middleware
+// exports.resizeUserImg = asyncErrorCatcher(async (req, res, next) => {
+//   if (!req.file) return next()
+
+//   req.file.filename = `userProfile-${req.user.id}-${Date.now()}.jpeg`
+
+//   await sharp(req.file.buffer)
+//     .resize(500, 500)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/${req.file.filename}`)
+
+//   next()
+// })
+
+// exports.resizeCoverImg = asyncErrorCatcher(async (req, res, next) => {
+//   if (!req.file) return next()
+
+//   req.file.filename = `userCover-${req.user.id}-${Date.now()}.jpeg`
+
+//   await sharp(req.file.buffer)
+//     .resize(1300, 800)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/${req.file.filename}`)
+
+//   next()
+// })
 
 // middleware to get current user on /me route
 exports.getMe = (req, res, next) => {
@@ -102,8 +134,11 @@ exports.updateMe = asyncErrorCatcher(async (req, res, next) => {
     'email'
   )
 
-  // 3) if file upload, add photo property to filteredBody
-  if (req.file) filteredBody.img = req.file.filename
+  // // 3) if file upload, add photo property to filteredBody
+  // if (req.file) filteredBody.img = req.file.filename
+
+  // changed for cloudinary
+  if (req.body.img !== null) filteredBody.img = req.body.img
 
   // 4) update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
@@ -139,8 +174,11 @@ exports.updateCoverImg = asyncErrorCatcher(async (req, res, next) => {
     'email'
   )
 
-  // 3) if file upload, add photo property to filteredBody
-  if (req.file) filteredBody.coverImg = req.file.filename
+  // // 3) if file upload, add photo property to filteredBody
+  // if (req.file) filteredBody.coverImg = req.file.filename
+
+  // changed for cloudinary
+  if (req.body.coverImg !== null) filteredBody.coverImg = req.body.coverImg
 
   // 4) update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
