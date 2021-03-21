@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   Button,
@@ -10,9 +10,15 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import UpdateProfileCoverImgForm from '../UpdateProfileCoverImgForm/UpdateProfileCoverImgForm'
-import UpdateProfileImgForm from '../UpdateProfileImgForm/UpdateProfileImgForm'
+
+import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
+import UploadProfileImgForm from '../UploadProfileImgForm/UploadProfileImgForm'
+import ImageButton from '../ImageButton/ImageButton'
+import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+
 import { updateUserProfile } from '../../Redux/usersSlice'
+
+import { base64StringtoFile } from '../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
@@ -22,12 +28,16 @@ const EditProfileForm = () => {
   const dispatch = useDispatch()
 
   // Global state - user info
-  const { userName, firstName, lastName, details } = useSelector(
+  const { userName, firstName, lastName, details, img, coverImg } = useSelector(
     (state) => state.users.currentUser
   )
 
-  // Component level state - profile info & file
+  // Component level state
   const [open, setOpen] = useState(false)
+  const [userFile, setUserFile] = useState(null)
+  const [userPreviewFile, setUserPreviewFile] = useState(null)
+  const [coverFile, setCoverFile] = useState(null)
+  const [coverPreviewFile, setCoverPreviewFile] = useState(null)
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
@@ -35,7 +45,23 @@ const EditProfileForm = () => {
     firstName: firstName,
     lastName: lastName,
     details: details,
+    img: img,
+    coverImg: coverImg,
   })
+
+  useEffect(() => {
+    if (userPreviewFile) {
+      const file = base64StringtoFile(userPreviewFile, 'croppedImg.png')
+      setUserFile(file)
+    }
+  }, [userPreviewFile])
+
+  useEffect(() => {
+    if (coverPreviewFile) {
+      const file = base64StringtoFile(coverPreviewFile, 'croppedImg.png')
+      setCoverFile(file)
+    }
+  }, [coverPreviewFile])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -43,6 +69,9 @@ const EditProfileForm = () => {
     const { userName, firstName, lastName, details } = formValues
 
     const formData = new FormData()
+    formData.append('img', userFile)
+    formData.append('coverImg', coverFile)
+    formData.append('upload_preset', 'travel-app')
     formData.append('userName', userName)
     formData.append('firstName', firstName)
     formData.append('lastName', lastName)
@@ -53,13 +82,17 @@ const EditProfileForm = () => {
     setOpen(false)
   }
 
-  const loadPreviewFile = () => console.log('from update profile form')
+  const loadUserPreviewFile = (croppedImage) => setUserPreviewFile(croppedImage)
+  const loadCoverPreviewFile = (croppedImage) =>
+    setCoverPreviewFile(croppedImage)
 
   const handleClickOpen = () => {
     setOpen(true)
   }
 
   const handleClose = () => {
+    setUserPreviewFile(null)
+    setCoverPreviewFile(null)
     setOpen(false)
   }
 
@@ -90,11 +123,23 @@ const EditProfileForm = () => {
           >
             Change your images or edit your info
           </Typography>
-          <UpdateProfileCoverImgForm
-            origin="profileForm"
-            loadPreviewFile={loadPreviewFile}
-          />
-          <UpdateProfileImgForm />
+
+          {coverPreviewFile ? (
+            <ImageButton coverImg={coverPreviewFile} />
+          ) : (
+            <UploadCoverImgForm
+              origin="editProfileForm"
+              loadPreviewFile={loadCoverPreviewFile}
+            />
+          )}
+          {userPreviewFile ? (
+            <ImageButtonRounded img={userPreviewFile} />
+          ) : (
+            <UploadProfileImgForm
+              origin="editProfileForm"
+              loadPreviewFile={loadUserPreviewFile}
+            />
+          )}
           <DialogContent>
             <TextField
               required

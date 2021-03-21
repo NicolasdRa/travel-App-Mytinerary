@@ -15,13 +15,15 @@ import {
 } from '@material-ui/core'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
-import { useImageCropper } from '../../../hooks/useImageCropper'
-import { base64StringtoFile } from '../../utils/imageUtils'
-import { updateUserProfile, selectCurrentUser } from '../../Redux/usersSlice'
-import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
+import { useImageCropper } from '../../hooks/useImageCropper'
+import { base64StringtoFile } from '../../Components/utils/imageUtils'
+import {
+  updateUserProfile,
+  selectCurrentUser,
+} from '../../Components/Redux/usersSlice'
+import ImageButtonRounded from '../../Components/ui/ImageButtonRounded/ImageButtonRounded'
 
 import { useStyles } from './styles'
-// import './styles.css'
 
 const UpdateProfileImgForm = () => {
   const classes = useStyles()

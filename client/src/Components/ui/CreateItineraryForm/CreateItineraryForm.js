@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import {
   Box,
@@ -19,6 +19,8 @@ import {
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
+import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
+
 import { selectAllCities } from '../../Redux/citiesSlice'
 import {
   selectCurrentUser,
@@ -27,9 +29,8 @@ import {
 import { addItinerary } from '../../Redux/itinerariesSlice'
 import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 import { base64StringtoFile } from '../../utils/imageUtils'
-import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
-import { useForm } from '../../../hooks/useForm'
 
+import { useForm } from '../../../hooks/useForm'
 import { useStyles } from './styles'
 
 const CreateItineraryForm = () => {
@@ -39,8 +40,10 @@ const CreateItineraryForm = () => {
   const cities = useSelector((state) => selectAllCities(state))
   const { _id } = useSelector(selectCurrentUser)
 
-  // Component level state - profile info & file
+  // Component level state
   const [open, setOpen] = useState(false)
+  const [file, setFile] = useState(null)
+  const [previewFile, setPreviewFile] = useState(null)
 
   // useForm hook
   const [formValues, handleInputChange, reset] = useForm({
@@ -54,10 +57,6 @@ const CreateItineraryForm = () => {
   })
 
   const { city, title, category, price, duration, details } = formValues
-
-  // Component level - File state
-  const [file, setFile] = useState(null)
-  const [previewFile, setPreviewFile] = useState(null)
 
   useEffect(() => {
     if (previewFile) {

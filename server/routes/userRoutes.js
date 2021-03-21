@@ -11,7 +11,6 @@ const {
   getMe,
   uploadProfileImage,
   uploadProfileCoverImage,
-  updateCoverImg,
 } = require('../controllers/userController')
 
 const upload = require('../middleware/multer')
@@ -25,12 +24,15 @@ router.use('/:userId/favourites', favouriteRouter)
 router.use(protect)
 
 router.route('/me').get(getMe, getUser)
-router
-  .route('/updateMe')
-  .patch(upload.single('img'), uploadProfileImage, updateMe)
-router
-  .route('/updateCover')
-  .patch(upload.single('coverImg'), uploadProfileCoverImage, updateCoverImg)
+router.route('/updateMe').patch(
+  upload.fields([
+    { name: 'img', maxCount: 1 },
+    { name: 'coverImg', maxCount: 1 },
+  ]),
+  uploadProfileImage,
+  uploadProfileCoverImage,
+  updateMe
+)
 
 router.delete('/deleteMe', deleteMe)
 

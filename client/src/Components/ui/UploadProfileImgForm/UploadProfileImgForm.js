@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
-import './styles.css'
+
 import {
   Box,
   Button,
@@ -14,17 +14,17 @@ import {
   IconButton,
   Typography,
 } from '@material-ui/core'
-import ImageButton from '../ImageButton/ImageButton'
+import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 
 import { useStyles } from './styles'
 import { useImageCropper } from '../../../hooks/useImageCropper'
 import { selectCurrentUser } from '../../Redux/usersSlice'
 
-const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
+const UploadProfileImgForm = ({ origin, loadPreviewFile }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
-  const { coverImg } = useSelector(selectCurrentUser)
+  const { img } = useSelector(selectCurrentUser)
 
   const {
     imageSrc,
@@ -74,7 +74,7 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
   return (
     <div>
       {origin === 'editProfileForm' ? (
-        <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
+        <ImageButtonRounded img={img} handleClick={handleClickOpen} />
       ) : (
         <Box className={classes.photoIconContainer}>
           <Typography variant="body2">Add a photo</Typography>
@@ -94,7 +94,7 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
           className={classes.title}
         >
           <Typography variant="body2">
-            {!imageSrc ? 'Choose ' : 'Adjust '}your cover image
+            {!imageSrc ? 'Choose ' : 'Adjust '}your profile image
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.contentContainer}>
@@ -110,8 +110,8 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                   onZoomChange={setZoom}
                   onRotationChange={setRotation}
                   onCropComplete={onCropComplete}
-                  showGrid={false}
-                  aspect={16 / 9}
+                  //   showGrid={false}
+                  aspect={1}
                   // aspect={1}
                   // cropShape="round"
                 />
@@ -197,9 +197,9 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
   )
 }
 
-UploadCoverImgForm.propTypes = {
+UploadProfileImgForm.propTypes = {
   loadPreviewFile: PropTypes.func.isRequired,
   origin: PropTypes.string.isRequired,
 }
 
-export default UploadCoverImgForm
+export default UploadProfileImgForm
