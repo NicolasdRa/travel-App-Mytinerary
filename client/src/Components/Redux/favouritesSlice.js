@@ -1,18 +1,49 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { favouritesUrl } from '../../constants'
 
 // THUNKS
 export const fetchFavourites = createAsyncThunk(
   'favourites/fetchAll',
   async (thunkAPI) => {
     const res = await axios({
-      method: 'get',
-      url: '/favourites',
-      baseURL: 'http://localhost:5000/api/v1',
+      method: 'GET',
+      url: favouritesUrl,
       responseType: 'json',
     })
-    return { results: res.data.results, data: res.data.data }
-  },
+    return res.data
+  }
+)
+
+export const addFavourite = createAsyncThunk(
+  'favourites/addOne',
+  async (formData, thunkAPI) => {
+    const res = await axios({
+      method: 'POST',
+      url: favouritesUrl,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    })
+    return res.data
+  }
+)
+
+export const deleteFavourite = createAsyncThunk(
+  'favourites/deleteOne',
+  async (formData, thunkAPI) => {
+    const id = formData.id
+    const res = await axios({
+      method: 'DELETE',
+      url: `${favouritesUrl}/${id}`,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    })
+    return res.data
+  }
 )
 
 // SLICE
@@ -21,29 +52,72 @@ const favouritesSlice = createSlice({
   initialState: {
     loading: 'idle',
     results: 0,
-    newFavourite: null,
+    data: null,
   },
   reducers: {
     // standard reducer logic, with auto-generated action types
-    addFavourite(state, action) {
-      // "mutate" the array by calling push()
-      state.push(action.payload)
-    },
-    deleteFavourite(state, action) {
-      return state.filter((favourite, i) => i !== action.payload.index)
-    },
   },
   extraReducers: {
-    // Add reducers for additional action types here, and handle loading state as needed
+    // fetch all
     [fetchFavourites.fulfilled]: (state, action) => {
-      // Add user to the state array
-      return { loading: 'done', ...action.payload }
+      state.loading = 'done'
+      state.results = action.payload.results
+      state.data = action.payload.data
+    },
+    [fetchFavourites.rejected]: (state, action) => {
+      state.loading = 'fail'
+      state.error = action.payload
+    },
+    // add one
+    [addFavourite.fulfilled]: (state, action) => {
+      const newFavourite = action.payload.data.data
+      state.loading = 'done'
+      state.data.unshift(newFavourite)
+    },
+    [addFavourite.rejected]: (state, action) => {
+      state.loading = 'fail'
+      state.error = action.payload
+    },
+    // delete one
+    [deleteFavourite.fulfilled]: (state, action) => {
+      const favourite = action.payload.data.data
+      state.loading = 'done'
+      state.data.filter((stateFavourite) => stateFavourite.id !== favourite.id)
+    },
+    [deleteFavourite.rejected]: (state, action) => {
+      state.loading = 'fail'
+      state.error = action.payload
     },
   },
 })
 
-// Extract and export each action creator by name
-export const { addFavourite, deleteFavourite } = favouritesSlice.actions
+const selectFavourites = (state) => state.itineraries.data
+
+export const selectItinerariesLoading = (state) => state.itineraries.loading
+
+export const selectAllFavourites = createSelector(
+  [selectFavourites],
+  (favourites) => favourites
+)
+
+export const selectUserFavourites = createSelector(
+  [selectFavourites, (state, userId) => userId],
+  (favourites, userId) =>
+    favourites && userId
+      ? favourites.filter((favourite) => favourite.author.user === userId)
+      : []
+)
+
+export const selectCityFavourites = createSelector(
+  [selectFavourites, (state, cityId) => cityId],
+  (favourites, cityId) =>
+    favourites && cityId
+      ? favourites.filter((favourite) => favourite.city === cityId)
+      : []
+)
+
+// Extract and export each action creator by name (not thunks)
+// export const { } = favouritesSlice.actions
 
 // // Export the reducer as a default export
 export default favouritesSlice.reducer

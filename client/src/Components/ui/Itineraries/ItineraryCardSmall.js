@@ -57,14 +57,16 @@ const ActivityCardSmall = (props) => {
         />
         <CardContent
           component={Link}
-          to={'/itinerarypage/' + title}
-          className={classes.card_underlineNone}>
+          to={`/itinerarypage/${title}`}
+          className={classes.card_underlineNone}
+        >
           <Typography
             className={classes.card_title}
             gutterBottom
             variant="subtitle2"
             component="h6"
-            textcolor="primary">
+            textcolor="primary"
+          >
             {title}
           </Typography>
         </CardContent>

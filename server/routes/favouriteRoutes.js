@@ -1,24 +1,24 @@
-const express = require("express");
+const express = require('express')
 const {
   getAllFavourites,
   getFavourite,
   addFavourite,
   updateFavourite,
   deleteFavourite,
-} = require("../controllers/favouriteController");
-const { restrict, protect } = require("../controllers/authController");
+} = require('../controllers/favouriteController')
+const { restrict, protect } = require('../controllers/authController')
 
 // ------------------------------------- //
 // ROUTES
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true })
 
-router.route("/").get(getAllFavourites).post(protect, addFavourite);
+router.route('/').get(getAllFavourites).post(protect, addFavourite)
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(getFavourite)
-  .patch(restrict("admin"), updateFavourite)
-  .delete(protect, deleteFavourite);
+  .patch(restrict('admin'), updateFavourite)
+  .delete(protect, deleteFavourite)
 
-module.exports = router;
+module.exports = router

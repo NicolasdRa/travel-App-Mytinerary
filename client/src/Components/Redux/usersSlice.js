@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { usersUrl } from '../../constants'
 
 // THUNKS
 
@@ -9,7 +10,7 @@ export const loadCurrentUser = createAsyncThunk(
   async () => {
     const res = await axios({
       method: 'GET',
-      url: `/api/v1/users/me`,
+      url: `${usersUrl}me`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -24,7 +25,7 @@ export const updateUserProfile = createAsyncThunk(
   async (formData) => {
     const res = await axios({
       method: 'PATCH',
-      url: '/api/v1/users/updateMe',
+      url: `${usersUrl}updateMe`,
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -40,7 +41,7 @@ export const updateProfileCoverImage = createAsyncThunk(
   async (formData) => {
     const res = await axios({
       method: 'PATCH',
-      url: '/api/v1/users/updateCover',
+      url: `${usersUrl}updateCover`,
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -61,7 +62,7 @@ export const updateProfileCoverImage = createAsyncThunk(
 export const getUserById = createAsyncThunk('users/getUserById', async () => {
   const res = await axios({
     method: 'GET',
-    url: `/api/v1/users/:id`,
+    url: `${usersUrl}:id`,
     headers: {
       'Content-Type': 'application/json',
     },

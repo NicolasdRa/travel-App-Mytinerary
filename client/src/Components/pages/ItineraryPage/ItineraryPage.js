@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
 import PuffLoader from 'react-spinners/PuffLoader'
-import { useSelector, useDispatch } from 'react-redux'
+
 import {
   fetchItineraryByTitle,
   selectCurrentItinerary,
 } from '../../Redux/itinerariesSlice'
+import { selectCurrentUser } from '../../Redux/usersSlice'
 
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
@@ -26,13 +28,11 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import { fetchFavourites } from '../../Redux/favouritesSlice'
-
 import { useStyles } from './styles'
 import clsx from 'clsx'
 
 import CreateCommentForm from '../../ui/CreateCommentForm/CreateCommentForm'
-import { selectCurrentUser } from '../../Redux/usersSlice'
+
 import { CommentCard } from '../../ui/CommentCard/CommentCard'
 
 // TODO: itinerary Reducer action to keep track of likes
@@ -47,12 +47,11 @@ const ItineraryPage = () => {
   const currentUser = useSelector(selectCurrentUser)
 
   // takes params & chooses itinerary to display
-  const { title: itineraryTitle } = useParams()
+  const { title } = useParams()
 
   // fetches data from DB
   useEffect(() => {
-    dispatch(fetchItineraryByTitle(itineraryTitle))
-    // loads itinerary comments to redux comment resource
+    dispatch(fetchItineraryByTitle(title))
   }, [])
 
   const itinerary = useSelector(selectCurrentItinerary)
@@ -84,7 +83,6 @@ const ItineraryPage = () => {
   // variables for ui
   const {
     _id,
-    title,
     city,
     category,
     duration,

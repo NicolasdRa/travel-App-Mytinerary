@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { itinerariesUrl } from '../../constants'
 
 // THUNKS
 export const fetchItineraries = createAsyncThunk(
@@ -7,7 +8,7 @@ export const fetchItineraries = createAsyncThunk(
   async (thunkAPI) => {
     const res = await axios({
       method: 'get',
-      url: '/api/v1/itineraries',
+      url: itinerariesUrl,
       responseType: 'json',
     })
     return res.data
@@ -19,7 +20,7 @@ export const fetchItineraryById = createAsyncThunk(
   async (id, thunkAPI) => {
     const res = await axios({
       method: 'get',
-      url: `/api/v1/itineraries/${id}`,
+      url: `${itinerariesUrl}${id}`,
       responseType: 'json',
     })
     return res.data
@@ -31,7 +32,7 @@ export const fetchItineraryByTitle = createAsyncThunk(
   async (title, thunkAPI) => {
     const res = await axios({
       method: 'get',
-      url: `/api/v1/itineraries/title/${title}`,
+      url: `${itinerariesUrl}/title/${title}`,
       responseType: 'json',
     })
     return res.data
@@ -43,7 +44,7 @@ export const addItinerary = createAsyncThunk(
   async (formData, thunkAPI) => {
     const res = await axios({
       method: 'POST',
-      url: '/api/v1/itineraries',
+      url: itinerariesUrl,
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -63,9 +64,7 @@ const itinerariesSlice = createSlice({
     data: [],
   },
   reducers: {
-    deleteItinerary(state, action) {
-      return state.filter((itinerary, i) => i !== action.payload.index)
-    },
+    // standard reducer logic, with auto-generated action types
     updateItineraryComments: {
       reducer(state, action) {
         state.currentItinerary.comments.unshift(action.payload)
@@ -91,16 +90,12 @@ const itinerariesSlice = createSlice({
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [fetchItineraries.fulfilled]: (state, action) => {
-      return {
-        loading: 'done',
-        ...action.payload,
-      }
+      state.loading = 'done'
+      state.data = action.payload.data
     },
     [fetchItineraries.rejected]: (state, action) => {
-      return {
-        loading: 'fail',
-        error: action.payload,
-      }
+      state.loading = 'fail'
+      state.error = action.payload
     },
     [addItinerary.fulfilled]: (state, action) => {
       const newItinerary = action.payload.data.data

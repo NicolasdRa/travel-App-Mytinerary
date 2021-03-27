@@ -26,6 +26,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { fetchCities } from '../Components/Redux/citiesSlice'
 import { fetchItineraries } from '../Components/Redux/itinerariesSlice'
 import { fetchActivities } from '../Components/Redux/activitiesSlice'
+import { fetchFavourites } from '../Components/Redux/favouritesSlice'
 import { loadCurrentUser } from '../Components/Redux/usersSlice'
 import { isLoggedIn } from '../Components/Redux/authSlice'
 
@@ -62,6 +63,7 @@ export const AppRouter = () => {
     dispatch(fetchCities())
     dispatch(fetchItineraries())
     dispatch(fetchActivities())
+    dispatch(fetchFavourites())
     setisLoading(false)
   }, [dispatch])
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { authUrl } from '../../constants'
 
 // THUNKS
 
@@ -10,7 +11,7 @@ export const signupUser = createAsyncThunk(
     try {
       const res = await axios({
         method: 'POST',
-        url: '/api/v1/auth/signup',
+        url: `${authUrl}signup`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -34,7 +35,7 @@ export const logInUser = createAsyncThunk(
     try {
       const res = await axios({
         method: 'POST',
-        url: '/api/v1/auth/login',
+        url: `${authUrl}login`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -57,7 +58,7 @@ export const logOutUser = createAsyncThunk(
     try {
       const res = await axios({
         method: 'POST',
-        url: '/api/v1/auth/logout',
+        url: `${authUrl}logout`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -79,7 +80,7 @@ export const forgotPassword = createAsyncThunk(
     try {
       const res = await axios({
         method: 'POST',
-        url: '/api/v1/auth/forgotpassword',
+        url: `${authUrl}forgotpassword`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -102,7 +103,7 @@ export const resetPassword = createAsyncThunk(
     try {
       const res = await axios({
         method: 'PATCH',
-        url: '/api/v1/auth/resetpassword',
+        url: `${authUrl}resetpassword`,
         headers: {
           'Content-Type': 'application/json',
         },

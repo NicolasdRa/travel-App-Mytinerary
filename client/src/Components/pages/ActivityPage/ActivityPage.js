@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
-import { useSelector } from 'react-redux'
-import { selectActivityByTitle } from '../../Redux/activitiesSlice'
+import PuffLoader from 'react-spinners/PuffLoader'
+
+import {
+  fetchActivityByTitle,
+  selectCurrentActivity,
+} from '../../Redux/activitiesSlice'
 
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
@@ -23,14 +28,29 @@ import CreateIcon from '@material-ui/icons/Create'
 
 import { useStyles } from './styles'
 
-const ActivityPage = ({ match }) => {
+const ActivityPage = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 
-  const { title } = match.params
+  // takes params & chooses activity to display
+  const { title } = useParams()
 
-  const activity = useSelector((state) => selectActivityByTitle(state, title))
+  // fetches data from DB
+  useEffect(() => {
+    dispatch(fetchActivityByTitle(title))
+  }, [])
+
+  const activity = useSelector(selectCurrentActivity)
+
+  if (!activity) {
+    return (
+      <div className={classes.loader}>
+        <PuffLoader color="red" loading={true} size={80} />
+      </div>
+    )
+  }
 
   const { city, category, likes, duration, price, img, details } = activity
 
@@ -48,7 +68,8 @@ const ActivityPage = ({ match }) => {
           <Box className={classes.likes}>
             <IconButton
               aria-label="add to favorites"
-              className={classes.likes_btn}>
+              className={classes.likes_btn}
+            >
               <FavoriteBorderRoundedIcon className={classes.likes_icon} />
             </IconButton>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -61,7 +82,8 @@ const ActivityPage = ({ match }) => {
             <Avatar
               // aria-label='recipe'
               // variant='rounded'
-              className={classes.avatar}>
+              className={classes.avatar}
+            >
               {/* (get from author_id) */}
               Author Name
             </Avatar>
@@ -69,7 +91,8 @@ const ActivityPage = ({ match }) => {
               variant="body2"
               color="textSecondary"
               component="p"
-              className={classes.author_name}>
+              className={classes.author_name}
+            >
               {/* ..still to develop this variable */}
               by John Doe
             </Typography>
@@ -101,7 +124,8 @@ const ActivityPage = ({ match }) => {
               color="secondary"
               component={Link}
               to={'/activitypage/' + title}
-              className={classes.view_btn}>
+              className={classes.view_btn}
+            >
               View Reviews (54)
             </Button>
             <Box className={classes.write_btn}>
@@ -110,7 +134,8 @@ const ActivityPage = ({ match }) => {
                 color="secondary"
                 component={Link}
                 to={'/activitypage/' + title}
-                className={classes.text_btn}>
+                className={classes.text_btn}
+              >
                 Leave your comment
               </Button>
               <CreateIcon className={classes.write_icon} />
@@ -122,14 +147,6 @@ const ActivityPage = ({ match }) => {
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
   )
-}
-
-ActivityPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }),
-  }),
 }
 
 export default ActivityPage

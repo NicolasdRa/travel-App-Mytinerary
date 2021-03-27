@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 // Schema
 const favouriteSchema = new mongoose.Schema(
@@ -15,28 +15,28 @@ const favouriteSchema = new mongoose.Schema(
 
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: [true, "A favourite must have a userFrom"],
+      ref: 'User',
+      required: [true, 'A favourite must have a user'],
     },
 
     city: {
       type: mongoose.Schema.ObjectId,
-      ref: "City",
+      ref: 'City',
     },
 
     itinerary: {
       type: mongoose.Schema.ObjectId,
-      ref: "Itinerary",
+      ref: 'Itinerary',
     },
 
     activity: {
       type: mongoose.Schema.ObjectId,
-      ref: "Activity",
+      ref: 'Activity',
     },
 
     comment: {
       type: mongoose.Schema.ObjectId,
-      ref: "Comment",
+      ref: 'Comment',
     },
 
     // originId: {
@@ -51,35 +51,35 @@ const favouriteSchema = new mongoose.Schema(
   },
 
   // options object for virtual properties
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
-);
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+)
 
 // query middleware to populate referenced fields
 favouriteSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "userFrom",
-    select: "userName",
+    path: 'user',
+    select: 'userName',
   })
     .populate({
-      path: "city",
-      select: "name",
+      path: 'city',
+      select: 'name',
     })
     .populate({
-      path: "itinerary",
-      select: "title",
+      path: 'itinerary',
+      select: 'title',
     })
     .populate({
-      path: "activity",
-      select: "title",
+      path: 'activity',
+      select: 'title',
     })
     .populate({
-      path: "comment",
-      select: "details",
-    });
+      path: 'comment',
+      select: 'details',
+    })
 
-  next();
-});
+  next()
+})
 
 // Model
-const Favourite = mongoose.model("Favourite", favouriteSchema);
-module.exports = Favourite;
+const Favourite = mongoose.model('Favourite', favouriteSchema)
+module.exports = Favourite

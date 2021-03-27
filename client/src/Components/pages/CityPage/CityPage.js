@@ -1,36 +1,38 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { selectCityByName } from "../../Redux/citiesSlice";
-import { selectAllItinerariesForCity } from "../../Redux/itinerariesSlice";
+import PuffLoader from 'react-spinners/PuffLoader'
+
+import { fetchCityByName, selectCurrentCity } from '../../Redux/citiesSlice'
+import { selectCurrentUser } from '../../Redux/usersSlice'
+
 // import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
-import ItineraryGallery from "../../ui/ItineraryGallery/ItineraryGallery";
-import ImageHeader from "../../ui/Headers/ImageHeader";
-import CreateIitineraryForm from "../../ui/CreateItineraryForm/CreateItineraryForm";
+import ItineraryGallery from '../../ui/ItineraryGallery/ItineraryGallery'
+import ImageHeader from '../../ui/Headers/ImageHeader'
+import Favourite from '../../ui/Favourite/Favourite'
+import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography } from '@material-ui/core'
 
-import { useStyles } from "./styles";
+import { useStyles } from './styles'
 
-const CityPage = ({ match }) => {
-  const classes = useStyles();
-  // const dispatch = useDispatch()
+const CityPage = () => {
+  const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const cityName = match.params.city_name;
+  const { city_name } = useParams()
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const user = useSelector(selectCurrentUser)
 
-  const city = useSelector((state) => selectCityByName(state, cityName));
-  const itineraries = useSelector((state) =>
-    selectAllItinerariesForCity(state, cityName),
-  );
-  // const itineraries = useSelector((state) =>
-  //   state.itineraries.data.filter(
-  //     (itineraries) => itineraries.city === cityName,
-  //   ),
-  // )
+  // fetches data from DB
+  useEffect(() => {
+    dispatch(fetchCityByName(city_name))
+  }, [])
+
+  const city = useSelector(selectCurrentCity)
 
   // useEffect(() => {
   //   dispatch(getCitiesGeoDB(cityName))
@@ -39,14 +41,35 @@ const CityPage = ({ match }) => {
   //   }
   // }, [])
 
-  const { name, img, country } = city;
+  if (!city) {
+    // TODO: create custom loader with custom message passed as props for all screens
+    return (
+      <div className={classes.loader}>
+        <PuffLoader color="red" loading={true} size={80} />
+      </div>
+    )
+  }
+
+  // variables for ui
+
+  const { name, img, country, itineraries = [], favourites = [] } = city
 
   return (
     <Box className={classes.content}>
       <ImageHeader img={img} className={classes.header} />
-      <Box className={classes.city_title}>
-        <Typography variant="overline">{country}</Typography>
-        <Typography variant="h5">{name}</Typography>
+      <Box className={classes.container}>
+        <Box className={classes.city_title}>
+          <Typography variant="overline">{country}</Typography>
+          <Typography variant="h5">{name}</Typography>
+        </Box>
+        <Box className={classes.likes}>
+          <Favourite
+            data={favourites.length}
+            target={city}
+            user={user}
+            className={classes.favourites}
+          />
+        </Box>
       </Box>
       <Box className={classes.gallery}>
         {itineraries.length > 0 && (
@@ -58,15 +81,7 @@ const CityPage = ({ match }) => {
       </Box>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
-  );
-};
+  )
+}
 
-CityPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      city_name: PropTypes.string.isRequired,
-    }),
-  }),
-};
-
-export default CityPage;
+export default CityPage
