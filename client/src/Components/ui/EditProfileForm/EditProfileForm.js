@@ -34,9 +34,9 @@ const EditProfileForm = () => {
 
   // Component level state
   const [open, setOpen] = useState(false)
-  const [userFile, setUserFile] = useState(null)
+  const [userFile, setUserFile] = useState(img)
   const [userPreviewFile, setUserPreviewFile] = useState(null)
-  const [coverFile, setCoverFile] = useState(null)
+  const [coverFile, setCoverFile] = useState(coverImg)
   const [coverPreviewFile, setCoverPreviewFile] = useState(null)
 
   // useForm hook
@@ -68,9 +68,11 @@ const EditProfileForm = () => {
 
     const { userName, firstName, lastName, details } = formValues
 
+    console.log(userFile, coverFile)
+
     const formData = new FormData()
-    formData.append('img', userFile)
-    formData.append('coverImg', coverFile)
+    userFile && formData.append('img', userFile)
+    coverFile && formData.append('coverImg', coverFile)
     formData.append('upload_preset', 'travel-app')
     formData.append('userName', userName)
     formData.append('firstName', firstName)

@@ -1,44 +1,109 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 import { Box, IconButton, Typography } from '@material-ui/core'
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 
-import { addFavourite, deleteFavourite } from '../../Redux/favouritesSlice'
-
 import { useStyles } from './styles'
+import { useFetchData } from '../../../hooks/useFetchData'
+import { favouritesUrl, apiUrl } from '../../../constants'
 
-const Favourite = ({ data, source }) => {
+const Favourite = ({ sourceType, sourceId, userId }) => {
   const classes = useStyles()
-  const dispatch = useDispatch()
-  const favouriteCount = useSelector((state) => state.favourites.results)
 
-  // local state
+  const urlPart = (sourceType) => {
+    switch (sourceType) {
+      case 'city':
+        return 'cities'
+      case 'itinerary':
+        return 'itineraries'
+      case 'activity':
+        return 'activities'
+
+      default:
+        return null
+    }
+  }
+
+  const [count, setCount] = useState(0)
+  const [favourite, setFavourite] = useState(null)
   const [iconColour, setIconColour] = useState('default')
-  const [count, setCount] = useState(data)
+
+  const url = `${apiUrl}${urlPart(sourceType)}/${sourceId}/favourites`
+
+  // fetches data
+  const [{ data: favourites, isLoading, isError }] = useFetchData(url, {})
 
   // fills count with DB data
   useEffect(() => {
-    setCount(favouriteCount)
-  }, [favouriteCount])
+    setCount(favourites.data && favourites.data.length)
+  }, [favourites])
 
-  // Here dispatch action to add / remove favourite in DB
+  useEffect(() => {
+    if (favourites.data && favourites.data.length > 0) {
+      const isfavourite = favourites.data.filter(
+        (favourite) => favourite.user.id === userId
+      )
+      setFavourite(isfavourite[0])
+    }
+  }, [favourites])
 
-  // toggles favourite btn
+  useEffect(() => {
+    favourite && setIconColour('secondary')
+  }, [favourite])
+
+  const addFavourite = async () => {
+    if (!favourite) {
+      try {
+        const res = await axios({
+          method: 'POST',
+          url: favouritesUrl,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            [sourceType]: sourceId,
+            user: userId,
+          },
+        })
+        setIconColour('secondary')
+        setCount(count + 1)
+        setFavourite(res.data.data.data)
+      } catch (error) {
+        console.log(error.response)
+      }
+    }
+  }
+
+  const removeFavourite = async () => {
+    if (favourite) {
+      console.log(favourite._id)
+
+      try {
+        const res = await axios({
+          method: 'DELETE',
+          url: `${favouritesUrl}${favourite._id}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        setFavourite(null)
+        setIconColour('default')
+        setCount(count - 1)
+        return res
+      } catch (error) {
+        console.log(error.response)
+      }
+    }
+  }
+
+  // toggles favourite btn action
   const handleClick = () => {
-    const addOne = () => {
-      setIconColour('secondary')
-      setCount(count + 1)
-      dispatch(addFavourite(source))
+    if (favourite === null) {
+      addFavourite()
+    } else {
+      removeFavourite()
     }
-
-    const removeOne = () => {
-      setIconColour('default')
-      setCount(count - 1)
-      dispatch(deleteFavourite(source))
-    }
-
-    iconColour === 'default' ? addOne() : removeOne()
   }
 
   return (

@@ -61,6 +61,28 @@ const citiesSlice = createSlice({
     deleteCity(state, action) {
       return state.filter((city, i) => i !== action.payload.index)
     },
+    addCityFavourite: {
+      reducer(state, action) {
+        state.currentCity.favourites.unshift(action.payload)
+      },
+      prepare(data) {
+        return {
+          payload: data,
+        }
+      },
+    },
+    deleteCityFavourite: {
+      reducer(state, action) {
+        state.currentCity.favourites.filter(
+          (favourite) => favourite._id !== action.payload._id
+        )
+      },
+      prepare(data) {
+        return {
+          payload: data,
+        }
+      },
+    },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed

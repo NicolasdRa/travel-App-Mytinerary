@@ -18,6 +18,7 @@ import {
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import EuroIcon from '@material-ui/icons/Euro'
+
 import { useStyles } from './styles'
 
 const ItineraryCard = ({ _id, city, title, likes, duration, price, img }) => {
@@ -110,7 +111,13 @@ const ItineraryCard = ({ _id, city, title, likes, duration, price, img }) => {
 }
 
 ItineraryCard.propTypes = {
-  itinerary: PropTypes.object.isRequired,
+  _id: PropTypes.string.isRequired,
+  city: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  likes: PropTypes.number.isRequired,
+  duration: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
 }
 
 export default ItineraryCard

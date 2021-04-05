@@ -53,13 +53,30 @@ export const fetchCommentByTitle = createAsyncThunk(
 export const addComment = createAsyncThunk(
   'comments/addOne',
   async (formData, thunkAPI) => {
+    console.log(formData)
+
+    const {
+      author,
+      sourceType,
+      sourceId,
+      rating,
+      summary,
+      description,
+    } = formData
+
     const res = await axios({
       method: 'POST',
       url: '/api/v1/comments',
       headers: {
         'Content-Type': 'application/json',
       },
-      data: formData,
+      data: {
+        [sourceType]: sourceId,
+        author,
+        rating,
+        summary,
+        description,
+      },
     })
     return res.data
   }
@@ -97,8 +114,7 @@ const commentsSlice = createSlice({
       }
     },
     [addComment.fulfilled]: (state, action) => {
-      // const newItinerary = action.payload.data.data
-      // state.data.unshift(newItinerary)
+      console.log(action.payload)
       state.data.unshift(action.payload.data.data)
     },
     [addComment.rejected]: (state, action) => {

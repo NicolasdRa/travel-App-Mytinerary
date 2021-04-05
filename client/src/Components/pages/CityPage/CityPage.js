@@ -34,13 +34,6 @@ const CityPage = () => {
 
   const city = useSelector(selectCurrentCity)
 
-  // useEffect(() => {
-  //   dispatch(getCitiesGeoDB(cityName))
-  //   return () => {
-  //     // cleanup
-  //   }
-  // }, [])
-
   if (!city) {
     // TODO: create custom loader with custom message passed as props for all screens
     return (
@@ -51,8 +44,7 @@ const CityPage = () => {
   }
 
   // variables for ui
-
-  const { name, img, country, itineraries = [], favourites = [] } = city
+  const { _id: cityId, name, img, country, itineraries } = city
 
   return (
     <Box className={classes.content}>
@@ -64,9 +56,10 @@ const CityPage = () => {
         </Box>
         <Box className={classes.likes}>
           <Favourite
-            data={favourites.length}
-            target={city}
-            user={user}
+            readOnly={!user && true}
+            sourceType="city"
+            sourceId={cityId}
+            userId={user && user._id}
             className={classes.favourites}
           />
         </Box>
@@ -74,7 +67,7 @@ const CityPage = () => {
       <Box className={classes.gallery}>
         {itineraries.length > 0 && (
           <Typography className={classes.subtitle}>
-            Available itineraries for {name}
+            Available itineraries for {city_name}
           </Typography>
         )}
         <ItineraryGallery itineraries={itineraries} />

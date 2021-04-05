@@ -111,8 +111,21 @@ const activitySchema = new mongoose.Schema(
     },
   },
   // options object for virtual properties
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
+
+// Virtual populate (to populate comments which in turn hold the reference to itineraries)
+activitySchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'activity',
+})
+
+activitySchema.virtual('favourites', {
+  ref: 'Favourite',
+  localField: '_id',
+  foreignField: 'activity',
+})
 
 // query middleware to populate referenced fields
 // activitySchema.pre(/^find/, function (next) {

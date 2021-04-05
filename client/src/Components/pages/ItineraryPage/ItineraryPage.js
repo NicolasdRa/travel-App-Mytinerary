@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { v4 as uuidv4 } from 'uuid'
 import PuffLoader from 'react-spinners/PuffLoader'
 
 import {
@@ -82,7 +83,7 @@ const ItineraryPage = () => {
 
   // variables for ui
   const {
-    _id,
+    _id: itineraryId,
     city,
     category,
     duration,
@@ -90,6 +91,7 @@ const ItineraryPage = () => {
     img,
     details,
     activities,
+    favourites,
     ratingAvg,
     likes,
     author: { userName: authorName } = '',
@@ -98,7 +100,7 @@ const ItineraryPage = () => {
   } = itinerary
 
   // variable to pass in create comment form
-  const userId = currentUser._id
+  const { _id: userId, userName, img: userImg } = currentUser
 
   return (
     <Box className={classes.container}>
@@ -113,7 +115,14 @@ const ItineraryPage = () => {
             <Typography variant="h5">{title}</Typography>
           </Box>
           <Box className={classes.likes}>
-            <Favourite data={likes} />
+            <Favourite
+              readOnly={!userId && true}
+              data={favourites.length}
+              sourceType="itinerary"
+              sourceId={itineraryId}
+              userId={userId && userId}
+              className={classes.favourites}
+            />
           </Box>
         </Box>
         <Box
@@ -207,13 +216,16 @@ const ItineraryPage = () => {
             </Box>
             <CreateCommentForm
               userId={userId}
-              itineraryId={_id}
+              userName={userName}
+              userImg={userImg}
+              sourceId={itineraryId}
+              sourceType="itinerary"
               className={classes.postReview}
             />
           </Box>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             {itinerary.comments.map((comment) => (
-              <CommentCard key={comment._id} comment={comment} />
+              <CommentCard key={uuidv4()} comment={comment} />
             ))}
           </Collapse>
           <Divider className={classes.divider} />

@@ -8,6 +8,7 @@ import commentsSlice from './commentsSlice'
 import authSlice from './authSlice'
 import usersSlice from './usersSlice'
 import formsSlice from './formsSlice'
+import uiSlice from './uiSlice'
 
 const rootReducer = combineReducers({
   cities: citiesSlice,
@@ -17,7 +18,9 @@ const rootReducer = combineReducers({
   comments: commentsSlice,
   auth: authSlice,
   users: usersSlice,
+  // TODO: refactor formsSlice into uiSlice
   forms: formsSlice,
+  ui: uiSlice,
 })
 
 export default rootReducer

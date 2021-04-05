@@ -10,7 +10,6 @@ const { restrict, protect } = require('../controllers/authController')
 
 // ------------------------------------- //
 // ROUTES
-
 const router = express.Router({ mergeParams: true })
 
 router.route('/').get(getAllFavourites).post(protect, addFavourite)

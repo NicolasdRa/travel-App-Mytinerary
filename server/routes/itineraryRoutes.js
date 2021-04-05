@@ -16,6 +16,7 @@ const upload = require('../middleware/multer')
 const { protect } = require('../controllers/authController')
 const activityRouter = require('../routes/activityRoutes')
 const favouriteRouter = require('../routes/favouriteRoutes')
+const commentRouter = require('../routes/commentRoutes')
 
 // ------------------------------------- //
 
@@ -27,6 +28,7 @@ const favouriteRouter = require('../routes/favouriteRoutes')
 // Nested routes
 router.use('/:itineraryId/activities', activityRouter)
 router.use('/:itineraryId/favourites', favouriteRouter)
+router.use('/:itineraryId/comments', commentRouter)
 
 // Routes
 router

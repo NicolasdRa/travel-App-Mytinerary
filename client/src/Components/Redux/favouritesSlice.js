@@ -15,48 +15,15 @@ export const fetchFavourites = createAsyncThunk(
   }
 )
 
-export const addFavourite = createAsyncThunk(
-  'favourites/addOne',
-  async (formData, thunkAPI) => {
-    const res = await axios({
-      method: 'POST',
-      url: favouritesUrl,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-    return res.data
-  }
-)
-
-export const deleteFavourite = createAsyncThunk(
-  'favourites/deleteOne',
-  async (formData, thunkAPI) => {
-    const id = formData.id
-    const res = await axios({
-      method: 'DELETE',
-      url: `${favouritesUrl}/${id}`,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-    return res.data
-  }
-)
-
 // SLICE
 const favouritesSlice = createSlice({
   name: 'favourites',
   initialState: {
     loading: 'idle',
     results: 0,
-    data: null,
+    data: [],
   },
-  reducers: {
-    // standard reducer logic, with auto-generated action types
-  },
+  reducers: {},
   extraReducers: {
     // fetch all
     [fetchFavourites.fulfilled]: (state, action) => {
@@ -68,32 +35,12 @@ const favouritesSlice = createSlice({
       state.loading = 'fail'
       state.error = action.payload
     },
-    // add one
-    [addFavourite.fulfilled]: (state, action) => {
-      const newFavourite = action.payload.data.data
-      state.loading = 'done'
-      state.data.unshift(newFavourite)
-    },
-    [addFavourite.rejected]: (state, action) => {
-      state.loading = 'fail'
-      state.error = action.payload
-    },
-    // delete one
-    [deleteFavourite.fulfilled]: (state, action) => {
-      const favourite = action.payload.data.data
-      state.loading = 'done'
-      state.data.filter((stateFavourite) => stateFavourite.id !== favourite.id)
-    },
-    [deleteFavourite.rejected]: (state, action) => {
-      state.loading = 'fail'
-      state.error = action.payload
-    },
   },
 })
 
-const selectFavourites = (state) => state.itineraries.data
+const selectFavourites = (state) => state.favourites.data
 
-export const selectItinerariesLoading = (state) => state.itineraries.loading
+export const selectFavouritesLoading = (state) => state.favourites.loading
 
 export const selectAllFavourites = createSelector(
   [selectFavourites],
@@ -113,6 +60,22 @@ export const selectCityFavourites = createSelector(
   (favourites, cityId) =>
     favourites && cityId
       ? favourites.filter((favourite) => favourite.city === cityId)
+      : []
+)
+
+export const selectItineraryFavourites = createSelector(
+  [selectFavourites, (state, itineraryId) => itineraryId],
+  (favourites, itineraryId) =>
+    favourites && itineraryId
+      ? favourites.filter((favourite) => favourite.itinerary === itineraryId)
+      : []
+)
+
+export const selectActivityFavourites = createSelector(
+  [selectFavourites, (state, activityId) => activityId],
+  (favourites, activityId) =>
+    favourites && activityId
+      ? favourites.filter((favourite) => favourite.activity === activityId)
       : []
 )
 

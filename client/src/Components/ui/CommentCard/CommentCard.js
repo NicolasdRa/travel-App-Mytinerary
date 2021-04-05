@@ -21,6 +21,8 @@ export const CommentCard = ({ comment }) => {
     rating,
     summary,
     description,
+    userName,
+    userImg,
     author: { userName: authorName },
     author: { img: authorImg },
     createdAt,
@@ -33,8 +35,8 @@ export const CommentCard = ({ comment }) => {
       <CardContent className={classes.userInfo}>
         <Avatar
           aria-label="recipe"
-          alt={authorName}
-          src={authorImg}
+          alt={authorName ? authorName : userName}
+          src={authorImg ? authorImg : userImg}
           className={classes.avatar}
         />
         <Box className={classes.header}>
@@ -43,7 +45,7 @@ export const CommentCard = ({ comment }) => {
             color="primary"
             variant="body2"
           >
-            {authorName}
+            {authorName ? authorName : userName}
           </Typography>
           <Box className={classes.ratingContainer}>
             <Rating

@@ -92,11 +92,15 @@ const itinerarySchema = new mongoose.Schema(
       default: 0,
     },
 
-    city: {
-      // type: mongoose.Schema.ObjectId,
+    cityName: {
       type: String,
-      // ref: 'City',
       // required: [true, 'An itinerary must belong to a city'],
+    },
+
+    city: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'City',
+      required: [true, 'An itinerary must belong to a city'],
     },
 
     activities: [
@@ -128,6 +132,12 @@ const itinerarySchema = new mongoose.Schema(
 // Virtual populate (to populate comments which in turn hold the reference to itineraries)
 itinerarySchema.virtual('comments', {
   ref: 'Comment',
+  localField: '_id',
+  foreignField: 'itinerary',
+})
+
+itinerarySchema.virtual('favourites', {
+  ref: 'Favourite',
   localField: '_id',
   foreignField: 'itinerary',
 })

@@ -9,9 +9,13 @@ const {
   getCityByName,
 } = require('../controllers/cityController')
 const { restrict } = require('../controllers/authController')
+const favouriteRouter = require('../routes/favouriteRoutes')
+const commentRouter = require('../routes/commentRoutes')
 
 // ------------------------------------- //
 // ROUTES
+router.use('/:cityId/favourites', favouriteRouter)
+router.use('/:cityId/comments', commentRouter)
 
 router.route('/').get(getAllCities).post(createCity)
 

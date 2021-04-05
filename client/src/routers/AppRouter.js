@@ -41,6 +41,7 @@ export const AppRouter = () => {
 
   // manages alerts
   const [alert, setAlert] = useState(false)
+
   const { error: authError } = useSelector((state) => state.auth)
   useEffect(() => {
     setAlert(true)

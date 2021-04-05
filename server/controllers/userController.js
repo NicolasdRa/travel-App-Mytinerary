@@ -19,7 +19,7 @@ const {
 
 // Basic CRUD controllers admin
 exports.getAllUsers = getAll(User)
-exports.getUser = getOne(User, { path: 'itineraries' })
+exports.getUser = getOne(User, { path: 'itineraries favourites' })
 exports.createUser = createOne(User)
 exports.deleteUser = deleteOne(User)
 exports.updateUser = updateOne(User)
@@ -28,7 +28,7 @@ exports.updateUser = updateOne(User)
 
 // upload to cloudinary
 exports.uploadProfileCoverImage = asyncErrorCatcher(async (req, res, next) => {
-  if (!req.file && !req.files) return next()
+  if (!req.files.coverImg) return next()
 
   const base64 = formatBufferToBase64(req.files.coverImg[0])
   const result = await uploadCoverImageCloudinary(base64.content)
@@ -41,7 +41,7 @@ exports.uploadProfileCoverImage = asyncErrorCatcher(async (req, res, next) => {
 
 // upload to cloudinary
 exports.uploadProfileImage = asyncErrorCatcher(async (req, res, next) => {
-  if (!req.file && !req.files) return next()
+  if (!req.files.img) return next()
 
   const base64 = formatBufferToBase64(req.files.img[0])
   const result = await uploadProfileImageCloudinary(base64.content)
@@ -98,7 +98,7 @@ exports.updateMe = asyncErrorCatcher(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
-  })
+  }).populate('itineraries favourites')
 
   res.status(200).json({
     status: 'success',

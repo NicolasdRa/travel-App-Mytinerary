@@ -19,11 +19,11 @@ exports.updateCity = updateOne(City)
 
 // CRUD controllers for special routes -- still to be implemented
 
-// gets ITINERARY by title
+// gets CITY by name
 exports.getCityByName = asyncErrorCatcher(async (req, res, next) => {
-  let city = await City.findOne({ name: req.params.city_name }).populate(
-    'comments'
-  )
+  let city = await City.findOne({ name: req.params.city_name }).populate({
+    path: 'itineraries favourites',
+  })
 
   if (!city) {
     return next(new AppError('No document found with that name', 404))

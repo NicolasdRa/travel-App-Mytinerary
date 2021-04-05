@@ -89,6 +89,7 @@ exports.getAll = (Model) =>
     if (req.params.itineraryTitle)
       filter = { itinerary: req.params.itineraryTitle }
     if (req.params.userId) filter = { user: req.params.userId }
+    if (req.params.cityId) filter = { city: req.params.cityId }
 
     const features = new APIfeatures(Model.find(filter), req.query)
       .filter()

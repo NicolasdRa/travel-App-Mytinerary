@@ -106,13 +106,6 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
-    favourites: [
-      {
-        itineraries: [{ type: mongoose.Schema.ObjectId, ref: 'Itinerary' }],
-        activities: [{ type: mongoose.Schema.ObjectId, ref: 'Activity' }],
-      },
-    ],
-
     active: {
       type: Boolean,
       default: true,
@@ -130,6 +123,12 @@ const userSchema = new mongoose.Schema(
 // Virtual populate (to populate comments which in turn hold the reference to itineraries)
 userSchema.virtual('itineraries', {
   ref: 'Itinerary',
+  localField: '_id',
+  foreignField: 'author',
+})
+
+userSchema.virtual('favourites', {
+  ref: 'Favourite',
   localField: '_id',
   foreignField: 'author',
 })

@@ -35,29 +35,6 @@ export const updateUserProfile = createAsyncThunk(
   }
 )
 
-// update profile cover image
-export const updateProfileCoverImage = createAsyncThunk(
-  'users/updateProfileCoverImage',
-  async (formData) => {
-    const res = await axios({
-      method: 'PATCH',
-      url: `${usersUrl}updateCover`,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-      onDownloadProgress: (progressEvent) => {
-        console.log(
-          'upload progress: ' +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            '%'
-        )
-      },
-    })
-    return res.data
-  }
-)
-
 // get user By Id
 export const getUserById = createAsyncThunk('users/getUserById', async () => {
   const res = await axios({
@@ -112,14 +89,6 @@ const usersSlice = createSlice({
     },
     [updateUserProfile.rejected]: (state, action) => {
       state.loading = 'fail'
-      state.error = action.payload
-    },
-    [updateProfileCoverImage.fulfilled]: (state, action) => {
-      state.loading = 'done'
-      state.currentUser = action.payload.data
-    },
-    [updateProfileCoverImage.rejected]: (state, action) => {
-      state.loading = 'done'
       state.error = action.payload
     },
   },

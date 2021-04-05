@@ -57,7 +57,7 @@ exports.getItinerariesByUser = asyncErrorCatcher(async (req, res, next) => {
 // gets ITINERARY by title
 exports.getItineraryByTitle = asyncErrorCatcher(async (req, res, next) => {
   let itinerary = await Itinerary.findOne({ title: req.params.title }).populate(
-    'comments'
+    'comments favourites'
   )
 
   if (!itinerary) {

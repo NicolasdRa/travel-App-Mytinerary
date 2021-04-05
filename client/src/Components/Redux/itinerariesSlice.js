@@ -64,7 +64,6 @@ const itinerariesSlice = createSlice({
     data: [],
   },
   reducers: {
-    // standard reducer logic, with auto-generated action types
     updateItineraryComments: {
       reducer(state, action) {
         state.currentItinerary.comments.unshift(action.payload)

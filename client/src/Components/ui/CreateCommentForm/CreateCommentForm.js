@@ -22,7 +22,13 @@ import { useForm } from '../../../hooks/useForm'
 import { addComment } from '../../Redux/commentsSlice'
 import { updateItineraryComments } from '../../Redux/itinerariesSlice'
 
-const CreateCommentForm = ({ userId, itineraryId }) => {
+const CreateCommentForm = ({
+  userId,
+  userName,
+  userImg,
+  sourceId,
+  sourceType,
+}) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -34,7 +40,10 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
     summary: '',
     description: '',
     author: userId,
-    itinerary: itineraryId,
+    userName: userName,
+    userImg: userImg,
+    sourceId: sourceId,
+    sourceType: sourceType,
   })
 
   const handleSubmit = (e) => {
@@ -166,6 +175,10 @@ const CreateCommentForm = ({ userId, itineraryId }) => {
 
 CreateCommentForm.propTypes = {
   userId: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  userImg: PropTypes.string.isRequired,
+  sourceId: PropTypes.string.isRequired,
+  sourceType: PropTypes.string.isRequired,
 }
 
 export default CreateCommentForm
