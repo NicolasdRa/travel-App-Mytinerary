@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-
-import { useSelector } from "react-redux";
-import { selectAllItineraries } from "../../Redux/itinerariesSlice";
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 import {
   Grid,
@@ -9,91 +7,52 @@ import {
   TextField,
   Typography,
   Paper,
-} from "@material-ui/core";
+} from '@material-ui/core'
 
-import ItineraryGallery from "../ItineraryGallery/ItineraryGallery";
-import ListingHeader from "../Headers/ListingHeader";
+import { CardGallery } from '../CardGallery/CardGallery'
+import ListingHeader from '../Headers/ListingHeader'
 
-import { randomNumberGenerator } from "../../utils/utils";
+import { randomNumberGenerator } from '../../utils/utils'
+import { selectAllItineraries } from '../../Redux/itinerariesSlice'
 
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingBottom: "3rem",
-  },
-
-  searchbarContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    backgroundColor: theme.palette.common.beigeLight,
-    padding: "1rem 1rem",
-    margin: "-.5rem 0 0 0",
-  },
-
-  searchBarTitle: {
-    color: theme.palette.primary.main,
-    fontSize: ".9rem",
-    fontWeight: "500",
-    textAlign: "left",
-    margin: "0 0 .5rem .5rem",
-  },
-
-  searchBar: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: "5px",
-  },
-
-  subtitle: {
-    margin: "2rem auto .5rem 1.5rem",
-    textAlign: "start",
-  },
-
-  loader: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "5rem 5rem",
-  },
-}));
+import { useStyles } from './styles'
 
 const Itineraries = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const itineraries = useSelector(selectAllItineraries);
+  const itineraries = useSelector(selectAllItineraries)
 
-  const [string, setString] = useState("");
-  const [headerItinerary, setHeaderItinerary] = useState(null);
-  const [filteredItineraries, setFilteredItineraries] = useState(null);
+  const [string, setString] = useState('')
+  const [headerItinerary, setHeaderItinerary] = useState(null)
+  const [filteredItineraries, setFilteredItineraries] = useState(null)
 
   useEffect(() => {
     // random cover image
-    const randomNumber = randomNumberGenerator(0, itineraries.length - 1);
+    const randomNumber = randomNumberGenerator(0, itineraries.length - 1)
 
     filteredItineraries === null
       ? setHeaderItinerary(itineraries[randomNumber])
-      : setHeaderItinerary(filteredItineraries[0]);
-  }, [itineraries, filteredItineraries]);
+      : setHeaderItinerary(filteredItineraries[0])
+  }, [itineraries, filteredItineraries])
 
   useEffect(() => {
     // itinerary filter
-    if (string !== "") {
+    if (string !== '') {
       const filtered = itineraries.filter((itinerary) =>
-        itinerary.city.toLowerCase().startsWith(string),
-      );
-      setFilteredItineraries(filtered);
+        itinerary.city.toLowerCase().startsWith(string)
+      )
+      setFilteredItineraries(filtered)
     }
     // clean up: when string is empty
     return () => {
-      setFilteredItineraries(null);
-    };
-  }, [itineraries, string]);
+      setFilteredItineraries(null)
+    }
+  }, [itineraries, string])
 
   const handleChange = (e) => {
     // updates string in state
-    setString(e.target.value.toLowerCase());
-  };
+    setString(e.target.value.toLowerCase())
+  }
 
   if (!itineraries) {
     return (
@@ -102,11 +61,12 @@ const Itineraries = () => {
         className={classes.loader}
         direction="column"
         justify="center"
-        alignjustify="center">
+        alignjustify="center"
+      >
         <Typography>Loading itineraries...</Typography>
         <CircularProgress color="secondary" />
       </Grid>
-    );
+    )
   }
 
   return (
@@ -115,7 +75,8 @@ const Itineraries = () => {
       direction="column"
       // justify='center'
       alignItems="center"
-      className={classes.container}>
+      className={classes.container}
+    >
       <Grid item xs={12} container direction="column" justify="center">
         {headerItinerary ? (
           <ListingHeader data={headerItinerary} className={classes.header} />
@@ -123,7 +84,8 @@ const Itineraries = () => {
         <Paper
           elevation={2}
           variant="outlined"
-          className={classes.searchbarContainer}>
+          className={classes.searchbarContainer}
+        >
           <Typography className={classes.searchBarTitle}>
             Choose your route
           </Typography>
@@ -138,17 +100,20 @@ const Itineraries = () => {
           />
         </Paper>
       </Grid>
-      <Grid container item xs={12}>
+      <Grid item xs={12} lg={12}>
         <Typography variant="subtitle2" className={classes.subtitle}>
-          {string === "" ? "Most popular Itineraries" : "Search results"}
+          {string === '' ? 'Most popular Itineraries' : 'Search results'}
         </Typography>
-        <ItineraryGallery
-          string={string}
-          itineraries={filteredItineraries ? filteredItineraries : itineraries}
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <CardGallery
+          className={classes.gallery}
+          data={filteredItineraries ? filteredItineraries : itineraries}
+          type="itineraries"
         />
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default Itineraries;
+export default Itineraries

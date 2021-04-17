@@ -87,11 +87,6 @@ const itinerarySchema = new mongoose.Schema(
       },
     },
 
-    likes: {
-      type: Number,
-      default: 0,
-    },
-
     cityName: {
       type: String,
       // required: [true, 'An itinerary must belong to a city'],
@@ -129,7 +124,7 @@ const itinerarySchema = new mongoose.Schema(
   }
 )
 
-// Virtual populate (to populate comments which in turn hold the reference to itineraries)
+// Virtual populate (to populate comments & favourites which in turn hold the reference to itineraries)
 itinerarySchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',
@@ -144,6 +139,11 @@ itinerarySchema.virtual('favourites', {
 
 // query middleware to populate referenced fields
 itinerarySchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'city',
+    select: '-__v',
+  })
+
   this.populate({
     path: 'author',
     select: 'userName img _id',

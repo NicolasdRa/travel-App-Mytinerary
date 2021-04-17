@@ -108,7 +108,7 @@ const ItineraryPage = () => {
 
       <Box className={classes.content}>
         <Typography className={classes.overline} variant="overline">
-          {city} - {category}
+          {city.name} - {category}
         </Typography>
         <Box className={classes.info}>
           <Box className={classes.city_title}>

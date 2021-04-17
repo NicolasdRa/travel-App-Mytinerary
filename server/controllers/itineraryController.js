@@ -26,10 +26,10 @@ exports.updateItinerary = updateOne(Itinerary)
 // gets ITINERARIES for a given city
 exports.getCityItineraries = asyncErrorCatcher(async (req, res, next) => {
   const itineraries = await Itinerary.find({ city: req.params.city_name })
-  res.status(200).json({
-    status: 'success',
-    data: { itineraries },
-  })
+  // res.status(200).json({
+  //   status: 'success',
+  //   data: { itineraries },
+  // })
   if (!itineraries) {
     return next(new AppError('No documents found', 404))
   }

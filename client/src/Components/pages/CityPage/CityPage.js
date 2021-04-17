@@ -9,7 +9,7 @@ import { selectCurrentUser } from '../../Redux/usersSlice'
 
 // import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
-import ItineraryGallery from '../../ui/ItineraryGallery/ItineraryGallery'
+import { CardGallery } from '../../ui/CardGallery/CardGallery'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import Favourite from '../../ui/Favourite/Favourite'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
@@ -67,10 +67,11 @@ const CityPage = () => {
       <Box className={classes.gallery}>
         {itineraries.length > 0 && (
           <Typography className={classes.subtitle}>
-            Available itineraries for {city_name}
+            Available itineraries for {name}
           </Typography>
         )}
-        <ItineraryGallery itineraries={itineraries} />
+
+        <CardGallery data={itineraries} type="itineraries" />
       </Box>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>

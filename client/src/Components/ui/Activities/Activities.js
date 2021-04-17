@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
 import { useSelector } from 'react-redux'
-import { selectAllActivities } from '../../Redux/activitiesSlice'
 
 import {
   Grid,
@@ -11,10 +9,11 @@ import {
   Paper,
 } from '@material-ui/core'
 
-import ActivityGallery from './ActivityGallery'
+import { CardGallery } from '../CardGallery/CardGallery'
 import ListingHeader from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
+import { selectAllActivities } from '../../Redux/activitiesSlice'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -80,7 +79,7 @@ const Activities = () => {
     // itinerary filter
     if (string !== '') {
       const filtered = activities.filter((activity) =>
-        activity.city.toLowerCase().startsWith(string),
+        activity.city.toLowerCase().startsWith(string)
       )
       setFilteredActivities(filtered)
     }
@@ -95,8 +94,6 @@ const Activities = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  console.log('Activities Tab Rendered')
-
   if (!activities) {
     return (
       <Grid
@@ -104,7 +101,8 @@ const Activities = () => {
         className={classes.loader}
         direction="column"
         justify="center"
-        alignjustify="center">
+        alignjustify="center"
+      >
         <Typography>Loading activities...</Typography>
         <CircularProgress color="secondary" />
       </Grid>
@@ -117,7 +115,8 @@ const Activities = () => {
       direction="column"
       // justify='center'
       alignItems="center"
-      className={classes.container}>
+      className={classes.container}
+    >
       <Grid item xs={12} container direction="column" justify="center">
         {headerActivity ? (
           <ListingHeader data={headerActivity} className={classes.header} />
@@ -125,7 +124,8 @@ const Activities = () => {
         <Paper
           elevation={2}
           variant="outlined"
-          className={classes.searchbarContainer}>
+          className={classes.searchbarContainer}
+        >
           <Typography className={classes.searchBarTitle}>
             Want to have fun?
           </Typography>
@@ -141,11 +141,17 @@ const Activities = () => {
           />
         </Paper>
       </Grid>
-      <Grid container item xs={12}>
+      <Grid item xs={12} lg={12}>
         <Typography variant="subtitle2" className={classes.subtitle}>
           {string === '' ? 'Most popular Activities' : 'Search results'}
         </Typography>
-        <ActivityGallery string={string} activities={activities} />
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <CardGallery
+          className={classes.gallery}
+          data={filteredActivities ? filteredActivities : activities}
+          type="activities"
+        />
       </Grid>
     </Grid>
   )

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { selectAllCities } from '../../Redux/citiesSlice'
 
 import {
   Grid,
@@ -10,52 +9,13 @@ import {
   Paper,
 } from '@material-ui/core'
 
-import CityGallery from './CityGallery'
+import { CardGallery } from '../CardGallery/CardGallery'
 import ListingHeader from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
+import { selectAllCities } from '../../Redux/citiesSlice'
 
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingBottom: '3rem',
-  },
-
-  searchbarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.common.beigeLight,
-    padding: '1rem 1rem',
-    margin: '-.5rem 0 0 0',
-  },
-
-  searchBarTitle: {
-    color: theme.palette.primary.main,
-    fontSize: '.9rem',
-    fontWeight: '500',
-    textAlign: 'left',
-    margin: '0 0 .5rem .5rem',
-  },
-
-  searchBar: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: '5px',
-  },
-
-  subtitle: {
-    margin: '2rem auto .5rem 1.5rem',
-    textAlign: 'start',
-  },
-
-  loader: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '5rem 5rem',
-  },
-}))
+import { useStyles } from './styles'
 
 const Cities = () => {
   const classes = useStyles()
@@ -79,7 +39,7 @@ const Cities = () => {
     // city filter
     if (string !== '') {
       const filtered = cities.filter((city) =>
-        city.name.toLowerCase().startsWith(string),
+        city.name.toLowerCase().startsWith(string)
       )
       setFilteredCities(filtered)
     }
@@ -103,7 +63,8 @@ const Cities = () => {
         className={classes.loader}
         direction="column"
         justify="center"
-        alignjustify="center">
+        alignjustify="center"
+      >
         <Typography>Loading cities...</Typography>
         <CircularProgress color="secondary" />
       </Grid>
@@ -116,7 +77,8 @@ const Cities = () => {
       direction="column"
       // justify='center'
       alignItems="center"
-      className={classes.container}>
+      className={classes.container}
+    >
       <Grid item xs={12} container direction="column" justify="center">
         {headerCity ? (
           <ListingHeader data={headerCity} className={classes.header} />
@@ -124,7 +86,8 @@ const Cities = () => {
         <Paper
           elevation={2}
           variant="outlined"
-          className={classes.searchbarContainer}>
+          className={classes.searchbarContainer}
+        >
           <Typography className={classes.searchBarTitle}>
             Choose your destination
           </Typography>
@@ -139,13 +102,16 @@ const Cities = () => {
           />
         </Paper>
       </Grid>
-      <Grid container item xs={12}>
+      <Grid item xs={12} lg={12}>
         <Typography variant="subtitle2" className={classes.subtitle}>
           {string === '' ? 'Most popular Cities' : 'Search results'}
         </Typography>
-        <CityGallery
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <CardGallery
           className={classes.gallery}
-          cities={filteredCities ? filteredCities : cities}
+          data={filteredCities ? filteredCities : cities}
+          type="cities"
         />
       </Grid>
     </Grid>

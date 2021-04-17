@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const {
   getAllItineraries,
   getItinerary,
@@ -17,11 +18,6 @@ const { protect } = require('../controllers/authController')
 const activityRouter = require('../routes/activityRoutes')
 const favouriteRouter = require('../routes/favouriteRoutes')
 const commentRouter = require('../routes/commentRoutes')
-
-// ------------------------------------- //
-
-// Param middleware
-// router.param('id', checkID)
 
 // ------------------------------------- //
 
