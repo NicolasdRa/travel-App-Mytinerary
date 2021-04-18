@@ -23,8 +23,6 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
   asyncErrorCatcher(async (req, res, next) => {
-    console.log('from factory handler update one', req.body)
-
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

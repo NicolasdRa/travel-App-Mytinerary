@@ -57,24 +57,6 @@ exports.getActivitiesByUser = asyncErrorCatcher(async (req, res, next) => {
   })
 })
 
-// // gets ACTIVITY by id
-// exports.getActivityById = asyncErrorCatcher(async (req, res, next) => {
-//   let activity = await Activity.findById({ _id: req.params.id })
-
-//   if (!itinerary) {
-//     return next(new AppError('No document found with that title', 404))
-//   }
-
-//   // code below replaced by pre-middleware in model
-//   // const populateOptions = { path: 'comments' }
-//   // if (populateOptions) itinerary = itinerary.populate(populateOptions)
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: activity,
-//   })
-// })
-
 // gets ITINERARIES for a given city
 exports.getItineraryActivities = asyncErrorCatcher(async (req, res, next) => {
   const activities = await Activity.find({

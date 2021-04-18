@@ -38,6 +38,7 @@ router
   .delete(protect, deleteActivity)
 
 router.route('/itinerary/:itinerary_name').get(getItineraryActivities)
+
 router.route('/city/:city_name').get(getCityActivities)
 router.route('/title/:title').get(getActivityByTitle)
 router.route('/user/:userId').get(getActivitiesByUser)
