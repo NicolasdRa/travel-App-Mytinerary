@@ -1,109 +1,174 @@
-import React, { useState, useEffect } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import { Link, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { logOutUser } from "../../Redux/auth/authActions";
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
 
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Button,
+  Fade,
+  IconButton,
+  List,
+  ListItem,
+  Menu,
+  MenuItem,
+} from '@material-ui/core/'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
-const useStyles = makeStyles((theme) => ({
-  tabContainer: {
-    marginLeft: "auto",
-  },
+import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
-  tab: {
-    ...theme.typography.topNavTab,
-  },
-}));
+import { logOutUser } from '../../Redux/authSlice'
+import { unloadCurrentUser } from '../../Redux/usersSlice'
 
-export const MenuDesk = (valueFromLogo) => {
-  const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
+import { useStyles } from './styles'
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
+export const MenuDesk = () => {
+  const classes = useStyles()
+  const history = useHistory()
+  const dispatch = useDispatch()
 
-  const [value, setValue] = useState(0);
-  const handleChange = (event, value) => {
-    setValue(value);
-  };
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const user = useSelector((state) => state.auth.user)
 
-  // check if it will eventually be used ...!
-  // const handleLogOut = e => {
-  //   e.preventDefault()
-  //   dispatch(logOutUser(user))
-  //   history.push('/')
-  // }
+  // log out functionality
+  const handleLogOut = (e) => {
+    e.preventDefault()
+    dispatch(logOutUser())
+    dispatch(unloadCurrentUser())
+    history.push('/')
+  }
 
-  // updates tab indicator value on component update
-  useEffect(() => {
-    if (window.location.pathname === "/") {
-      setValue(0);
-    }
-    // if (window.location.pathname === '/' && valueFromLogo === 0) {
-    //   setValue(0)
-    // }
-    if (window.location.pathname === "/listing" && value !== 0) {
-      setValue(0);
-    } else if (
-      window.location.pathname === "/signup" ||
-      (window.location.pathname === "/profile" && value !== 1)
-    ) {
-      setValue(1);
-    } else if (
-      window.location.pathname === "/login" ||
-      (window.location.pathname === "/logout" && value !== 2)
-    ) {
-      setValue(2);
-    }
-  }, [value, valueFromLogo]);
+  // menu functionality
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+
+  // login button rotate
+  const [expanded, setExpanded] = useState(open)
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
+  }
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    handleExpandClick()
+    setAnchorEl(null)
+  }
 
   return (
-    <Tabs
-      value={value}
-      className={classes.tabContainer}
-      onChange={handleChange}
-      indicatorColor='secondary'>
-      <Tab
-        className={classes.tab}
-        component={Link}
-        to='/listing'
-        label='Browse'
-      />
-      {isAuthenticated ? (
-        <Tab
-          className={classes.tab}
+    <List className={classes.list}>
+      {/* <ListItem className={classes.listItem}>
+        <Button
+          color="transparent"
           component={Link}
-          to='/profile'
-          label='Your Profile'
-        />
-      ) : (
-        <Tab
-          className={classes.tab}
+          to="/"
+          className={classes.navLink}
+        >
+          Home
+        </Button>
+      </ListItem> */}
+      <ListItem className={classes.listItem}>
+        <Button
+          color="transparent"
           component={Link}
-          to='/signup'
-          label='Signup'
-        />
-      )}
-      {isAuthenticated ? (
-        <Tab
-          className={classes.tab}
+          to="/listing"
+          className={classes.navLink}
+        >
+          Browse
+        </Button>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <Button
+          color="transparent"
           component={Link}
-          to='/logout'
-          label='Log Out'
-        />
-      ) : (
-        <Tab
-          className={classes.tab}
+          to="/profile"
+          className={classes.navLink}
+        >
+          Profile
+        </Button>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <Button
+          color="transparent"
           component={Link}
-          to='/login'
-          label='Login'
-        />
-      )}
-    </Tabs>
-  );
-};
-
-export default MenuDesk;
+          to="/"
+          className={classes.navLink}
+        >
+          About
+        </Button>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        {user ? (
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            aria-controls="desk-menu"
+            aria-haspopup="true"
+            onClick={handleMenu}
+          >
+            <CustomAvatar />
+          </IconButton>
+        ) : (
+          <Button
+            // variant="outlined"
+            // component={Link}
+            // to="/login"
+            aria-label="menu"
+            aria-controls="desk-menu"
+            aria-haspopup="true"
+            onClick={(e) => {
+              handleMenu(e)
+            }}
+            className={classes.navLink}
+          >
+            Log in{' '}
+            <ArrowDropDownIcon
+              style={{ padding: 0 }}
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            />
+          </Button>
+        )}
+      </ListItem>
+      <Menu
+        id="desk-menu"
+        open={open}
+        onClose={handleClose}
+        keepMounted
+        anchorEl={anchorEl}
+        TransitionComponent={Fade}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        // prop below fixes padding added to body on open
+        disableScrollLock={true}
+      >
+        {isAuthenticated ? (
+          <MenuItem onClick={handleClose} component={Link} to="/profile">
+            Your Profile
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleClose} component={Link} to="/login">
+            Login
+          </MenuItem>
+        )}
+        {isAuthenticated ? (
+          <MenuItem onClick={handleLogOut} component={Link} to="/">
+            Log out
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleClose} component={Link} to="/signup">
+            Signup
+          </MenuItem>
+        )}
+      </Menu>
+    </List>
+  )
+}

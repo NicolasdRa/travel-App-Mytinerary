@@ -5,23 +5,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import PuffLoader from 'react-spinners/PuffLoader'
 import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
-import TopNav from '../Components/ui/TopNav/TopNav'
-import BottomNav from '../Components/ui/BottomNav/BottomNav'
-import Footer from '../Components/ui/footer/Footer'
-import LandingPage from '../Components/pages/LandingPage/LandingPage'
+import { LandingPage } from '../Components/pages/LandingPage/LandingPage'
+import { LoginPage } from '../Components/pages/LoginPage/LoginPage'
+import { SignupPage } from '../Components/pages/SignupPage/SignupPage'
 import ProfilePage from '../Components/pages/ProfilePage/ProfilePage'
 import ListingPage from '../Components/pages/ListingPage/ListingPage'
 import CityPage from '../Components/pages/CityPage/CityPage'
 import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
 import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
-import { PasswordResetForm } from '../Components/ui/PasswordResetForm/PasswordResetForm'
+import { PasswordResetPage } from '../Components/pages/PasswordResetPage/PasswordResetPage'
 
 import { Box, Grid, Snackbar, Typography } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 
 import { ThemeProvider } from '@material-ui/styles'
-import theme from '../Components/theme/Theme'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { fetchCities } from '../Components/Redux/citiesSlice'
 import { fetchItineraries } from '../Components/Redux/itinerariesSlice'
@@ -31,10 +28,10 @@ import { loadCurrentUser } from '../Components/Redux/usersSlice'
 import { isLoggedIn } from '../Components/Redux/authSlice'
 
 import { useStyles } from './styles'
+import theme from '../Components/theme/Theme'
 
 export const AppRouter = () => {
   const classes = useStyles()
-  const matches = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useDispatch()
 
   const [isLoading, setisLoading] = useState(true)
@@ -100,7 +97,6 @@ export const AppRouter = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <TopNav className={classes.topNav} />
         <Grid className={classes.main}>
           <Switch>
             <PublicRoute
@@ -108,6 +104,18 @@ export const AppRouter = () => {
               path="/"
               isAuthenticated={true}
               component={LandingPage}
+            />
+            <PublicRoute
+              exact
+              path="/login"
+              isAuthenticated={true}
+              component={LoginPage}
+            />
+            <PublicRoute
+              exact
+              path="/signup"
+              isAuthenticated={true}
+              component={SignupPage}
             />
             <PublicRoute
               exact
@@ -140,10 +148,9 @@ export const AppRouter = () => {
               component={ProfilePage}
             />
             <PublicRoute
-              exact
               path="/resetPassword/:resetToken"
-              isAuthenticated={false}
-              component={PasswordResetForm}
+              isAuthenticated={true}
+              component={PasswordResetPage}
             />
             <Redirect to="/" />
           </Switch>
@@ -161,8 +168,6 @@ export const AppRouter = () => {
             </Snackbar>
           )}
         </Grid>
-
-        {matches ? <BottomNav className={classes.bottomNav} /> : <Footer />}
       </ThemeProvider>
     </Router>
   )

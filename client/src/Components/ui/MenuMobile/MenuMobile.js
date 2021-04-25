@@ -1,54 +1,42 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-import MenuIcon from "@material-ui/icons/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import AvatarPicture from "../AvatarPicture/AvatarPicture";
+import { Fade, IconButton, Menu, MenuItem } from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 
-import Signup from "../Signup/Signup";
-import Login from "../Login/Login";
+import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
-import { logOutUser } from "../../Redux/authSlice";
+import { logOutUser } from '../../Redux/authSlice'
 
-import { makeStyles } from "@material-ui/core/styles";
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { unloadCurrentUser } from "../../Redux/usersSlice";
+import { useStyles } from './styles'
 
-const useStyles = makeStyles((theme) => ({}));
+import { unloadCurrentUser } from '../../Redux/usersSlice'
 
 export const MenuMobile = () => {
-  const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
+  const classes = useStyles()
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const user = useSelector((state) => state.auth.user)
 
   // log out functionality
   const handleLogOut = (e) => {
-    e.preventDefault();
-    dispatch(logOutUser());
-    dispatch(unloadCurrentUser());
-    history.push("/");
-  };
+    e.preventDefault()
+    dispatch(logOutUser())
+    dispatch(unloadCurrentUser())
+    history.push('/')
+  }
 
   // menu functionality
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
   const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  // media query
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+    setAnchorEl(null)
+  }
 
   return (
     <div>
@@ -59,58 +47,41 @@ export const MenuMobile = () => {
         // aria-label='menu'
         aria-controls="mobile-menu"
         aria-haspopup="true"
-        onClick={handleMenu}>
-        {matches ? (
-          <MenuIcon />
-        ) : user !== null ? (
-          <AvatarPicture />
-        ) : (
-          <AccountCircle />
-        )}
+        onClick={handleMenu}
+      >
+        {user ? <CustomAvatar /> : <MenuIcon />}
       </IconButton>
 
       <Menu
         id="mobile-menu"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
         open={open}
-        onClose={handleClose}>
+        onClose={handleClose}
+        keepMounted
+        anchorEl={anchorEl}
+        TransitionComponent={Fade}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
         {isAuthenticated ? (
-          <MenuItem onClick={handleClose}>
-            <Link to="/profile">Your Profile</Link>
+          <MenuItem onClick={handleClose} component={Link} to="/profile">
+            Your Profile
           </MenuItem>
         ) : (
-          <MenuItem onClick={handleClose}>
-            <Login />
-            {/* <Link to='/login'>Log in</Link> */}
+          <MenuItem onClick={handleClose} component={Link} to="/login">
+            Login
           </MenuItem>
         )}
         {isAuthenticated ? (
-          <div>
-            <MenuItem onClick={handleLogOut}>
-              <Link to="/">Log out</Link>
-            </MenuItem>
-          </div>
+          <MenuItem onClick={handleLogOut} component={Link} to="/">
+            Log out
+          </MenuItem>
         ) : (
-          <MenuItem onClick={handleClose}>
-            <Signup />
-            {/* <Link to='/signup'>Create account</Link> */}
+          <MenuItem onClick={handleClose} component={Link} to="/signup">
+            Signup
           </MenuItem>
         )}
-        {/* <MenuItem onClick={handleClose}>
-          <Link to='/listing'>Browse</Link>
-        </MenuItem> */}
       </Menu>
     </div>
-  );
-};
-
-export default MenuMobile;
+  )
+}

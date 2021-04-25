@@ -7,7 +7,9 @@ import { authUrl } from '../../constants'
 // sign up
 export const signupUser = createAsyncThunk(
   'auth/SignUpUser',
-  async (formData, { rejectWithValue }) => {
+  async (formData, { dispatch, rejectWithValue }) => {
+    dispatch(isLoggingIn())
+
     try {
       const res = await axios({
         method: 'POST',
@@ -130,6 +132,11 @@ const authSlice = createSlice({
   },
   reducers: {
     // standard reducer logic, with auto-generated action types
+    isLoggingIn(state, action) {
+      if (state.loading === 'idle') {
+        state.loading = 'pending'
+      }
+    },
     isLoggedIn: {
       reducer(state, action) {
         state.loading = 'done'
@@ -215,8 +222,11 @@ const authSlice = createSlice({
   },
 })
 
+// SELECTORS
+export const selectLoginLoading = (state) => state.auth.loading
+
 // Extract and export each action creator by name
-export const { isLoggedIn } = authSlice.actions
+export const { isLoggingIn, isLoggedIn } = authSlice.actions
 
 // // Export the reducer as a default export
 export default authSlice.reducer

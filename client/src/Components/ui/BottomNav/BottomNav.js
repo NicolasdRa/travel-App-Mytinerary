@@ -7,7 +7,7 @@ import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded'
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded'
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded'
 
-import AvatarPicture from '../AvatarPicture/AvatarPicture'
+import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 import { selectCurrentUser } from '../../Redux/usersSlice'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -63,7 +63,7 @@ export default function BottomNav() {
         to={user ? `/user/${user.userName}` : '/'}
         label="Profile"
         value="profile"
-        icon={user ? <AvatarPicture /> : <AccountCircleRoundedIcon />}
+        icon={user ? <CustomAvatar /> : <AccountCircleRoundedIcon />}
       />
     </BottomNavigation>
   )

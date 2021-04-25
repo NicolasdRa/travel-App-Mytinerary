@@ -19,7 +19,11 @@ export default createMuiTheme({
       orangeLight: '#fbe9e7',
     },
   },
+  typography: {},
+
   typography: {
+    fontFamily: ['Roboto', '"Roboto Slab"', 'sans-serif'].join(','),
+
     topNavTab: {
       textTransform: 'none',
       fontSize: '.8rem',

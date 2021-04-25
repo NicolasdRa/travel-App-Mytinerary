@@ -71,6 +71,7 @@ const Profile = () => {
         </Box>
         <CreateItineraryForm />
       </Box>
+      {/* {matchesSm ? <BottomNav className={classes.bottomNav} /> : <Footer />} */}
     </Box>
   )
 }

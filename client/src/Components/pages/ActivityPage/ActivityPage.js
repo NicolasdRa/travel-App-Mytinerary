@@ -10,6 +10,9 @@ import {
   selectCurrentActivity,
 } from '../../Redux/activitiesSlice'
 
+import { Header } from '../../ui/Header/Header'
+import BottomNav from '../../ui/BottomNav/BottomNav'
+import Footer from '../../ui/Footer/Footer'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
@@ -27,9 +30,12 @@ import EuroIcon from '@material-ui/icons/Euro'
 import CreateIcon from '@material-ui/icons/Create'
 
 import { useStyles } from './styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import theme from '../../theme/Theme'
 
 const ActivityPage = () => {
   const classes = useStyles()
+  const matchesSm = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useDispatch()
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
@@ -56,6 +62,7 @@ const ActivityPage = () => {
 
   return (
     <Box className={classes.container}>
+      <Header className={classes.topNav} />
       <ImageHeader img={img} className={classes.header} />
       <Box className={classes.content}>
         <Typography className={classes.overline} variant="overline">
@@ -144,6 +151,7 @@ const ActivityPage = () => {
           <Divider className={classes.divider} />
         </Box>
       </Box>
+      {matchesSm ? <BottomNav className={classes.bottomNav} /> : <Footer />}
       {isAuthenticated ? <CreateIitineraryForm /> : null}
     </Box>
   )

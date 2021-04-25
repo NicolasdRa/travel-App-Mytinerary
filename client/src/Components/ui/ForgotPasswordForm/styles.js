@@ -1,38 +1,40 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
   btnContainer: {
-    display: "flex",
-    justifyContent: "center",
-    fontStyle: "lowercase",
+    display: 'flex',
+    fontStyle: 'lowercase',
   },
 
   btn: {
-    textTransform: "none",
+    textTransform: 'none',
+    fontWeight: 400,
+    fontSize: '.8rem',
+    marginLeft: '-0.5rem',
   },
 
   title: {
-    margin: "1rem 0 0 0",
+    margin: '1rem 0 0 0',
     padding: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   subtitle: {
-    margin: "1.5rem 1.5rem 0 1.5rem",
+    margin: '1.5rem 1.5rem 0 1.5rem',
     padding: 0,
-    textAlign: "left",
+    textAlign: 'left',
   },
 
   input_field: {
-    margin: ".8rem 0",
+    margin: '.8rem 0',
   },
 
   text: {
-    marginTop: "1rem",
-    textAlign: "center",
+    marginTop: '1rem',
+    textAlign: 'center',
   },
 
   btns: {
-    paddingLeft: "1rem",
+    paddingLeft: '1rem',
   },
-}));
+}))
