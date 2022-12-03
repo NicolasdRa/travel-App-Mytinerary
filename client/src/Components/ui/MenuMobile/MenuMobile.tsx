@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { Fade, IconButton, Menu, MenuItem } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -9,30 +8,31 @@ import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
 import { logOutUser } from '../../Redux/authSlice'
 
-import { useStyles } from './styles'
-
 import { unloadCurrentUser } from '../../Redux/usersSlice'
+import { RootState } from '../../Redux/store'
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 
 export const MenuMobile = () => {
-  const classes = useStyles()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const user = useSelector((state) => state.auth.user)
+  const dispatch = useAppDispatch()
+  const isAuthenticated = useAppSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  )
+  const user = useAppSelector((state: RootState) => state.auth.user)
 
   // log out functionality
-  const handleLogOut = (e) => {
+  const handleLogOut = (e: any) => {
     e.preventDefault()
     dispatch(logOutUser())
-    dispatch(unloadCurrentUser())
+    dispatch(unloadCurrentUser(user))
     navigate('/')
   }
 
   // menu functionality
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget)
+  const handleMenu = (e: any) => {
+    setAnchorEl(e.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
@@ -42,7 +42,7 @@ export const MenuMobile = () => {
     <div>
       <IconButton
         edge="start"
-        className={classes.menuButton}
+        className="menuButton"
         color="inherit"
         // aria-label='menu'
         aria-controls="mobile-menu"
@@ -59,7 +59,6 @@ export const MenuMobile = () => {
         keepMounted
         anchorEl={anchorEl}
         TransitionComponent={Fade}
-        getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >

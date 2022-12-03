@@ -17,7 +17,7 @@ export const HeroSection = () => {
   )
 
   return (
-    <StyledContainer className="main">
+    <StyledContainer>
       <Header />
       <Grid
         item
@@ -25,7 +25,7 @@ export const HeroSection = () => {
         direction="column"
         spacing={3}
         xs={12}
-        className="content"
+        className="container"
       >
         <Grid item xs={12}>
           <Typography variant="h1" className="title">

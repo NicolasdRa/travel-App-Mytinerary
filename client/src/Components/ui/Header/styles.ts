@@ -17,14 +17,13 @@ export const StyledContainer = styled('div')`
     flex-flow: row nowrap;
     justify-content: flex-start;
     position: relative;
-    z-index: unset;
   }
 
   .toolbar {
-    justifycontent: space-between;
+    justify-content: space-between;
     width: 100%;
 
-    [${(props) => props.theme.breakpoints.up('xl')}]: {
+    ${(props) => props.theme.breakpoints.up('xl')} {
       justify-content: space-around;
     }
   }
@@ -40,14 +39,14 @@ export const StyledContainer = styled('div')`
     fill: ${(props) => props.theme.palette.common.chalk};
     opacity: 0.8;
 
-    [${(props) => props.theme.breakpoints.up('md')}]: {
-      width: '7rem';
+    ${(props) => props.theme.breakpoints.up('md')} {
+      width: 7rem;
     }
-    [${(props) => props.theme.breakpoints.up('lg')}]: {
-      width: '6rem';
+    ${(props) => props.theme.breakpoints.up('lg')} {
+      width: 6rem;
     }
-    [${(props) => props.theme.breakpoints.up('xl')}]: {
-      width: '8rem';
+    ${(props) => props.theme.breakpoints.up('xl')} {
+      width: 8rem;
     }
   }
 `

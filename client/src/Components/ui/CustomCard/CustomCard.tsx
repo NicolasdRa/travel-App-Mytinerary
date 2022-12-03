@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import {
   Avatar,
   Button,
-  Card,
   CardMedia,
   CardContent,
   CardActions,
@@ -17,51 +15,63 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 import { FavouriteComponent } from '../FavouriteComponent/FavouriteComponent'
 
-import { useStyles } from './styles'
 import { selectCurrentUser } from '../../Redux/usersSlice'
+import { StyledCard } from './styles'
 
-const values = (type) => {
-  switch (type) {
-    case 'cities':
-      return {
-        link: '/citypage/',
-        sourceType: 'city',
-      }
-    case 'itineraries':
-      return {
-        link: '/itinerarypage/',
-        sourceType: 'itinerary',
-      }
-    case 'activities':
-      return {
-        link: '/activitypage/',
-        sourceType: 'activity',
-      }
-
-    default:
-      return {}
+interface Values {
+  cities: {
+    link: string
+    sourceType: 'city' | 'itinerary' | 'activity'
+  }
+  itineraries: {
+    link: string
+    sourceType: 'city' | 'itinerary' | 'activity'
+  }
+  activities: {
+    link: string
+    sourceType: 'city' | 'itinerary' | 'activity'
   }
 }
 
-export const CustomCard = ({ data, type }) => {
-  const classes = useStyles()
+const getValue = (type: 'cities' | 'itineraries' | 'activities') => {
+  const values: Values = {
+    cities: {
+      link: '/citypage/',
+      sourceType: 'city',
+    },
+    itineraries: {
+      link: '/itinerarypage/',
+      sourceType: 'itinerary',
+    },
+    activities: {
+      link: '/activitypage/',
+      sourceType: 'activity',
+    },
+  }
+  return values[type]
+}
 
+interface CustomCardProps {
+  data: any
+  type: 'cities' | 'itineraries' | 'activities'
+}
+
+export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
   const user = useSelector(selectCurrentUser)
 
   const { _id, name, country, title, cityName, img, duration, author, price } =
     data
 
-  const link = values(type).link
-  const sourceType = values(type).sourceType
+  const link = getValue(type).link
+  const sourceType = getValue(type).sourceType
 
   if (!img) {
     return (
       <Grid
         container
-        className={classes.loader}
+        className="loader"
         direction="column"
-        justify="center"
-        alignjustify="center"
+        justifyContent="center"
       >
         <Typography>Loading...</Typography>
         <CircularProgress color="secondary" />
@@ -70,25 +80,25 @@ export const CustomCard = ({ data, type }) => {
   }
 
   return (
-    <Card className={classes.root}>
+    <StyledCard>
       <CardMedia
         component="img"
         alt={`${sourceType} image`}
         image={img}
-        className={classes.cardImg}
+        className="cardImg"
       />
-      <CardContent className={classes.cardContent}>
-        <div className={classes.firstLine}>
+      <CardContent className="cardContent">
+        <div className="firstLine">
           <Typography
             variant="overline"
             color="textSecondary"
-            className={classes.overline}
+            className="overline"
           >
             {type === 'cities' && country}
             {type === 'itineraries' && cityName}
             {type === 'activities' && cityName}
           </Typography>
-          <div className={classes.likesBtn}>
+          <div className="likesBtn">
             <FavouriteComponent
               sourceType={sourceType}
               sourceId={_id}
@@ -97,42 +107,39 @@ export const CustomCard = ({ data, type }) => {
           </div>
         </div>
 
-        <Typography variant="h6" color="primary" className={classes.title}>
+        <Typography variant="h6" color="primary" className="title">
           {type === 'cities' ? name : title}
         </Typography>
 
         {(type === 'itineraries' || type === 'activities') && (
-          <div className={classes.authorInfo}>
-            <Avatar
-              className={classes.avatar}
-              src={author ? author.img : 'anonymous'}
-            >
+          <div className="authorInfo">
+            <Avatar className="avatar" src={author ? author.img : 'anonymous'}>
               {author ? author.userName : 'anonymous'}
             </Avatar>
             <Typography
               variant="body2"
               color="textSecondary"
               component="p"
-              className={classes.authorName}
+              className="authorName"
             >
               by {author ? author.userName : 'anonymous'}
             </Typography>
           </div>
         )}
         {(type === 'itineraries' || type === 'activities') && (
-          <div className={classes.additionalInfo}>
-            <div className={classes.duration}>
-              <AccessTimeIcon className={classes.icons} />
+          <div className="additionalInfo">
+            <div className="duration">
+              <AccessTimeIcon className="icons" />
               <Typography
                 variant="caption"
                 color="textSecondary"
                 component="p"
-                className={classes.infoText}
+                className="infoText"
               >
                 {duration}
               </Typography>
             </div>
-            <div className={classes.price}>
+            <div className="price">
               <Typography variant="caption" color="textSecondary" component="p">
                 Cost: {price}
               </Typography>
@@ -141,22 +148,17 @@ export const CustomCard = ({ data, type }) => {
         )}
       </CardContent>
 
-      <CardActions className={classes.cardActions}>
+      <CardActions className="cardActions">
         <Button
           size="small"
           color="secondary"
           component={Link}
           to={type === 'cities' ? `${link}${name}` : `${link}${title}`}
-          className={classes.textBtn}
+          className="textBtn"
         >
           View more
         </Button>
       </CardActions>
-    </Card>
+    </StyledCard>
   )
-}
-
-CustomCard.propTypes = {
-  data: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired,
 }

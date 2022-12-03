@@ -8,6 +8,7 @@ import { MenuDesk } from '../MenuDesk/MenuDesk'
 import { Logo } from '../Logo/Logo'
 
 import { StyledContainer } from './styles'
+import { theme } from '../../Styles/Theme'
 
 export const Header = () => {
   return (
@@ -16,7 +17,7 @@ export const Header = () => {
         <Toolbar className="toolbar">
           <Button component={Link} to="/">
             <Box className="logo">
-              <Logo />
+              <Logo color={theme.palette.common.chalk} viewBox={'0 0 184 65'} />
             </Box>
           </Button>
           <Hidden mdUp>

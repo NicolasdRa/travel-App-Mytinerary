@@ -5,7 +5,6 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 import PuffLoader from 'react-spinners/PuffLoader'
 import { PublicRoute } from './PublicRoute'
@@ -31,7 +30,7 @@ import { isLoggedIn } from '../Components/Redux/authSlice'
 
 import { StyledGrid } from './styles'
 import { RootState } from '../Components/Redux/store'
-import { useAppDispatch } from '../Components/Redux/hooks'
+import { useAppDispatch, useAppSelector } from '../Components/Redux/hooks'
 
 export const AppRouter = () => {
   const dispatch = useAppDispatch()
@@ -41,13 +40,13 @@ export const AppRouter = () => {
   // manages alerts
   const [alert, setAlert] = useState(false)
 
-  const { error: authError } = useSelector((state: RootState) => state.auth)
+  const { error: authError } = useAppSelector((state: RootState) => state.auth)
   useEffect(() => {
     setAlert(true)
   }, [authError])
 
   // manages authenticated
-  const isAuthenticated = useSelector(
+  const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
   useEffect(() => {
@@ -55,7 +54,7 @@ export const AppRouter = () => {
   }, [isAuthenticated, dispatch])
 
   //logs in user if GoogleAuth
-  const user = useSelector((state: RootState) => state.users.currentUser)
+  const user = useAppSelector((state: RootState) => state.users.currentUser)
   useEffect(() => {
     if (user) dispatch(isLoggedIn(user))
   }, [user, dispatch])

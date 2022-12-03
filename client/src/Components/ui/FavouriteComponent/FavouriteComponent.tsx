@@ -9,11 +9,11 @@ import { favouritesUrl, apiUrl } from '../../../constants'
 import { StyledContainer } from './styles'
 
 interface FavouriteComponentProps {
-  readOnly: boolean
+  readOnly?: boolean
   sourceType: 'city' | 'itinerary' | 'activity'
   sourceId: string
-  userId: string
-  amount: number
+  userId: string | undefined
+  amount?: number
 }
 
 export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
@@ -86,7 +86,7 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
 
   const removeFavourite = async () => {
     if (favourite) {
-      console.log(favourite['_id'])
+      console.log(favourite['._id'])
 
       try {
         const res = await axios({

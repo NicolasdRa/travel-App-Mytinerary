@@ -1,6 +1,7 @@
-import { makeStyles } from 'tss-react/mui'
+import { Card } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-export const useStyles = makeStyles((theme) => ({
+export const StyledCard = styled(Card)(({ theme }) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
