@@ -1,16 +1,16 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, Button, Paper, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
 import { selectLoginLoading, signupUser } from '../../Redux/authSlice'
 
 import { useStyles } from './styles'
-import { useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useForm } from '../../../hooks/useForm'
 
@@ -19,7 +19,7 @@ export const Signup = () => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const loading = useSelector(selectLoginLoading)
   // const loading = 'pending'
@@ -41,7 +41,7 @@ export const Signup = () => {
     // TODO: improve error handlig here showing a snackbar if error
     // TODO: check if loader reads pending state dispatched in thunk
     dispatch(signupUser(formValues)).catch((error) => console.log(error))
-    history.replace(redirectPath)
+    navigate(redirectPath, { replace: true })
   }
 
   return (

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Fade, IconButton, Menu, MenuItem } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
+import { Fade, IconButton, Menu, MenuItem } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
@@ -15,7 +15,7 @@ import { unloadCurrentUser } from '../../Redux/usersSlice'
 
 export const MenuMobile = () => {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const user = useSelector((state) => state.auth.user)
@@ -25,7 +25,7 @@ export const MenuMobile = () => {
     e.preventDefault()
     dispatch(logOutUser())
     dispatch(unloadCurrentUser())
-    history.push('/')
+    navigate('/')
   }
 
   // menu functionality

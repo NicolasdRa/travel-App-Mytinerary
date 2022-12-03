@@ -14,20 +14,19 @@ import { selectCurrentUser } from '../../Redux/usersSlice'
 import ImageHeader from '../../ui/Headers/ImageHeader'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
 import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
-import Favourite from '../../ui/Favourite/Favourite'
+import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
 
 import {
   Avatar,
-  Box,
   Collapse,
   Divider,
   IconButton,
   Typography,
-} from '@material-ui/core'
-import Rating from '@material-ui/lab/Rating'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import EuroIcon from '@material-ui/icons/Euro'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+  Rating,
+} from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import EuroIcon from '@mui/icons-material/Euro'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import { useStyles } from './styles'
 import clsx from 'clsx'
@@ -103,19 +102,19 @@ const ItineraryPage = () => {
   const { _id: userId, userName, img: userImg } = currentUser
 
   return (
-    <Box className={classes.container}>
+    <div className={classes.container}>
       <ImageHeader img={img} className={classes.header} />
 
-      <Box className={classes.content}>
+      <div className={classes.content}>
         <Typography className={classes.overline} variant="overline">
           {city.name} - {category}
         </Typography>
-        <Box className={classes.info}>
-          <Box className={classes.city_title}>
+        <div className={classes.info}>
+          <div className={classes.city_title}>
             <Typography variant="h5">{title}</Typography>
-          </Box>
-          <Box className={classes.likes}>
-            <Favourite
+          </div>
+          <div className={classes.likes}>
+            <FavouriteComponent
               readOnly={!userId && true}
               data={favourites.length}
               sourceType="itinerary"
@@ -123,9 +122,9 @@ const ItineraryPage = () => {
               userId={userId && userId}
               className={classes.favourites}
             />
-          </Box>
-        </Box>
-        <Box
+          </div>
+        </div>
+        <div
           component="fieldset"
           borderColor="transparent"
           className={classes.ratingContainer}
@@ -145,9 +144,9 @@ const ItineraryPage = () => {
           >
             ({ratingAvg})
           </Typography>
-        </Box>
-        <Box className={classes.extra_info}>
-          <Box className={classes.user_info}>
+        </div>
+        <div className={classes.extra_info}>
+          <div className={classes.user_info}>
             <Avatar
               // aria-label='recipe'
               // variant='rounded'
@@ -163,29 +162,29 @@ const ItineraryPage = () => {
             >
               {authorName ? `by ${authorName}` : 'by anonymous'}
             </Typography>
-          </Box>
-          <Box className={classes.price_time}>
-            <Box className={classes.duration}>
+          </div>
+          <div className={classes.price_time}>
+            <div className={classes.duration}>
               <AccessTimeIcon className={classes.icons} />
               <Typography variant="body2" color="textSecondary" component="p">
                 {duration}
               </Typography>
-            </Box>
-            <Box className={classes.price}>
+            </div>
+            <div className={classes.price}>
               <EuroIcon className={classes.icons} />
               <Typography variant="body2" color="textSecondary" component="p">
                 {price}
               </Typography>
-            </Box>
-          </Box>
-        </Box>
+            </div>
+          </div>
+        </div>
         <Divider className={classes.divider} />
-        <Box className={classes.gallery}>
+        <div className={classes.gallery}>
           <Typography variant="body2" className={classes.text}>
             {details}
           </Typography>
           <Divider className={classes.divider} />
-          <Box className={classes.gallery}>
+          <div className={classes.gallery}>
             <Typography variant="body2" className={classes.subtitle}>
               {activities.length > 0
                 ? 'Available activities'
@@ -194,11 +193,11 @@ const ItineraryPage = () => {
             </Typography>
 
             <ActivityGallerySmall activities={activities} />
-          </Box>
+          </div>
 
           <Divider className={classes.divider} />
-          <Box className={classes.reviewContainer}>
-            <Box className={classes.viewReviews}>
+          <div className={classes.reviewContainer}>
+            <div className={classes.viewReviews}>
               <Typography variant="body2" className={classes.reviewText}>
                 View all Reviews ({comments.length})
               </Typography>
@@ -213,7 +212,7 @@ const ItineraryPage = () => {
               >
                 <ExpandMoreIcon />
               </IconButton>
-            </Box>
+            </div>
             <CreateCommentForm
               userId={userId}
               userName={userName}
@@ -222,17 +221,17 @@ const ItineraryPage = () => {
               sourceType="itinerary"
               className={classes.postReview}
             />
-          </Box>
+          </div>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             {itinerary.comments.map((comment) => (
               <CommentCard key={uuidv4()} comment={comment} />
             ))}
           </Collapse>
           <Divider className={classes.divider} />
-        </Box>
+        </div>
         {isAuthenticated && <CreateIitineraryForm />}
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 

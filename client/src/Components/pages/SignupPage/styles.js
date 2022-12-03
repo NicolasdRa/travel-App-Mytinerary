@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from 'tss-react/mui'
 import Image from '../../../assets/images/bg5.jpg'
 
 export const useStyles = makeStyles((theme) => ({
@@ -10,10 +10,6 @@ export const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100vw',
     margin: '0',
-
-    [theme.breakpoints.up('md')]: {
-      height: '60vh',
-    },
   },
 
   backgroundImg: {

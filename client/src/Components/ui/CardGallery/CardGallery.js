@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 import { CustomCard } from '../CustomCard/CustomCard'
 import { useStyles } from './styles'
 
 export const CardGallery = ({ data, type }) => {
   const classes = useStyles()
-
-  console.log(data)
 
   if (data.length > 0) {
     return (

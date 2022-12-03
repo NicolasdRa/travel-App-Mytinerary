@@ -1,11 +1,9 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import {
   Avatar,
-  Box,
   Button,
   Card,
   CardMedia,
@@ -14,10 +12,10 @@ import {
   Typography,
   Grid,
   CircularProgress,
-} from '@material-ui/core'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
+} from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
-import Favourite from '../Favourite/Favourite'
+import { FavouriteComponent } from '../FavouriteComponent/FavouriteComponent'
 
 import { useStyles } from './styles'
 import { selectCurrentUser } from '../../Redux/usersSlice'
@@ -50,17 +48,8 @@ export const CustomCard = ({ data, type }) => {
 
   const user = useSelector(selectCurrentUser)
 
-  const {
-    _id,
-    name,
-    country,
-    title,
-    cityName,
-    img,
-    duration,
-    author,
-    price,
-  } = data
+  const { _id, name, country, title, cityName, img, duration, author, price } =
+    data
 
   const link = values(type).link
   const sourceType = values(type).sourceType
@@ -89,7 +78,7 @@ export const CustomCard = ({ data, type }) => {
         className={classes.cardImg}
       />
       <CardContent className={classes.cardContent}>
-        <Box className={classes.firstLine}>
+        <div className={classes.firstLine}>
           <Typography
             variant="overline"
             color="textSecondary"
@@ -99,21 +88,21 @@ export const CustomCard = ({ data, type }) => {
             {type === 'itineraries' && cityName}
             {type === 'activities' && cityName}
           </Typography>
-          <Box className={classes.likesBtn}>
-            <Favourite
+          <div className={classes.likesBtn}>
+            <FavouriteComponent
               sourceType={sourceType}
               sourceId={_id}
               userId={user ? user._id : undefined}
             />
-          </Box>
-        </Box>
+          </div>
+        </div>
 
         <Typography variant="h6" color="primary" className={classes.title}>
           {type === 'cities' ? name : title}
         </Typography>
 
         {(type === 'itineraries' || type === 'activities') && (
-          <Box className={classes.authorInfo}>
+          <div className={classes.authorInfo}>
             <Avatar
               className={classes.avatar}
               src={author ? author.img : 'anonymous'}
@@ -128,11 +117,11 @@ export const CustomCard = ({ data, type }) => {
             >
               by {author ? author.userName : 'anonymous'}
             </Typography>
-          </Box>
+          </div>
         )}
         {(type === 'itineraries' || type === 'activities') && (
-          <Box className={classes.additionalInfo}>
-            <Box className={classes.duration}>
+          <div className={classes.additionalInfo}>
+            <div className={classes.duration}>
               <AccessTimeIcon className={classes.icons} />
               <Typography
                 variant="caption"
@@ -142,13 +131,13 @@ export const CustomCard = ({ data, type }) => {
               >
                 {duration}
               </Typography>
-            </Box>
-            <Box className={classes.price}>
+            </div>
+            <div className={classes.price}>
               <Typography variant="caption" color="textSecondary" component="p">
                 Cost: {price}
               </Typography>
-            </Box>
-          </Box>
+            </div>
+          </div>
         )}
       </CardContent>
 

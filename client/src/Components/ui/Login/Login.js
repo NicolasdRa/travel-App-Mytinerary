@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, Button, Paper, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
@@ -15,8 +15,8 @@ import {
 import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 
 import { useStyles } from './styles'
-import { useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useForm } from '../../../hooks/useForm'
 
@@ -25,7 +25,7 @@ export const Login = () => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const loading = useSelector(selectLoginLoading)
   // const loading = 'pending'
@@ -46,7 +46,7 @@ export const Login = () => {
     // TODO: check if loader reads pending state dispatched in thunk
     dispatch(logInUser(formValues)).catch((error) => console.log(error))
 
-    history.replace(redirectPath)
+    navigate(redirectPath, { replace: true })
 
     reset()
   }
