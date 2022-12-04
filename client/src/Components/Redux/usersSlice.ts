@@ -92,7 +92,6 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-
     builder.addCase(loadCurrentUser.pending, (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending'

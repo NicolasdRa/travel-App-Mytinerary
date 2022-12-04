@@ -1,18 +1,14 @@
-import React from 'react'
-
 import { Header } from '../../ui/Header/Header'
 import { Signup } from '../../ui/Signup/Signup'
-
-import { useStyles } from './styles'
+import { StyledContainer } from './styles'
 
 export const SignupPage = () => {
-  const classes = useStyles()
   return (
     <>
-      <div className={classes.background}>
+      <StyledContainer>
         <Header />
         <Signup />
-      </div>
+      </StyledContainer>
     </>
   )
 }

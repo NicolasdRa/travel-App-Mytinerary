@@ -1,9 +1,6 @@
 import React from 'react'
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
 
-import { Paper, Tabs, Tab, Typography } from '@mui/material'
+import { Paper, Tabs, Tab, Box } from '@mui/material'
 
 import { Header } from '../../ui/Header/Header'
 import { Footer } from '../../ui/Footer/Footer'
@@ -11,70 +8,40 @@ import Cities from '../../ui/Cities/Cities'
 import Itineraries from '../../ui/Itineraries/Itineraries'
 import Activities from '../../ui/Activities/Activities'
 import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { RootState } from '../../Redux/store'
+import { useAppSelector } from '../../Redux/hooks'
+import { StyledListingPageContainer } from './styles'
 
-import { makeStyles } from 'tss-react/mui'
+export interface TabPanelProps {
+  children?: React.ReactNode
+  index: number
+  value: number
+}
 
-const PREFIX = 'ListingPage';
-
-const classes = {
-  root: `${PREFIX}-root`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-  [`& .${classes.root}`]: {
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    width: '100%',
-    margin: '0 1rem',
-  }
-}));
-
-function TabPanel(props) {
+function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
   return (
-    <Typography
-      component="div"
+    <div
       role="tabpanel"
       hidden={value !== index}
-      id={`nav-tabpanel-${index}`}
-      aria-labelledby={`nav-tab-${index}`}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Root
-          style={{
-            padding: '1rem',
-          }}
-          p={3}
-        >
-          {children}
-        </Root>
-      )}
-    </Typography>
-  );
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  )
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-}
-
-function a11yProps(index) {
+function a11yProps(index: number) {
   return {
     id: `nav-tab-${index}`,
     'aria-controls': `nav-tabpanel-${index}`,
   }
 }
 
-function LinkTab(props) {
+function LinkTab(props: any) {
   return (
     <Tab
       component="a"
@@ -87,18 +54,19 @@ function LinkTab(props) {
 }
 
 const ListingPage = () => {
-
   const [value, setValue] = React.useState(0)
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const isAuthenticated = useAppSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  )
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (e: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue)
   }
 
   return (
-    <div className={classes.root}>
+    <StyledListingPageContainer className="root">
       <Header />
-      <Paper position="static">
+      <Paper>
         <Tabs
           variant="fullWidth"
           value={value}
@@ -121,7 +89,7 @@ const ListingPage = () => {
       </TabPanel>
       {isAuthenticated ? <CreateIitineraryForm /> : null}
       <Footer />
-    </div>
+    </StyledListingPageContainer>
   )
 }
 

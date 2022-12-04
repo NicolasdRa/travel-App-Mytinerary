@@ -61,9 +61,6 @@ const uiSlice = createSlice({
       },
     },
   },
-  extraReducers: {
-    // Add reducers for additional action types here, and handle loading state as needed
-  },
 })
 
 // Extract and export each action creator by name

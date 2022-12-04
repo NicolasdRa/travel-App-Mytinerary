@@ -1,65 +1,41 @@
 import React from 'react'
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types'
-import { Paper, Tabs, Tab, Typography, Box } from '@mui/material'
-import Itineraries from '../Itineraries/Itineraries'
-import Activities from '../Activities/Activities'
 
-const PREFIX = 'UserListing';
+import { Paper, Tabs, Tab, Typography, Box } from '@mui/material'
+
+import { TabPanelProps } from './ListingPage'
+import Itineraries from '../../ui/Itineraries/Itineraries'
+import Activities from '../../ui/Activities/Activities'
+
+const PREFIX = 'UserListing'
 
 const classes = {
-  root: `${PREFIX}-root`
-};
+  root: `${PREFIX}-root`,
+}
 
-const StyledBox = styled(Box)((
-  {
-    theme
-  }
-) => ({
-  [`& .${classes.root}`]: {
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '0 0 auto',
-    width: '100%',
-  }
-}));
-
-function TabPanel(props) {
+function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
   return (
-    <Typography
-      component="div"
+    <div
       role="tabpanel"
       hidden={value !== index}
-      id={`nav-tabpanel-${index}`}
-      aria-labelledby={`nav-tab-${index}`}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <StyledBox style={{ padding: '0.5rem' }} p={3}>
-          {children}
-        </StyledBox>
-      )}
-    </Typography>
-  );
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  )
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-}
-
-function a11yProps(index) {
+function a11yProps(index: number) {
   return {
     id: `nav-tab-${index}`,
     'aria-controls': `nav-tabpanel-${index}`,
   }
 }
 
-function LinkTab(props) {
+function LinkTab(props: any) {
   return (
     <Tab
       component="a"
@@ -72,10 +48,9 @@ function LinkTab(props) {
 }
 
 const UserListing = () => {
-
   const [value, setValue] = React.useState(0)
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (e: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue)
   }
 
@@ -83,7 +58,7 @@ const UserListing = () => {
     <Box className={classes.root}>
       <Typography variant="body1">Your Contributions</Typography>
 
-      <Paper position="static">
+      <Paper>
         <Tabs
           variant="fullWidth"
           value={value}

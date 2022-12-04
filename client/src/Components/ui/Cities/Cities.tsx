@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
 
 import {
   Grid,
@@ -14,17 +13,16 @@ import ListingHeader from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
 import { selectAllCities } from '../../Redux/citiesSlice'
-
-import { useStyles } from './styles'
+import { useAppSelector } from '../../Redux/hooks'
+import { City } from '../../../@types/types'
+import { StyledGrid, StyledLoaderGrid } from './styles'
 
 const Cities = () => {
-  const classes = useStyles()
-
-  const cities = useSelector(selectAllCities)
+  const cities = useAppSelector(selectAllCities)
 
   const [string, setString] = useState('')
-  const [headerCity, setHeaderCity] = useState(null)
-  const [filteredCities, setFilteredCities] = useState(null)
+  const [headerCity, setHeaderCity] = useState<City | null>(null)
+  const [filteredCities, setFilteredCities] = useState<City[] | null>(null)
 
   useEffect(() => {
     // random cover image
@@ -32,7 +30,7 @@ const Cities = () => {
 
     filteredCities === null
       ? setHeaderCity(cities[randomNumber])
-      : setHeaderCity(filteredCities[0])
+      : setHeaderCity(cities[0])
   }, [cities, filteredCities])
 
   useEffect(() => {
@@ -49,7 +47,7 @@ const Cities = () => {
     }
   }, [cities, string])
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     // updates string in state
     setString(e.target.value.toLowerCase())
   }
@@ -58,37 +56,29 @@ const Cities = () => {
 
   if (!cities) {
     return (
-      <Grid
+      <StyledLoaderGrid
         container
-        className={classes.loader}
         direction="column"
-        justify="center"
-        alignjustify="center"
+        justifyContent="center"
+        alignContent="center"
       >
         <Typography>Loading cities...</Typography>
         <CircularProgress color="secondary" />
-      </Grid>
+      </StyledLoaderGrid>
     )
   }
 
   return (
-    <Grid
+    <StyledGrid
       container
       direction="column"
       // justify='center'
       alignItems="center"
-      className={classes.container}
     >
-      <Grid item xs={12} container direction="column" justify="center">
-        {headerCity && (
-          <ListingHeader data={headerCity} className={classes.header} />
-        )}
-        <Paper
-          elevation={2}
-          variant="outlined"
-          className={classes.searchbarContainer}
-        >
-          <Typography className={classes.searchBarTitle}>
+      <Grid item xs={12} container direction="column" justifyContent="center">
+        {headerCity && <ListingHeader data={headerCity} className="header" />}
+        <Paper elevation={2} variant="outlined" className="searchbarContainer">
+          <Typography className="searchBarTitle">
             Choose your destination
           </Typography>
           <TextField
@@ -98,23 +88,22 @@ const Cities = () => {
             variant="outlined"
             onChange={handleChange}
             color="primary"
-            className={classes.searchBar}
+            className="searchBar"
           />
         </Paper>
       </Grid>
       <Grid item xs={12} lg={12}>
-        <Typography variant="subtitle2" className={classes.subtitle}>
+        <Typography variant="subtitle2" className="subtitle">
           {string === '' ? 'Most popular Cities' : 'Search results'}
         </Typography>
       </Grid>
       <Grid item xs={12} lg={12}>
         <CardGallery
-          className={classes.gallery}
           data={filteredCities ? filteredCities : cities}
           type="cities"
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   )
 }
 

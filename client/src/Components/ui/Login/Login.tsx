@@ -1,105 +1,101 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, Button, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
-import { selectLoginLoading, signupUser } from '../../Redux/authSlice'
+import {
+  isLoggingIn,
+  logInUser,
+  selectLoginLoading,
+} from '../../Redux/authSlice'
 
-import { useStyles } from './styles'
+import { ForgotPasswordForm } from '../ForgotPasswordForm/ForgotPasswordForm'
+
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useForm } from '../../../hooks/useForm'
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { StyledPaper } from './styles'
 
-export const Signup = () => {
-  const classes = useStyles()
+export const Login = () => {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const loading = useSelector(selectLoginLoading)
+  const loading = useAppSelector(selectLoginLoading)
   // const loading = 'pending'
 
   // must be outside handleSubmit
   const redirectPath = localStorage.getItem('lastPath')
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({
-    userName: '',
+  const {
+    values: formValues,
+    handleInputChange,
+    reset,
+  } = useForm({
     email: '',
     password: '',
-    passwordConfirm: '',
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
+
+    console.log(formValues)
 
     // TODO: improve error handlig here showing a snackbar if error
     // TODO: check if loader reads pending state dispatched in thunk
-    dispatch(signupUser(formValues)).catch((error) => console.log(error))
-    navigate(redirectPath, { replace: true })
+    dispatch(logInUser(formValues)).catch((error) => console.log(error))
+
+    navigate(`'${redirectPath}'`, { replace: true })
+    reset()
   }
 
   return (
-    <Paper className={classes.main}>
-      <Box className={classes.container}>
+    <StyledPaper className="main">
+      <Box className="container">
         <Typography
           variant={matches ? 'h4' : 'h5'}
           color="primary"
-          className={classes.title}
+          className="title"
         >
-          Welcome to Mytinerary
+          Welcome Back
         </Typography>
 
         <Button
-          className={classes.google_button}
+          className="google_button"
           variant="outlined"
           href="http://localhost:5000/api/v1/auth/google"
           startIcon={<GoogleSVGIcon />}
         >
-          Sign up with Google
+          Log in with Google
         </Button>
 
-        <Box disableTypography className={classes.subtitle}>
+        <Box className="subtitle">
           <Typography variant="body2">
-            {' '}
-            or signup with email & password
+            or login with email & password
           </Typography>
         </Box>
 
-        <form className={classes.form}>
+        <form className="form">
           <TextField
             required
             autoFocus
-            margin="dense"
-            name="userName"
-            label="User Name"
-            type="userName"
-            autoComplete="current-firstName"
-            onChange={handleInputChange}
             fullWidth
-            className={classes.input_field}
-          />
-          <TextField
-            required
-            autoFocus
             margin="dense"
             name="email"
             label="Email Address"
             type="email"
             autoComplete="current-email"
             onChange={handleInputChange}
-            fullWidth
-            className={classes.input_field}
+            className="input_field"
           />
           <TextField
             required
             autoFocus
-            minLength="6"
             margin="dense"
             name="password"
             label="Password"
@@ -107,58 +103,44 @@ export const Signup = () => {
             autoComplete="current-password"
             onChange={handleInputChange}
             fullWidth
-            className={classes.input_field}
+            className="input_field"
           />
-          <TextField
-            required
-            autoFocus
-            minLength="6"
-            margin="dense"
-            name="passwordConfirm"
-            label="Confirm Password"
-            type="password"
-            autoComplete="current-password-confirm"
-            onChange={handleInputChange}
-            fullWidth
-            className={classes.input_field}
-          />
-          <Box className={classes.btns}>
+
+          <ForgotPasswordForm />
+
+          <Box className="btns">
             {loading !== 'pending' ? (
               <Button
-                className={classes.loginBtn}
+                className="loginBtn"
                 variant="contained"
                 color="secondary"
                 onClick={handleSubmit}
               >
-                Sign up
+                Log in
               </Button>
             ) : (
-              <Box className={classes.loader}>
-                <Box className={classes.ringLoader}>
+              <Box className="loader">
+                <Box className="ringLoader">
                   <PuffLoader
                     color={theme.palette.primary.main}
-                    loading={loading}
+                    loading={loading && false}
                     size={20}
                   />
                 </Box>
                 <Typography
                   variant="caption"
                   color="primary"
-                  className={classes.loaderText}
+                  className="loaderText"
                 >
-                  Signing up...
+                  Logging in...
                 </Typography>
               </Box>
             )}
           </Box>
         </form>
-        <Typography
-          variant="body2"
-          color="primary"
-          className={classes.bottomLink}
-        >
-          Already have an account?{'  '}
-          <Link to="/login">Log in</Link>
+        <Typography variant="body2" color="primary" className="bottomLink">
+          Don't have an account?{'  '}
+          <Link to="/signup">Sign Up</Link>
         </Typography>
 
         <Typography variant="caption">
@@ -166,6 +148,6 @@ export const Signup = () => {
           and T&Cs.
         </Typography>
       </Box>
-    </Paper>
+    </StyledPaper>
   )
 }

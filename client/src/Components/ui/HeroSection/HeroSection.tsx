@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 import { Button, Grid, Hidden, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -8,11 +7,12 @@ import { Header } from '../Header/Header'
 import { StyledContainer } from './styles'
 import { theme } from '../../Styles/Theme'
 import { RootState } from '../../Redux/store'
+import { useAppSelector } from '../../Redux/hooks'
 
 export const HeroSection = () => {
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
 
-  const isAuthenticated = useSelector(
+  const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
 

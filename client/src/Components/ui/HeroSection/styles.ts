@@ -1,4 +1,3 @@
-import { Grid, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Image from '../../../assets/images/bg4.jpg'
 
@@ -20,7 +19,7 @@ export const StyledContainer = styled('div')`
   }
 
   ${(props) => props.theme.breakpoints.up('lg')} {
-    width: 50vw;
+    width: 100vw;
   }
 
   .container {
@@ -54,15 +53,12 @@ export const StyledContainer = styled('div')`
     ${(props) => props.theme.breakpoints.up('sm')} {
       font-size: 6rem;
       margin: 5rem 0 0.875rem;
-      color: ${(props) => props.theme.palette.common.turquoise};
     }
     ${(props) => props.theme.breakpoints.up('lg')} {
       font-size: 3.5rem;
       margin: 2rem 0 0.875rem;
-      color: ${(props) => props.theme.palette.common.green};
     }
     ${(props) => props.theme.breakpoints.up('xl')} {
-      color: ${(props) => props.theme.palette.common.blue};
       font-size: 4.2rem;
       margin: 5rem 0 0.875rem;
     }
@@ -98,12 +94,12 @@ export const StyledContainer = styled('div')`
 
   .start-btn-container {
     text-align: center;
+
     ${(props) => props.theme.breakpoints.up('sm')} {
       margin: 2rem 0 0 0;
     }
     ${(props) => props.theme.breakpoints.up('md')} {
       margin-top: 1rem;
-      text-align: start;
     }
     ${(props) => props.theme.breakpoints.up('lg')} {
     }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -7,26 +7,27 @@ import {
   DialogContent,
   DialogTitle,
   Snackbar,
+  SnackbarCloseReason,
   TextField,
   Typography,
 } from '@mui/material'
 import { forgotPassword } from '../../Redux/authSlice'
 
-import { useStyles } from './styles'
 import { useForm } from '../../../hooks/useForm'
+import { StyledContainer } from './styles'
+import { useAppDispatch } from '../../Redux/hooks'
 
-const ForgotPasswordForm = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+export const ForgotPasswordForm = () => {
+  const dispatch = useAppDispatch()
 
   const [open, setOpen] = useState(false)
   const [openSnackBar, setOpenSnackBar] = useState(false)
 
-  const [formValues, handleInputChange] = useForm({
+  const { values: formValues, handleInputChange } = useForm({
     email: '',
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
 
     dispatch(forgotPassword(formValues))
@@ -42,11 +43,13 @@ const ForgotPasswordForm = () => {
     setOpen(false)
   }
 
-  const handleCloseSnackBar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSnackBar(false)
+  const handleCloseSnackBar:
+    | ((
+        event: Event | React.SyntheticEvent<any, Event>,
+        reason: SnackbarCloseReason
+      ) => void)
+    | undefined = (e, reason) => {
+    reason === 'clickaway' && setOpenSnackBar(false)
   }
 
   const handleClickOpen = () => {
@@ -54,8 +57,8 @@ const ForgotPasswordForm = () => {
   }
 
   return (
-    <div className={classes.btnContainer}>
-      <Button className={classes.btn} color="primary" onClick={handleClickOpen}>
+    <StyledContainer>
+      <Button className="btn" color="primary" onClick={handleClickOpen}>
         Forgot Password?
       </Button>
       <Dialog
@@ -64,18 +67,10 @@ const ForgotPasswordForm = () => {
         aria-labelledby="form-dialog-title"
       >
         <form>
-          <DialogTitle
-            id="form-dialog-title"
-            disableTypography
-            className={classes.title}
-          >
+          <DialogTitle id="form-dialog-title" className="title">
             <Typography variant="h6">Forgot your Password?</Typography>
           </DialogTitle>
-          <DialogTitle
-            id="form-dialog-subtitle"
-            disableTypography
-            className={classes.subtitle}
-          >
+          <DialogTitle id="form-dialog-subtitle" className="subtitle">
             <Typography variant="body2">
               Enter your email address and submit. You will be sent an email to
               the address provided with a password reset link.
@@ -92,7 +87,7 @@ const ForgotPasswordForm = () => {
               type="email"
               autoComplete="current-email"
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
             <Snackbar
               anchorOrigin={{
@@ -105,7 +100,7 @@ const ForgotPasswordForm = () => {
               message="A message with a password reset link has been sent to your email account."
             />
           </DialogContent>
-          <DialogActions className={classes.btns}>
+          <DialogActions className="btns">
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
@@ -115,8 +110,6 @@ const ForgotPasswordForm = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </div>
+    </StyledContainer>
   )
 }
-
-export default ForgotPasswordForm

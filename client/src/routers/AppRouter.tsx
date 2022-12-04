@@ -109,7 +109,7 @@ export const AppRouter = () => {
               </PublicRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/login"
             element={
               <PublicRoute>
@@ -133,47 +133,47 @@ export const AppRouter = () => {
               </PublicRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/citypage/:city_name"
             element={
               <PublicRoute>
                 <CityPage />
               </PublicRoute>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/itinerarypage/:title"
             element={
               <PublicRoute>
                 <ItineraryPage />
               </PublicRoute>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/activitypage/:title"
             element={
               <PublicRoute>
                 <ActivityPage />
               </PublicRoute>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/user/:userName"
             element={
               <PrivateRoute>
                 {user ? <ProfilePage user={user} /> : <Navigate to="/login" />}
               </PrivateRoute>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/resetPassword/:resetToken"
             element={
               <PublicRoute>
                 <PasswordResetPage />
               </PublicRoute>
             }
-          />
-          <Route path="/*" element={<Navigate to="/" />} /> */}
+          /> */}
+          <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
 
         {authError && (

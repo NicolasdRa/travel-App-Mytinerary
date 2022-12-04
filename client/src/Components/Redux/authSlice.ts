@@ -9,7 +9,7 @@ import { User } from '../../@types/types'
 // sign up
 export const signupUser = createAsyncThunk(
   'auth/SignUpUser',
-  async (formData, { dispatch, rejectWithValue }) => {
+  async (formData: {}, { dispatch, rejectWithValue }) => {
     dispatch(isLoggingIn())
 
     try {
@@ -35,7 +35,9 @@ export const signupUser = createAsyncThunk(
 export const logInUser = createAsyncThunk(
   'auth/logInUser',
 
-  async (formData, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
+    console.log('redux', formData)
+
     try {
       const res = await axios({
         method: 'POST',
@@ -50,6 +52,7 @@ export const logInUser = createAsyncThunk(
       if (!error.response) {
         throw error
       }
+      console.log(error)
       return rejectWithValue(error.response.data)
     }
   }
@@ -80,7 +83,7 @@ export const logOutUser = createAsyncThunk(
 // send password reset link
 export const forgotPassword = createAsyncThunk(
   'auth/sendPasswordResetLink',
-  async (formData, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'POST',
@@ -125,7 +128,7 @@ export const resetPassword = createAsyncThunk(
 
 // Define a type for the slice state
 interface AuthSlice {
-  loading: 'idle' | 'pending' | 'done' | 'failed'
+  loading: 'idle' | 'pending' | 'done' | 'fail'
   isAuthenticated: boolean
   user: string | null
   error: string | null
@@ -176,7 +179,7 @@ const authSlice = createSlice({
     builder.addCase(
       signupUser.rejected,
       (state, action: PayloadAction<any>) => {
-        state.loading = 'failed'
+        state.loading = 'fail'
         state.isAuthenticated = false
         state.error = action.payload.message
       }
@@ -187,7 +190,7 @@ const authSlice = createSlice({
       state.user = action.payload.user._id
     })
     builder.addCase(logInUser.rejected, (state, action: PayloadAction<any>) => {
-      state.loading = 'failed'
+      state.loading = 'fail'
       state.isAuthenticated = false
       state.error = action.payload.message
     })
@@ -201,7 +204,7 @@ const authSlice = createSlice({
     builder.addCase(
       logOutUser.rejected,
       (state, action: PayloadAction<any>) => {
-        state.loading = 'failed'
+        state.loading = 'fail'
         state.isAuthenticated = true
         state.error = action.payload.message
       }
@@ -214,7 +217,7 @@ const authSlice = createSlice({
     builder.addCase(
       forgotPassword.rejected,
       (state, action: PayloadAction<any>) => {
-        state.loading = 'failed'
+        state.loading = 'fail'
         state.error = action.payload.message
       }
     )
@@ -226,7 +229,7 @@ const authSlice = createSlice({
     builder.addCase(
       resetPassword.rejected,
       (state, action: PayloadAction<any>) => {
-        state.loading = 'failed'
+        state.loading = 'fail'
         state.error = action.payload.message
       }
     )
