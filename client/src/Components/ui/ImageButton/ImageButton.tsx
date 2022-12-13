@@ -1,9 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-
 import { ButtonBase, Typography } from '@mui/material'
-
-import { useStyles } from './styles'
+import { StyledContainer } from './styles'
 
 const images = [
   {
@@ -23,48 +19,47 @@ const images = [
   //   }
 ]
 
-const ImageButton = (props) => {
-  const classes = useStyles()
+interface ImageButonProps {
+  coverImg: string | Blob
+  handleClick: () => void
+}
 
+const ImageButton: React.FC<ImageButonProps> = ({ coverImg, handleClick }) => {
   return (
-    <div className={classes.root}>
+    <StyledContainer>
       {images.map((image) => (
         <ButtonBase
           focusRipple
           key={image.title}
-          className={classes.image}
-          focusVisibleClassName={classes.focusVisible}
+          className="image"
+          focusVisibleClassName="focusVisible"
           style={{
             width: image.width,
           }}
-          onClick={props.handleClick}
+          onClick={handleClick}
         >
           <span
-            className={classes.imageSrc}
+            className="imageSrc"
             style={{
-              backgroundImage: `url(${props.coverImg})`,
+              backgroundImage: `url(${coverImg})`,
             }}
           />
-          <span className={classes.imageBackdrop} />
-          <span className={classes.imageButton}>
+          <span className="imageBackdrop" />
+          <span className="imageButton">
             <Typography
               component="span"
               variant="subtitle1"
               color="inherit"
-              className={classes.imageTitle}
+              className="imageTitle"
             >
               {image.title}
-              <span className={classes.imageMarked} />
+              <span className="imageMarked" />
             </Typography>
           </span>
         </ButtonBase>
       ))}
-    </div>
+    </StyledContainer>
   )
-}
-
-ImageButton.propTypes = {
-  coverImg: PropTypes.string.isRequired,
 }
 
 export default ImageButton

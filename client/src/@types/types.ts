@@ -47,13 +47,14 @@ export interface Itinerary {
 
 export interface Activity {
   _id: string
-  city: City
   category: string
-  likes: number
-  duration: number
-  price: number
-  img?: string
+  city: City
   details?: string
+  duration: number
+  img?: string
+  likes: number
+  price: number
+  title: string | undefined
 }
 
 export interface Favourite {

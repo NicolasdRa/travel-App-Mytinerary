@@ -40,3 +40,9 @@ export const Logo: React.FC<LogoProps> = ({
     />
   </svg>
 )
+
+// import SvgLogo from '../../../assets/images/Logo.svg'
+
+// export const Logo = () => {
+//   return <img src={SvgLogo} alt="logo" style={{ color: 'white' }} />
+// }

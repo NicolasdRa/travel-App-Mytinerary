@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, SetStateAction } from 'react'
 import {
   getCroppedImg,
   getRotatedImage,
@@ -25,6 +25,10 @@ export const useImageCropper = () => {
   }, [])
 
   const showCroppedImage = useCallback(async () => {
+    if (!croppedAreaPixels) {
+      return
+    }
+
     try {
       const croppedImage = await getCroppedImg(
         imageSrc,
@@ -51,6 +55,7 @@ export const useImageCropper = () => {
       // apply rotation if needed
       const orientation = await getOrientation(file)
       const rotation = ORIENTATION_TO_ANGLE[orientation]
+
       if (rotation) {
         imageDataUrl = await getRotatedImage(imageDataUrl, rotation)
       }

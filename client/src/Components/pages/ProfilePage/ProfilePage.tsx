@@ -3,21 +3,22 @@ import React from 'react'
 import PuffLoader from 'react-spinners/PuffLoader'
 import { Avatar, Divider, Typography } from '@mui/material'
 
-import CreateItineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
-import ImageHeader from '../../ui/Headers/ImageHeader'
+import { ImageHeader } from '../../ui/Headers/ImageHeader'
 import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
 import EditProfileForm from '../../ui/EditProfileForm/EditProfileForm'
 import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
 
-import { StyledContainer, StyledLoader } from './styles'
-import { Favourite, Itinerary, User } from '../../../@types/types'
+import { StyledContainer } from './styles'
+import { User } from '../../../@types/types'
+import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
 interface ProfilePageProps {
   user: User
 }
 
-export const ProfilePage: React.FC<ProfilePageProps> = ({
-  user: {
+export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
+  // TODO load favourites
+  const {
     _id,
     coverImg,
     details,
@@ -27,10 +28,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     firstName,
     lastName,
     userName,
-  },
-}) => {
-  // TODO load favourites
-
+  } = user
   return (
     <>
       {/* {!userName && (
@@ -40,7 +38,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
       )} */}
 
       <StyledContainer>
-        <ImageHeader img={coverImg} className="header" />
+        <ImageHeader img={coverImg} />
         <div className="content">
           <Avatar
             alt={firstName + '' + lastName}
@@ -82,7 +80,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
             <UserItinerariesSmall />
             <Divider className="divider" />
           </div>
-          <CreateItineraryForm />
+          <CreateItineraryForm currentUser={user} />
         </div>
         {/* {matchesSm ? <BottomNav className={classes.bottomNav} /> : <Footer />} */}
       </StyledContainer>

@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 
 import { CardGallery } from '../CardGallery/CardGallery'
-import ListingHeader from '../Headers/ListingHeader'
+import { ListingHeader } from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
 import { selectAllActivities } from '../../Redux/activitiesSlice'
@@ -72,7 +72,11 @@ const Activities = () => {
     <StyledGrid container direction="column" alignItems="center">
       <Grid item xs={12} container direction="column" justifyContent="center">
         {headerActivity ? (
-          <ListingHeader data={headerActivity} className="header" />
+          <ListingHeader
+            title={headerActivity.title}
+            cityName={headerActivity.city.name}
+            img={headerActivity.img}
+          />
         ) : null}
         <Paper elevation={2} variant="outlined" className="searchbarContainer">
           <Typography className="searchBarTitle">Want to have fun?</Typography>

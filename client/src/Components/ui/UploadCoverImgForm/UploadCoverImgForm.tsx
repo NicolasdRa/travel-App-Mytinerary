@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useState, useRef, useEffect } from 'react'
+
 import Slider from '@mui/material/Slider'
 import Cropper from 'react-easy-crop'
 import './styles.css'
 import {
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -17,14 +15,21 @@ import {
 import ImageButton from '../ImageButton/ImageButton'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 
-import { useStyles } from './styles'
+import { StyledDialog } from './styles'
 import { useImageCropper } from '../../../hooks/useImageCropper'
-import { selectCurrentUser } from '../../Redux/usersSlice'
 
-const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
-  const classes = useStyles()
+interface UploadCoverImgFormProps {
+  origin: string
+  loadPreviewFile: (file: string) => void
+  coverImg: Blob | string
+}
+
+const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
+  origin,
+  loadPreviewFile,
+  coverImg,
+}) => {
   const [open, setOpen] = useState(false)
-  const { coverImg } = useSelector(selectCurrentUser)
 
   const {
     imageSrc,
@@ -44,17 +49,17 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
   // loads image to show
   useEffect(
     () => {
-      loadPreviewFile(croppedImage)
+      croppedImage && loadPreviewFile(croppedImage)
       return () => {}
     },
-    [croppedImage]
+    [croppedImage, loadPreviewFile]
     // loadPreviewFile
   )
 
   // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef(null)
-  const handleClick = (e) => {
-    hiddenInput.current.click()
+  const hiddenInput = useRef<HTMLInputElement>(null)
+  const handleClick = (e: any) => {
+    hiddenInput && hiddenInput.current && hiddenInput.current.click()
   }
 
   const handleClickOpen = () => {
@@ -71,36 +76,40 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
     clearImage()
   }
 
+  const handleChangeZoom = (e: any, newValue: number | number[]) => {
+    setZoom(newValue as number)
+  }
+
+  const handleChangeRotate = (e: any, newValue: number | number[]) => {
+    setRotation(newValue as number)
+  }
+
   return (
     <div>
       {origin === 'editProfileForm' ? (
         <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
       ) : (
-        <Box className={classes.photoIconContainer}>
+        <Box className="photoIconContainer">
           <Typography variant="body2">Add a photo</Typography>
           <IconButton onClick={handleClickOpen}>
-            <AddAPhotoIcon color="secondary" className={classes.photo_icon} />
+            <AddAPhotoIcon color="secondary" className="photo_icon" />
           </IconButton>
         </Box>
       )}
-      <Dialog
+      <StyledDialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle
-          id="form-dialog-title"
-          disableTypography
-          className={classes.title}
-        >
+        <DialogTitle id="form-dialog-title" className="title">
           <Typography variant="body2">
             {!imageSrc ? 'Choose ' : 'Adjust '}your cover image
           </Typography>
         </DialogTitle>
-        <DialogContent className={classes.contentContainer}>
+        <DialogContent className="contentContainer">
           {imageSrc ? (
-            <Box className={classes.previewContainer}>
-              <div className={classes.cropContainer}>
+            <Box className="previewContainer">
+              <div className="cropContainer">
                 <Cropper
                   image={imageSrc}
                   crop={crop}
@@ -116,12 +125,9 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                   // cropShape="round"
                 />
               </div>
-              <div className={classes.controls}>
-                <div className={classes.sliderContainer}>
-                  <Typography
-                    variant="overline"
-                    classes={{ root: classes.sliderLabel }}
-                  >
+              <div className="controls">
+                <div className="sliderContainer">
+                  <Typography variant="overline" className="sliderLabel">
                     Zoom
                   </Typography>
                   <Slider
@@ -130,15 +136,12 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                     max={3}
                     step={0.1}
                     aria-labelledby="Zoom"
-                    onChange={(e, zoom) => setZoom(zoom)}
-                    classes={{ root: classes.slider }}
+                    onChange={handleChangeZoom}
+                    className="slider"
                   />
                 </div>
-                <div className={classes.sliderContainer}>
-                  <Typography
-                    variant="overline"
-                    classes={{ root: classes.sliderLabel }}
-                  >
+                <div className="sliderContainer">
+                  <Typography variant="overline" className="sliderLabel">
                     Rotate
                   </Typography>
                   <Slider
@@ -147,14 +150,14 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                     max={360}
                     step={1}
                     aria-labelledby="Rotation"
-                    classes={{ root: classes.slider }}
-                    onChange={(e, rotation) => setRotation(rotation)}
+                    className="slider"
+                    onChange={handleChangeRotate}
                   />
                 </div>
               </div>
             </Box>
           ) : (
-            <Box className={classes.photoIconContainer}>
+            <Box className="photoIconContainer">
               <input
                 style={{ display: 'none' }}
                 id="customFile"
@@ -163,21 +166,18 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
                 ref={hiddenInput}
               />
               <IconButton onClick={handleClick}>
-                <AddAPhotoIcon
-                  color="secondary"
-                  className={classes.photo_icon}
-                />
+                <AddAPhotoIcon color="secondary" className="photo_icon" />
               </IconButton>
             </Box>
           )}
         </DialogContent>
-        <DialogActions className={classes.btns}>
+        <DialogActions className="btns">
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           {imageSrc && (
             <>
-              <Button onClick={() => clearImage()} color="default">
+              <Button onClick={() => clearImage()} color="inherit">
                 Clear
               </Button>
               <Button
@@ -192,14 +192,9 @@ const UploadCoverImgForm = ({ origin, loadPreviewFile }) => {
             </>
           )}
         </DialogActions>
-      </Dialog>
+      </StyledDialog>
     </div>
   )
-}
-
-UploadCoverImgForm.propTypes = {
-  loadPreviewFile: PropTypes.func.isRequired,
-  origin: PropTypes.string.isRequired,
 }
 
 export default UploadCoverImgForm

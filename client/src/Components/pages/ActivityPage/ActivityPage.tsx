@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
@@ -12,8 +12,8 @@ import {
 import { Header } from '../../ui/Header/Header'
 import BottomNav from '../../ui/BottomNav/BottomNav'
 import { Footer } from '../../ui/Footer/Footer'
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { ImageHeader } from '../../ui/Headers/ImageHeader'
+import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
 import {
   Avatar,
@@ -31,12 +31,15 @@ import CreateIcon from '@mui/icons-material/Create'
 import { theme } from '../../Styles/Theme'
 import { Container } from './styles'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { RootState } from '../../Redux/store'
 
 const ActivityPage = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
 
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const currentUser = useAppSelector(
+    (state: RootState) => state.users.currentUser
+  )
 
   // takes params & chooses activity to display
   const { title } = useParams<{ title?: string | undefined }>()
@@ -61,7 +64,7 @@ const ActivityPage = () => {
   return (
     <Container>
       <Header />
-      <ImageHeader img={img} className="header" />
+      <ImageHeader img={img} />
       <div className="content">
         <Typography className="overline" variant="overline">
           {city.name} - {category}
@@ -147,7 +150,7 @@ const ActivityPage = () => {
         </div>
       </div>
       {matchesSm ? <BottomNav /> : <Footer />}
-      {isAuthenticated ? <CreateIitineraryForm /> : null}
+      {currentUser ? <CreateItineraryForm currentUser={currentUser} /> : null}
     </Container>
   )
 }

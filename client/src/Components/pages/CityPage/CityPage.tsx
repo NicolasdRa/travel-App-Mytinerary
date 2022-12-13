@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import PuffLoader from 'react-spinners/PuffLoader'
@@ -9,20 +9,22 @@ import { selectCurrentUser } from '../../Redux/usersSlice'
 // import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
 import { CardGallery } from '../../ui/CardGallery/CardGallery'
-import ImageHeader from '../../ui/Headers/ImageHeader'
+import { ImageHeader } from '../../ui/Headers/ImageHeader'
 import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
 
 import { Typography } from '@mui/material'
 import { StyledContainer } from './styles'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { RootState } from '../../Redux/store'
 
 const CityPage = () => {
   const dispatch = useAppDispatch()
 
   const { city_name } = useParams<{ city_name?: string | undefined }>()
-
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const currentUser = useAppSelector(
+    (state: RootState) => state.users.currentUser
+  )
   const user = useAppSelector(selectCurrentUser)
 
   // fetches data from DB
@@ -46,7 +48,7 @@ const CityPage = () => {
 
   return (
     <StyledContainer>
-      <ImageHeader img={img} className="header" />
+      <ImageHeader img={img} />
       <div className="container">
         <div className="city_title">
           <Typography variant="overline">{country}</Typography>
@@ -72,7 +74,7 @@ const CityPage = () => {
 
         <CardGallery data={itineraries} type="itineraries" />
       </div>
-      {isAuthenticated ? <CreateIitineraryForm /> : null}
+      {currentUser && <CreateItineraryForm currentUser={currentUser} />}
     </StyledContainer>
   )
 }

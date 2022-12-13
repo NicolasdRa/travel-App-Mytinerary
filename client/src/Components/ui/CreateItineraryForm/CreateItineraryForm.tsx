@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
 
 import {
   Button,
@@ -21,41 +20,48 @@ import AddIcon from '@mui/icons-material/Add'
 import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
 
 import { selectAllCities } from '../../Redux/citiesSlice'
-import {
-  selectCurrentUser,
-  updateUserItineraries,
-} from '../../Redux/usersSlice'
+import { updateUserItineraries } from '../../Redux/usersSlice'
 import { addItinerary } from '../../Redux/itinerariesSlice'
 import { CategoryOptions, PriceOptions, DurationOptions } from './data'
 import { base64StringtoFile } from '../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
-import { useStyles } from './styles'
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { User } from '../../../@types/types'
+import { StyledContainer } from './styles'
 
-const CreateItineraryForm = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+interface CreateItineraryFormProps {
+  currentUser: User
+}
 
-  const cities = useSelector((state) => selectAllCities(state))
-  const { _id } = useSelector(selectCurrentUser)
+export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
+  currentUser,
+}) => {
+  const dispatch = useAppDispatch()
+
+  const cities = useAppSelector((state) => selectAllCities(state))
 
   // Component level state
   const [open, setOpen] = useState(false)
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState<string | Blob>('')
   const [previewFile, setPreviewFile] = useState(null)
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({
+  const {
+    values: formValues,
+    handleInputChange,
+    reset,
+  } = useForm({
     city: '',
     title: '',
     category: '',
-    price: '',
-    duration: '',
+    price: 0,
+    duration: 1,
     details: '',
-    author: '',
   })
 
   const { city, title, category, price, duration, details } = formValues
+  const { _id } = currentUser
 
   useEffect(() => {
     if (previewFile) {
@@ -64,7 +70,7 @@ const CreateItineraryForm = () => {
     }
   }, [previewFile])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
 
     const formData = new FormData()
@@ -85,9 +91,9 @@ const CreateItineraryForm = () => {
     setPreviewFile(null)
   }
 
-  const loadPreviewFile = (croppedImage) => setPreviewFile(croppedImage)
+  const loadPreviewFile = (croppedImage: any) => setPreviewFile(croppedImage)
 
-  const handleClearImage = (e) => {
+  const handleClearImage = () => {
     setPreviewFile(null)
   }
 
@@ -102,12 +108,12 @@ const CreateItineraryForm = () => {
   const cityOptions = cities.map((city) => city.name).sort()
 
   return (
-    <div>
+    <StyledContainer>
       <Fab
         color="secondary"
         aria-label="add"
         onClick={handleClickOpen}
-        className={classes.add_btn}
+        className="add_btn"
       >
         <AddIcon />
       </Fab>
@@ -119,24 +125,20 @@ const CreateItineraryForm = () => {
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <DialogTitle
-            id="form-dialog-title"
-            disableTypography
-            className={classes.title}
-          >
+          <DialogTitle id="form-dialog-title" className="title">
             <Typography variant="h6" color="primary">
               Create Your Itinerary
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <Typography variant="body2" className={classes.subtitle}>
+            <Typography variant="body2" className="subtitle">
               Add details, a photo and submit. You can add activities from the
               itinerary page.
             </Typography>
-            <FormControl className={classes.formControl}>
+            <FormControl className="formControl">
               <InputLabel id="city-label">Choose a city</InputLabel>
               <Select
-                className={classes.select}
+                className="select"
                 labelId="city-label"
                 name="city"
                 value={city}
@@ -159,14 +161,14 @@ const CreateItineraryForm = () => {
               autoComplete="current-title"
               value={title}
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
-            <Grid item container className={classes.price_duration}>
+            <Grid item container className="price_duration">
               <Grid item xs={12} sm={4} container>
-                <FormControl className={classes.formControl}>
+                <FormControl className="formControl">
                   <InputLabel id="category-label">Category</InputLabel>
                   <Select
-                    className={classes.select}
+                    className="select"
                     labelId="category-label"
                     name="category"
                     value={category}
@@ -181,10 +183,10 @@ const CreateItineraryForm = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4} container>
-                <FormControl className={classes.formControl}>
+                <FormControl className="formControl">
                   <InputLabel id="price-label">Price</InputLabel>
                   <Select
-                    className={classes.select}
+                    className="select"
                     labelId="price-label"
                     name="price"
                     value={price}
@@ -199,10 +201,10 @@ const CreateItineraryForm = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4} container>
-                <FormControl className={classes.formControl}>
+                <FormControl className="formControl">
                   <InputLabel id="duration-label">Duration</InputLabel>
                   <Select
-                    className={classes.select}
+                    className="select"
                     labelId="duration-label"
                     name="duration"
                     value={duration}
@@ -232,27 +234,28 @@ const CreateItineraryForm = () => {
               autoComplete="current-details"
               value={details}
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
             <div>
               {!previewFile ? (
                 <UploadCoverImgForm
                   origin="itineraryForm"
                   loadPreviewFile={loadPreviewFile}
+                  coverImg={file}
                 />
               ) : (
-                <div className={classes.previewContainer}>
-                  <div className={classes.previewImgContainer}>
+                <div className="previewContainer">
+                  <div className="previewImgContainer">
                     <img
                       src={previewFile}
                       alt="preview file"
-                      className={classes.previewImg}
+                      className="previewImg"
                     />
                   </div>
                   <Button
                     onClick={handleClearImage}
                     color="primary"
-                    className={classes.clearButton}
+                    className="clearButton"
                   >
                     Clear photo
                   </Button>
@@ -260,7 +263,7 @@ const CreateItineraryForm = () => {
               )}
             </div>
           </DialogContent>
-          <DialogActions className={classes.btns}>
+          <DialogActions className="btns">
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
@@ -270,8 +273,6 @@ const CreateItineraryForm = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </div>
+    </StyledContainer>
   )
 }
-
-export default CreateItineraryForm

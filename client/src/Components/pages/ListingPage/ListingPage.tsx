@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { Paper, Tabs, Tab, Box } from '@mui/material'
+import { Paper, Tabs, Tab, Box, Alert } from '@mui/material'
 
 import { Header } from '../../ui/Header/Header'
 import { Footer } from '../../ui/Footer/Footer'
-import Cities from '../../ui/Cities/Cities'
+import { Cities } from '../../ui/Cities/Cities'
 import Itineraries from '../../ui/Itineraries/Itineraries'
 import Activities from '../../ui/Activities/Activities'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
 import { RootState } from '../../Redux/store'
 import { useAppSelector } from '../../Redux/hooks'
 import { StyledListingPageContainer } from './styles'
@@ -55,8 +55,8 @@ function LinkTab(props: any) {
 
 const ListingPage = () => {
   const [value, setValue] = React.useState(0)
-  const isAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.isAuthenticated
+  const currentUser = useAppSelector(
+    (state: RootState) => state.users.currentUser
   )
 
   const handleChange = (e: any, newValue: React.SetStateAction<number>) => {
@@ -87,7 +87,13 @@ const ListingPage = () => {
       <TabPanel value={value} index={2}>
         <Activities />
       </TabPanel>
-      {isAuthenticated ? <CreateIitineraryForm /> : null}
+      {currentUser ? (
+        <CreateItineraryForm currentUser={currentUser} />
+      ) : (
+        <Alert color="error">
+          You must log in in order to create an itinerary
+        </Alert>
+      )}
       <Footer />
     </StyledListingPageContainer>
   )

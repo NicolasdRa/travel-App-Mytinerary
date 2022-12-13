@@ -1,6 +1,8 @@
+import { SelectChangeEvent } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
+import { Activity, Itinerary, Comment, Favourite } from '../@types/types'
 
-export const useForm = (initialState = {}) => {
+export const useForm = (initialState: any) => {
   const [values, setValues] = useState(initialState)
 
   const reset = () => {
@@ -8,7 +10,9 @@ export const useForm = (initialState = {}) => {
   }
 
   const handleInputChange: (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<any>
   ) => void = (e) => {
     setValues({
       ...values,

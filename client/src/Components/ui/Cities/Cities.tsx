@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 
 import { CardGallery } from '../CardGallery/CardGallery'
-import ListingHeader from '../Headers/ListingHeader'
+import { ListingHeader } from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
 import { selectAllCities } from '../../Redux/citiesSlice'
@@ -17,7 +17,7 @@ import { useAppSelector } from '../../Redux/hooks'
 import { City } from '../../../@types/types'
 import { StyledGrid, StyledLoaderGrid } from './styles'
 
-const Cities = () => {
+export const Cities = () => {
   const cities = useAppSelector(selectAllCities)
 
   const [string, setString] = useState('')
@@ -76,7 +76,9 @@ const Cities = () => {
       alignItems="center"
     >
       <Grid item xs={12} container direction="column" justifyContent="center">
-        {headerCity && <ListingHeader data={headerCity} className="header" />}
+        {headerCity && (
+          <ListingHeader cityName={headerCity.name} img={headerCity.img} />
+        )}
         <Paper elevation={2} variant="outlined" className="searchbarContainer">
           <Typography className="searchBarTitle">
             Choose your destination
@@ -106,5 +108,3 @@ const Cities = () => {
     </StyledGrid>
   )
 }
-
-export default Cities

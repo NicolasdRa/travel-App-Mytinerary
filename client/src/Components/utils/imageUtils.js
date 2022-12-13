@@ -17,7 +17,7 @@ export const readFile = (file) => {
     reader.addEventListener(
       'load',
       () => resolve(reader.result),
-      reader.readAsDataURL(file),
+      reader.readAsDataURL(file)
     )
   })
 }
@@ -25,7 +25,7 @@ export const readFile = (file) => {
 export const extractImageFileExtensionFromBase64 = (base64Data) => {
   return base64Data.substring(
     'data:image/'.length,
-    base64Data.indexOf(';base64'),
+    base64Data.indexOf(';base64')
   )
 }
 
@@ -68,7 +68,7 @@ export async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
   ctx.drawImage(
     image,
     safeArea / 2 - image.width * 0.5,
-    safeArea / 2 - image.height * 0.5,
+    safeArea / 2 - image.height * 0.5
   )
   const data = ctx.getImageData(0, 0, safeArea, safeArea)
 
@@ -80,7 +80,7 @@ export async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
   ctx.putImageData(
     data,
     Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
-    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y),
+    Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
   )
 
   // As Base64 string

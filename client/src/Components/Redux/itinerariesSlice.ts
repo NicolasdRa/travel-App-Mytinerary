@@ -60,7 +60,7 @@ export const deleteItinerary = createAsyncThunk(
 
 export const addItinerary = createAsyncThunk(
   'itineraries/addOne',
-  async (formData, thunkAPI) => {
+  async (formData: FormData, thunkAPI) => {
     const res = await axios({
       method: 'POST',
       url: itinerariesUrl,

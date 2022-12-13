@@ -10,21 +10,22 @@ import {
 } from '@mui/material'
 
 import { CardGallery } from '../CardGallery/CardGallery'
-import ListingHeader from '../Headers/ListingHeader'
+import { ListingHeader } from '../Headers/ListingHeader'
 
 import { randomNumberGenerator } from '../../utils/utils'
 import { selectAllItineraries } from '../../Redux/itinerariesSlice'
 
-import { useStyles } from './styles'
+import { StyledGrid, StyledLoader } from './styles'
+import { Itinerary } from '../../../@types/types'
 
 const Itineraries = () => {
-  const classes = useStyles()
-
   const itineraries = useSelector(selectAllItineraries)
 
   const [string, setString] = useState('')
-  const [headerItinerary, setHeaderItinerary] = useState(null)
-  const [filteredItineraries, setFilteredItineraries] = useState(null)
+  const [headerItinerary, setHeaderItinerary] = useState<Itinerary | null>(null)
+  const [filteredItineraries, setFilteredItineraries] = useState<
+    Itinerary[] | null
+  >(null)
 
   useEffect(() => {
     // random cover image
@@ -39,7 +40,7 @@ const Itineraries = () => {
     // itinerary filter
     if (string !== '') {
       const filtered = itineraries.filter((itinerary) =>
-        itinerary.city.toLowerCase().startsWith(string)
+        itinerary.city.name.toLowerCase().startsWith(string)
       )
       setFilteredItineraries(filtered)
     }
@@ -49,46 +50,42 @@ const Itineraries = () => {
     }
   }, [itineraries, string])
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     // updates string in state
     setString(e.target.value.toLowerCase())
   }
 
   if (!itineraries) {
     return (
-      <Grid
+      <StyledLoader
         container
-        className={classes.loader}
         direction="column"
-        justify="center"
-        alignjustify="center"
+        justifyContent="center"
+        alignContent="center"
       >
         <Typography>Loading itineraries...</Typography>
         <CircularProgress color="secondary" />
-      </Grid>
+      </StyledLoader>
     )
   }
 
   return (
-    <Grid
+    <StyledGrid
       container
       direction="column"
       // justify='center'
       alignItems="center"
-      className={classes.container}
     >
-      <Grid item xs={12} container direction="column" justify="center">
+      <Grid item xs={12} container direction="column" justifyContent="center">
         {headerItinerary ? (
-          <ListingHeader data={headerItinerary} className={classes.header} />
+          <ListingHeader
+            title={headerItinerary.title}
+            cityName={headerItinerary.city.name}
+            img={headerItinerary.img}
+          />
         ) : null}
-        <Paper
-          elevation={2}
-          variant="outlined"
-          className={classes.searchbarContainer}
-        >
-          <Typography className={classes.searchBarTitle}>
-            Choose your route
-          </Typography>
+        <Paper elevation={2} variant="outlined" className="searchbarContainer">
+          <Typography className="searchBarTitle">Choose your route</Typography>
           <TextField
             id="outlined-helperText"
             label="Search Itineraries for City.."
@@ -96,23 +93,22 @@ const Itineraries = () => {
             variant="outlined"
             onChange={handleChange}
             color="primary"
-            className={classes.searchBar}
+            className="searchBar"
           />
         </Paper>
       </Grid>
       <Grid item xs={12} lg={12}>
-        <Typography variant="subtitle2" className={classes.subtitle}>
+        <Typography variant="subtitle2" className="subtitle">
           {string === '' ? 'Most popular Itineraries' : 'Search results'}
         </Typography>
       </Grid>
       <Grid item xs={12} lg={12}>
         <CardGallery
-          className={classes.gallery}
           data={filteredItineraries ? filteredItineraries : itineraries}
           type="itineraries"
         />
       </Grid>
-    </Grid>
+    </StyledGrid>
   )
 }
 
