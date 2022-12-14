@@ -106,7 +106,7 @@ export const forgotPassword = createAsyncThunk(
 // reset password
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
-  async (formData, { rejectWithValue }) => {
+  async (formData: FormData, { rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'PATCH',

@@ -1,35 +1,46 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+
 import {
   Box,
   Button,
-  Paper,
+  Link,
   Snackbar,
+  SnackbarCloseReason,
   TextField,
   Typography,
 } from '@mui/material'
 
 import { resetPassword } from '../../Redux/authSlice'
 import { useForm } from '../../../hooks/useForm'
+import { StyledPaper } from './styles'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '../../Redux/hooks'
 
-import { useStyles } from './styles'
+interface PasswordResetFormProps {
+  match: any
+  history: any
+}
 
-export const PasswordResetForm = ({ match, history }) => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
+  match,
+  history,
+}) => {
+  const navigate = useNavigate()
+
+  const dispatch = useAppDispatch()
 
   // must be outside handleSubmit
   const redirectPath = localStorage.getItem('lastPath')
 
   const [openSnackBar, setOpenSnackBar] = useState(false)
 
-  const [formValues, handleInputChange] = useForm({
+  const { values: formValues, handleInputChange } = useForm({
     password: '',
     passwordConfirm: '',
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
 
     const data = { ...formValues, resetToken: match.params.resetToken }
@@ -38,33 +49,35 @@ export const PasswordResetForm = ({ match, history }) => {
     setOpenSnackBar(true)
     setTimeout(() => {
       setOpenSnackBar(false)
-      history.push(`/`)
+      navigate('/')
     }, 3000)
   }
 
-  const handleCloseSnackBar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSnackBar(false)
+  const handleCloseSnackBar:
+    | ((
+        event: Event | React.SyntheticEvent<any, Event>,
+        reason: SnackbarCloseReason
+      ) => void)
+    | undefined = (e, reason) => {
+    reason === 'clickaway' && setOpenSnackBar(false)
   }
 
   return (
-    <Paper className={classes.main}>
-      <Box className={classes.container}>
-        <Typography variant="h6" className={classes.title}>
+    <StyledPaper>
+      <Box className="container">
+        <Typography variant="h6" className="title">
           Reset your password
         </Typography>
 
-        <Typography variant="body2" className={classes.subtitle}>
+        <Typography variant="body2" className="subtitle">
           Enter a new password, confirm and submit.
         </Typography>
 
-        <Typography variant="body2" className={classes.paragraph}>
+        <Typography variant="body2" className="paragraph">
           You will be re-directed to the log in page shortly afterwards.
         </Typography>
 
-        <form className={classes.form}>
+        <form className="form">
           <TextField
             required
             autoFocus
@@ -75,12 +88,11 @@ export const PasswordResetForm = ({ match, history }) => {
             autoComplete="current-password"
             onChange={handleInputChange}
             fullWidth
-            className={classes.input_field}
+            className="input_field"
           />
           <TextField
             required
             autoFocus
-            minLength="6"
             margin="dense"
             name="passwordConfirm"
             label="Confirm New Password"
@@ -88,7 +100,7 @@ export const PasswordResetForm = ({ match, history }) => {
             autoComplete="current-password-confirm"
             onChange={handleInputChange}
             fullWidth
-            className={classes.input_field}
+            className="input_field"
           />
           <Snackbar
             anchorOrigin={{
@@ -100,30 +112,25 @@ export const PasswordResetForm = ({ match, history }) => {
             onClose={handleCloseSnackBar}
             message="Your password has been reset, please log in with your new password"
           />
-          <Typography variant="body2" className={classes.text}>
+          <Typography variant="body2" className="text">
             By proceeding you agree to Mytinerary’s Privacy Policy, User
             Agreement and T&Cs.
           </Typography>
 
-          <Box className={classes.btns}>
-            <Button
-              component={Link}
-              to={redirectPath}
-              color="primary"
-              className={classes.btn}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              color="secondary"
-              className={classes.btn}
-            >
-              Submit
-            </Button>
-          </Box>
+          <Link
+            component="button"
+            onClick={() => navigate(`${redirectPath}`)}
+            color="inherit"
+            className="btn"
+          >
+            Cancel
+          </Link>
+
+          <Button onClick={handleSubmit} color="secondary" className="btn">
+            Submit
+          </Button>
         </form>
       </Box>
-    </Paper>
+    </StyledPaper>
   )
 }

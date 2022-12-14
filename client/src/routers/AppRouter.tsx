@@ -165,14 +165,14 @@ export const AppRouter = () => {
               </PrivateRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/resetPassword/:resetToken"
             element={
               <PublicRoute>
                 <PasswordResetPage />
               </PublicRoute>
             }
-          /> */}
+          />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
 
