@@ -1,42 +1,27 @@
-import React from 'react'
+import { SetStateAction, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { BottomNavigation, BottomNavigationAction } from '@mui/material'
+import { BottomNavigationAction } from '@mui/material'
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 import { selectCurrentUser } from '../../Redux/usersSlice'
-
-import { makeStyles } from 'tss-react/mui'
-
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-    position: 'fixed',
-    bottom: 0,
-    backgroundColor: '#FAFAFA',
-  },
-})
+import { StyledBottomNavigation } from './styles'
 
 export default function BottomNav() {
-  const classes = useStyles()
-  const [value, setValue] = React.useState('recents')
+  const [value, setValue] = useState('recents')
 
   const user = useSelector(selectCurrentUser)
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (e: any, newValue: SetStateAction<string>) => {
     setValue(newValue)
   }
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={handleChange}
-      className={classes.root}
-    >
+    <StyledBottomNavigation value={value} onChange={handleChange}>
       <BottomNavigationAction
         component={Link}
         to="/"
@@ -65,6 +50,6 @@ export default function BottomNav() {
         value="profile"
         icon={user ? <CustomAvatar /> : <AccountCircleRoundedIcon />}
       />
-    </BottomNavigation>
+    </StyledBottomNavigation>
   )
 }

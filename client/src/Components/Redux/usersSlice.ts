@@ -29,7 +29,7 @@ export const loadCurrentUser = createAsyncThunk(
 // update user info & picture
 export const updateUserProfile = createAsyncThunk(
   'users/updateUserProfile',
-  async (formData) => {
+  async (formData: FormData) => {
     const res = await axios({
       method: 'PATCH',
       url: `${usersUrl}updateMe`,

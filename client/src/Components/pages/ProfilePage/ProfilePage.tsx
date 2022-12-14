@@ -47,7 +47,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
           />
           <div className="info">
             <div className="edit_btn">
-              <EditProfileForm />
+              <EditProfileForm currentUser={user} />
             </div>
             <div className="likes">
               <FavouriteComponent
@@ -77,7 +77,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
               {details}
             </Typography>
             <Divider className="divider" />
-            <UserItinerariesSmall />
+            <UserItinerariesSmall currentUser={user} />
             <Divider className="divider" />
           </div>
           <CreateItineraryForm currentUser={user} />

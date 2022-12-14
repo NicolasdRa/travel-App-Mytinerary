@@ -149,22 +149,22 @@ export const AppRouter = () => {
               </PublicRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/activitypage/:title"
             element={
               <PublicRoute>
                 <ActivityPage />
               </PublicRoute>
             }
-          /> */}
-          {/* <Route
+          />
+          <Route
             path="/user/:userName"
             element={
               <PrivateRoute>
                 {user ? <ProfilePage user={user} /> : <Navigate to="/login" />}
               </PrivateRoute>
             }
-          /> */}
+          />
           {/* <Route
             path="/resetPassword/:resetToken"
             element={

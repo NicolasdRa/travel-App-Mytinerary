@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
 import {
   Button,
   Dialog,
@@ -21,26 +20,32 @@ import { updateUserProfile } from '../../Redux/usersSlice'
 import { base64StringtoFile } from '../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
-import { useStyles } from './styles'
+import { StyledContainer } from './styles'
+import { useAppDispatch } from '../../Redux/hooks'
+import { User } from '../../../@types/types'
 
-const EditProfileForm = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+interface EditProfileFormProps {
+  currentUser: User
+}
 
-  // Global state - user info
-  const { userName, firstName, lastName, details, img, coverImg } = useSelector(
-    (state) => state.users.currentUser
-  )
+const EditProfileForm: React.FC<EditProfileFormProps> = ({
+  currentUser: { userName, firstName, lastName, details, img, coverImg },
+}) => {
+  const dispatch = useAppDispatch()
 
   // Component level state
   const [open, setOpen] = useState(false)
-  const [userFile, setUserFile] = useState(img)
+  const [userFile, setUserFile] = useState<string | Blob>(img)
   const [userPreviewFile, setUserPreviewFile] = useState(null)
-  const [coverFile, setCoverFile] = useState(coverImg)
+  const [coverFile, setCoverFile] = useState<string | Blob>(coverImg)
   const [coverPreviewFile, setCoverPreviewFile] = useState(null)
 
   // useForm hook
-  const [formValues, handleInputChange, reset] = useForm({
+  const {
+    values: formValues,
+    handleInputChange,
+    reset,
+  } = useForm({
     userName: userName,
     firstName: firstName,
     lastName: lastName,
@@ -63,12 +68,10 @@ const EditProfileForm = () => {
     }
   }, [coverPreviewFile])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
 
     const { userName, firstName, lastName, details } = formValues
-
-    console.log(userFile, coverFile)
 
     const formData = new FormData()
     userFile && formData.append('img', userFile)
@@ -84,8 +87,9 @@ const EditProfileForm = () => {
     setOpen(false)
   }
 
-  const loadUserPreviewFile = (croppedImage) => setUserPreviewFile(croppedImage)
-  const loadCoverPreviewFile = (croppedImage) =>
+  const loadUserPreviewFile = (croppedImage: any) =>
+    setUserPreviewFile(croppedImage)
+  const loadCoverPreviewFile = (croppedImage: any) =>
     setCoverPreviewFile(croppedImage)
 
   const handleClickOpen = () => {
@@ -99,7 +103,7 @@ const EditProfileForm = () => {
   }
 
   return (
-    <div>
+    <StyledContainer>
       <Button color="secondary" onClick={handleClickOpen}>
         EDIT PROFILE
       </Button>
@@ -109,37 +113,41 @@ const EditProfileForm = () => {
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <DialogTitle
-            id="form-dialog-title"
-            disableTypography
-            className={classes.title}
-          >
+          <DialogTitle id="form-dialog-title" className="title">
             <Typography variant="h6" color="primary">
               Edit your profile info
             </Typography>
           </DialogTitle>
-          <Typography
-            variant="body1"
-            color="inherit"
-            className={classes.subtitle}
-          >
+          <Typography variant="body1" color="inherit" className="subtitle">
             Change your images or edit your info
           </Typography>
 
           {coverPreviewFile ? (
-            <ImageButton coverImg={coverPreviewFile} />
+            <ImageButton
+              coverImg={coverPreviewFile}
+              handleClick={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+            />
           ) : (
             <UploadCoverImgForm
               origin="editProfileForm"
               loadPreviewFile={loadCoverPreviewFile}
+              coverImg={coverImg}
             />
           )}
           {userPreviewFile ? (
-            <ImageButtonRounded img={userPreviewFile} />
+            <ImageButtonRounded
+              img={userPreviewFile}
+              handleClick={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+            />
           ) : (
             <UploadProfileImgForm
               origin="editProfileForm"
               loadPreviewFile={loadUserPreviewFile}
+              img={''}
             />
           )}
           <DialogContent>
@@ -154,9 +162,9 @@ const EditProfileForm = () => {
               autoComplete="current-userName"
               defaultValue={userName}
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
-            <Grid item container className={classes.price_duration}>
+            <Grid item container className="price_duration">
               <Grid item xs={6} container>
                 <TextField
                   required
@@ -169,7 +177,7 @@ const EditProfileForm = () => {
                   autoComplete="current-firstName"
                   defaultValue={firstName}
                   onChange={handleInputChange}
-                  className={classes.input_field}
+                  className="input_field"
                 />
               </Grid>
               <Grid item xs={6} container>
@@ -184,7 +192,7 @@ const EditProfileForm = () => {
                   autoComplete="current-lastName"
                   defaultValue={lastName}
                   onChange={handleInputChange}
-                  className={classes.input_field}
+                  className="input_field"
                 />
               </Grid>
             </Grid>
@@ -199,10 +207,10 @@ const EditProfileForm = () => {
               autoComplete="current-details"
               defaultValue={details}
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
           </DialogContent>
-          <DialogActions className={classes.btns}>
+          <DialogActions className="btns">
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
@@ -212,7 +220,7 @@ const EditProfileForm = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </div>
+    </StyledContainer>
   )
 }
 

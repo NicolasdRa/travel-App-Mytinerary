@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Card, Grid } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const StyledGrid = styled(Grid)`
@@ -33,8 +33,56 @@ export const StyledGrid = styled(Grid)`
   }
 `
 
+export const StyledCard = styled(Card)`
+  flex: 0 0 auto;
+  margin: 0.3rem;
+  min-width: 8rem;
+  max-width: 8rem;
+  /* padding: 0.6rem; */
+  padding: 0;
+
+  .media {
+    height: 6rem;
+    object-fit: cover;
+    min-width: 4rem;
+    /* // maxWidth: 100%; */
+    border-radius: 3;
+    /* // boxShadow: 0 2px 6px 0 #c1c9d7, 0 -2px 6px 0 #cce1e9;
+    // rounded centered image
+    // paddingTop: 65%;
+    // borderRadius: 50%;
+    // margin: '1.5rem 1.5rem 0 1.5rem' */
+  }
+
+  .card_underlineNone {
+    text-decoration: none;
+  }
+
+  .card_title {
+    padding: 0 0.15rem;
+    color: black;
+    text-decoration: none;
+    font-weight: 400;
+  }
+`
+
 export const StyledLoader = styled(Grid)`
   display: flex;
   flex-direction: column;
   margin: 5rem 5rem;
+`
+export const StyledItinerariesContainer = styled('div')`
+  .text: {
+    margin: 0.5rem;
+    text-align: left;
+  }
+
+  .gallery: {
+    position: relative;
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    width: auto;
+    overflowx: auto;
+  }
 `
