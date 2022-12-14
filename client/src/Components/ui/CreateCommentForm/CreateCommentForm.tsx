@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
 
-import { useDispatch } from 'react-redux'
 import {
   Button,
   Dialog,
@@ -15,26 +13,34 @@ import {
 } from '@mui/material'
 import CreateIcon from '@mui/icons-material/Create'
 
-import { useStyles } from './styles'
+import { StyledContainer } from './styles'
 import { useForm } from '../../../hooks/useForm'
 
 import { addComment } from '../../Redux/commentsSlice'
 import { updateItineraryComments } from '../../Redux/itinerariesSlice'
+import { useAppDispatch } from '../../Redux/hooks'
 
-const CreateCommentForm = ({
+interface CreateCommentFormProps {
+  userId: string
+  userName: string
+  userImg: string
+  sourceId: string
+  sourceType: string
+}
+
+const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   userId,
   userName,
   userImg,
   sourceId,
   sourceType,
 }) => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [open, setOpen] = useState(false)
   const [openSnackBar, setOpenSnackBar] = useState(false)
 
-  const [formValues, handleInputChange] = useForm({
+  const { values: formValues, handleInputChange } = useForm({
     rating: '',
     summary: '',
     description: '',
@@ -45,7 +51,7 @@ const CreateCommentForm = ({
     sourceType: sourceType,
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
 
     dispatch(addComment(formValues))
@@ -62,7 +68,7 @@ const CreateCommentForm = ({
     setOpen(false)
   }
 
-  const handleCloseSnackBar = (event, reason) => {
+  const handleCloseSnackBar = (e: any, reason: string) => {
     if (reason === 'clickaway') {
       return
     }
@@ -74,42 +80,30 @@ const CreateCommentForm = ({
   }
 
   return (
-    <div className={classes.btnContainer}>
-      <Button
-        className={classes.btn}
-        color="secondary"
-        onClick={handleClickOpen}
-      >
+    <StyledContainer>
+      <Button className="btn" color="secondary" onClick={handleClickOpen}>
         Post Review
-        <CreateIcon color="secondary" className={classes.createIcon} />
+        <CreateIcon color="secondary" className="createIcon" />
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.modal}
+        className="modal"
       >
         <form>
-          <DialogTitle
-            id="form-dialog-title"
-            disableTypography
-            className={classes.title}
-          >
+          <DialogTitle id="form-dialog-title" className="title">
             <Typography variant="h6">Share your experience</Typography>
           </DialogTitle>
-          <DialogTitle
-            id="form-dialog-subtitle"
-            disableTypography
-            className={classes.subtitle}
-          >
+          <DialogTitle id="form-dialog-subtitle" className="subtitle">
             <Typography variant="body2">
               Help the community with your review
             </Typography>
           </DialogTitle>
 
           <DialogContent>
-            <div className={classes.ratingContainer}>
-              <Typography variant="body2" className={classes.ratingLabel}>
+            <div className="ratingContainer">
+              <Typography variant="body2" className="ratingLabel">
                 Rate your experience
               </Typography>
               <Rating
@@ -118,7 +112,7 @@ const CreateCommentForm = ({
                 defaultValue={2}
                 name="rating"
                 onChange={handleInputChange}
-                className={classes.rating}
+                className="rating"
               />
             </div>
             <TextField
@@ -131,7 +125,7 @@ const CreateCommentForm = ({
               type="text"
               autoComplete="current-summary"
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
             <TextField
               required
@@ -145,7 +139,7 @@ const CreateCommentForm = ({
               type="text"
               autoComplete="current-description"
               onChange={handleInputChange}
-              className={classes.input_field}
+              className="input_field"
             />
             <Snackbar
               anchorOrigin={{
@@ -158,7 +152,7 @@ const CreateCommentForm = ({
               message="Your comment has been submitted, thanks!!."
             />
           </DialogContent>
-          <DialogActions className={classes.btns}>
+          <DialogActions className="btns">
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
@@ -168,16 +162,8 @@ const CreateCommentForm = ({
           </DialogActions>
         </form>
       </Dialog>
-    </div>
+    </StyledContainer>
   )
-}
-
-CreateCommentForm.propTypes = {
-  userId: PropTypes.string.isRequired,
-  userName: PropTypes.string.isRequired,
-  userImg: PropTypes.string.isRequired,
-  sourceId: PropTypes.string.isRequired,
-  sourceType: PropTypes.string.isRequired,
 }
 
 export default CreateCommentForm

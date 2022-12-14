@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
+    "@types/uuid": "^9.0.0",
     "url-loader": "^4.1.1"
   },
   "proxy": "http://localhost:5000",

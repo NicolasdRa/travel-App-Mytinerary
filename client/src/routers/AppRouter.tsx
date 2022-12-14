@@ -133,22 +133,22 @@ export const AppRouter = () => {
               </PublicRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/citypage/:city_name"
             element={
               <PublicRoute>
                 <CityPage />
               </PublicRoute>
             }
-          /> */}
-          {/* <Route
+          />
+          <Route
             path="/itinerarypage/:title"
             element={
               <PublicRoute>
                 <ItineraryPage />
               </PublicRoute>
             }
-          /> */}
+          />
           {/* <Route
             path="/activitypage/:title"
             element={

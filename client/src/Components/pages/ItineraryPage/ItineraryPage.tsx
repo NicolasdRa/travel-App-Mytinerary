@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { v4 as uuidv4 } from 'uuid'
 import PuffLoader from 'react-spinners/PuffLoader'
@@ -11,8 +11,8 @@ import {
 } from '../../Redux/itinerariesSlice'
 import { selectCurrentUser } from '../../Redux/usersSlice'
 
-import ImageHeader from '../../ui/Headers/ImageHeader'
-import CreateIitineraryForm from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { ImageHeader } from '../../ui/Headers/ImageHeader'
+import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
 import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
 import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
 
@@ -28,26 +28,26 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import EuroIcon from '@mui/icons-material/Euro'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import { useStyles } from './styles'
 import clsx from 'clsx'
 
 import CreateCommentForm from '../../ui/CreateCommentForm/CreateCommentForm'
 
 import { CommentCard } from '../../ui/CommentCard/CommentCard'
+import { useAppDispatch } from '../../Redux/hooks'
+import { RootState } from '../../Redux/store'
+import { StyledContainer } from './styles'
 
 // TODO: itinerary Reducer action to keep track of likes
 
 const ItineraryPage = () => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [expanded, setExpanded] = React.useState(false)
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const currentUser = useSelector(selectCurrentUser)
 
   // takes params & chooses itinerary to display
-  const { title } = useParams()
+  const { title } = useParams<{ title?: string | undefined }>()
 
   // fetches data from DB
   useEffect(() => {
@@ -74,7 +74,7 @@ const ItineraryPage = () => {
 
   if (!itinerary) {
     return (
-      <div className={classes.loader}>
+      <div className="loader">
         <PuffLoader color="red" loading={true} size={80} />
       </div>
     )
@@ -93,41 +93,38 @@ const ItineraryPage = () => {
     favourites,
     ratingAvg,
     likes,
-    author: { userName: authorName } = '',
-    author: { img: authorImg } = '',
+    author: { userName: authorName = '', img: authorImg = '' },
     comments,
   } = itinerary
 
-  // variable to pass in create comment form
-  const { _id: userId, userName, img: userImg } = currentUser
-
   return (
-    <div className={classes.container}>
-      <ImageHeader img={img} className={classes.header} />
+    <StyledContainer>
+      <ImageHeader img={img} />
 
-      <div className={classes.content}>
-        <Typography className={classes.overline} variant="overline">
+      <div className="content">
+        <Typography className="overline" variant="overline">
           {city.name} - {category}
         </Typography>
-        <div className={classes.info}>
-          <div className={classes.city_title}>
+        <div className="info">
+          <div className="city_title">
             <Typography variant="h5">{title}</Typography>
           </div>
-          <div className={classes.likes}>
-            <FavouriteComponent
-              readOnly={!userId && true}
-              data={favourites.length}
-              sourceType="itinerary"
-              sourceId={itineraryId}
-              userId={userId && userId}
-              className={classes.favourites}
-            />
+          <div className="likes">
+            {currentUser && (
+              <FavouriteComponent
+                readOnly={!currentUser._id && true}
+                amount={favourites ? favourites.length : 0}
+                sourceType="itinerary"
+                sourceId={itineraryId}
+                userId={currentUser._id}
+              />
+            )}
           </div>
         </div>
         <div
-          component="fieldset"
-          borderColor="transparent"
-          className={classes.ratingContainer}
+          // component="fieldset"
+          // borderColor="transparent"
+          className="ratingContainer"
         >
           <Rating
             name="read-only"
@@ -135,57 +132,53 @@ const ItineraryPage = () => {
             precision={0.5}
             value={ratingAvg}
             readOnly
-            className={classes.rating}
+            className="rating"
           />
-          <Typography
-            className={classes.ratingNumber}
-            color="primary"
-            variant="body2"
-          >
+          <Typography className="ratingNumber" color="primary" variant="body2">
             ({ratingAvg})
           </Typography>
         </div>
-        <div className={classes.extra_info}>
-          <div className={classes.user_info}>
+        <div className="extra_info">
+          <div className="user_info">
             <Avatar
               // aria-label='recipe'
               // variant='rounded'
               alt={authorName}
               src={authorImg}
-              className={classes.avatar}
+              className="avatar"
             />
             <Typography
               variant="body2"
               color="textSecondary"
               component="p"
-              className={classes.author_name}
+              className="author_name"
             >
               {authorName ? `by ${authorName}` : 'by anonymous'}
             </Typography>
           </div>
-          <div className={classes.price_time}>
-            <div className={classes.duration}>
-              <AccessTimeIcon className={classes.icons} />
+          <div className="price_time">
+            <div className="duration">
+              <AccessTimeIcon className="icons" />
               <Typography variant="body2" color="textSecondary" component="p">
                 {duration}
               </Typography>
             </div>
-            <div className={classes.price}>
-              <EuroIcon className={classes.icons} />
+            <div className="price">
+              <EuroIcon className="icons" />
               <Typography variant="body2" color="textSecondary" component="p">
                 {price}
               </Typography>
             </div>
           </div>
         </div>
-        <Divider className={classes.divider} />
-        <div className={classes.gallery}>
-          <Typography variant="body2" className={classes.text}>
+        <Divider className="divider" />
+        <div className="gallery">
+          <Typography variant="body2" className="text">
             {details}
           </Typography>
-          <Divider className={classes.divider} />
-          <div className={classes.gallery}>
-            <Typography variant="body2" className={classes.subtitle}>
+          <Divider className="divider" />
+          <div className="gallery">
+            <Typography variant="body2" className="subtitle">
               {activities.length > 0
                 ? 'Available activities'
                 : 'No activities found'}{' '}
@@ -195,16 +188,16 @@ const ItineraryPage = () => {
             <ActivityGallerySmall activities={activities} />
           </div>
 
-          <Divider className={classes.divider} />
-          <div className={classes.reviewContainer}>
-            <div className={classes.viewReviews}>
-              <Typography variant="body2" className={classes.reviewText}>
+          <Divider className="divider" />
+          <div className="reviewContainer">
+            <div className="viewReviews">
+              <Typography variant="body2" className="reviewText">
                 View all Reviews ({comments.length})
               </Typography>
               <IconButton
                 style={{ padding: 0, marginRight: 'auto' }}
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
+                className={clsx('expand', {
+                  ['expandOpen']: expanded,
                 })}
                 onClick={handleExpandClick}
                 aria-expanded={expanded}
@@ -213,25 +206,26 @@ const ItineraryPage = () => {
                 <ExpandMoreIcon />
               </IconButton>
             </div>
-            <CreateCommentForm
-              userId={userId}
-              userName={userName}
-              userImg={userImg}
-              sourceId={itineraryId}
-              sourceType="itinerary"
-              className={classes.postReview}
-            />
+            {currentUser && (
+              <CreateCommentForm
+                userId={currentUser._id}
+                userName={currentUser.userName}
+                userImg={currentUser.img}
+                sourceId={itineraryId}
+                sourceType="itinerary"
+              />
+            )}
           </div>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             {itinerary.comments.map((comment) => (
               <CommentCard key={uuidv4()} comment={comment} />
             ))}
           </Collapse>
-          <Divider className={classes.divider} />
+          <Divider className="divider" />
         </div>
-        {isAuthenticated && <CreateIitineraryForm />}
+        {currentUser && <CreateItineraryForm currentUser={currentUser} />}
       </div>
-    </div>
+    </StyledContainer>
   )
 }
 

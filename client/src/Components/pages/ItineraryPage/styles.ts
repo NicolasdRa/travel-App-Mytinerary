@@ -1,0 +1,170 @@
+import { styled } from '@mui/material/styles'
+
+export const StyledContainer = styled('div')`
+  .loader {
+    display: flex;
+    margin: 35vh auto;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 100%;
+    margin-bottom: 56px;
+  }
+
+  .header {
+    height: 20rem;
+    width: 100%;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  .overline {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    padding: 0 0 0 1rem;
+  }
+
+  .city_title {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .likes_btn {
+  }
+
+  ,
+  .extra_info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+
+  .ratingContainer {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .ratingNumber {
+    margin-left: 0.5rem;
+  }
+
+  .user_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .avatar {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .price_time {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  .icons {
+    font-size: 1rem;
+    margin-right: 0.2rem;
+    color: grey;
+  }
+
+  .duration {
+    display: flex;
+    align-items: center;
+  }
+
+  .price {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+  }
+
+  .info_icon {
+    align-items: center;
+    fill: grey;
+  }
+
+  .divider {
+    margin: 1rem;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    text-align: left;
+    margin: 1rem;
+  }
+
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+  }
+
+  .subtitle {
+    display: flex;
+    justify-self: start;
+    margin-left: 1rem;
+  }
+
+  .reviewContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .viewReviews {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 1rem;
+  }
+
+  .reviewText {
+    margin-right: 0.3rem;
+  }
+
+  .expandMoreBtn {
+    padding: 0;
+    margin-right: auto;
+  }
+
+  .expand {
+    transform: rotate(0deg);
+    margin-left: auto;
+    transition: ${(props) =>
+      props.theme.transitions.create('transform', {
+        duration: props.theme.transitions.duration.shortest,
+      })};
+  }
+
+  .expandOpen {
+    transform: rotate(180deg);
+  }
+`

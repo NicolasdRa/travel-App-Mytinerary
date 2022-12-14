@@ -36,7 +36,7 @@ export const fetchItineraryById = createAsyncThunk(
 
 export const fetchItineraryByTitle = createAsyncThunk(
   'itineraries/fetchItineraryByTitle',
-  async (title, thunkAPI) => {
+  async (title: string | undefined) => {
     const res = await axios({
       method: 'get',
       url: `${itinerariesUrl}/title/${title}`,

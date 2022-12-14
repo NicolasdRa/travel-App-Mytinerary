@@ -31,7 +31,7 @@ export interface Itinerary {
   category?: string
   duration?: number
   price?: number
-  img?: string
+  img: string
   details?: string
   activities: Activity[]
   favourites?: Favourite[]
