@@ -78,7 +78,7 @@ const Activities = () => {
             img={headerActivity.img}
           />
         ) : null}
-        <Paper elevation={2} variant="outlined" className="searchbarContainer">
+        <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">Want to have fun?</Typography>
 
           <TextField

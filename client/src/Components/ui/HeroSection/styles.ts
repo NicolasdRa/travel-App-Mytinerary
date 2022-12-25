@@ -6,9 +6,13 @@ export const StyledContainer = styled('div')`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  flex-direction: column;
+
   height: 100vh;
   width: 100vw;
+
+  flex-direction: column;
+  justify-content: space-around;
+  margin: auto 0;
 
   ${(props) => props.theme.breakpoints.up('md')} {
     height: '53vh';
@@ -23,12 +27,7 @@ export const StyledContainer = styled('div')`
   }
 
   .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin: auto 0;
     padding: 0 2rem;
-    text-align: center;
 
     ${(props) => props.theme.breakpoints.up('md')} {
       padding: 0 5rem;
@@ -48,7 +47,7 @@ export const StyledContainer = styled('div')`
     font-family: 'Roboto Slab', 'Times New Roman', serif;
     font-size: 4rem;
     font-weight: 700;
-    margin: 0.3rem 0 0.875rem;
+    margin: 0 0 1rem 0;
 
     ${(props) => props.theme.breakpoints.up('sm')} {
       font-size: 6rem;
@@ -93,7 +92,7 @@ export const StyledContainer = styled('div')`
   }
 
   .start-btn-container {
-    text-align: center;
+    /* text-align: center; */
 
     ${(props) => props.theme.breakpoints.up('sm')} {
       margin: 2rem 0 0 0;

@@ -7,6 +7,7 @@ declare module '@mui/material/styles/createPalette' {
     blue?: string
     chalk?: string
     green?: string
+    grey?: string
     orangeLight?: string
     turquoise?: string
   }

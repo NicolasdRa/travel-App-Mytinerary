@@ -58,6 +58,7 @@ const ListingPage = () => {
   const currentUser = useAppSelector(
     (state: RootState) => state.users.currentUser
   )
+  const cities = useAppSelector((state: RootState) => state.cities.data)
 
   const handleChange = (e: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue)

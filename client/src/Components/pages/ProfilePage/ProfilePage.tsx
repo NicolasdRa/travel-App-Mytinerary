@@ -11,6 +11,8 @@ import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteCompone
 import { StyledContainer } from './styles'
 import { User } from '../../../@types/types'
 import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { useAppSelector } from '../../Redux/hooks'
+import { selectAllCities } from '../../Redux/citiesSlice'
 
 interface ProfilePageProps {
   user: User

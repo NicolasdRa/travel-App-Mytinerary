@@ -29,7 +29,7 @@ export const MenuDesk: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
-  const user = useSelector((state: RootState) => state.auth.user)
+  const user = useSelector((state: RootState) => state.auth.userId)
 
   // log out functionality
   const handleLogOut = (e: any) => {

@@ -3,27 +3,24 @@ import { Link } from 'react-router-dom'
 import { Button, Grid, Hidden, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-import { Header } from '../Header/Header'
 import { StyledContainer } from './styles'
 import { theme } from '../../Styles/Theme'
 import { RootState } from '../../Redux/store'
 import { useAppSelector } from '../../Redux/hooks'
+import { selectAuthenticated } from '../../Redux/authSlice'
 
 export const HeroSection = () => {
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
 
-  const isAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  )
+  const isAuthenticated = useAppSelector(selectAuthenticated)
 
   return (
     <StyledContainer>
-      <Header />
       <Grid
         item
         container
         direction="column"
-        spacing={3}
+        spacing={6}
         xs={12}
         className="container"
       >

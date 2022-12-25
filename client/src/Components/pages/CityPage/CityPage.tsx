@@ -26,6 +26,7 @@ const CityPage = () => {
     (state: RootState) => state.users.currentUser
   )
   const user = useAppSelector(selectCurrentUser)
+  const cities = useAppSelector((state: RootState) => state.cities.data)
 
   // fetches data from DB
   useEffect(() => {

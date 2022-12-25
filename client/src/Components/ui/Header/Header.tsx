@@ -17,7 +17,7 @@ export const Header = () => {
         <Toolbar className="toolbar">
           <Button component={Link} to="/">
             <Box className="logo">
-              <Logo color={theme.palette.common.chalk} viewBox={'0 0 184 65'} />
+              <Logo color={theme.palette.common.chalk} viewBox={'0 0 184 50'} />
             </Box>
           </Button>
           <Hidden mdUp>

@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const {
   signup,
   login,
@@ -8,30 +8,30 @@ const {
   forgotPassword,
   resetPassword,
   updatePassword,
-} = require("../controllers/authController");
-const passport = require("passport");
+} = require('../controllers/authController')
+const passport = require('passport')
 
 // ------------------------------------- //
 // ROUTES
 
-router.route("/signup").post(signup);
-router.route("/login").post(login);
-router.route("/logout").post(logout);
-router.route("/logoutall").post(logout);
+router.route('/signup').post(signup)
+router.route('/login').post(login)
+router.route('/logout').post(logout)
+router.route('/logoutall').post(logout)
 router
-  .route("/google")
-  .get(passport.authenticate("google", { scope: ["profile", "email"] }));
-router.route("/google/redirect").get(
-  passport.authenticate("google", {
+  .route('/google')
+  .get(passport.authenticate('google', { scope: ['profile', 'email'] }))
+router.route('/google/redirect').get(
+  passport.authenticate('google', {
     session: false,
-    failureRedirect: "/login",
+    failureRedirect: '/login',
   }),
-  googleLoginRedirect,
-);
+  googleLoginRedirect
+)
 
-router.route("/forgotpassword").post(forgotPassword);
-router.route("/resetpassword").patch(resetPassword);
-router.route("/updatepassword").post(updatePassword);
+router.route('/forgotpassword').post(forgotPassword)
+router.route('/resetpassword').patch(resetPassword)
+router.route('/updatepassword').post(updatePassword)
 
 // // HTTP POST /users/logoutall — Logout from all devices.
 // router.post('/logoutall', auth, async (req, res) => {
@@ -58,4 +58,4 @@ router.route("/updatepassword").post(updatePassword);
 //   }
 // })
 
-module.exports = router;
+module.exports = router

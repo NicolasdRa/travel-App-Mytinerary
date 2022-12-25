@@ -19,7 +19,6 @@ import AddIcon from '@mui/icons-material/Add'
 
 import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
 
-import { selectAllCities } from '../../Redux/citiesSlice'
 import { updateUserItineraries } from '../../Redux/usersSlice'
 import { addItinerary } from '../../Redux/itinerariesSlice'
 import { CategoryOptions, PriceOptions, DurationOptions } from './data'
@@ -27,8 +26,9 @@ import { base64StringtoFile } from '../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
-import { User } from '../../../@types/types'
+import { City, User } from '../../../@types/types'
 import { StyledContainer } from './styles'
+import { selectAllCities } from '../../Redux/citiesSlice'
 
 interface CreateItineraryFormProps {
   currentUser: User
@@ -39,12 +39,13 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
 }) => {
   const dispatch = useAppDispatch()
 
-  const cities = useAppSelector((state) => selectAllCities(state))
-
   // Component level state
   const [open, setOpen] = useState(false)
   const [file, setFile] = useState<string | Blob>('')
   const [previewFile, setPreviewFile] = useState(null)
+  const [cityOptions, setCityOptions] = useState<City[]>([])
+
+  const cities = useAppSelector(selectAllCities)
 
   // useForm hook
   const {
@@ -62,6 +63,12 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
 
   const { city, title, category, price, duration, details } = formValues
   const { _id } = currentUser
+
+  useEffect(() => {
+    if (cities.length > 0) {
+      setCityOptions(cities)
+    }
+  }, [])
 
   useEffect(() => {
     if (previewFile) {
@@ -105,8 +112,6 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
     setOpen(false)
   }
 
-  const cityOptions = cities.map((city) => city.name).sort()
-
   return (
     <StyledContainer>
       <Fab
@@ -145,8 +150,8 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                 onChange={handleInputChange}
               >
                 {cityOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
+                  <MenuItem key={index} value={option.name}>
+                    {option.name}
                   </MenuItem>
                 ))}
               </Select>

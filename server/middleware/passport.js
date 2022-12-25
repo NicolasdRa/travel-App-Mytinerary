@@ -11,13 +11,13 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/v1/auth/google/redirect'
+      callbackURL: '/api/v1/auth/google/redirect',
     },
     (accessToken, refreshToken, profile, done) => {
       // passport callback function
 
       // Check if user is in DB
-      User.findOne({ googleId: profile.id }).then(user => {
+      User.findOne({ googleId: profile.id }).then((user) => {
         if (user) {
           // already have a user
           console.log('From passport -- Current User is:', user)
@@ -28,10 +28,10 @@ passport.use(
             userName: profile.displayName,
             googleId: profile.id,
             email: profile.emails[0].value,
-            img: profile.photos[0].value
+            img: profile.photos[0].value,
           })
             .save()
-            .then(user => {
+            .then((user) => {
               console.log('From passport -- new user created:' + user)
               done(null, user)
             })

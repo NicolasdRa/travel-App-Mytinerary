@@ -4,11 +4,7 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
-import {
-  isLoggingIn,
-  logInUser,
-  selectLoginLoading,
-} from '../../Redux/authSlice'
+import { logInUser, selectLoginLoading } from '../../Redux/authSlice'
 
 import { ForgotPasswordForm } from '../ForgotPasswordForm/ForgotPasswordForm'
 
@@ -43,8 +39,6 @@ export const Login = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-
-    console.log(formValues)
 
     // TODO: improve error handlig here showing a snackbar if error
     // TODO: check if loader reads pending state dispatched in thunk

@@ -12,8 +12,8 @@ import { RootState } from './store'
 // THUNKS
 
 // load current User
-export const loadCurrentUser = createAsyncThunk(
-  'users/loadCurrentUser',
+export const fetchCurrentUser = createAsyncThunk(
+  'users/fetchCurrentUser',
   async () => {
     const res = await axios({
       method: 'GET',
@@ -22,6 +22,12 @@ export const loadCurrentUser = createAsyncThunk(
         'Content-Type': 'application/json',
       },
     })
+
+    // autheticates state when user is already logged in (google or cookie still valid) and his data is available
+    // if (res.data) {
+    //   store.dispatch(isLoggedIn(res.data))
+    // }
+
     return res.data
   }
 )
@@ -92,16 +98,16 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(loadCurrentUser.pending, (state) => {
+    builder.addCase(fetchCurrentUser.pending, (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending'
       }
     })
-    builder.addCase(loadCurrentUser.fulfilled, (state, action) => {
+    builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
       state.loading = 'done'
       state.currentUser = action.payload.data
     })
-    builder.addCase(loadCurrentUser.rejected, (state, action) => {
+    builder.addCase(fetchCurrentUser.rejected, (state, action) => {
       state.loading = 'failed'
       state.error = action.error.message
     })
@@ -128,8 +134,10 @@ const selectUser = (state: RootState) => state.users.currentUser
 export const selectUserLoading = (state: RootState) => state.users.loading
 
 export const selectCurrentUser = createSelector(
-  [selectUser],
-  (currentUser) => currentUser
+  (state: RootState) => state.users.currentUser,
+  (currentUser) => {
+    return currentUser
+  }
 )
 
 // Extract and export each action creator by name

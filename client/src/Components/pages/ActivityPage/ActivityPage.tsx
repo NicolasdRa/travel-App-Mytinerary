@@ -41,6 +41,10 @@ const ActivityPage = () => {
     (state: RootState) => state.users.currentUser
   )
 
+  const cities = useAppSelector((state: RootState) => state.cities.data)
+
+  console.log(cities)
+
   // takes params & chooses activity to display
   const { title } = useParams<{ title?: string | undefined }>()
 

@@ -4,12 +4,12 @@ export const StyledContainer = styled('div')`
   .appBar {
     display: flex;
     border: 0;
-    border-radius: 3px;
-    padding: 0.625rem 0;
+    border-radius: 0px;
+    padding: 0.2rem 0;
     /* margin-bottom: '20px'; */
-    color: #555;
+    color: ${(props) => props.theme.palette.common.grey};
     width: 100%;
-    background-color: transparent;
+    background-color: ${(props) => props.theme.palette.primary.main};
     box-shadow: 0 4px 18px 0px rgba(0 0 0 0.12),
       0 7px 10px -5px rgba(0 0 0 0.15);
     transition: all 150ms ease 0s;

@@ -18,7 +18,7 @@ export const MenuMobile = () => {
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
-  const user = useAppSelector((state: RootState) => state.auth.user)
+  const user = useAppSelector((state: RootState) => state.auth.userId)
 
   // log out functionality
   const handleLogOut = (e: any) => {

@@ -84,7 +84,7 @@ const Itineraries = () => {
             img={headerItinerary.img}
           />
         ) : null}
-        <Paper elevation={2} variant="outlined" className="searchbarContainer">
+        <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">Choose your route</Typography>
           <TextField
             id="outlined-helperText"

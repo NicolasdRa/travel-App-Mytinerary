@@ -3,7 +3,8 @@ import { createTheme, Theme } from '@mui/material/styles'
 export const theme: Theme = createTheme({
   palette: {
     primary: {
-      main: '#292c33',
+      main: 'hsl(256, 44%, 5%)',
+      // main: '#292c33',
     },
     secondary: {
       main: '#ef5350',
@@ -13,6 +14,7 @@ export const theme: Theme = createTheme({
       beige: '#BFA6A2',
       beigeLight: '#efebe9',
       blue: '#0092FF',
+      grey: '#555555',
       green: '#4caf50',
       turquoise: '#40E0D0',
       chalk: '#fafafa',

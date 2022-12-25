@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Navigate,
@@ -6,7 +6,9 @@ import {
   Routes,
 } from 'react-router-dom'
 
+import { AlertProps, Snackbar, Typography } from '@mui/material'
 import PuffLoader from 'react-spinners/PuffLoader'
+
 import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
 import { LandingPage } from '../Components/pages/LandingPage/LandingPage'
@@ -19,54 +21,73 @@ import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
 import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
 import { PasswordResetPage } from '../Components/pages/PasswordResetPage/PasswordResetPage'
 
-import { Snackbar, Typography } from '@mui/material'
-
 import { fetchCities } from '../Components/Redux/citiesSlice'
 import { fetchItineraries } from '../Components/Redux/itinerariesSlice'
 import { fetchActivities } from '../Components/Redux/activitiesSlice'
 import { fetchFavourites } from '../Components/Redux/favouritesSlice'
-import { loadCurrentUser } from '../Components/Redux/usersSlice'
-import { isLoggedIn } from '../Components/Redux/authSlice'
+import {
+  fetchCurrentUser,
+  selectCurrentUser,
+} from '../Components/Redux/usersSlice'
+import { setUser } from '../Components/Redux/authSlice'
 
-import { StyledGrid } from './styles'
-import { RootState } from '../Components/Redux/store'
 import { useAppDispatch, useAppSelector } from '../Components/Redux/hooks'
 
-export const AppRouter = () => {
+import { StyledGrid } from './styles'
+import { getCookieValue } from '../Components/utils/utils'
+
+// interface RouterProps {
+//   children: React.ReactNode
+//   user: User
+// }
+
+export const AppRouter: React.FC = () => {
+  console.log('Router rendered')
+
   const dispatch = useAppDispatch()
+
+  // manages authenticated
 
   const [isLoading, setisLoading] = useState(true)
 
-  // manages alerts
-  const [alert, setAlert] = useState(false)
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  console.log(isAuthenticated)
 
-  const { error: authError } = useAppSelector((state: RootState) => state.auth)
-  useEffect(() => {
-    setAlert(true)
-  }, [authError])
+  const user = useAppSelector(selectCurrentUser)
 
-  // manages authenticated
-  const isAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  )
   useEffect(() => {
-    dispatch(loadCurrentUser())
-  }, [isAuthenticated, dispatch])
+    console.log('1st useEffect: SET USER')
 
-  //logs in user if GoogleAuth
-  const user = useAppSelector((state: RootState) => state.users.currentUser)
+    const jwt = getCookieValue('jwt')
+
+    if (jwt !== null || jwt !== 'loggedOut') {
+      dispatch(setUser())
+    }
+  }, [isAuthenticated])
+
   useEffect(() => {
-    if (user) dispatch(isLoggedIn(user))
-  }, [user, dispatch])
+    console.log('2st useEffect FETCH USER DATA', user)
+    if (isAuthenticated) {
+      dispatch(fetchCurrentUser())
+    }
+  }, [isAuthenticated])
 
   // fetches data from DB
   useEffect(() => {
+    console.log('3rd useEffect rendered: DATA', user)
     dispatch(fetchCities())
     dispatch(fetchItineraries())
     dispatch(fetchActivities())
     dispatch(fetchFavourites())
     setisLoading(false)
-  }, [dispatch])
+  }, [])
+
+  // manages alerts
+  const [alert, setAlert] = useState(false)
+  const { error: authError } = useAppSelector((state) => state.auth)
+  useEffect(() => {
+    setAlert(true)
+  }, [authError])
 
   // TODO redirect when itinerary name is not found in route
 
@@ -85,11 +106,18 @@ export const AppRouter = () => {
     )
   }
 
-  function Alert(props: any) {
-    return <Alert elevation={6} variant="filled" {...props} />
-  }
+  // Alert component
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref
+  ) {
+    return <Alert elevation={6} ref={ref} variant="filled" {...props} />
+  })
 
-  const handleCloseAlert = (event: any, reason: string) => {
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
     if (reason === 'clickaway') {
       return
     }
@@ -182,9 +210,13 @@ export const AppRouter = () => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             autoHideDuration={4000}
             onClose={handleCloseAlert}
-            className="alert"
+            message="test snackbar"
           >
-            <Alert onClose={handleCloseAlert} severity="error">
+            <Alert
+              onClose={handleCloseAlert}
+              severity="error"
+              className="alert"
+            >
               {authError}
             </Alert>
           </Snackbar>

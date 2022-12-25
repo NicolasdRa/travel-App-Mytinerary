@@ -79,7 +79,7 @@ export const Cities = () => {
         {headerCity && (
           <ListingHeader cityName={headerCity.name} img={headerCity.img} />
         )}
-        <Paper elevation={2} variant="outlined" className="searchbarContainer">
+        <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">
             Choose your destination
           </Typography>

@@ -9,12 +9,15 @@ import { Footer } from '../../ui/Footer/Footer'
 
 import { selectAllItineraries } from '../../Redux/itinerariesSlice'
 import { StyledContainer } from './styles'
+import BottomNav from '../../ui/BottomNav/BottomNav'
+import { Header } from '../../ui/Header/Header'
 
 export const LandingPage = () => {
   const itineraries = useSelector(selectAllItineraries)
 
   return (
     <StyledContainer>
+      <Header />
       <HeroSection />
       <Grid
         container
@@ -33,6 +36,9 @@ export const LandingPage = () => {
           </Grid>
         </Hidden>
       </Grid>
+      <Hidden mdUp>
+        <BottomNav />
+      </Hidden>
       <Hidden lgDown>
         <Footer />
       </Hidden>

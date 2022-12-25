@@ -11,5 +11,9 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     (state: RootState) => state.auth.isAuthenticated
   )
 
-  return isAuthenticated ? children : <Navigate to="/login" />
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />
+  }
+
+  return children
 }

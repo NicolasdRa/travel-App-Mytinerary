@@ -16,6 +16,7 @@ export const fetchCities = createAsyncThunk('cities/fetchAll', async () => {
     url: citiesUrl,
     responseType: 'json',
   })
+
   return res.data
 })
 
@@ -115,7 +116,7 @@ const citiesSlice = createSlice({
     })
     builder.addCase(fetchCities.fulfilled, (state, action) => {
       state.loading = 'done'
-      state.data = action.payload
+      state.data = action.payload.data
     })
     builder.addCase(fetchCities.rejected, (state, action) => {
       state.loading = 'failed'

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 import { v4 as uuidv4 } from 'uuid'
 import PuffLoader from 'react-spinners/PuffLoader'
@@ -33,7 +32,7 @@ import clsx from 'clsx'
 import CreateCommentForm from '../../ui/CreateCommentForm/CreateCommentForm'
 
 import { CommentCard } from '../../ui/CommentCard/CommentCard'
-import { useAppDispatch } from '../../Redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 import { RootState } from '../../Redux/store'
 import { StyledContainer } from './styles'
 
@@ -44,7 +43,9 @@ const ItineraryPage = () => {
 
   const [expanded, setExpanded] = React.useState(false)
 
-  const currentUser = useSelector(selectCurrentUser)
+  const currentUser = useAppSelector(selectCurrentUser)
+  const itinerary = useAppSelector(selectCurrentItinerary)
+  const cities = useAppSelector((state: RootState) => state.cities.data)
 
   // takes params & chooses itinerary to display
   const { title } = useParams<{ title?: string | undefined }>()
@@ -53,8 +54,6 @@ const ItineraryPage = () => {
   useEffect(() => {
     dispatch(fetchItineraryByTitle(title))
   }, [])
-
-  const itinerary = useSelector(selectCurrentItinerary)
 
   // TODO: fetch favourites from DB
   // useEffect(() => {

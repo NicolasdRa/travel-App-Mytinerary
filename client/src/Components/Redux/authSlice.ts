@@ -1,6 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { authUrl } from '../../constants'
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit'
+import axios, { AxiosError } from 'axios'
+import { authUrl, usersUrl } from '../../constants'
 import { RootState } from './store'
 import { User } from '../../@types/types'
 
@@ -10,8 +15,6 @@ import { User } from '../../@types/types'
 export const signupUser = createAsyncThunk(
   'auth/SignUpUser',
   async (formData: {}, { dispatch, rejectWithValue }) => {
-    dispatch(isLoggingIn())
-
     try {
       const res = await axios({
         method: 'POST',
@@ -35,9 +38,7 @@ export const signupUser = createAsyncThunk(
 export const logInUser = createAsyncThunk(
   'auth/logInUser',
 
-  async (formData: {}, { rejectWithValue }) => {
-    console.log('redux', formData)
-
+  async (formData: {}, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'POST',
@@ -47,16 +48,32 @@ export const logInUser = createAsyncThunk(
         },
         data: formData,
       })
+
+      console.log(res.data)
+
       return res.data
     } catch (error: any) {
       if (!error.response) {
         throw error
       }
-      console.log(error)
+      error && dispatch(logOutUser())
       return rejectWithValue(error.response.data)
     }
   }
 )
+
+// set user
+export const setUser = createAsyncThunk('auth/setUser', async () => {
+  const res = await axios({
+    method: 'GET',
+    url: `${usersUrl}me`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  return res.data
+})
 
 // log out
 export const logOutUser = createAsyncThunk(
@@ -130,7 +147,7 @@ export const resetPassword = createAsyncThunk(
 interface AuthSlice {
   loading: 'idle' | 'pending' | 'done' | 'fail'
   isAuthenticated: boolean
-  user: string | null
+  userId: string | null
   error: string | null
 }
 
@@ -138,7 +155,7 @@ interface AuthSlice {
 const initialState: AuthSlice = {
   loading: 'idle',
   isAuthenticated: false,
-  user: null,
+  userId: null,
   error: null,
 }
 
@@ -148,32 +165,21 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types
-    isLoggingIn(state, action: PayloadAction<User | undefined>) {
-      if (state.loading === 'idle') {
-        state.loading = 'pending'
-      }
-    },
-    isLoggedIn: {
-      reducer(state, action: PayloadAction<User>) {
-        state.loading = 'done'
-        state.isAuthenticated = true
-        state.user = action.payload._id
-      },
-      prepare(user: User) {
-        return {
-          payload: user,
-        }
-      },
+    isLoggedOut(state) {
+      state.loading = 'done'
+      state.isAuthenticated = false
+      state.userId = null
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(
       signupUser.fulfilled,
-      (state, action: PayloadAction<User>) => {
+      (state, action: PayloadAction<any>) => {
         state.loading = 'done'
         state.isAuthenticated = true
-        state.user = action.payload._id
+        state.userId = action.payload._id
+        console.log(action.payload)
       }
     )
     builder.addCase(
@@ -184,11 +190,15 @@ const authSlice = createSlice({
         state.error = action.payload.message
       }
     )
-    builder.addCase(logInUser.fulfilled, (state, action) => {
-      state.loading = 'done'
-      state.isAuthenticated = true
-      state.user = action.payload.user._id
-    })
+    builder.addCase(
+      logInUser.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = 'done'
+        state.isAuthenticated = true
+        state.userId = action.payload._id
+        console.log(action.payload)
+      }
+    )
     builder.addCase(logInUser.rejected, (state, action: PayloadAction<any>) => {
       state.loading = 'fail'
       state.isAuthenticated = false
@@ -198,7 +208,7 @@ const authSlice = createSlice({
     builder.addCase(logOutUser.fulfilled, (state, action) => {
       state.loading = 'done'
       state.isAuthenticated = false
-      state.user = null
+      state.userId = null
     })
 
     builder.addCase(
@@ -209,6 +219,18 @@ const authSlice = createSlice({
         state.error = action.payload.message
       }
     )
+
+    builder.addCase(setUser.fulfilled, (state, action) => {
+      state.loading = 'done'
+      state.isAuthenticated = true
+      state.userId = action.payload.data._id
+    })
+
+    builder.addCase(setUser.rejected, (state, action) => {
+      state.loading = 'done'
+      state.isAuthenticated = false
+      state.userId = null
+    })
 
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
       state.loading = 'done'
@@ -239,8 +261,15 @@ const authSlice = createSlice({
 // SELECTORS
 export const selectLoginLoading = (state: RootState) => state.auth.loading
 
+const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated
+
+export const selectAuthenticated = createSelector(
+  [selectIsAuthenticated],
+  (isAuthenticated) => isAuthenticated
+)
+
 // Extract and export each action creator by name
-export const { isLoggingIn, isLoggedIn } = authSlice.actions
+export const { isLoggedOut } = authSlice.actions
 
 // // Export the reducer as a default export
 export default authSlice.reducer
