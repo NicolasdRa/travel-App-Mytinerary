@@ -3,7 +3,7 @@ import React from 'react'
 import { Paper, Tabs, Tab, Typography, Box } from '@mui/material'
 
 import { TabPanelProps } from './ListingPage'
-import Itineraries from '../../ui/Itineraries/Itineraries'
+import { Itineraries } from '../../ui/Itineraries/Itineraries'
 import Activities from '../../ui/Activities/Activities'
 
 const PREFIX = 'UserListing'
@@ -23,7 +23,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </div>
   )
 }

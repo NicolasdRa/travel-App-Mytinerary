@@ -1,3 +1,4 @@
+import { Box, Skeleton } from '@mui/material'
 import { StyledImageHeaderContainer } from './styles'
 
 interface ImageHeaderProps {
@@ -5,5 +6,15 @@ interface ImageHeaderProps {
 }
 // image header for profile, itinerary, activity pages
 export const ImageHeader: React.FC<ImageHeaderProps> = ({ img }) => {
-  return <StyledImageHeaderContainer sx={{ backgroundImage: img }} />
+  console.log(img)
+
+  return (
+    <StyledImageHeaderContainer>
+      {img ? (
+        <Box sx={{ backgroundImage: `url(${img})` }} className="img" />
+      ) : (
+        <Skeleton variant="rectangular" animation="wave" className="skeleton" />
+      )}
+    </StyledImageHeaderContainer>
+  )
 }

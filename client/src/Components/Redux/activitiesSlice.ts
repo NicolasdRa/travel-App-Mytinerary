@@ -122,6 +122,14 @@ export const selectActivitiesForItinerary = createSelector(
     activities.filter((activity) => activity.itinerary === itineraryId)
 )
 
+export const selectRandomActivity = createSelector(
+  [selectAllActivities],
+  (items) => {
+    const randomItem = items[Math.floor(Math.random() * items.length)]
+    return randomItem
+  }
+)
+
 // ACTION EXPORTS
 
 // Extract and export each action creator by name

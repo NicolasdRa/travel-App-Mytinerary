@@ -17,8 +17,6 @@ export const getCookieValue = (name: string) => {
   } else {
     const cookieValue = jwtCookie.split('=')[1]
 
-    console.log(cookieValue)
-
     return cookieValue
   }
 }

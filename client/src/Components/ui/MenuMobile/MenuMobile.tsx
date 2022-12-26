@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Fade, IconButton, Menu, MenuItem } from '@mui/material'
+import {
+  Box,
+  Fade,
+  IconButton,
+  Menu,
+  MenuItem,
+  SxProps,
+  Theme,
+} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
@@ -12,7 +20,11 @@ import { unloadCurrentUser } from '../../Redux/usersSlice'
 import { RootState } from '../../Redux/store'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 
-export const MenuMobile = () => {
+interface MenuMobileProps {
+  sx?: SxProps<Theme>
+}
+
+export const MenuMobile: React.FC<MenuMobileProps> = ({ sx = [] }) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const isAuthenticated = useAppSelector(
@@ -39,7 +51,7 @@ export const MenuMobile = () => {
   }
 
   return (
-    <div>
+    <Box sx={[...(Array.isArray(sx) ? sx : [sx])]}>
       <IconButton
         edge="start"
         className="menuButton"
@@ -49,7 +61,7 @@ export const MenuMobile = () => {
         aria-haspopup="true"
         onClick={handleMenu}
       >
-        {user ? <CustomAvatar /> : <MenuIcon />}
+        <MenuIcon />
       </IconButton>
 
       <Menu
@@ -63,7 +75,11 @@ export const MenuMobile = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         {isAuthenticated ? (
-          <MenuItem onClick={handleClose} component={Link} to="/profile">
+          <MenuItem
+            onClick={handleClose}
+            component={Link}
+            to={user ? `/user/${user}` : '/'}
+          >
             Your Profile
           </MenuItem>
         ) : (
@@ -81,6 +97,6 @@ export const MenuMobile = () => {
           </MenuItem>
         )}
       </Menu>
-    </div>
+    </Box>
   )
 }

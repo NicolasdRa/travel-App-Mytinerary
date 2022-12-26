@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { AppBar, Box, Button, Hidden, Toolbar } from '@mui/material'
+import { AppBar, Box, Button, Toolbar } from '@mui/material'
 
 import { MenuMobile } from '../MenuMobile/MenuMobile'
 import { MenuDesk } from '../MenuDesk/MenuDesk'
@@ -20,12 +20,8 @@ export const Header = () => {
               <Logo color={theme.palette.common.chalk} viewBox={'0 0 184 50'} />
             </Box>
           </Button>
-          <Hidden mdUp>
-            <MenuMobile />
-          </Hidden>
-          <Hidden mdDown>
-            <MenuDesk />
-          </Hidden>
+          <MenuMobile sx={{ display: { xs: 'flex', lg: 'none' } }} />
+          <MenuDesk sx={{ display: { xs: 'none', md: 'flex' } }} />
         </Toolbar>
       </AppBar>
     </StyledContainer>

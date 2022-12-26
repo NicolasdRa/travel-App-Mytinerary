@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
 
-import { Button, Grid, Hidden, Typography } from '@mui/material'
+import { Box, Button, Grid, Hidden, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { StyledContainer } from './styles'
 import { theme } from '../../Styles/Theme'
-import { RootState } from '../../Redux/store'
 import { useAppSelector } from '../../Redux/hooks'
 import { selectAuthenticated } from '../../Redux/authSlice'
 
@@ -16,14 +15,7 @@ export const HeroSection = () => {
 
   return (
     <StyledContainer>
-      <Grid
-        item
-        container
-        direction="column"
-        spacing={6}
-        xs={12}
-        className="container"
-      >
+      <Grid item container direction="column" spacing={0} className="container">
         <Grid item xs={12}>
           <Typography variant="h1" className="title">
             Find the perfect tour
@@ -37,7 +29,7 @@ export const HeroSection = () => {
             <Button
               className="start-btn"
               variant={matches ? 'outlined' : 'contained'}
-              color="secondary"
+              color="primary"
               component={Link}
               to="/listing"
             >
@@ -46,30 +38,33 @@ export const HeroSection = () => {
           </div>
 
           {!isAuthenticated && (
-            <Hidden mdUp>
-              <div className="login-btns-container">
-                <Typography variant="subtitle1" className="question">
-                  Want to build your own MYtinerary?
-                </Typography>
+            <Box
+              sx={{ display: { xs: 'block', md: 'none' } }}
+              className="login-btns-container"
+            >
+              <Typography variant="subtitle1" className="question">
+                Want to build your own MYtinerary?
+              </Typography>
 
-                <Button
-                  variant="outlined"
-                  component={Link}
-                  to="/login"
-                  className="modal-btn"
-                >
-                  Login
-                </Button>
-                <Button
-                  variant="outlined"
-                  component={Link}
-                  to="/signup"
-                  className="modal-btn"
-                >
-                  Signup
-                </Button>
-              </div>
-            </Hidden>
+              <Button
+                variant="contained"
+                color="secondary"
+                component={Link}
+                to="/login"
+                className="modal-btn"
+              >
+                Login
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                component={Link}
+                to="/signup"
+                className="modal-btn"
+              >
+                Signup
+              </Button>
+            </Box>
           )}
         </Grid>
       </Grid>

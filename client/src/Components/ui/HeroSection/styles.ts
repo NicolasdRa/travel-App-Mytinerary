@@ -6,13 +6,11 @@ export const StyledContainer = styled('div')`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
-  height: 100vh;
-  width: 100vw;
-
   flex-direction: column;
+  height: 100vh;
   justify-content: space-around;
   margin: auto 0;
+  width: 100vw;
 
   ${(props) => props.theme.breakpoints.up('md')} {
     height: '53vh';
@@ -27,7 +25,7 @@ export const StyledContainer = styled('div')`
   }
 
   .container {
-    padding: 0 2rem;
+    padding: 2rem;
 
     ${(props) => props.theme.breakpoints.up('md')} {
       padding: 0 5rem;
@@ -92,7 +90,8 @@ export const StyledContainer = styled('div')`
   }
 
   .start-btn-container {
-    /* text-align: center; */
+    margin: 1rem 0;
+    text-align: center;
 
     ${(props) => props.theme.breakpoints.up('sm')} {
       margin: 2rem 0 0 0;
@@ -104,7 +103,8 @@ export const StyledContainer = styled('div')`
     }
   }
 
-  .text {
+  .question {
+    margin: 2rem 0 0 0;
     color: ${(props) => props.theme.palette.common.chalk};
 
     ${(props) => props.theme.breakpoints.up('sm')} {

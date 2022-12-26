@@ -238,6 +238,14 @@ export const selectItinerariesByUserId = createSelector(
       : []
 )
 
+export const selectRandomItinerary = createSelector(
+  [selectAllItineraries],
+  (items) => {
+    const randomItem = items[Math.floor(Math.random() * items.length)]
+    return randomItem
+  }
+)
+
 // Extract and export each action creator by name
 export const { updateItineraryComments, updateItineraryActivities } =
   itinerariesSlice.actions

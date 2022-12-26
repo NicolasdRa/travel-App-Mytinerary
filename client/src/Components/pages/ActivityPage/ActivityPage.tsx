@@ -10,7 +10,7 @@ import {
 } from '../../Redux/activitiesSlice'
 
 import { Header } from '../../ui/Header/Header'
-import BottomNav from '../../ui/BottomNav/BottomNav'
+import { BottomNav } from '../../ui/BottomNav/BottomNav'
 import { Footer } from '../../ui/Footer/Footer'
 import { ImageHeader } from '../../ui/Headers/ImageHeader'
 import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'

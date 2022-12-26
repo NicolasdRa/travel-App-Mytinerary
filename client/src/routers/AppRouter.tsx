@@ -15,7 +15,7 @@ import { LandingPage } from '../Components/pages/LandingPage/LandingPage'
 import { LoginPage } from '../Components/pages/LoginPage/LoginPage'
 import { SignupPage } from '../Components/pages/SignupPage/SignupPage'
 import { ProfilePage } from '../Components/pages/ProfilePage/ProfilePage'
-import ListingPage from '../Components/pages/ListingPage/ListingPage'
+import { ListingPage } from '../Components/pages/ListingPage/ListingPage'
 import CityPage from '../Components/pages/CityPage/CityPage'
 import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
 import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
@@ -36,28 +36,15 @@ import { useAppDispatch, useAppSelector } from '../Components/Redux/hooks'
 import { StyledGrid } from './styles'
 import { getCookieValue } from '../Components/utils/utils'
 
-// interface RouterProps {
-//   children: React.ReactNode
-//   user: User
-// }
-
 export const AppRouter: React.FC = () => {
-  console.log('Router rendered')
-
   const dispatch = useAppDispatch()
-
-  // manages authenticated
 
   const [isLoading, setisLoading] = useState(true)
 
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  console.log(isAuthenticated)
-
   const user = useAppSelector(selectCurrentUser)
 
   useEffect(() => {
-    console.log('1st useEffect: SET USER')
-
     const jwt = getCookieValue('jwt')
 
     if (jwt !== null || jwt !== 'loggedOut') {
@@ -66,7 +53,7 @@ export const AppRouter: React.FC = () => {
   }, [isAuthenticated])
 
   useEffect(() => {
-    console.log('2st useEffect FETCH USER DATA', user)
+    // console.log('2st useEffect FETCH USER DATA', user)
     if (isAuthenticated) {
       dispatch(fetchCurrentUser())
     }
@@ -74,7 +61,7 @@ export const AppRouter: React.FC = () => {
 
   // fetches data from DB
   useEffect(() => {
-    console.log('3rd useEffect rendered: DATA', user)
+    // console.log('3rd useEffect rendered: DATA', user)
     dispatch(fetchCities())
     dispatch(fetchItineraries())
     dispatch(fetchActivities())

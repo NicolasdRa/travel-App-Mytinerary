@@ -2,25 +2,23 @@ import { Grid } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const StyledGrid = styled(Grid)`
-  .container {
-    padding-bottom: 3rem;
-  }
+  padding-bottom: 3rem;
 
   .searchbarContainer {
+    background-color: ${(props) => props.theme.palette.common.beigeLight};
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: ${(props) => props.theme.palette.common.beigeLight};
+    margin: 0 0 0 0;
     padding: 1rem 1rem;
-    margin: -0.5rem 0 0 0;
   }
 
   .searchBarTitle {
     color: ${(props) => props.theme.palette.primary.main};
     font-size: 0.9rem;
     font-weight: 500;
-    text-align: left;
     margin: 0 0 0.5rem 0.5rem;
+    text-align: left;
   }
 
   .searchBar {
@@ -30,12 +28,12 @@ export const StyledGrid = styled(Grid)`
   }
 
   .subtitle {
-    margin: 2rem auto 0.5rem 1.5rem;
+    margin: 1.5rem auto 0.5rem 1.5rem;
     text-align: start;
   }
 `
 
-export const StyledLoaderGrid = styled(Grid)`
+export const StyledLoader = styled(Grid)`
   display: flex;
   flex-direction: column;
   margin: 5rem 5rem;

@@ -11,29 +11,23 @@ import {
 import { CardGallery } from '../CardGallery/CardGallery'
 import { ListingHeader } from '../Headers/ListingHeader'
 
-import { randomNumberGenerator } from '../../utils/utils'
-import { selectAllActivities } from '../../Redux/activitiesSlice'
+import {
+  selectAllActivities,
+  selectRandomActivity,
+} from '../../Redux/activitiesSlice'
 import { useAppSelector } from '../../Redux/hooks'
 import { Activity } from '../../../@types/types'
 import { StyledGrid, StyledLoaderGrid } from './styles'
 
 const Activities = () => {
   const activities = useAppSelector(selectAllActivities)
+  const headerActivity = useAppSelector(selectRandomActivity)
 
   const [string, setString] = useState('')
-  const [headerActivity, setHeaderActivity] = useState<Activity | null>(null)
+
   const [filteredActivities, setFilteredActivities] = useState<
     Activity[] | null
   >(null)
-
-  useEffect(() => {
-    // random cover image
-    const randomNumber = randomNumberGenerator(0, activities.length - 1)
-
-    filteredActivities === null
-      ? setHeaderActivity(activities[randomNumber])
-      : setHeaderActivity(activities[0])
-  }, [activities, filteredActivities])
 
   useEffect(() => {
     // itinerary filter
@@ -69,15 +63,18 @@ const Activities = () => {
   }
 
   return (
-    <StyledGrid container direction="column" alignItems="center">
+    <StyledGrid
+      container
+      direction="column"
+      justifyContent="start"
+      alignItems="start"
+    >
       <Grid item xs={12} container direction="column" justifyContent="center">
-        {headerActivity ? (
-          <ListingHeader
-            title={headerActivity.title}
-            cityName={headerActivity.city.name}
-            img={headerActivity.img}
-          />
-        ) : null}
+        <ListingHeader
+          title={headerActivity?.title}
+          cityName={headerActivity?.city.name}
+          img={headerActivity?.img}
+        />
         <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">Want to have fun?</Typography>
 

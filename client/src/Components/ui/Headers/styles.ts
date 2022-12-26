@@ -1,11 +1,20 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledListingHeaderContainer = styled('div')`
-  background-position: center;
   width: 100%;
-  height: 16vh;
-  background-size: cover;
-  border-radius: 5px;
+  height: 10rem;
+
+  .img {
+    width: 100%;
+    height: 10rem;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .skeleton {
+    width: 100%;
+    height: 10rem;
+  }
 
   ${(props) => props.theme.breakpoints.up('sm')} {
     height: 15rem;
@@ -16,19 +25,29 @@ export const StyledListingHeaderContainer = styled('div')`
 
   .textArea {
     display: flex;
-    flexdirection: column;
-    justifycontent: flex-start;
-    alignitems: flex-start;
-    color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: ${(props) => props.theme.palette.primary.main};
     padding: 1rem 1.5rem;
   }
 `
 
 export const StyledImageHeaderContainer = styled('div')`
-  background-position: center;
   width: 100%;
   height: 10rem;
-  background-size: cover;
+
+  .img {
+    width: 100%;
+    height: 10rem;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .skeleton {
+    width: 100%;
+    height: 10rem;
+  }
 
   ${(props) => props.theme.breakpoints.up('sm')} {
     height: 15rem;
@@ -39,10 +58,10 @@ export const StyledImageHeaderContainer = styled('div')`
 
   .textArea {
     display: flex;
-    flexdirection: column;
-    justifycontent: flex-start;
-    alignitems: flex-start;
-    color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: ${(props) => props.theme.palette.primary.main};
     padding: 1rem 1.5rem;
   }
 `

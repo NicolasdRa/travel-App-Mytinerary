@@ -11,27 +11,17 @@ import {
 import { CardGallery } from '../CardGallery/CardGallery'
 import { ListingHeader } from '../Headers/ListingHeader'
 
-import { randomNumberGenerator } from '../../utils/utils'
-import { selectAllCities } from '../../Redux/citiesSlice'
+import { selectAllCities, selectRandomCity } from '../../Redux/citiesSlice'
 import { useAppSelector } from '../../Redux/hooks'
 import { City } from '../../../@types/types'
-import { StyledGrid, StyledLoaderGrid } from './styles'
+import { StyledGrid, StyledLoader } from './styles'
 
 export const Cities = () => {
   const cities = useAppSelector(selectAllCities)
+  const headerCity = useAppSelector(selectRandomCity)
 
   const [string, setString] = useState('')
-  const [headerCity, setHeaderCity] = useState<City | null>(null)
   const [filteredCities, setFilteredCities] = useState<City[] | null>(null)
-
-  useEffect(() => {
-    // random cover image
-    const randomNumber = randomNumberGenerator(0, cities.length - 1)
-
-    filteredCities === null
-      ? setHeaderCity(cities[randomNumber])
-      : setHeaderCity(cities[0])
-  }, [cities, filteredCities])
 
   useEffect(() => {
     // city filter
@@ -52,11 +42,9 @@ export const Cities = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  // console.log('Cities Tab Rendered')
-
   if (!cities) {
     return (
-      <StyledLoaderGrid
+      <StyledLoader
         container
         direction="column"
         justifyContent="center"
@@ -64,7 +52,7 @@ export const Cities = () => {
       >
         <Typography>Loading cities...</Typography>
         <CircularProgress color="secondary" />
-      </StyledLoaderGrid>
+      </StyledLoader>
     )
   }
 
@@ -72,13 +60,11 @@ export const Cities = () => {
     <StyledGrid
       container
       direction="column"
-      // justify='center'
-      alignItems="center"
+      justifyContent="start"
+      alignItems="start"
     >
       <Grid item xs={12} container direction="column" justifyContent="center">
-        {headerCity && (
-          <ListingHeader cityName={headerCity.name} img={headerCity.img} />
-        )}
+        <ListingHeader img={headerCity?.img} />
         <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">
             Choose your destination
@@ -94,12 +80,12 @@ export const Cities = () => {
           />
         </Paper>
       </Grid>
-      <Grid item xs={12} lg={12}>
+      <Grid item xs={12}>
         <Typography variant="subtitle2" className="subtitle">
           {string === '' ? 'Most popular Cities' : 'Search results'}
         </Typography>
       </Grid>
-      <Grid item xs={12} lg={12}>
+      <Grid item xs={10}>
         <CardGallery
           data={filteredCities ? filteredCities : cities}
           type="cities"

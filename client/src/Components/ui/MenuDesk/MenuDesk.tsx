@@ -10,6 +10,8 @@ import {
   ListItem,
   Menu,
   MenuItem,
+  SxProps,
+  Theme,
 } from '@mui/material/'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
@@ -22,7 +24,11 @@ import { RootState } from '../../Redux/store'
 import { StyledList } from './styles'
 import { useAppDispatch } from '../../Redux/hooks'
 
-export const MenuDesk: React.FC = () => {
+interface MenuDeskProps {
+  sx?: SxProps<Theme>
+}
+
+export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -78,7 +84,7 @@ export const MenuDesk: React.FC = () => {
   ]
 
   return (
-    <StyledList>
+    <StyledList sx={[...(Array.isArray(sx) ? sx : [sx])]}>
       {navItems.map((item, index) => (
         <ListItem key={index} className="listItem">
           <Button component={Link} to={item.url} className="navLink">

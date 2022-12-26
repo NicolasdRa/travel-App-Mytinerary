@@ -9,22 +9,15 @@ interface CardGalleryProps {
 }
 
 export const CardGallery: React.FC<CardGalleryProps> = ({ data, type }) => {
-  if (data.length > 0) {
-    return (
-      <StyledContainer>
-        {
-          // TODO: improve typing item
-          data.map((item: any) => (
-            <CustomCard data={item} type={type} key={item._id} />
-          ))
-        }
-      </StyledContainer>
-    )
-  } else {
-    return (
-      <Typography style={{ margin: '1rem 0 .5rem 1rem', textAlign: 'center' }}>
-        No {type} found.
-      </Typography>
-    )
-  }
+  return (
+    <StyledContainer>
+      {data.length > 0 ? (
+        data.map((item: any) => (
+          <CustomCard data={item} type={type} key={item._id} />
+        ))
+      ) : (
+        <Typography className="message">No {type} found.</Typography>
+      )}
+    </StyledContainer>
+  )
 }

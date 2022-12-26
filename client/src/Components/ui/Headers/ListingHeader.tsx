@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
 import { StyledListingHeaderContainer } from './styles'
 
 interface ListingHeaderProps {
@@ -17,10 +17,16 @@ export const ListingHeader: React.FC<ListingHeaderProps> = ({
 }) => {
   return (
     <StyledListingHeaderContainer sx={{ backgroundImage: img }}>
-      <div className="textArea">
-        <Typography variant="h6">{name ? name : title}</Typography>
-        <Typography variant="body2">{title ? cityName : name}</Typography>
-      </div>
+      {img ? (
+        <Box sx={{ backgroundImage: `url(${img})` }} className="img">
+          <div className="textArea">
+            <Typography variant="h6">{name ? name : title}</Typography>
+            <Typography variant="body2">{title ? cityName : name}</Typography>
+          </div>
+        </Box>
+      ) : (
+        <Skeleton variant="rectangular" animation="wave" className="skeleton" />
+      )}
     </StyledListingHeaderContainer>
   )
 }

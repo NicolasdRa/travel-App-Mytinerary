@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-import { Grid, Hidden, Paper, Typography } from '@mui/material'
+import { Grid, Paper, Typography } from '@mui/material'
 
 import { HeroSection } from '../../ui/HeroSection/HeroSection'
 import { CardGallery } from '../../ui/CardGallery/CardGallery'
@@ -9,7 +9,7 @@ import { Footer } from '../../ui/Footer/Footer'
 
 import { selectAllItineraries } from '../../Redux/itinerariesSlice'
 import { StyledContainer } from './styles'
-import BottomNav from '../../ui/BottomNav/BottomNav'
+import { BottomNav } from '../../ui/BottomNav/BottomNav'
 import { Header } from '../../ui/Header/Header'
 
 export const LandingPage = () => {
@@ -20,28 +20,23 @@ export const LandingPage = () => {
       <Header />
       <HeroSection />
       <Grid
+        sx={{ display: { xs: 'none', md: 'flex' } }} // Hide on mobile
         container
         direction="column"
         alignItems="center"
         justifyContent="center"
       >
-        <Hidden smDown>
-          <Grid item md={10} className="content">
-            <Paper className="galleryContainer">
-              <Typography className="galleryTitle">
-                Most Popular Mytineraries
-              </Typography>
-              <CardGallery data={itineraries} type="itineraries" />
-            </Paper>
-          </Grid>
-        </Hidden>
+        <Grid item md={10}>
+          <Paper className="galleryContainer">
+            <Typography className="galleryTitle">
+              Most Popular Mytineraries
+            </Typography>
+            <CardGallery data={itineraries} type="itineraries" />
+          </Paper>
+        </Grid>
       </Grid>
-      <Hidden mdUp>
-        <BottomNav />
-      </Hidden>
-      <Hidden lgDown>
-        <Footer />
-      </Hidden>
+      <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
+      <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
     </StyledContainer>
   )
 }

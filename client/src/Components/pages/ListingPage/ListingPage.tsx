@@ -1,16 +1,19 @@
-import React from 'react'
+import { SetStateAction, useState } from 'react'
 
 import { Paper, Tabs, Tab, Box, Alert } from '@mui/material'
 
 import { Header } from '../../ui/Header/Header'
 import { Footer } from '../../ui/Footer/Footer'
 import { Cities } from '../../ui/Cities/Cities'
-import Itineraries from '../../ui/Itineraries/Itineraries'
+
 import Activities from '../../ui/Activities/Activities'
 import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
-import { RootState } from '../../Redux/store'
+
 import { useAppSelector } from '../../Redux/hooks'
 import { StyledListingPageContainer } from './styles'
+import { selectCurrentUser } from '../../Redux/usersSlice'
+import { BottomNav } from '../../ui/BottomNav/BottomNav'
+import { Itineraries } from '../../ui/Itineraries/Itineraries'
 
 export interface TabPanelProps {
   children?: React.ReactNode
@@ -29,7 +32,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </div>
   )
 }
@@ -53,19 +56,16 @@ function LinkTab(props: any) {
   )
 }
 
-const ListingPage = () => {
-  const [value, setValue] = React.useState(0)
-  const currentUser = useAppSelector(
-    (state: RootState) => state.users.currentUser
-  )
-  const cities = useAppSelector((state: RootState) => state.cities.data)
+export const ListingPage = () => {
+  const [value, setValue] = useState(0)
+  const currentUser = useAppSelector(selectCurrentUser)
 
-  const handleChange = (e: any, newValue: React.SetStateAction<number>) => {
+  const handleChange = (e: any, newValue: SetStateAction<number>) => {
     setValue(newValue)
   }
 
   return (
-    <StyledListingPageContainer className="root">
+    <StyledListingPageContainer>
       <Header />
       <Paper>
         <Tabs
@@ -74,9 +74,9 @@ const ListingPage = () => {
           onChange={handleChange}
           aria-label="nav tabs example"
         >
-          <LinkTab label="Cities" href="/drafts" {...a11yProps(0)} />
-          <LinkTab label="Itineraries" href="/trash" {...a11yProps(1)} />
-          <LinkTab label="Activities" href="/spam" {...a11yProps(2)} />
+          <LinkTab label="Cities" {...a11yProps(0)} />
+          <LinkTab label="Itineraries" {...a11yProps(1)} />
+          <LinkTab label="Activities" {...a11yProps(2)} />
         </Tabs>
       </Paper>
       <TabPanel value={value} index={0}>
@@ -95,9 +95,8 @@ const ListingPage = () => {
           You must log in in order to create an itinerary
         </Alert>
       )}
-      <Footer />
+      <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
+      <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
     </StyledListingPageContainer>
   )
 }
-
-export default ListingPage

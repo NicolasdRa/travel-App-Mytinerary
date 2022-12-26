@@ -2,7 +2,7 @@ import { SetStateAction, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { BottomNavigationAction } from '@mui/material'
+import { BottomNavigationAction, SxProps, Theme } from '@mui/material'
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
@@ -11,7 +11,11 @@ import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 import { selectCurrentUser } from '../../Redux/usersSlice'
 import { StyledBottomNavigation } from './styles'
 
-export default function BottomNav() {
+interface BottomNavProps {
+  sx?: SxProps<Theme>
+}
+
+export const BottomNav: React.FC<BottomNavProps> = ({ sx = [] }) => {
   const [value, setValue] = useState('recents')
 
   const user = useSelector(selectCurrentUser)
@@ -21,7 +25,11 @@ export default function BottomNav() {
   }
 
   return (
-    <StyledBottomNavigation value={value} onChange={handleChange}>
+    <StyledBottomNavigation
+      value={value}
+      onChange={handleChange}
+      sx={[...(Array.isArray(sx) ? sx : [sx])]}
+    >
       <BottomNavigationAction
         component={Link}
         to="/"

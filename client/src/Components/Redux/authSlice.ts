@@ -4,10 +4,9 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { authUrl, usersUrl } from '../../constants'
 import { RootState } from './store'
-import { User } from '../../@types/types'
 
 // THUNKS
 
@@ -63,17 +62,28 @@ export const logInUser = createAsyncThunk(
 )
 
 // set user
-export const setUser = createAsyncThunk('auth/setUser', async () => {
-  const res = await axios({
-    method: 'GET',
-    url: `${usersUrl}me`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+export const setUser = createAsyncThunk(
+  'auth/setUser',
+  async (user, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await axios({
+        method: 'GET',
+        url: `${usersUrl}me`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-  return res.data
-})
+      return res.data
+    } catch (error: any) {
+      if (!error.response) {
+        throw error
+      }
+      error && dispatch(logOutUser())
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
 
 // log out
 export const logOutUser = createAsyncThunk(

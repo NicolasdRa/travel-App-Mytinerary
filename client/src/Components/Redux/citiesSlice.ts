@@ -168,6 +168,11 @@ export const selectCityByName = createSelector(
     cities && name && cities.filter((city) => city.name === name)
 )
 
+export const selectRandomCity = createSelector([selectAllCities], (items) => {
+  const randomItem = items[Math.floor(Math.random() * items.length)]
+  return randomItem
+})
+
 // Extract and export each action creator by name
 export const { addCity, deleteCity } = citiesSlice.actions
 

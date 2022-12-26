@@ -10,31 +10,28 @@ import {
 } from '@mui/material'
 
 import { CardGallery } from '../CardGallery/CardGallery'
-import { ListingHeader } from '../Headers/ListingHeader'
 
-import { randomNumberGenerator } from '../../utils/utils'
-import { selectAllItineraries } from '../../Redux/itinerariesSlice'
+import {
+  selectAllItineraries,
+  selectRandomItinerary,
+} from '../../Redux/itinerariesSlice'
 
 import { StyledGrid, StyledLoader } from './styles'
 import { Itinerary } from '../../../@types/types'
+import { useAppSelector } from '../../Redux/hooks'
+import { ListingHeader } from '../Headers/ListingHeader'
 
-const Itineraries = () => {
+export const Itineraries = () => {
   const itineraries = useSelector(selectAllItineraries)
+  const headerItinerary = useAppSelector(selectRandomItinerary)
+
+  console.log(headerItinerary)
 
   const [string, setString] = useState('')
-  const [headerItinerary, setHeaderItinerary] = useState<Itinerary | null>(null)
+
   const [filteredItineraries, setFilteredItineraries] = useState<
     Itinerary[] | null
   >(null)
-
-  useEffect(() => {
-    // random cover image
-    const randomNumber = randomNumberGenerator(0, itineraries.length - 1)
-
-    filteredItineraries === null
-      ? setHeaderItinerary(itineraries[randomNumber])
-      : setHeaderItinerary(filteredItineraries[0])
-  }, [itineraries, filteredItineraries])
 
   useEffect(() => {
     // itinerary filter
@@ -73,17 +70,15 @@ const Itineraries = () => {
     <StyledGrid
       container
       direction="column"
-      // justify='center'
-      alignItems="center"
+      justifyContent="start"
+      alignItems="start"
     >
       <Grid item xs={12} container direction="column" justifyContent="center">
-        {headerItinerary ? (
-          <ListingHeader
-            title={headerItinerary.title}
-            cityName={headerItinerary.city.name}
-            img={headerItinerary.img}
-          />
-        ) : null}
+        <ListingHeader
+          title={headerItinerary?.title}
+          cityName={headerItinerary?.city.name}
+          img={headerItinerary?.img}
+        />
         <Paper elevation={2} className="searchbarContainer">
           <Typography className="searchBarTitle">Choose your route</Typography>
           <TextField
@@ -97,12 +92,12 @@ const Itineraries = () => {
           />
         </Paper>
       </Grid>
-      <Grid item xs={12} lg={12}>
+      <Grid item xs={12}>
         <Typography variant="subtitle2" className="subtitle">
           {string === '' ? 'Most popular Itineraries' : 'Search results'}
         </Typography>
       </Grid>
-      <Grid item xs={12} lg={12}>
+      <Grid item xs={12}>
         <CardGallery
           data={filteredItineraries ? filteredItineraries : itineraries}
           type="itineraries"
@@ -111,5 +106,3 @@ const Itineraries = () => {
     </StyledGrid>
   )
 }
-
-export default Itineraries

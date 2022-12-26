@@ -1,16 +1,20 @@
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, SxProps, Theme } from '@mui/material'
 
 import logo from '../../../assets/images/Logo.svg'
 import { StyledFooter } from './styles'
 
-export const Footer = () => {
+interface FooterProps {
+  sx?: SxProps<Theme>
+}
+
+export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
   const date = moment(new Date()).format('YYYY')
 
   return (
-    <StyledFooter>
+    <StyledFooter sx={[...(Array.isArray(sx) ? sx : [sx])]}>
       <Grid container direction="row" justifyContent="center">
         <Grid
           item
