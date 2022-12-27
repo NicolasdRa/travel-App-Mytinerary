@@ -1,6 +1,6 @@
 import moment from 'moment'
-import { Avatar, CardContent, Typography, Rating } from '@mui/material'
-import { StyledCard } from './styles'
+import { Avatar, Typography, Rating } from '@mui/material'
+import { StyledCard, StyledCardContent } from './styles'
 import { Comment } from '../../../@types/types'
 
 interface CommentCardProps {
@@ -23,7 +23,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
 
   return (
     <StyledCard raised={false}>
-      <CardContent className="userInfo">
+      <StyledCardContent>
         <Avatar
           aria-label="recipe"
           alt={authorName ? authorName : userName}
@@ -51,8 +51,8 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
             </Typography>
           </div>
         </div>
-      </CardContent>
-      <CardContent className="content">
+      </StyledCardContent>
+      <StyledCardContent className="content">
         <Typography className="summary" variant="body2" color="primary">
           {summary}
         </Typography>
@@ -60,7 +60,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
         <Typography variant="body2" className="description">
           {description}
         </Typography>
-      </CardContent>
+      </StyledCardContent>
     </StyledCard>
   )
 }

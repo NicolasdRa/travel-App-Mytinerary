@@ -65,24 +65,29 @@ export const StyledCard = styled(Card)`
   }
 
   .card_title {
-    padding: 0 0.15rem;
+    padding: 0 0.5rem;
     color: black;
     text-decoration: none;
     font-weight: 400;
   }
 `
 export const StyledItinerariesContainer = styled('div')`
-  .text: {
+  align-items: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+  .text {
     margin: 0.5rem;
     text-align: left;
   }
 
-  .gallery: {
-    position: relative;
+  .gallery {
     display: flex;
-    flex: 0 1 auto;
     flex-direction: row;
-    width: auto;
-    overflowx: auto;
+    flex: 0 1 auto;
+    overflow-x: auto;
+    position: relative;
+    width: 94vw;
   }
 `

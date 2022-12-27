@@ -25,8 +25,6 @@ export const Itineraries = () => {
   const itineraries = useSelector(selectAllItineraries)
   const headerItinerary = useAppSelector(selectRandomItinerary)
 
-  console.log(headerItinerary)
-
   const [string, setString] = useState('')
 
   const [filteredItineraries, setFilteredItineraries] = useState<

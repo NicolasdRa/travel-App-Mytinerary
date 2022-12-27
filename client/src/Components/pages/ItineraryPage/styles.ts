@@ -37,8 +37,9 @@ export const StyledContainer = styled('div')`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 1rem;
-    padding: 0 0 0 1rem;
+    margin-top: 0.8rem;
+    padding: 0 1rem;
+    font-size: 0.7rem;
   }
 
   .city_title {
@@ -46,6 +47,10 @@ export const StyledContainer = styled('div')`
     flex: 0 0 auto;
     flex-direction: row;
     justify-content: flex-start;
+  }
+
+  .likes {
+    height: 1.5rem;
   }
 
   .likes_btn {
@@ -83,7 +88,7 @@ export const StyledContainer = styled('div')`
     display: flex;
     margin-left: auto;
     align-items: center;
-    padding: 1rem 0;
+    padding: 0;
   }
 
   .icons {
@@ -112,12 +117,12 @@ export const StyledContainer = styled('div')`
     margin: 1rem;
   }
 
-  .text {
+  .decription {
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
+    margin: 0 1rem;
     text-align: left;
-    margin: 1rem;
   }
 
   .gallery {

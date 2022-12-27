@@ -6,8 +6,6 @@ interface ImageHeaderProps {
 }
 // image header for profile, itinerary, activity pages
 export const ImageHeader: React.FC<ImageHeaderProps> = ({ img }) => {
-  console.log(img)
-
   return (
     <StyledImageHeaderContainer>
       {img ? (

@@ -1,10 +1,16 @@
 import { styled } from '@mui/material/styles'
-import { Card } from '@mui/material'
+import { Card, CardContent } from '@mui/material'
 
 export const StyledCard = styled(Card)`
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  box-shadow: none;
+`
+
+export const StyledCardContent = styled(CardContent)`
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem 1rem;
 
   .avatar {
     height: 2rem;
@@ -12,18 +18,14 @@ export const StyledCard = styled(Card)`
     margin: auto 0;
   }
 
-  .userInfo {
-    display: flex;
-    flex-direction: 'row';
-  }
-
   .header {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    flex-grow: 1;
+    /* flex-grow: 1; */
     margin-left: 1rem;
     text-align: start;
+    height: 40px;
   }
 
   .userName {
@@ -62,10 +64,5 @@ export const StyledCard = styled(Card)`
 
   .description {
     text-align: start;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
   }
 `

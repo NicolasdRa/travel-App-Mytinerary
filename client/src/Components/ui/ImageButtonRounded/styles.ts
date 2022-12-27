@@ -12,7 +12,8 @@ export const StyledContainer = styled('div')`
   .image {
     position: relative;
     margin-top: -2rem;
-    min-height: 5rem;
+    min-height: 8rem;
+    width: 8rem;
 
     ${(props) => props.theme.breakpoints.down('xs')} {
       /* Overrides inline-style */

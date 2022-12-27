@@ -1,12 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import Slider from '@mui/material/Slider'
-import Cropper from 'react-easy-crop'
+import { useState, useEffect } from 'react'
 
 import {
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -17,7 +13,9 @@ import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 
 import { useImageCropper } from '../../../hooks/useImageCropper'
-import { StyledContainer } from './styles'
+import { CustomImageCropper } from '../CustomImageCropper/CustomImageCropper'
+
+import { StyledContainer, StyledDialog } from './styles'
 
 interface UploadProfileImgFormProps {
   origin: string
@@ -25,7 +23,7 @@ interface UploadProfileImgFormProps {
   img: Blob | string
 }
 
-const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
+export const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
   origin,
   loadPreviewFile,
   img,
@@ -57,12 +55,6 @@ const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
     // loadPreviewFile
   )
 
-  // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef<HTMLInputElement>(null)
-  const handleClick = (e: any) => {
-    hiddenInput && hiddenInput.current && hiddenInput.current.click()
-  }
-
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -77,14 +69,6 @@ const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
     clearImage()
   }
 
-  const handleChangeZoom = (e: any, newValue: number | number[]) => {
-    setZoom(newValue as number)
-  }
-
-  const handleChangeRotate = (e: any, newValue: number | number[]) => {
-    setRotation(newValue as number)
-  }
-
   return (
     <StyledContainer>
       {origin === 'editProfileForm' ? (
@@ -97,80 +81,26 @@ const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
           </IconButton>
         </Box>
       )}
-      <Dialog
+      <StyledDialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title" className="title">
-          <Typography variant="body2">
-            {!imageSrc ? 'Choose ' : 'Adjust '}your profile image
-          </Typography>
+          {!imageSrc ? 'Upload ' : 'Adjust '}your profile image
         </DialogTitle>
-        <DialogContent className="contentContainer">
-          {imageSrc ? (
-            <Box className="previewContainer">
-              <div className="cropContainer">
-                <Cropper
-                  image={imageSrc}
-                  crop={crop}
-                  zoom={zoom}
-                  rotation={rotation}
-                  onCropChange={setCrop}
-                  onZoomChange={setZoom}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  //   showGrid={false}
-                  aspect={1}
-                  // aspect={1}
-                  // cropShape="round"
-                />
-              </div>
-              <div className="controls">
-                <div className="sliderContainer">
-                  <Typography variant="overline" className="sliderLabel">
-                    Zoom
-                  </Typography>
-                  <Slider
-                    value={zoom}
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    aria-labelledby="Zoom"
-                    onChange={handleChangeZoom}
-                    className="slider"
-                  />
-                </div>
-                <div className="sliderContainer">
-                  <Typography variant="overline" className="sliderLabel">
-                    Rotate
-                  </Typography>
-                  <Slider
-                    value={rotation}
-                    min={0}
-                    max={360}
-                    step={1}
-                    aria-labelledby="Rotation"
-                    className="slider"
-                    onChange={handleChangeRotate}
-                  />
-                </div>
-              </div>
-            </Box>
-          ) : (
-            <Box className="photoIconContainer">
-              <input
-                style={{ display: 'none' }}
-                id="customFile"
-                onChange={onFileChange}
-                type="file"
-                ref={hiddenInput}
-              />
-              <IconButton onClick={handleClick}>
-                <AddAPhotoIcon color="secondary" className="photo_icon" />
-              </IconButton>
-            </Box>
-          )}
+        <DialogContent>
+          <CustomImageCropper
+            imageSrc={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            rotation={rotation}
+            setCrop={setCrop}
+            setZoom={setZoom}
+            setRotation={setRotation}
+            onCropComplete={onCropComplete}
+            onFileChange={onFileChange}
+          />
         </DialogContent>
         <DialogActions className="btns">
           <Button onClick={handleClose} color="primary">
@@ -193,9 +123,7 @@ const UploadProfileImgForm: React.FC<UploadProfileImgFormProps> = ({
             </>
           )}
         </DialogActions>
-      </Dialog>
+      </StyledDialog>
     </StyledContainer>
   )
 }
-
-export default UploadProfileImgForm

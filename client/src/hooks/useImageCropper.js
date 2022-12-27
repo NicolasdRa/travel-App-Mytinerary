@@ -1,4 +1,4 @@
-import { useState, useCallback, SetStateAction } from 'react'
+import { useState, useCallback } from 'react'
 import {
   getCroppedImg,
   getRotatedImage,
@@ -25,9 +25,9 @@ export const useImageCropper = () => {
   }, [])
 
   const showCroppedImage = useCallback(async () => {
-    if (!croppedAreaPixels) {
-      return
-    }
+    // if (!croppedAreaPixels) {
+    //   return
+    // }
 
     try {
       const croppedImage = await getCroppedImg(
@@ -35,7 +35,7 @@ export const useImageCropper = () => {
         croppedAreaPixels,
         rotation
       )
-
+      console.log('donee')
       setCroppedImage(croppedImage)
       // console.log('donee', { croppedImage })
     } catch (e) {

@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react'
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
 
-import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
-import UploadProfileImgForm from '../UploadProfileImgForm/UploadProfileImgForm'
+import { UploadCoverImgForm } from '../UploadCoverImgForm/UploadCoverImgForm'
+import { UploadProfileImgForm } from '../UploadProfileImgForm/UploadProfileImgForm'
 import ImageButton from '../ImageButton/ImageButton'
 import ImageButtonRounded from '../ImageButtonRounded/ImageButtonRounded'
 
@@ -20,7 +21,7 @@ import { updateUserProfile } from '../../Redux/usersSlice'
 import { base64StringtoFile } from '../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
-import { StyledContainer } from './styles'
+import { StyledContainer, StyledDialog } from './styles'
 import { useAppDispatch } from '../../Redux/hooks'
 import { User } from '../../../@types/types'
 
@@ -104,22 +105,33 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
 
   return (
     <StyledContainer>
-      <Button color="secondary" onClick={handleClickOpen}>
-        EDIT PROFILE
-      </Button>
-      <Dialog
+      <Stack direction="row" spacing={2}>
+        <Button
+          endIcon={<EditIcon className="edit-icon" />}
+          color="secondary"
+          onClick={handleClickOpen}
+          className="trigger-btn"
+        >
+          Edit Profile
+        </Button>
+      </Stack>
+
+      <StyledDialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="form"
+        >
           <DialogTitle id="form-dialog-title" className="title">
-            <Typography variant="h6" color="primary">
-              Edit your profile info
-            </Typography>
+            Edit your profile info
           </DialogTitle>
+
           <Typography variant="body1" color="inherit" className="subtitle">
-            Change your images or edit your info
+            Change your image or edit your info
           </Typography>
 
           {coverPreviewFile ? (
@@ -147,11 +159,12 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
             <UploadProfileImgForm
               origin="editProfileForm"
               loadPreviewFile={loadUserPreviewFile}
-              img={''}
+              img={img}
             />
           )}
           <DialogContent>
             <TextField
+              size="small"
               required
               autoFocus
               fullWidth
@@ -167,6 +180,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
             <Grid item container className="price_duration">
               <Grid item xs={6} container>
                 <TextField
+                  size="small"
                   required
                   autoFocus
                   fullWidth
@@ -182,6 +196,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
               </Grid>
               <Grid item xs={6} container>
                 <TextField
+                  size="small"
                   required
                   autoFocus
                   fullWidth
@@ -197,6 +212,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
               </Grid>
             </Grid>
             <TextField
+              size="small"
               required
               autoFocus
               fullWidth
@@ -219,7 +235,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
             </Button>
           </DialogActions>
         </form>
-      </Dialog>
+      </StyledDialog>
     </StyledContainer>
   )
 }

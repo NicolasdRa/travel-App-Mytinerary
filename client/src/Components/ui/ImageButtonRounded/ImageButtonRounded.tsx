@@ -37,9 +37,6 @@ const ImageButtonRounded: React.FC<ImageButtonRoundedProps> = ({
           key={image.title}
           className="image"
           focusVisibleClassName="focusVisible"
-          style={{
-            width: image.width,
-          }}
           onClick={handleClick}
         >
           <span
@@ -56,7 +53,7 @@ const ImageButtonRounded: React.FC<ImageButtonRoundedProps> = ({
               color="inherit"
               className="imageTitle"
             >
-              {image.title}
+              change
               <span className="imageMarked" />
             </Typography>
           </span>

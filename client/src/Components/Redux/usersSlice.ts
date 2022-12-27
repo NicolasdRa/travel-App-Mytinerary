@@ -134,12 +134,9 @@ const selectUser = (state: RootState) => state.users.currentUser
 export const selectUserLoading = (state: RootState) => state.users.loading
 
 export const selectCurrentUser = createSelector(
-  (state: RootState) => state.users.currentUser,
-  (currentUser) => {
-    return currentUser
-  }
+  [selectUser],
+  (currentUser) => currentUser
 )
-
 // Extract and export each action creator by name
 export const { unloadCurrentUser, updateUserItineraries } = usersSlice.actions
 

@@ -2,18 +2,18 @@ import { styled } from '@mui/material/styles'
 
 export const StyledListingHeaderContainer = styled('div')`
   width: 100%;
-  height: 10rem;
+  height: 9rem;
 
   .img {
     width: 100%;
-    height: 10rem;
+    height: 9rem;
     background-size: cover;
     background-position: center;
   }
 
   .skeleton {
     width: 100%;
-    height: 10rem;
+    height: 9rem;
   }
 
   ${(props) => props.theme.breakpoints.up('sm')} {
@@ -35,18 +35,18 @@ export const StyledListingHeaderContainer = styled('div')`
 
 export const StyledImageHeaderContainer = styled('div')`
   width: 100%;
-  height: 10rem;
+  height: 9rem;
 
   .img {
     width: 100%;
-    height: 10rem;
+    height: 9rem;
     background-size: cover;
     background-position: center;
   }
 
   .skeleton {
     width: 100%;
-    height: 10rem;
+    height: 9rem;
   }
 
   ${(props) => props.theme.breakpoints.up('sm')} {

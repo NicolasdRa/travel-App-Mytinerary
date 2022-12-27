@@ -17,7 +17,7 @@ import { SignupPage } from '../Components/pages/SignupPage/SignupPage'
 import { ProfilePage } from '../Components/pages/ProfilePage/ProfilePage'
 import { ListingPage } from '../Components/pages/ListingPage/ListingPage'
 import CityPage from '../Components/pages/CityPage/CityPage'
-import ItineraryPage from '../Components/pages/ItineraryPage/ItineraryPage'
+import { ItineraryPage } from '../Components/pages/ItineraryPage/ItineraryPage'
 import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
 import { PasswordResetPage } from '../Components/pages/PasswordResetPage/PasswordResetPage'
 

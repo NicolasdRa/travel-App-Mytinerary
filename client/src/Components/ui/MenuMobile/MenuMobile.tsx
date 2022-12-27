@@ -12,8 +12,6 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
-
 import { logOutUser } from '../../Redux/authSlice'
 
 import { unloadCurrentUser } from '../../Redux/usersSlice'

@@ -1,8 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
-import Slider from '@mui/material/Slider'
-import Cropper from 'react-easy-crop'
-import './styles.css'
 import {
   Box,
   Button,
@@ -15,8 +12,9 @@ import {
 import ImageButton from '../ImageButton/ImageButton'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 
-import { StyledDialog } from './styles'
+import { StyledContainer, StyledDialog } from './styles'
 import { useImageCropper } from '../../../hooks/useImageCropper'
+import { CustomImageCropper } from '../CustomImageCropper/CustomImageCropper'
 
 interface UploadCoverImgFormProps {
   origin: string
@@ -24,7 +22,7 @@ interface UploadCoverImgFormProps {
   coverImg: Blob | string
 }
 
-const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
+export const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
   origin,
   loadPreviewFile,
   coverImg,
@@ -56,12 +54,6 @@ const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
     // loadPreviewFile
   )
 
-  // Ref needed to hide default input and functionalise custom icon btn
-  const hiddenInput = useRef<HTMLInputElement>(null)
-  const handleClick = (e: any) => {
-    hiddenInput && hiddenInput.current && hiddenInput.current.click()
-  }
-
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -76,21 +68,15 @@ const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
     clearImage()
   }
 
-  const handleChangeZoom = (e: any, newValue: number | number[]) => {
-    setZoom(newValue as number)
-  }
-
-  const handleChangeRotate = (e: any, newValue: number | number[]) => {
-    setRotation(newValue as number)
-  }
-
   return (
-    <div>
+    <StyledContainer>
       {origin === 'editProfileForm' ? (
         <ImageButton coverImg={coverImg} handleClick={handleClickOpen} />
       ) : (
         <Box className="photoIconContainer">
-          <Typography variant="body2">Add a photo</Typography>
+          <Typography variant="body2" className="photo-title">
+            Add a photo
+          </Typography>
           <IconButton onClick={handleClickOpen}>
             <AddAPhotoIcon color="secondary" className="photo_icon" />
           </IconButton>
@@ -107,69 +93,17 @@ const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
           </Typography>
         </DialogTitle>
         <DialogContent className="contentContainer">
-          {imageSrc ? (
-            <Box className="previewContainer">
-              <div className="cropContainer">
-                <Cropper
-                  image={imageSrc}
-                  crop={crop}
-                  zoom={zoom}
-                  rotation={rotation}
-                  onCropChange={setCrop}
-                  onZoomChange={setZoom}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  showGrid={false}
-                  aspect={16 / 9}
-                  // aspect={1}
-                  // cropShape="round"
-                />
-              </div>
-              <div className="controls">
-                <div className="sliderContainer">
-                  <Typography variant="overline" className="sliderLabel">
-                    Zoom
-                  </Typography>
-                  <Slider
-                    value={zoom}
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    aria-labelledby="Zoom"
-                    onChange={handleChangeZoom}
-                    className="slider"
-                  />
-                </div>
-                <div className="sliderContainer">
-                  <Typography variant="overline" className="sliderLabel">
-                    Rotate
-                  </Typography>
-                  <Slider
-                    value={rotation}
-                    min={0}
-                    max={360}
-                    step={1}
-                    aria-labelledby="Rotation"
-                    className="slider"
-                    onChange={handleChangeRotate}
-                  />
-                </div>
-              </div>
-            </Box>
-          ) : (
-            <Box className="photoIconContainer">
-              <input
-                style={{ display: 'none' }}
-                id="customFile"
-                onChange={onFileChange}
-                type="file"
-                ref={hiddenInput}
-              />
-              <IconButton onClick={handleClick}>
-                <AddAPhotoIcon color="secondary" className="photo_icon" />
-              </IconButton>
-            </Box>
-          )}
+          <CustomImageCropper
+            imageSrc={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            rotation={rotation}
+            setCrop={setCrop}
+            setZoom={setZoom}
+            setRotation={setRotation}
+            onCropComplete={onCropComplete}
+            onFileChange={onFileChange}
+          />
         </DialogContent>
         <DialogActions className="btns">
           <Button onClick={handleClose} color="primary">
@@ -193,8 +127,6 @@ const UploadCoverImgForm: React.FC<UploadCoverImgFormProps> = ({
           )}
         </DialogActions>
       </StyledDialog>
-    </div>
+    </StyledContainer>
   )
 }
-
-export default UploadCoverImgForm

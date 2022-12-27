@@ -2,22 +2,18 @@ import { useState, useEffect } from 'react'
 
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Fab,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Typography,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
-import UploadCoverImgForm from '../UploadCoverImgForm/UploadCoverImgForm'
+import { UploadCoverImgForm } from '../UploadCoverImgForm/UploadCoverImgForm'
 
 import { updateUserItineraries } from '../../Redux/usersSlice'
 import { addItinerary } from '../../Redux/itinerariesSlice'
@@ -27,7 +23,7 @@ import { base64StringtoFile } from '../../utils/imageUtils'
 import { useForm } from '../../../hooks/useForm'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 import { City, User } from '../../../@types/types'
-import { StyledContainer } from './styles'
+import { StyledDialog, StyledMainContainer } from './styles'
 import { selectAllCities } from '../../Redux/citiesSlice'
 
 interface CreateItineraryFormProps {
@@ -45,7 +41,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
   const [previewFile, setPreviewFile] = useState(null)
   const [cityOptions, setCityOptions] = useState<City[]>([])
 
-  const cities = useAppSelector(selectAllCities)
+  const cities = useAppSelector<City[]>(selectAllCities)
 
   // useForm hook
   const {
@@ -56,7 +52,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
     city: '',
     title: '',
     category: '',
-    price: 0,
+    price: '€',
     duration: 1,
     details: '',
   })
@@ -113,7 +109,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
   }
 
   return (
-    <StyledContainer>
+    <StyledMainContainer>
       <Fab
         color="secondary"
         aria-label="add"
@@ -122,7 +118,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
       >
         <AddIcon />
       </Fab>
-      <Dialog
+      <StyledDialog
         //   TransitionComponent={Transition}
         //   keepMounted
         open={open}
@@ -130,21 +126,21 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <DialogTitle id="form-dialog-title" className="title">
-            <Typography variant="h6" color="primary">
-              Create Your Itinerary
-            </Typography>
-          </DialogTitle>
-          <DialogContent>
+          <Typography variant="h6" color="primary" className="title">
+            Create Your Itinerary
+          </Typography>
+          <DialogContent className="content">
             <Typography variant="body2" className="subtitle">
               Add details, a photo and submit. You can add activities from the
               itinerary page.
             </Typography>
             <FormControl className="formControl">
-              <InputLabel id="city-label">Choose a city</InputLabel>
-              <Select
+              <TextField
+                required
+                select
+                size="small"
                 className="select"
-                labelId="city-label"
+                label="Choose a city"
                 name="city"
                 value={city}
                 onChange={handleInputChange}
@@ -154,9 +150,10 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                     {option.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
             </FormControl>
             <TextField
+              size="small"
               required
               autoFocus
               fullWidth
@@ -171,10 +168,11 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
             <Grid item container className="price_duration">
               <Grid item xs={12} sm={4} container>
                 <FormControl className="formControl">
-                  <InputLabel id="category-label">Category</InputLabel>
-                  <Select
+                  <TextField
+                    required
+                    size="small"
                     className="select"
-                    labelId="category-label"
+                    label="Category"
                     name="category"
                     value={category}
                     onChange={handleInputChange}
@@ -184,15 +182,16 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={4} container>
+              <Grid item xs={6} sm={4} container>
                 <FormControl className="formControl">
-                  <InputLabel id="price-label">Price</InputLabel>
-                  <Select
+                  <TextField
+                    required
+                    size="small"
                     className="select"
-                    labelId="price-label"
+                    label="Price"
                     name="price"
                     value={price}
                     onChange={handleInputChange}
@@ -202,15 +201,16 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={4} container>
+              <Grid item xs={6} sm={4} container>
                 <FormControl className="formControl">
-                  <InputLabel id="duration-label">Duration</InputLabel>
-                  <Select
+                  <TextField
+                    required
+                    size="small"
                     className="select"
-                    labelId="duration-label"
+                    label="Duration"
                     name="duration"
                     value={duration}
                     onChange={handleInputChange}
@@ -222,7 +222,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                         value={`${option}hs`}
                       >{`${option}hs`}</MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 </FormControl>
               </Grid>
             </Grid>
@@ -277,7 +277,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
             </Button>
           </DialogActions>
         </form>
-      </Dialog>
-    </StyledContainer>
+      </StyledDialog>
+    </StyledMainContainer>
   )
 }

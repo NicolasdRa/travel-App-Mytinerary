@@ -45,6 +45,32 @@ export const theme: Theme = createTheme({
         },
       },
     },
+
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          minHeight: '50px',
+        },
+      },
+    },
+
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: {
+          height: '50px',
+        },
+      },
+    },
+
+    MuiInputLabel: {
+      styleOverrides: {
+        formControl: {
+          // top: '6px',
+        },
+      },
+    },
+
+    // '&.Mui-focused': {}
   },
 
   breakpoints: {

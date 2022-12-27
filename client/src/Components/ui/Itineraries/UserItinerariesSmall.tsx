@@ -17,9 +17,6 @@ const UserItinerariesSmall: React.FC<UserItinerariesSmallProps> = ({
   if (itineraries && itineraries.length > 0) {
     return (
       <StyledItinerariesContainer>
-        <Typography variant="body2" className="text">
-          My itineraries
-        </Typography>
         <div className="gallery">
           {itineraries.map((itinerary) => (
             <ItineraryCardSmall itinerary={itinerary} key={itinerary._id} />

@@ -1,18 +1,32 @@
+import { Dialog } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const StyledContainer = styled('div')`
+export const StyledMainContainer = styled('div')`
+  .add_btn {
+    position: fixed;
+    bottom: 4rem;
+    right: 1.5rem;
+    z-index: 1000;
+  }
+`
+
+export const StyledDialog = styled(Dialog)`
   .title {
     margin: 1.5rem 0 0 0;
     padding: 0;
     text-align: center;
   }
 
+  .content {
+    padding-top: 0.5rem;
+  }
+
   .subtitle {
-    margin: 0.5rem 0 0 0;
+    margin: 0.5rem 0 1rem 0;
   }
 
   .input_field {
-    margin: 0.8rem 0;
+    margin: 0.4rem 0;
   }
 
   .text {
@@ -25,7 +39,8 @@ export const StyledContainer = styled('div')`
   }
 
   .select {
-    min-width: 3rem;
+    min-width: 4rem;
+    margin: 0.4rem 0 0.2rem 0;
   }
 
   .btnContainer {
@@ -77,12 +92,5 @@ export const StyledContainer = styled('div')`
 
   .clearButton {
     align-self: flex-end;
-  }
-
-  .add_btn {
-    position: fixed;
-    bottom: 4rem;
-    right: 1.5rem;
-    z-index: 1000;
   }
 `

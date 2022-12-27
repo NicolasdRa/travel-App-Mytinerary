@@ -1,26 +1,47 @@
+import { Dialog } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
+  .trigger-btn {
+    text-transform: capitalize;
+  }
+
+  .edit-icon {
+    margin-top: -0.3rem;
+    margin-left: -0.2rem;
+  }
+`
+export const StyledDialog = styled(Dialog)`
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   .cover-image {
     width: 100%;
-    /* background-size: 'cover' */
+    background-size: 'cover';
   }
 
   .title {
-    margin: 2rem 0 1rem 0;
-    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: -1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
     text-align: center;
   }
 
   .subtitle {
     font-size: 0.8rem;
-    margin: 1rem 0 1.5rem 0;
+    margin: 0rem 0 3rem 0;
     padding: 0;
     text-align: center;
   }
 
   .input_field {
-    margin: 0.8rem 0;
+    margin: 0.5rem 0;
   }
 
   .text {
@@ -41,7 +62,7 @@ export const StyledContainer = styled('div')`
   }
 
   .btns {
-    padding-left: 1rem;
+    padding: 0 1rem 1rem 1rem;
   }
 
   .photo_icon {

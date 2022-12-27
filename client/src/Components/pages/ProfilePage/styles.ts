@@ -22,40 +22,41 @@ export const StyledContainer = styled('div')`
   }
 
   .userImg {
-    display: flex;
-    margin: -1.5rem auto 0 auto;
-    height: 6rem;
-    width: 6rem;
     border: 2px solid white;
+    display: flex;
+    height: 6rem;
+    margin: -1.5rem auto 0 auto;
+    width: 6rem;
   }
 
   .info {
+    align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     margin-top: -3rem;
     padding: 0 1rem 0 0;
   }
 
   .edit_btn {
-    display: flex;
-    color: grey;
     align-items: center;
+    color: grey;
+    display: flex;
+    margin-left: -0.5rem;
   }
 
   .likes {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
   }
 
   .likes_btn {
     display: flex;
     flex-direction: row;
     flex: 0 0 auto;
-    text-align: left;
     padding: 0;
+    text-align: left;
   }
 
   .likes_icon {
@@ -70,33 +71,38 @@ export const StyledContainer = styled('div')`
   }
 
   .user_info {
+    align-self: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 1rem 0;
   }
 
+  .userName {
+    align-self: center;
+  }
+
   .avatar {
     height: 2rem;
-    width: 2rem;
     margin-right: 0.5rem;
+    width: 2rem;
   }
 
   .price_time {
+    align-items: center;
     display: flex;
     margin-left: auto;
-    align-items: center;
     padding: 1rem 0;
   }
 
   .duration {
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   .price {
-    display: flex;
     align-items: center;
+    display: flex;
     margin-left: 1rem;
   }
 
@@ -109,12 +115,17 @@ export const StyledContainer = styled('div')`
     margin: 1rem 0;
   }
 
-  .text {
+  .details {
+    align-self: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex: 0 0 auto;
+    margin-bottom: 0.8rem;
     text-align: center;
-    margin: 0.5rem;
+  }
+
+  .tabs {
+    margin-bottom: 0.8rem;
   }
 
   .gallery {
@@ -124,17 +135,17 @@ export const StyledContainer = styled('div')`
   }
 
   .write_btn {
-    display: flex;
-    color: grey;
-    padding-left: 0.5rem;
     align-items: center;
+    color: grey;
+    display: flex;
+    padding-left: 0.5rem;
   }
 
   .write_icon {
     align-items: center;
-    width: 1.2rem;
     height: 1.2rem;
     padding-bottom: 0.3rem;
+    width: 1.2rem;
   }
 
   .alt_container {

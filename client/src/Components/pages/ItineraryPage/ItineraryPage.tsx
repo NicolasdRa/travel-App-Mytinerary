@@ -22,6 +22,8 @@ import {
   IconButton,
   Typography,
   Rating,
+  useMediaQuery,
+  Box,
 } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import EuroIcon from '@mui/icons-material/Euro'
@@ -35,10 +37,15 @@ import { CommentCard } from '../../ui/CommentCard/CommentCard'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 import { RootState } from '../../Redux/store'
 import { StyledContainer } from './styles'
+import { Header } from '../../ui/Header/Header'
+import { theme } from '../../Styles/Theme'
+import { BottomNav } from '../../ui/BottomNav/BottomNav'
+import { Footer } from '../../ui/Footer/Footer'
 
 // TODO: itinerary Reducer action to keep track of likes
 
-const ItineraryPage = () => {
+export const ItineraryPage: React.FC = () => {
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
 
   const [expanded, setExpanded] = React.useState(false)
@@ -98,6 +105,7 @@ const ItineraryPage = () => {
 
   return (
     <StyledContainer>
+      <Header />
       <ImageHeader img={img} />
 
       <div className="content">
@@ -120,9 +128,9 @@ const ItineraryPage = () => {
             )}
           </div>
         </div>
-        <div
-          // component="fieldset"
-          // borderColor="transparent"
+        <Box
+          component="fieldset"
+          borderColor="transparent"
           className="ratingContainer"
         >
           <Rating
@@ -136,7 +144,7 @@ const ItineraryPage = () => {
           <Typography className="ratingNumber" color="primary" variant="body2">
             ({ratingAvg})
           </Typography>
-        </div>
+        </Box>
         <div className="extra_info">
           <div className="user_info">
             <Avatar
@@ -172,7 +180,7 @@ const ItineraryPage = () => {
         </div>
         <Divider className="divider" />
         <div className="gallery">
-          <Typography variant="body2" className="text">
+          <Typography variant="body2" className="decription">
             {details}
           </Typography>
           <Divider className="divider" />
@@ -215,7 +223,12 @@ const ItineraryPage = () => {
               />
             )}
           </div>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expanded}
+            timeout="auto"
+            unmountOnExit
+            className="collapse"
+          >
             {itinerary.comments.map((comment) => (
               <CommentCard key={uuidv4()} comment={comment} />
             ))}
@@ -224,8 +237,7 @@ const ItineraryPage = () => {
         </div>
         {currentUser && <CreateItineraryForm currentUser={currentUser} />}
       </div>
+      {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )
 }
-
-export default ItineraryPage

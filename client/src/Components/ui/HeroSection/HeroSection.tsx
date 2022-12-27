@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { Box, Button, Grid, Hidden, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { StyledContainer } from './styles'

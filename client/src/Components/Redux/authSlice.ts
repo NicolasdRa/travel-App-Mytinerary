@@ -47,9 +47,6 @@ export const logInUser = createAsyncThunk(
         },
         data: formData,
       })
-
-      console.log(res.data)
-
       return res.data
     } catch (error: any) {
       if (!error.response) {
@@ -206,7 +203,6 @@ const authSlice = createSlice({
         state.loading = 'done'
         state.isAuthenticated = true
         state.userId = action.payload._id
-        console.log(action.payload)
       }
     )
     builder.addCase(logInUser.rejected, (state, action: PayloadAction<any>) => {

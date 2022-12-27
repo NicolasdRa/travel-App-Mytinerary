@@ -12,7 +12,7 @@ import { RootState } from './store'
 // THUNKS
 export const fetchItineraries = createAsyncThunk(
   'itineraries/fetchAll',
-  async (thunkAPI) => {
+  async () => {
     const res = await axios({
       method: 'get',
       url: itinerariesUrl,
@@ -24,7 +24,7 @@ export const fetchItineraries = createAsyncThunk(
 
 export const fetchItineraryById = createAsyncThunk(
   'itineraries/fetchItineraryById',
-  async (id, thunkAPI) => {
+  async (id: any) => {
     const res = await axios({
       method: 'get',
       url: `${itinerariesUrl}${id}`,
@@ -48,7 +48,7 @@ export const fetchItineraryByTitle = createAsyncThunk(
 
 export const deleteItinerary = createAsyncThunk(
   'itineraries/deleteOne',
-  async (id, thunkAPI) => {
+  async (id: any) => {
     const res = await axios({
       method: 'delete',
       url: `${itinerariesUrl}${id}`,
@@ -60,7 +60,7 @@ export const deleteItinerary = createAsyncThunk(
 
 export const addItinerary = createAsyncThunk(
   'itineraries/addOne',
-  async (formData: FormData, thunkAPI) => {
+  async (formData: FormData) => {
     const res = await axios({
       method: 'POST',
       url: itinerariesUrl,
@@ -112,9 +112,9 @@ const itinerariesSlice = createSlice({
         state.currentItinerary &&
           state.currentItinerary.activities.unshift(action.payload)
       },
-      prepare(activity) {
+      prepare(data: Activity) {
         return {
-          payload: activity,
+          payload: data,
         }
       },
     },
