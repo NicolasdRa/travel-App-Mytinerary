@@ -52,6 +52,7 @@ const activitiesSlice = createSlice({
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types
+    // TODO: replace these two below with builder cases
     addActivity(state, action) {
       // "mutate" the array by calling push()
       state.data.push(action.payload)
@@ -82,7 +83,7 @@ const activitiesSlice = createSlice({
 
     builder.addCase(fetchActivityByTitle.fulfilled, (state, action) => {
       state.loading = 'done'
-      state.data = action.payload
+      state.currentActivity = action.payload.data
     })
 
     builder.addCase(fetchActivityByTitle.rejected, (state, action) => {
@@ -95,14 +96,18 @@ const activitiesSlice = createSlice({
 // SELECTORS
 const selectActivities = (state: RootState) => state.activities.data
 
+const selectActivity = (state: RootState) => state.activities.currentActivity
+
 export const selectActivitiesLoading = (state: RootState) =>
   state.activities.loading
 
-export const selectCurrentActivity = (state: RootState) =>
-  state.activities.currentActivity
-
 export const selectAllActivities = createSelector(
   [selectActivities],
+  (activities) => activities
+)
+
+export const selectCurrentActivity = createSelector(
+  [selectActivity],
   (activities) => activities
 )
 

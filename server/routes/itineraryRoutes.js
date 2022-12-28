@@ -8,6 +8,7 @@ const {
   updateItinerary,
   deleteItinerary,
   getItineraryByTitle,
+  getItineraryById,
   getCityItineraries,
   uploadCoverImage,
   getItinerariesByUser,
@@ -15,9 +16,9 @@ const {
 
 const upload = require('../middleware/multer')
 const { protect } = require('../controllers/authController')
-const activityRouter = require('../routes/activityRoutes')
-const favouriteRouter = require('../routes/favouriteRoutes')
-const commentRouter = require('../routes/commentRoutes')
+const activityRouter = require('./activityRoutes')
+const favouriteRouter = require('./favouriteRoutes')
+const commentRouter = require('./commentRoutes')
 
 // ------------------------------------- //
 

@@ -49,6 +49,8 @@ export const ItineraryPage: React.FC = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const itinerary = useAppSelector(selectCurrentItinerary)
 
+  console.log(itinerary)
+
   // takes params to use in dispatch for single itinerary to display
   const { title } = useParams<{ title?: string | undefined }>()
 
@@ -177,7 +179,7 @@ export const ItineraryPage: React.FC = () => {
           <Divider className="divider" />
           <div className="gallery">
             <Typography variant="body2" className="subtitle">
-              {activities.length > 0
+              {activities?.length > 0
                 ? 'Available activities'
                 : 'No activities found'}{' '}
               for {title}

@@ -16,7 +16,9 @@ const {
 
 // Basic CRUD controllers
 exports.getAllItineraries = getAll(Itinerary)
-exports.getItinerary = getOne(Itinerary, { path: 'activities comments' })
+exports.getItinerary = getOne(Itinerary, {
+  path: 'activities comments favourites',
+})
 exports.createItinerary = createOne(Itinerary)
 exports.deleteItinerary = deleteOne(Itinerary)
 exports.updateItinerary = updateOne(Itinerary)
@@ -57,7 +59,7 @@ exports.getItinerariesByUser = asyncErrorCatcher(async (req, res, next) => {
 // gets ITINERARY by title
 exports.getItineraryByTitle = asyncErrorCatcher(async (req, res, next) => {
   let itinerary = await Itinerary.findOne({ title: req.params.title }).populate(
-    'comments favourites'
+    'activities comments favourites'
   )
 
   if (!itinerary) {
@@ -76,7 +78,9 @@ exports.getItineraryByTitle = asyncErrorCatcher(async (req, res, next) => {
 
 // gets ITINERARY by id
 exports.getItineraryById = asyncErrorCatcher(async (req, res, next) => {
-  let itinerary = await Itinerary.findById({ _id: req.params.id })
+  let itinerary = await Itinerary.findById({ _id: req.params.id }).populate(
+    'activities comments favourites'
+  )
 
   if (!itinerary) {
     return next(new AppError('No document found with that title', 404))

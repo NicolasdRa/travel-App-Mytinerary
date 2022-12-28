@@ -58,7 +58,11 @@ const ActivityPage = () => {
     return <CustomLoader loading={true} message="Activity Page" />
   }
 
-  const { city, category, likes, duration, price, img, details } = activity
+  const { cityName, category, likes, duration, price, img, details } = activity
+
+  console.log({ activity })
+
+  console.log({ img })
 
   return (
     <StyledContainer>
@@ -66,7 +70,7 @@ const ActivityPage = () => {
       <ImageHeader img={img} />
       <div className="content">
         <Typography className="overline" variant="overline">
-          {city.name} - {category}
+          {cityName} - {category}
         </Typography>
         <div className="info">
           <div className="city_title">

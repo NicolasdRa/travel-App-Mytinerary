@@ -98,13 +98,14 @@ const itinerarySchema = new mongoose.Schema(
       required: [true, 'An itinerary must belong to a city'],
     },
 
-    activities: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Activity',
-        // required: [true, 'An itinerary must have an activity']
-      },
-    ],
+    // Field for Child referencing - replaced by virtual populate below
+    // activities: [
+    //   {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'Activity',
+    //     // required: [true, 'An itinerary must have an activity']
+    //   },
+    // ],
 
     author: {
       type: mongoose.Schema.ObjectId,
@@ -125,6 +126,12 @@ const itinerarySchema = new mongoose.Schema(
 )
 
 // Virtual populate (to populate comments & favourites which in turn hold the reference to itineraries)
+itinerarySchema.virtual('activities', {
+  ref: 'Activity',
+  localField: '_id',
+  foreignField: 'itinerary',
+})
+
 itinerarySchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',
@@ -148,10 +155,12 @@ itinerarySchema.pre(/^find/, function (next) {
     path: 'author',
     select: 'userName img _id',
   })
-  this.populate({
-    path: 'activities',
-    select: '-__v',
-  })
+
+  // For Child referencing - replaced by virtual populate above
+  // this.populate({
+  //   path: 'activities',
+  //   select: '-__v',
+  // })
   next()
 })
 
