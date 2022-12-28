@@ -22,6 +22,12 @@ export interface City {
   country?: string
   itineraries: Itinerary[]
   favourites: Favourite[]
+  guides?: User[]
+  id?: string
+  location?: {
+    type: string
+    coordinates: number[]
+  }
 }
 
 export interface Itinerary {

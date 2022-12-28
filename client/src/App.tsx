@@ -1,9 +1,9 @@
 import { Provider } from 'react-redux'
 
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
-import { theme } from './Components/Styles/Theme'
+import { theme } from './theme/Theme'
 
-import { store } from './Components/Redux/store'
+import { store } from './redux/store'
 import { AppRouter } from './routers/AppRouter'
 import { CssBaseline } from '@mui/material'
 

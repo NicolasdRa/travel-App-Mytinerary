@@ -6,35 +6,31 @@ import {
   Routes,
 } from 'react-router-dom'
 
-import { AlertProps, Snackbar, Typography } from '@mui/material'
-import PuffLoader from 'react-spinners/PuffLoader'
+import { AlertProps, Snackbar } from '@mui/material'
 
 import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
-import { LandingPage } from '../Components/pages/LandingPage/LandingPage'
-import { LoginPage } from '../Components/pages/LoginPage/LoginPage'
-import { SignupPage } from '../Components/pages/SignupPage/SignupPage'
-import { ProfilePage } from '../Components/pages/ProfilePage/ProfilePage'
-import { ListingPage } from '../Components/pages/ListingPage/ListingPage'
-import CityPage from '../Components/pages/CityPage/CityPage'
-import { ItineraryPage } from '../Components/pages/ItineraryPage/ItineraryPage'
-import ActivityPage from '../Components/pages/ActivityPage/ActivityPage'
-import { PasswordResetPage } from '../Components/pages/PasswordResetPage/PasswordResetPage'
+import { CustomLoader } from '../components/ui/CustomLoader/CustomLoader'
+import { LandingPage } from '../components/pages/LandingPage/LandingPage'
+import { LoginPage } from '../components/pages/LoginPage/LoginPage'
+import { SignupPage } from '../components/pages/SignupPage/SignupPage'
+import { ListingPage } from '../components/pages/ListingPage/ListingPage'
+import { CityPage } from '../components/pages/CityPage/CityPage'
+import { ItineraryPage } from '../components/pages/ItineraryPage/ItineraryPage'
+import ActivityPage from '../components/pages/ActivityPage/ActivityPage'
+import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage'
+import { PasswordResetPage } from '../components/pages/PasswordResetPage/PasswordResetPage'
 
-import { fetchCities } from '../Components/Redux/citiesSlice'
-import { fetchItineraries } from '../Components/Redux/itinerariesSlice'
-import { fetchActivities } from '../Components/Redux/activitiesSlice'
-import { fetchFavourites } from '../Components/Redux/favouritesSlice'
-import {
-  fetchCurrentUser,
-  selectCurrentUser,
-} from '../Components/Redux/usersSlice'
-import { setUser } from '../Components/Redux/authSlice'
-
-import { useAppDispatch, useAppSelector } from '../Components/Redux/hooks'
+import { fetchCities } from '../redux/citiesSlice'
+import { fetchItineraries } from '../redux/itinerariesSlice'
+import { fetchActivities } from '../redux/activitiesSlice'
+import { fetchFavourites } from '../redux/favouritesSlice'
+import { fetchCurrentUser, selectCurrentUser } from '../redux/usersSlice'
+import { setUser } from '../redux/authSlice'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 
 import { StyledGrid } from './styles'
-import { getCookieValue } from '../Components/utils/utils'
+import { getCookieValue } from '../utils/utils'
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -79,18 +75,7 @@ export const AppRouter: React.FC = () => {
   // TODO redirect when itinerary name is not found in route
 
   if (isLoading) {
-    return (
-      <div className="loader">
-        <PuffLoader color="red" loading={true} size={80} />
-        <Typography
-          color="secondary"
-          variant="caption"
-          className="loaderMessage"
-        >
-          Mytinerary is loading...
-        </Typography>
-      </div>
-    )
+    return <CustomLoader loading={true} message="Profile Page" />
   }
 
   // Alert component

@@ -15,7 +15,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 import { FavouriteComponent } from '../FavouriteComponent/FavouriteComponent'
 
-import { selectCurrentUser } from '../../Redux/usersSlice'
+import { selectCurrentUser } from '../../../redux/usersSlice'
 import { StyledCard } from './styles'
 
 interface Values {

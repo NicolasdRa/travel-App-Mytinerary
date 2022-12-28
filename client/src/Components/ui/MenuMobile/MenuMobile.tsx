@@ -12,11 +12,11 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import { logOutUser } from '../../Redux/authSlice'
+import { logOutUser } from '../../../redux/authSlice'
 
-import { unloadCurrentUser } from '../../Redux/usersSlice'
-import { RootState } from '../../Redux/store'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { unloadCurrentUser } from '../../../redux/usersSlice'
+import { RootState } from '../../../redux/store'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 interface MenuMobileProps {
   sx?: SxProps<Theme>

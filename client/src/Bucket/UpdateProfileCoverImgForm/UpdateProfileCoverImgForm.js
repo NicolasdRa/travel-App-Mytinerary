@@ -16,12 +16,12 @@ import {
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 
 import { useImageCropper } from '../../hooks/useImageCropper'
-import { base64StringtoFile } from '../../Components/utils/imageUtils'
+import { base64StringtoFile } from '../../utils/imageUtils'
 import {
   updateProfileCoverImage,
   selectCurrentUser,
-} from '../../Components/Redux/usersSlice'
-import ImageButton from '../../Components/ui/ImageButton/ImageButton'
+} from '../../redux/usersSlice'
+import ImageButton from '../../components/ui/ImageButton/ImageButton'
 
 import { useStyles } from './styles'
 

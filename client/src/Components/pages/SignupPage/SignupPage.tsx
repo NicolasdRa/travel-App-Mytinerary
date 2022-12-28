@@ -1,4 +1,4 @@
-import { Header } from '../../ui/Header/Header'
+import { Header } from '../../sections/Header/Header'
 import { Signup } from '../../ui/Signup/Signup'
 import { StyledContainer } from './styles'
 

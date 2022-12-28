@@ -1,19 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
 import { v4 as uuidv4 } from 'uuid'
-import PuffLoader from 'react-spinners/PuffLoader'
-
-import {
-  fetchItineraryByTitle,
-  selectCurrentItinerary,
-} from '../../Redux/itinerariesSlice'
-import { selectCurrentUser } from '../../Redux/usersSlice'
-
-import { ImageHeader } from '../../ui/Headers/ImageHeader'
-import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
-import ActivityGallerySmall from '../../ui/Activities/ActivityGallerySmall'
-import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
+import clsx from 'clsx'
 
 import {
   Avatar,
@@ -29,18 +17,26 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import EuroIcon from '@mui/icons-material/Euro'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import clsx from 'clsx'
-
-import CreateCommentForm from '../../ui/CreateCommentForm/CreateCommentForm'
-
+import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+import { Header } from '../../sections/Header/Header'
+import { ImageHeader } from '../../sections/Headers/ImageHeader'
+import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
+import ActivityGallerySmall from '../../sections/Activities/ActivityGallerySmall'
+import CreateCommentForm from '../../forms/CreateCommentForm/CreateCommentForm'
 import { CommentCard } from '../../ui/CommentCard/CommentCard'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
-import { RootState } from '../../Redux/store'
+import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Footer } from '../../sections/Footer/Footer'
+
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
+import { selectCurrentUser } from '../../../redux/usersSlice'
+import {
+  fetchItineraryByTitle,
+  selectCurrentItinerary,
+} from '../../../redux/itinerariesSlice'
+
+import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
-import { Header } from '../../ui/Header/Header'
-import { theme } from '../../Styles/Theme'
-import { BottomNav } from '../../ui/BottomNav/BottomNav'
-import { Footer } from '../../ui/Footer/Footer'
 
 // TODO: itinerary Reducer action to keep track of likes
 
@@ -48,13 +44,12 @@ export const ItineraryPage: React.FC = () => {
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
 
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const currentUser = useAppSelector(selectCurrentUser)
   const itinerary = useAppSelector(selectCurrentItinerary)
-  const cities = useAppSelector((state: RootState) => state.cities.data)
 
-  // takes params & chooses itinerary to display
+  // takes params to use in dispatch for single itinerary to display
   const { title } = useParams<{ title?: string | undefined }>()
 
   // fetches data from DB
@@ -79,11 +74,7 @@ export const ItineraryPage: React.FC = () => {
   }
 
   if (!itinerary) {
-    return (
-      <div className="loader">
-        <PuffLoader color="red" loading={true} size={80} />
-      </div>
-    )
+    return <CustomLoader loading={true} message="Itinerary Page" />
   }
 
   // variables for ui

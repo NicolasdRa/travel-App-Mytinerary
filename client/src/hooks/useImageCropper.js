@@ -1,9 +1,5 @@
 import { useState, useCallback } from 'react'
-import {
-  getCroppedImg,
-  getRotatedImage,
-  readFile,
-} from '../Components/utils/imageUtils'
+import { getCroppedImg, getRotatedImage, readFile } from '../utils/imageUtils'
 import { getOrientation } from 'get-orientation/browser'
 
 const ORIENTATION_TO_ANGLE = {

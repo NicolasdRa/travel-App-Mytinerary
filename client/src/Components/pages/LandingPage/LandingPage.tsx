@@ -2,15 +2,15 @@ import { useSelector } from 'react-redux'
 
 import { Grid, Paper, Typography } from '@mui/material'
 
-import { HeroSection } from '../../ui/HeroSection/HeroSection'
+import { HeroSection } from '../../sections/HeroSection/HeroSection'
 import { CardGallery } from '../../ui/CardGallery/CardGallery'
 
-import { Footer } from '../../ui/Footer/Footer'
+import { Footer } from '../../sections/Footer/Footer'
 
-import { selectAllItineraries } from '../../Redux/itinerariesSlice'
+import { selectAllItineraries } from '../../../redux/itinerariesSlice'
 import { StyledContainer } from './styles'
-import { BottomNav } from '../../ui/BottomNav/BottomNav'
-import { Header } from '../../ui/Header/Header'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Header } from '../../sections/Header/Header'
 
 export const LandingPage = () => {
   const itineraries = useSelector(selectAllItineraries)

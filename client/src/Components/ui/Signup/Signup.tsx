@@ -4,14 +4,14 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
-import { selectLoginLoading, signupUser } from '../../Redux/authSlice'
+import { selectLoginLoading, signupUser } from '../../../redux/authSlice'
 
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useForm } from '../../../hooks/useForm'
 import { StyledPaper } from './styles'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 export const Signup = () => {
   const theme = useTheme()

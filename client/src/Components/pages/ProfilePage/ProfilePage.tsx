@@ -1,30 +1,28 @@
 import React, { SetStateAction, useState } from 'react'
 
-import PuffLoader from 'react-spinners/PuffLoader'
 import {
   Avatar,
   Box,
   Divider,
-  Paper,
   Tab,
   Tabs,
   Typography,
   useMediaQuery,
 } from '@mui/material'
 
-import { ImageHeader } from '../../ui/Headers/ImageHeader'
-import UserItinerariesSmall from '../../ui/Itineraries/UserItinerariesSmall'
-import EditProfileForm from '../../ui/EditProfileForm/EditProfileForm'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Footer } from '../../sections/Footer/Footer'
+import { theme } from '../../../theme/Theme'
+import { Header } from '../../sections/Header/Header'
+import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+import { ImageHeader } from '../../sections/Headers/ImageHeader'
+import UserItinerariesSmall from '../../sections/Itineraries/UserItinerariesSmall'
+import EditProfileForm from '../../forms/EditProfileForm/EditProfileForm'
 import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
+import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
 
 import { StyledContainer } from './styles'
 import { User } from '../../../@types/types'
-import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
-
-import { BottomNav } from '../../ui/BottomNav/BottomNav'
-import { Footer } from '../../ui/Footer/Footer'
-import { theme } from '../../Styles/Theme'
-import { Header } from '../../ui/Header/Header'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -79,6 +77,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   const handleChange = (e: any, newValue: SetStateAction<number>) => {
     setValue(newValue)
   }
+
+  if (!user) {
+    return <CustomLoader loading={true} message="Profile Page" />
+  }
+
   // TODO load favourites
   const {
     _id,
@@ -92,7 +95,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
     userName,
   } = user
 
-  console.log(favourites)
   //remove this when we have activities
   const activities = null
 

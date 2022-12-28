@@ -3,8 +3,8 @@ import React from 'react'
 import { Paper, Tabs, Tab, Typography, Box } from '@mui/material'
 
 import { TabPanelProps } from './ListingPage'
-import { Itineraries } from '../../ui/Itineraries/Itineraries'
-import Activities from '../../ui/Activities/Activities'
+import { Itineraries } from '../../sections/Itineraries/Itineraries'
+import { Activities } from '../../sections/Activities/Activities'
 
 const PREFIX = 'UserListing'
 

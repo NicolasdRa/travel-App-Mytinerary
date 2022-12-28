@@ -1,5 +1,5 @@
-import { Header } from '../../ui/Header/Header'
-import { PasswordResetForm } from '../../ui/PasswordResetForm/PasswordResetForm'
+import { Header } from '../../sections/Header/Header'
+import { PasswordResetForm } from '../../forms/PasswordResetForm/PasswordResetForm'
 import { StyledContainer } from './styles'
 
 export const PasswordResetPage: React.FC = () => {

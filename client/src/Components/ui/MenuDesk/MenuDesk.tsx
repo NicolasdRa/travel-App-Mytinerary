@@ -17,12 +17,12 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
-import { logOutUser } from '../../Redux/authSlice'
-import { unloadCurrentUser } from '../../Redux/usersSlice'
-import { RootState } from '../../Redux/store'
+import { logOutUser } from '../../../redux/authSlice'
+import { unloadCurrentUser } from '../../../redux/usersSlice'
+import { RootState } from '../../../redux/store'
 
 import { StyledList } from './styles'
-import { useAppDispatch } from '../../Redux/hooks'
+import { useAppDispatch } from '../../../redux/hooks'
 
 interface MenuDeskProps {
   sx?: SxProps<Theme>

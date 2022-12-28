@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles'
 
-export const Container = styled('div')`
+export const StyledContainer = styled('div')`
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;

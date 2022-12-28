@@ -2,18 +2,18 @@ import { SetStateAction, useState } from 'react'
 
 import { Paper, Tabs, Tab, Box, Alert } from '@mui/material'
 
-import { Header } from '../../ui/Header/Header'
-import { Footer } from '../../ui/Footer/Footer'
-import { Cities } from '../../ui/Cities/Cities'
+import { Header } from '../../sections/Header/Header'
+import { Footer } from '../../sections/Footer/Footer'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Cities } from '../../sections/Cities/Cities'
+import { Activities } from '../../sections/Activities/Activities'
+import { Itineraries } from '../../sections/Itineraries/Itineraries'
+import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
 
-import Activities from '../../ui/Activities/Activities'
-import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
+import { useAppSelector } from '../../../redux/hooks'
+import { selectCurrentUser } from '../../../redux/usersSlice'
 
-import { useAppSelector } from '../../Redux/hooks'
 import { StyledListingPageContainer } from './styles'
-import { selectCurrentUser } from '../../Redux/usersSlice'
-import { BottomNav } from '../../ui/BottomNav/BottomNav'
-import { Itineraries } from '../../ui/Itineraries/Itineraries'
 
 export interface TabPanelProps {
   children?: React.ReactNode

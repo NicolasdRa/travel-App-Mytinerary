@@ -2,19 +2,6 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
-import PuffLoader from 'react-spinners/PuffLoader'
-
-import {
-  fetchActivityByTitle,
-  selectCurrentActivity,
-} from '../../Redux/activitiesSlice'
-
-import { Header } from '../../ui/Header/Header'
-import { BottomNav } from '../../ui/BottomNav/BottomNav'
-import { Footer } from '../../ui/Footer/Footer'
-import { ImageHeader } from '../../ui/Headers/ImageHeader'
-import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
-
 import {
   Avatar,
   Button,
@@ -28,10 +15,22 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import EuroIcon from '@mui/icons-material/Euro'
 import CreateIcon from '@mui/icons-material/Create'
 
-import { theme } from '../../Styles/Theme'
-import { Container } from './styles'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
-import { RootState } from '../../Redux/store'
+import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+import { Header } from '../../sections/Header/Header'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Footer } from '../../sections/Footer/Footer'
+import { ImageHeader } from '../../sections/Headers/ImageHeader'
+
+import {
+  fetchActivityByTitle,
+  selectCurrentActivity,
+} from '../../../redux/activitiesSlice'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
+import { RootState } from '../../../redux/store'
+
+import { theme } from '../../../theme/Theme'
+import { StyledContainer } from './styles'
+import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
 
 const ActivityPage = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('md'))
@@ -56,17 +55,13 @@ const ActivityPage = () => {
   const activity = useAppSelector(selectCurrentActivity)
 
   if (!activity) {
-    return (
-      <div className="loader">
-        <PuffLoader color="red" loading={true} size={80} />
-      </div>
-    )
+    return <CustomLoader loading={true} message="Activity Page" />
   }
 
   const { city, category, likes, duration, price, img, details } = activity
 
   return (
-    <Container>
+    <StyledContainer>
       <Header />
       <ImageHeader img={img} />
       <div className="content">
@@ -155,7 +150,7 @@ const ActivityPage = () => {
       </div>
       {matchesSm ? <BottomNav /> : <Footer />}
       {currentUser ? <CreateItineraryForm currentUser={currentUser} /> : null}
-    </Container>
+    </StyledContainer>
   )
 }
 

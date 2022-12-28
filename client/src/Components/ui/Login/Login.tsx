@@ -1,18 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom'
-
-import { Box, Button, TextField, Typography } from '@mui/material'
-import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
-import { logInUser, selectLoginLoading } from '../../Redux/authSlice'
-
-import { ForgotPasswordForm } from '../ForgotPasswordForm/ForgotPasswordForm'
-
-import { useTheme } from '@mui/material/styles'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
+
+import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
+import { ForgotPasswordForm } from '../../forms/ForgotPasswordForm/ForgotPasswordForm'
+
+import { logInUser, selectLoginLoading } from '../../../redux/authSlice'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 import { useForm } from '../../../hooks/useForm'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
+
 import { StyledPaper } from './styles'
 
 export const Login = () => {

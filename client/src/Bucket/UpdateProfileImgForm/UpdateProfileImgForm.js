@@ -16,12 +16,9 @@ import {
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 
 import { useImageCropper } from '../../hooks/useImageCropper'
-import { base64StringtoFile } from '../../Components/utils/imageUtils'
-import {
-  updateUserProfile,
-  selectCurrentUser,
-} from '../../Components/Redux/usersSlice'
-import ImageButtonRounded from '../../Components/ui/ImageButtonRounded/ImageButtonRounded'
+import { base64StringtoFile } from '../../utils/imageUtils'
+import { updateUserProfile, selectCurrentUser } from '../../redux/usersSlice'
+import ImageButtonRounded from '../../components/ui/ImageButtonRounded/ImageButtonRounded'
 
 import { useStyles } from './styles'
 

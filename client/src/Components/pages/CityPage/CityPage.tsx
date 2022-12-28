@@ -1,54 +1,51 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-import PuffLoader from 'react-spinners/PuffLoader'
+import { Typography, useMediaQuery } from '@mui/material'
 
-import { fetchCityByName, selectCurrentCity } from '../../Redux/citiesSlice'
-import { selectCurrentUser } from '../../Redux/usersSlice'
+import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+import { Header } from '../../sections/Header/Header'
+import { ImageHeader } from '../../sections/Headers/ImageHeader'
+import { BottomNav } from '../../sections/BottomNav/BottomNav'
+import { Footer } from '../../sections/Footer/Footer'
+import { CardGallery } from '../../ui/CardGallery/CardGallery'
+import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
+import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+
+import { fetchCityByName, selectCurrentCity } from '../../../redux/citiesSlice'
+import { selectCurrentUser } from '../../../redux/usersSlice'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 // import { getCitiesGeoDB } from '../../Redux/citiesSlice'
 
-import { CardGallery } from '../../ui/CardGallery/CardGallery'
-import { ImageHeader } from '../../ui/Headers/ImageHeader'
-import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
-import { CreateItineraryForm } from '../../ui/CreateItineraryForm/CreateItineraryForm'
-
-import { Typography } from '@mui/material'
+import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
-import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
-import { RootState } from '../../Redux/store'
 
-const CityPage = () => {
+export const CityPage: React.FC = () => {
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
 
+  // takes params to use in dispatch for single city to display
   const { city_name } = useParams<{ city_name?: string | undefined }>()
-  const currentUser = useAppSelector(
-    (state: RootState) => state.users.currentUser
-  )
-  const user = useAppSelector(selectCurrentUser)
-  const cities = useAppSelector((state: RootState) => state.cities.data)
+
+  const currentUser = useAppSelector(selectCurrentUser)
+  const city = useAppSelector(selectCurrentCity)
 
   // fetches data from DB
   useEffect(() => {
     dispatch(fetchCityByName(city_name))
   }, [])
 
-  const city = useAppSelector(selectCurrentCity)
-
   if (!city) {
-    // TODO: create custom loader with custom message passed as props for all screens
-    return (
-      <div className="loader">
-        <PuffLoader color="red" loading={true} size={80} />
-      </div>
-    )
+    return <CustomLoader loading={true} message="City Page" />
   }
 
   // variables for ui
-  const { _id: cityId, name, img, country, itineraries } = city
+  const { _id: cityId, name, img, country, itineraries, favourites } = city
 
   return (
     <StyledContainer>
+      <Header />
       <ImageHeader img={img} />
       <div className="container">
         <div className="city_title">
@@ -57,12 +54,12 @@ const CityPage = () => {
         </div>
         <div className="likes">
           <FavouriteComponent
-            readOnly={!user && true}
+            readOnly={!currentUser && true}
             sourceType="city"
             sourceId={cityId}
             //TODO: fix userId
-            userId={user ? user._id : ''}
-            amount={city.favourites.length}
+            userId={currentUser ? currentUser._id : ''}
+            amount={favourites.length}
           />
         </div>
       </div>
@@ -76,8 +73,7 @@ const CityPage = () => {
         <CardGallery data={itineraries} type="itineraries" />
       </div>
       {currentUser && <CreateItineraryForm currentUser={currentUser} />}
+      {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )
 }
-
-export default CityPage
