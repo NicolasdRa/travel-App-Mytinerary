@@ -4,22 +4,42 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { Link } from 'react-router-dom'
 import { StyledSmallCard } from './styles'
-import { Activity } from '../../../@types/types'
 
 interface ActivityCardSmallProps {
-  activity: Activity
+  img: string | undefined
+  source: 'itineraries' | 'cities' | 'activities'
+  // All other props
+  [x: string]: any
 }
 
-const ActivityCardSmall: React.FC<ActivityCardSmallProps> = ({
-  activity: { title, img },
+export const CardSmall: React.FC<ActivityCardSmallProps> = ({
+  source,
+  img,
+  ...rest
 }) => {
+  const { title, name } = rest
+
+  const getUrl = (source: 'itineraries' | 'cities' | 'activities') => {
+    const paths = {
+      activities: '/activitypage/',
+      itineraries: '/itinerarypage/',
+      cities: '/citypage/',
+    }
+
+    return `${paths[source]}${title}`
+  }
+
   return (
     <StyledSmallCard className="root">
       <CardActionArea>
-        <CardMedia className="media" image={img} title={title} />
+        <CardMedia
+          className="media"
+          image={img}
+          title={source === 'cities' ? name : title}
+        />
         <CardContent
           component={Link}
-          to={'/activitypage/' + title}
+          to={getUrl(source)}
           className="card_underlineNone"
         >
           <Typography
@@ -29,12 +49,10 @@ const ActivityCardSmall: React.FC<ActivityCardSmallProps> = ({
             component="h6"
             color="primary"
           >
-            {title}
+            {source === 'cities' ? name : title}
           </Typography>
         </CardContent>
       </CardActionArea>
     </StyledSmallCard>
   )
 }
-
-export default ActivityCardSmall

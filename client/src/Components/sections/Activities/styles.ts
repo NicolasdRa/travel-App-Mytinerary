@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles'
-import { Card, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 
 export const StyledGrid = styled(Grid)`
   padding-bottom: 3rem;
@@ -30,40 +30,5 @@ export const StyledGrid = styled(Grid)`
   .subtitle {
     margin: 1.5rem auto 0.5rem 1.5rem;
     text-align: start;
-  }
-`
-
-export const StyledGalleryContainer = styled('div')`
-  position: relative;
-  display: flex;
-  flex: 0 1 auto;
-  width: auto;
-  overflow-x: auto;
-  padding-left: 0.5rem;
-`
-
-export const StyledSmallCard = styled(Card)`
-  flex: 0 0 auto;
-  margin: 0.3rem;
-  min-width: 9rem;
-  max-width: 9rem;
-  padding: 0;
-
-  .media {
-    height: 6rem;
-    object-fit: cover;
-    min-width: 4rem;
-    border-radius: 3;
-  }
-
-  .card_underlineNone {
-    text-decoration: none;
-  }
-
-  .card_title {
-    padding: 0 0.5rem;
-    color: black;
-    text-decoration: none;
-    font-weight: 400;
   }
 `

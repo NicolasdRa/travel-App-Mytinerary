@@ -10,59 +10,65 @@ export const StyledCard = styled(Card)`
 export const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: row;
-  padding: 0.5rem 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0;
 
   .avatar {
     height: 2rem;
     width: 2rem;
-    margin: auto 0;
   }
 
   .header {
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    /* flex-grow: 1; */
+    align-items: start;
+    justify-content: start;
+    flex-grow: 1;
     margin-left: 1rem;
     text-align: start;
     height: 40px;
   }
 
-  .userName {
-    margin-left: 0.3rem;
+  .username {
     font-weight: bolder;
+    margin-left: 0.3rem;
   }
 
-  .ratingContainer {
+  .rating-container {
     display: flex;
     flex-direction: row;
   }
 
   .rating {
-    margin-right: 0.5rem;
     text-align: start;
+    margin-right: 0.2rem;
   }
 
   .date {
-    margin: 0 0.5rem 0 auto;
     align-self: flex-end;
     text-align: end;
+    margin-left: 1rem;
   }
+`
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 2;
-    padding-top: 0;
-    padding-bottom: 16px !important;
-  }
+export const StyledCardMessage = styled('div')`
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 16px !important;
+  padding-top: 0;
 
   .summary {
-    text-align: start;
     font-weight: bolder;
+    text-align: start;
+    margin-right: 0.5rem;
+
+    ::first-letter {
+      text-transform: capitalize;
+    }
   }
 
-  .description {
+  .description:first-letter {
     text-align: start;
+    text-transform: capitalize;
   }
 `

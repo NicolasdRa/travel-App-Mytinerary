@@ -19,7 +19,7 @@ export interface City {
   _id: string
   name: string
   img: string
-  country?: string
+  country: string
   itineraries: Itinerary[]
   favourites: Favourite[]
   guides?: User[]
@@ -49,6 +49,7 @@ export interface Itinerary {
     img: string
   }
   comments: Comment[]
+  cityName: string
 }
 
 export interface Activity {
@@ -61,6 +62,8 @@ export interface Activity {
   likes: number
   price?: string
   title: string | undefined
+  itinerary: Itinerary
+  cityName: string
 }
 
 export interface Favourite {

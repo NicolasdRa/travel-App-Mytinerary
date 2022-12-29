@@ -16,13 +16,13 @@ import { theme } from '../../../theme/Theme'
 import { Header } from '../../sections/Header/Header'
 import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
 import { ImageHeader } from '../../sections/Headers/ImageHeader'
-import UserItinerariesSmall from '../../sections/Itineraries/UserItinerariesSmall'
 import EditProfileForm from '../../forms/EditProfileForm/EditProfileForm'
 import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
 import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
 
 import { StyledContainer } from './styles'
 import { User } from '../../../@types/types'
+import { CardGallerySmall } from '../../ui/CardGallerySmall/CardGallerySmall'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -149,7 +149,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
         <TabPanel value={value} index={0}>
           {itineraries ? (
             <div className="gallery">
-              <UserItinerariesSmall currentUser={user} />
+              <CardGallerySmall items={itineraries} source={'itineraries'} />
             </div>
           ) : (
             <>

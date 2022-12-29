@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { activitiesUrl } from '../constants'
 import { RootState } from './store'
+import { Activity } from '../@types/types'
 
 // THUNKS
 export const fetchActivities = createAsyncThunk(
@@ -24,6 +25,7 @@ export const fetchActivityByTitle = createAsyncThunk(
       url: `${activitiesUrl}title/${title}`,
       responseType: 'json',
     })
+
     return res.data
   }
 )
@@ -42,7 +44,7 @@ const initialState: ActivitiesSlice = {
   loading: 'idle',
   status: '',
   results: '',
-  currentActivity: {},
+  currentActivity: null,
   data: [],
 }
 
@@ -69,7 +71,7 @@ const activitiesSlice = createSlice({
 
     builder.addCase(fetchActivities.fulfilled, (state, action) => {
       state.loading = 'done'
-      state.data = action.payload
+      state.data = action.payload.data
     })
 
     builder.addCase(fetchActivities.rejected, (state, action) => {
@@ -108,7 +110,13 @@ export const selectAllActivities = createSelector(
 
 export const selectCurrentActivity = createSelector(
   [selectActivity],
-  (activities) => activities
+  (currentActivity) => currentActivity
+)
+
+export const selectActivitiesForCity = createSelector(
+  [selectAllActivities, (state, cityName) => cityName],
+  (activities: Activity[], cityName) =>
+    activities.filter((activity) => activity.cityName === cityName)
 )
 
 export const selectActivitiesSortedByLikes = createSelector(

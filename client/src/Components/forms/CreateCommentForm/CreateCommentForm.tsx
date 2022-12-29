@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import CreateIcon from '@mui/icons-material/Create'
 
-import { StyledContainer } from './styles'
+import { StyledContainer, StyledDialog } from './styles'
 import { useForm } from '../../../hooks/useForm'
 
 import { addComment } from '../../../redux/commentsSlice'
@@ -85,22 +85,18 @@ const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         Post Review
         <CreateIcon color="secondary" className="createIcon" />
       </Button>
-      <Dialog
+      <StyledDialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className="modal"
       >
         <form>
           <DialogTitle id="form-dialog-title" className="title">
-            <Typography variant="h6">Share your experience</Typography>
+            Share your experience
           </DialogTitle>
-          <DialogTitle id="form-dialog-subtitle" className="subtitle">
-            <Typography variant="body2">
-              Help the community with your review
-            </Typography>
-          </DialogTitle>
-
+          <Typography variant="body1" color="inherit" className="subtitle">
+            Help the community with your review
+          </Typography>
           <DialogContent>
             <div className="ratingContainer">
               <Typography variant="body2" className="ratingLabel">
@@ -161,7 +157,7 @@ const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
             </Button>
           </DialogActions>
         </form>
-      </Dialog>
+      </StyledDialog>
     </StyledContainer>
   )
 }

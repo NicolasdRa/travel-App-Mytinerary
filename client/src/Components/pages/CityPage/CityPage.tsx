@@ -1,16 +1,17 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Typography, useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
 
 import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
 import { Header } from '../../sections/Header/Header'
 import { ImageHeader } from '../../sections/Headers/ImageHeader'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
-import { CardGallery } from '../../ui/CardGallery/CardGallery'
-import { FavouriteComponent } from '../../ui/FavouriteComponent/FavouriteComponent'
 import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
+import { PageGalleryCard } from '../../ui/PageGalleryCard/PageGalleryCard'
+import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
 
 import { fetchCityByName, selectCurrentCity } from '../../../redux/citiesSlice'
 import { selectCurrentUser } from '../../../redux/usersSlice'
@@ -20,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
+import { selectActivitiesForCity } from '../../../redux/activitiesSlice'
 
 export const CityPage: React.FC = () => {
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
@@ -31,6 +33,10 @@ export const CityPage: React.FC = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const city = useAppSelector(selectCurrentCity)
 
+  const activities = useAppSelector((state) =>
+    selectActivitiesForCity(state, city_name)
+  )
+
   // fetches data from DB
   useEffect(() => {
     dispatch(fetchCityByName(city_name))
@@ -41,37 +47,47 @@ export const CityPage: React.FC = () => {
   }
 
   // variables for ui
-  const { _id: cityId, name, img, country, itineraries, favourites } = city
+  const {
+    _id: cityId,
+    name,
+    img,
+    country,
+    itineraries,
+    // favourites,
+    // ratingAvg,
+    // comments,
+    // details,
+  } = city
 
   return (
     <StyledContainer>
       <Header />
       <ImageHeader img={img} />
-      <div className="container">
-        <div className="city_title">
-          <Typography variant="overline">{country}</Typography>
-          <Typography variant="h5">{name}</Typography>
-        </div>
-        <div className="likes">
-          <FavouriteComponent
-            readOnly={!currentUser && true}
-            sourceType="city"
-            sourceId={cityId}
-            //TODO: fix userId
-            userId={currentUser ? currentUser._id : ''}
-            amount={favourites.length}
-          />
-        </div>
-      </div>
-      <div className="gallery">
-        {itineraries.length > 0 && (
-          <Typography className="subtitle">
-            Available itineraries for {name}
-          </Typography>
-        )}
-
-        <CardGallery data={itineraries} type="itineraries" />
-      </div>
+      <PageInfoCard
+        user={currentUser}
+        itemId={cityId}
+        overline={country}
+        title={name}
+        source={'city'}
+        // favourites={favourites}
+        // ratingAvg={ratingAvg}
+        // description={details}
+      />
+      <PageGalleryCard
+        title={`"${name}"`}
+        items={itineraries}
+        source={'itineraries'}
+      />
+      <PageGalleryCard
+        title={`"${name}"`}
+        items={activities}
+        source={'activities'}
+      />
+      {/* <PageReviewsCard
+        comments={comments}
+        currentUser={currentUser}
+        itemId={cityId}
+      /> */}
       {currentUser && <CreateItineraryForm currentUser={currentUser} />}
       {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>

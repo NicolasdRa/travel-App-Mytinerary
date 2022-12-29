@@ -1,3 +1,4 @@
+import { Dialog } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
@@ -14,31 +15,30 @@ export const StyledContainer = styled('div')`
     display: flex;
     text-transform: none;
     align-content: flex-end;
-    margin-left: -8px;
-    padding: 0 1rem;
   }
+`
 
-  .modal {
-    display: flex;
-    justify-content: center;
-  }
+export const StyledDialog = styled(Dialog)`
+  display: flex;
+  justify-content: center;
 
   .title {
-    padding: 1.5rem 0 0.5rem 0;
+    padding: 1rem 0 0 0;
     text-align: center;
+    font-size: 1.6rem;
   }
 
   .subtitle {
-    margin: 0 1rem;
-    padding: 0 0 0.5rem 0;
+    padding: 0;
     text-align: center;
   }
 
   .ratingContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin: 0.5rem 0;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 
   .ratingLabel {
@@ -51,7 +51,7 @@ export const StyledContainer = styled('div')`
   }
 
   .input_field {
-    margin: 0.8rem 0;
+    margin: 0.5rem 0;
   }
 
   .text {
@@ -60,6 +60,6 @@ export const StyledContainer = styled('div')`
   }
 
   .btns {
-    padding-left: 1rem;
+    margin-botttom: 1rem;
   }
 `

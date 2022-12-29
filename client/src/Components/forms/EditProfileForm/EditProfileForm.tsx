@@ -129,7 +129,6 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
           <DialogTitle id="form-dialog-title" className="title">
             Edit your profile info
           </DialogTitle>
-
           <Typography variant="body1" color="inherit" className="subtitle">
             Change your image or edit your info
           </Typography>
