@@ -39,16 +39,15 @@ export const StyledGalleryContainer = styled('div')`
   flex: 0 1 auto;
   width: auto;
   overflow-x: auto;
+  padding-left: 0.5rem;
 `
 
-export const StyledCard = styled(Card)`
-  .root {
-    flex: 0 0 auto;
-    margin: 0.3rem;
-    min-width: 8rem;
-    max-width: 8rem;
-    padding: 0;
-  }
+export const StyledSmallCard = styled(Card)`
+  flex: 0 0 auto;
+  margin: 0.3rem;
+  min-width: 9rem;
+  max-width: 9rem;
+  padding: 0;
 
   .media {
     height: 6rem;
@@ -62,7 +61,7 @@ export const StyledCard = styled(Card)`
   }
 
   .card_title {
-    padding: 0 0.15rem;
+    padding: 0 0.5rem;
     color: black;
     text-decoration: none;
     font-weight: 400;

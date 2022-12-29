@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import ItineraryCardSmall from './ItineraryCardSmall'
 
 import { StyledItinerariesContainer } from './styles'
-import { User } from '../../../../../client-back/src/Components/Redux/types'
+import { User } from '../../../@types/types'
 
 interface UserItinerariesSmallProps {
   currentUser: User

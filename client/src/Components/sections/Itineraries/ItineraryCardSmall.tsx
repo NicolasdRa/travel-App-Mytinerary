@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 
-import { Link } from 'react-router-dom'
-import { Itinerary } from '../../../../../client-back/src/Components/Redux/types'
+import { Itinerary } from '../../../@types/types'
+
 import { StyledCard } from './styles'
 
 interface ItineraryCardSmallProps {

@@ -207,43 +207,19 @@ export const selectRandomItinerary = createSelector(
   (items) => items[Math.floor(Math.random() * items.length)]
 )
 
-// FIXME: this selector is not working
-// export const selectAllItinerariesForCity = createSelector(
-//   [selectAllItineraries, (state, city) => city],
-//   (itineraries, city) =>
-//     itineraries && city
-//       ? itineraries.filter((itinerary) => itinerary.city === city)
-//       : []
-// )
+// This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analise if it is worth doing it
+export const selectItineraryByTitle = createSelector(
+  [selectAllItineraries, (state, title) => title],
+  (itineraries, title) =>
+    itineraries.filter((itinerary) => itinerary.title === title)[0]
+)
 
-// FIXME: this selector is not working
-// export const selectItineraryByTitle = createSelector(
-//   [selectAllItineraries, (state, title) => title],
-//   (itineraries, title) =>
-//     itineraries && title
-//       ? itineraries.filter((itinerary) => itinerary.title === title)
-//       : []
-// )
-
-// FIXME: this selector is not working
-// export const selectItinerariesByUser = createSelector(
-//   [selectAllItineraries, (state, userName) => userName],
-//   (itineraries, userName) =>
-//     itineraries && userName
-//       ? itineraries.filter(
-//           (itinerary) => itinerary.author.userName === userName
-//         )
-//       : []
-// )
-
-// FIXME: this selector is not working
-// export const selectItinerariesByUserId = createSelector(
-//   [selectAllItineraries, (state, id) => id],
-//   (itineraries, id) =>
-//     itineraries && id
-//       ? itineraries.filter((itinerary) => itinerary.author._id === id)
-//       : []
-// )
+// This selector is working fine => DO I NEED IT?
+export const selectItinerariesByUserId = createSelector(
+  [selectAllItineraries, (state, id) => id],
+  (itineraries, id) =>
+    itineraries.filter((itinerary) => itinerary.author._id === id)
+)
 
 // Extract and export each action creator by name
 export const { updateItineraryComments, updateItineraryActivities } =

@@ -1,36 +1,10 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
-  .loader {
-    display: flex;
-    margin: 35vh auto;
-  }
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 auto;
-    width: 100%;
-    margin-bottom: 56px;
-  }
-
-  .header {
-    height: 20rem;
-    width: 100%;
-  }
-
   .content {
     display: flex;
     flex-direction: column;
     margin: 0 1rem;
-  }
-
-  .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
   }
 
   .overline {
@@ -40,6 +14,14 @@ export const StyledContainer = styled('div')`
     margin-top: 0.8rem;
     padding: 0 1rem;
     font-size: 0.7rem;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
   }
 
   .city_title {
@@ -53,16 +35,6 @@ export const StyledContainer = styled('div')`
     height: 1.5rem;
   }
 
-  .likes_btn {
-  }
-
-  ,
-  .extra_info {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 1rem;
-  }
-
   .ratingContainer {
     display: flex;
     flex-direction: row;
@@ -70,6 +42,12 @@ export const StyledContainer = styled('div')`
 
   .ratingNumber {
     margin-left: 0.5rem;
+  }
+
+  .extra_info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
   }
 
   .user_info {
@@ -153,11 +131,6 @@ export const StyledContainer = styled('div')`
 
   .reviewText {
     margin-right: 0.3rem;
-  }
-
-  .expandMoreBtn {
-    padding: 0;
-    margin-right: auto;
   }
 
   .expand {

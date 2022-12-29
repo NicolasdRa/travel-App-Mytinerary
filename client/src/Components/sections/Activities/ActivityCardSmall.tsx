@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { Link } from 'react-router-dom'
-import { StyledCard } from './styles'
+import { StyledSmallCard } from './styles'
 import { Activity } from '../../../@types/types'
 
 interface ActivityCardSmallProps {
@@ -14,7 +14,7 @@ const ActivityCardSmall: React.FC<ActivityCardSmallProps> = ({
   activity: { title, img },
 }) => {
   return (
-    <StyledCard className="root">
+    <StyledSmallCard className="root">
       <CardActionArea>
         <CardMedia className="media" image={img} title={title} />
         <CardContent
@@ -33,7 +33,7 @@ const ActivityCardSmall: React.FC<ActivityCardSmallProps> = ({
           </Typography>
         </CardContent>
       </CardActionArea>
-    </StyledCard>
+    </StyledSmallCard>
   )
 }
 

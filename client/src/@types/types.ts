@@ -35,8 +35,8 @@ export interface Itinerary {
   title: string
   city: City
   category?: string
-  duration?: number
-  price?: number
+  duration?: string
+  price?: string
   img: string
   details?: string
   activities: Activity[]
@@ -56,10 +56,10 @@ export interface Activity {
   category: string
   city: City
   details?: string
-  duration: number
+  duration?: string
   img?: string
   likes: number
-  price: number
+  price?: string
   title: string | undefined
 }
 

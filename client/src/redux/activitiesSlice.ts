@@ -122,9 +122,9 @@ export const selectActivityByTitle = createSelector(
 )
 
 export const selectActivitiesForItinerary = createSelector(
-  [selectAllActivities, (state, itineraryId) => itineraryId],
-  (activities, itineraryId) =>
-    activities.filter((activity) => activity.itinerary === itineraryId)
+  [selectAllActivities, (state, title) => title],
+  (activities, title) =>
+    activities.filter((activity) => activity.itinerary.title === title)
 )
 
 export const selectRandomActivity = createSelector(
