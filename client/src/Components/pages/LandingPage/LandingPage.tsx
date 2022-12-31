@@ -31,7 +31,7 @@ export const LandingPage = () => {
             <Typography className="galleryTitle">
               Most Popular Mytineraries
             </Typography>
-            <CardGallery data={itineraries} type="itineraries" />
+            <CardGallery items={itineraries} source="itineraries" />
           </Paper>
         </Grid>
       </Grid>

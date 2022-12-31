@@ -1,4 +1,4 @@
-import { Activity, City, Itinerary } from '../../../@types/types'
+import { Activity, City, Favourite, Itinerary } from '../../../@types/types'
 import { CardSmall } from '../CardSmall/CardSmall'
 import { StyledGalleryContainer } from './styles'
 
@@ -14,9 +14,9 @@ export const CardGallerySmall: React.FC<CardGallerySmallProps> = ({
   return (
     <StyledGalleryContainer>
       {items.map((item) => {
-        const { _id, img, ...rest } = item
+        const { _id, ...rest } = item
 
-        return <CardSmall source={source} key={_id} img={img} {...rest} />
+        return <CardSmall source={source} key={_id} {...rest} />
       })}
     </StyledGalleryContainer>
   )

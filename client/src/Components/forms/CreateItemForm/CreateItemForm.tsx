@@ -1,47 +1,64 @@
 import { useState, useEffect } from 'react'
 
 import {
+  Backdrop,
   Button,
   DialogActions,
   DialogContent,
-  Fab,
   FormControl,
   Grid,
   MenuItem,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
 
 import { UploadCoverImgForm } from '../UploadCoverImgForm/UploadCoverImgForm'
 
 import { updateUserItineraries } from '../../../redux/usersSlice'
-import { addItinerary } from '../../../redux/itinerariesSlice'
-import { CategoryOptions, PriceOptions, DurationOptions } from './data'
+import {
+  addItinerary,
+  selectItinerariesByUserId,
+} from '../../../redux/itinerariesSlice'
+import { categoryOptions, priceOptions, durationOptions } from './data'
 import { base64StringtoFile } from '../../../utils/imageUtils'
 
 import { useForm } from '../../../hooks/useForm'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
-import { City, User } from '../../../@types/types'
+import { City, Itinerary, User } from '../../../@types/types'
 import { StyledDialog, StyledMainContainer } from './styles'
 import { selectAllCities } from '../../../redux/citiesSlice'
+import { CustomDial } from '../../ui/CustomDial/CustomDial'
+import { toggleAddItemForm } from '../../../redux/uiSlice'
+import { addActivity } from '../../../redux/activitiesSlice'
+import { theme } from '../../../theme/Theme'
 
-interface CreateItineraryFormProps {
+interface CreateItemFormProps {
   currentUser: User
 }
 
-export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
+export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   currentUser,
 }) => {
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
 
+  const backdropOpen = useAppSelector((state) => state.ui.backdrop.open)
+
+  // handle form open & type state
+  const open = useAppSelector((state) => state.ui.forms.addItemForm.open)
+  const type = useAppSelector((state) => state.ui.forms.addItemForm.type)
+
   // Component level state
-  const [open, setOpen] = useState(false)
   const [file, setFile] = useState<string | Blob>('')
   const [previewFile, setPreviewFile] = useState(null)
   const [cityOptions, setCityOptions] = useState<City[]>([])
+  const [itineraryOptions, setItineraryOptions] = useState<Itinerary[]>([])
 
   const cities = useAppSelector<City[]>(selectAllCities)
+  const itineraries = useAppSelector<Itinerary[]>((state) =>
+    selectItinerariesByUserId(state, currentUser._id)
+  )
 
   // useForm hook
   const {
@@ -50,22 +67,36 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
     reset,
   } = useForm({
     city: '',
+    itinerary: '',
     title: '',
     category: '',
     price: '€',
-    duration: 1,
+    duration: '0.5',
     details: '',
   })
 
-  const { city, title, category, price, duration, details } = formValues
-  const { _id } = currentUser
+  const { itinerary, city, title, category, price, duration, details } =
+    formValues
+  const { _id: userId } = currentUser
 
+  // handles city options
   useEffect(() => {
     if (cities.length > 0) {
       setCityOptions(cities)
     }
   }, [])
 
+  // handles itinerary options based on city selection
+  useEffect(() => {
+    if (itineraries.length > 0) {
+      const filterUserItinerariesByCity = itineraries.filter(
+        (item) => item.cityName === city
+      )
+      setItineraryOptions(filterUserItinerariesByCity)
+    }
+  }, [city, itineraries])
+
+  // handles preview file
   useEffect(() => {
     if (previewFile) {
       const file = base64StringtoFile(previewFile, 'croppedImg.png')
@@ -77,19 +108,51 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('img', file)
-    formData.append('upload_preset', 'travel-app')
-    formData.append('city', city)
-    formData.append('title', title)
-    formData.append('category', category)
-    formData.append('price', price)
-    formData.append('duration', duration)
-    formData.append('details', details)
-    formData.append('author', _id)
 
-    dispatch(addItinerary(formData))
-    dispatch(updateUserItineraries({ ...formValues, img: previewFile }))
-    setOpen(false)
+    if (type === 'itinerary') {
+      formData.append('img', file)
+      formData.append('upload_preset', 'travel-app')
+      formData.append(
+        'city',
+        cities.filter((item) => item.name === city)[0]._id
+      )
+      formData.append('cityName', city)
+      formData.append('title', title)
+      formData.append('category', category)
+      formData.append('price', price)
+      formData.append('duration', duration)
+      formData.append('details', details)
+      formData.append('author', userId)
+
+      dispatch(addItinerary(formData))
+      dispatch(updateUserItineraries({ ...formValues, img: previewFile }))
+      dispatch(toggleAddItemForm('itinerary'))
+    }
+
+    if (type === 'activity') {
+      formData.append('img', file)
+      formData.append('upload_preset', 'travel-app')
+      formData.append('cityName', city)
+      formData.append('title', title)
+      formData.append('category', category)
+      formData.append('price', price)
+      formData.append('duration', duration)
+      formData.append('details', details)
+      formData.append(
+        'city',
+        cities.filter((item) => item.name === city)[0]._id
+      )
+      itinerary &&
+        formData.append(
+          'itinerary',
+          itineraries.filter((item) => item.title === itinerary)[0]._id
+        )
+      formData.append('author', userId)
+
+      dispatch(addActivity(formData))
+      dispatch(toggleAddItemForm('activity'))
+    }
+
     reset()
     setPreviewFile(null)
   }
@@ -100,24 +163,15 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
     setPreviewFile(null)
   }
 
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
   const handleClose = () => {
-    setOpen(false)
+    dispatch(toggleAddItemForm(type))
+    reset()
   }
 
   return (
     <StyledMainContainer>
-      <Fab
-        color="secondary"
-        aria-label="add"
-        onClick={handleClickOpen}
-        className="add_btn"
-      >
-        <AddIcon />
-      </Fab>
+      {mdDown && <Backdrop open={backdropOpen} />}
+      <CustomDial />
       <StyledDialog
         //   TransitionComponent={Transition}
         //   keepMounted
@@ -127,12 +181,11 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
       >
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Typography variant="h6" color="primary" className="title">
-            Create Your Itinerary
+            Create Your {type}
           </Typography>
           <DialogContent className="content">
             <Typography variant="body2" className="subtitle">
-              Add details, a photo and submit. You can add activities from the
-              itinerary page.
+              Add details, a photo and submit.
             </Typography>
             <FormControl className="formControl">
               <TextField
@@ -152,6 +205,26 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                 ))}
               </TextField>
             </FormControl>
+            {type === 'activity' && (
+              <FormControl className="formControl">
+                <TextField
+                  required
+                  select
+                  size="small"
+                  className="select"
+                  label="Choose an itinerary"
+                  name="itinerary"
+                  value={itinerary}
+                  onChange={handleInputChange}
+                >
+                  {itineraryOptions.map((option, index) => (
+                    <MenuItem key={index} value={option.title}>
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>
+            )}
             <TextField
               size="small"
               required
@@ -170,6 +243,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                 <FormControl className="formControl">
                   <TextField
                     required
+                    select
                     size="small"
                     className="select"
                     label="Category"
@@ -177,7 +251,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                     value={category}
                     onChange={handleInputChange}
                   >
-                    {CategoryOptions.map((option, index) => (
+                    {categoryOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
@@ -189,6 +263,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                 <FormControl className="formControl">
                   <TextField
                     required
+                    select
                     size="small"
                     className="select"
                     label="Price"
@@ -196,7 +271,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                     value={price}
                     onChange={handleInputChange}
                   >
-                    {PriceOptions.map((option, index) => (
+                    {priceOptions.map((option, index) => (
                       <MenuItem key={index} id="price" value={option}>
                         {option}
                       </MenuItem>
@@ -208,6 +283,7 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                 <FormControl className="formControl">
                   <TextField
                     required
+                    select
                     size="small"
                     className="select"
                     label="Duration"
@@ -215,12 +291,12 @@ export const CreateItineraryForm: React.FC<CreateItineraryFormProps> = ({
                     value={duration}
                     onChange={handleInputChange}
                   >
-                    {DurationOptions.map((option, index) => (
+                    {durationOptions.map((option, index) => (
                       <MenuItem
                         key={index}
                         id="duration"
-                        value={`${option}hs`}
-                      >{`${option}hs`}</MenuItem>
+                        value={option}
+                      >{`${option} hs`}</MenuItem>
                     ))}
                   </TextField>
                 </FormControl>

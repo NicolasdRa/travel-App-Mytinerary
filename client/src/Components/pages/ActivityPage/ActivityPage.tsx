@@ -8,7 +8,7 @@ import { Header } from '../../sections/Header/Header'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
 import { ImageHeader } from '../../sections/Headers/ImageHeader'
-import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
 import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
 import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
 
@@ -82,7 +82,7 @@ export const ActivityPage: React.FC = () => {
         itemId={_id}
       />
       {matchesSm ? <BottomNav /> : <Footer />}
-      {currentUser ? <CreateItineraryForm currentUser={currentUser} /> : null}
+      {currentUser ? <CreateItemForm currentUser={currentUser} /> : null}
     </StyledContainer>
   )
 }

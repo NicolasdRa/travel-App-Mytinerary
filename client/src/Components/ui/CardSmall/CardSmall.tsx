@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import { StyledSmallCard } from './styles'
 
 interface ActivityCardSmallProps {
-  img: string | undefined
   source: 'itineraries' | 'cities' | 'activities'
   // All other props
   [x: string]: any
@@ -14,10 +13,9 @@ interface ActivityCardSmallProps {
 
 export const CardSmall: React.FC<ActivityCardSmallProps> = ({
   source,
-  img,
   ...rest
 }) => {
-  const { title, name } = rest
+  const { img, title, name } = rest
 
   const getUrl = (source: 'itineraries' | 'cities' | 'activities') => {
     const paths = {

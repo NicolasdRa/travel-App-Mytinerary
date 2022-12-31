@@ -9,6 +9,7 @@ export interface User {
   firstName: string
   img: string
   itineraries: Itinerary[]
+  activities: Activity[]
   lastName: string
   name: string
   password: string
@@ -64,6 +65,11 @@ export interface Activity {
   title: string | undefined
   itinerary: Itinerary
   cityName: string
+  author: {
+    id: string
+    userName: string
+    img: string
+  }
 }
 
 export interface Favourite {

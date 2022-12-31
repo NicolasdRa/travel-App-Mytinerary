@@ -72,8 +72,8 @@ export const Cities = () => {
       </Grid>
       <Grid item xs={10}>
         <CardGallery
-          data={filteredCities ? filteredCities : cities}
-          type="cities"
+          items={filteredCities ? filteredCities : cities}
+          source="cities"
         />
       </Grid>
     </StyledGrid>

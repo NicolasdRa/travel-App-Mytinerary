@@ -33,7 +33,7 @@ interface Values {
   }
 }
 
-const getValue = (type: 'cities' | 'itineraries' | 'activities') => {
+const getValue = (source: 'cities' | 'itineraries' | 'activities') => {
   const values: Values = {
     cities: {
       link: '/citypage/',
@@ -48,22 +48,23 @@ const getValue = (type: 'cities' | 'itineraries' | 'activities') => {
       sourceType: 'activity',
     },
   }
-  return values[type]
+  return values[source]
 }
 
 interface CustomCardProps {
-  data: any
-  type: 'cities' | 'itineraries' | 'activities'
+  source: 'itineraries' | 'cities' | 'activities'
+  // All other props
+  [x: string]: any
 }
 
-export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
+export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
   const user = useSelector(selectCurrentUser)
 
   const { _id, name, country, title, cityName, img, duration, author, price } =
-    data
+    rest
 
-  const link = getValue(type).link
-  const sourceType = getValue(type).sourceType
+  const link = getValue(source).link
+  const sourceType = getValue(source).sourceType
 
   if (!img) {
     return (
@@ -94,9 +95,9 @@ export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
             color="textSecondary"
             className="overline"
           >
-            {type === 'cities' && country}
-            {type === 'itineraries' && cityName}
-            {type === 'activities' && cityName}
+            {source === 'cities' && country}
+            {source === 'itineraries' && cityName}
+            {source === 'activities' && cityName}
           </Typography>
           <div className="likesBtn">
             <FavouriteComponent
@@ -108,10 +109,10 @@ export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
         </div>
 
         <Typography variant="h6" color="primary" className="title">
-          {type === 'cities' ? name : title}
+          {source === 'cities' ? name : title}
         </Typography>
 
-        {(type === 'itineraries' || type === 'activities') && (
+        {(source === 'itineraries' || source === 'activities') && (
           <div className="authorInfo">
             <Avatar className="avatar" src={author ? author.img : 'anonymous'}>
               {author ? author.userName : 'anonymous'}
@@ -126,7 +127,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
             </Typography>
           </div>
         )}
-        {(type === 'itineraries' || type === 'activities') && (
+        {(source === 'itineraries' || source === 'activities') && (
           <div className="additionalInfo">
             <div className="duration">
               <AccessTimeIcon className="icons" />
@@ -153,7 +154,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ data, type }) => {
           size="small"
           color="secondary"
           component={Link}
-          to={type === 'cities' ? `${link}${name}` : `${link}${title}`}
+          to={source === 'cities' ? `${link}${name}` : `${link}${title}`}
           className="textBtn"
         >
           View more

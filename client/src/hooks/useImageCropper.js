@@ -31,9 +31,8 @@ export const useImageCropper = () => {
         croppedAreaPixels,
         rotation
       )
-      console.log('donee')
-      setCroppedImage(croppedImage)
       // console.log('donee', { croppedImage })
+      setCroppedImage(croppedImage)
     } catch (e) {
       console.error(e)
     }

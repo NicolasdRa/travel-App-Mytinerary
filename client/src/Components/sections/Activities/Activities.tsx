@@ -29,7 +29,7 @@ export const Activities = () => {
     // itinerary filter
     if (string !== '') {
       const filtered: Activity[] = activities.filter((activity) =>
-        activity.city.toLowerCase().startsWith(string)
+        activity.cityName.toLowerCase().startsWith(string)
       )
       setFilteredActivities(filtered)
     }
@@ -58,7 +58,7 @@ export const Activities = () => {
       <Grid item xs={12} container direction="column" justifyContent="center">
         <ListingHeader
           title={headerActivity?.title}
-          cityName={headerActivity?.city.name}
+          cityName={headerActivity?.cityName}
           img={headerActivity?.img}
         />
         <Paper elevation={2} className="searchbarContainer">
@@ -82,8 +82,8 @@ export const Activities = () => {
       </Grid>
       <Grid item xs={12} lg={12}>
         <CardGallery
-          data={filteredActivities ? filteredActivities : activities}
-          type="activities"
+          items={filteredActivities ? filteredActivities : activities}
+          source="activities"
         />
       </Grid>
     </StyledGrid>

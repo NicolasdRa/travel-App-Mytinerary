@@ -9,7 +9,7 @@ import { ImageHeader } from '../../sections/Headers/ImageHeader'
 import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
 import { PageGalleryCard } from '../../ui/PageGalleryCard/PageGalleryCard'
 import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
-import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
 
@@ -99,7 +99,7 @@ export const ItineraryPage: React.FC = () => {
         currentUser={currentUser}
         itemId={itineraryId}
       />
-      {currentUser && <CreateItineraryForm currentUser={currentUser} />}
+      {currentUser && <CreateItemForm currentUser={currentUser} />}
       {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )

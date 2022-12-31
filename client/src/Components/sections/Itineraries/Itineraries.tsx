@@ -82,8 +82,8 @@ export const Itineraries = () => {
       </Grid>
       <Grid item xs={12}>
         <CardGallery
-          data={filteredItineraries ? filteredItineraries : itineraries}
-          type="itineraries"
+          items={filteredItineraries ? filteredItineraries : itineraries}
+          source="itineraries"
         />
       </Grid>
     </StyledGrid>

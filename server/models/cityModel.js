@@ -37,7 +37,7 @@ const citySchema = new mongoose.Schema(
   }
 )
 
-// Virtual populate (to populate comments which in turn hold the reference to itineraries)
+// Virtual populate (to populate favourites & itineraries which in turn hold a reference to a city)
 citySchema.virtual('favourites', {
   ref: 'Favourite',
   localField: '_id',

@@ -5,26 +5,45 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 // INTERFACE
 interface UiSlice {
   forms: {
-    openLogInForm: boolean
-    openSignUpForm: boolean
+    logInForm: {
+      open: boolean
+    }
+    signUpForm: {
+      open: boolean
+    }
+    addItemForm: {
+      open: boolean
+      type: string | undefined
+    }
   }
   snackBar: {
     open: boolean
     severity: string
     msg: string
   }
+  backdrop: {
+    open: boolean
+  }
 }
 
 // INITIAL STATE
 const initialState: UiSlice = {
   forms: {
-    openLogInForm: false,
-    openSignUpForm: false,
+    logInForm: { open: false },
+    signUpForm: { open: false },
+    addItemForm: {
+      open: false,
+      type: undefined,
+    },
   },
+
   snackBar: {
     open: false,
     severity: '',
     msg: '',
+  },
+  backdrop: {
+    open: false,
   },
 }
 
@@ -34,18 +53,38 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types
-    openLogInForm(state) {
-      state.forms.openLogInForm = true
+    toggleLogInForm(state) {
+      const open = state.forms.logInForm.open
+
+      state.forms.logInForm.open = !open
     },
-    closeLogInForm(state) {
-      state.forms.openLogInForm = false
+
+    toggleSignUpForm(state) {
+      const open = state.forms.logInForm.open
+
+      state.forms.signUpForm.open = !open
     },
-    openSignUpForm(state) {
-      state.forms.openSignUpForm = true
+
+    toggleBackdrop(state) {
+      const open = state.backdrop.open
+
+      state.backdrop.open = !open
     },
-    closeSignUpForm(state) {
-      state.forms.openSignUpForm = false
+
+    toggleAddItemForm: {
+      reducer(state, action: PayloadAction<{ type: string }>) {
+        const open = state.forms.addItemForm.open
+
+        state.forms.addItemForm.open = !open
+        state.forms.addItemForm.type = action.payload.type
+      },
+      prepare(type) {
+        return {
+          payload: { type },
+        }
+      },
     },
+
     toggleSnackBar: {
       reducer(state, action: PayloadAction<{ severity: string; msg: string }>) {
         const open = state.snackBar.open
@@ -65,11 +104,11 @@ const uiSlice = createSlice({
 
 // Extract and export each action creator by name
 export const {
-  openLogInForm,
-  closeLogInForm,
-  openSignUpForm,
-  closeSignUpForm,
+  toggleLogInForm,
+  toggleSignUpForm,
+  toggleBackdrop,
   toggleSnackBar,
+  toggleAddItemForm,
 } = uiSlice.actions
 
 // // Export the reducer as a default export

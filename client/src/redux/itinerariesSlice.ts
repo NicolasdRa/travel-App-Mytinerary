@@ -207,18 +207,23 @@ export const selectRandomItinerary = createSelector(
   (items) => items[Math.floor(Math.random() * items.length)]
 )
 
+export const selectItinerariesForCity = createSelector(
+  [selectAllItineraries, (state, cityName) => cityName],
+  (itineraries: Itinerary[], cityName) =>
+    itineraries.filter((item) => item.cityName === cityName)
+)
+
+export const selectItinerariesByUserId = createSelector(
+  [selectAllItineraries, (state, id) => id],
+  (itineraries, id) =>
+    itineraries.filter((itinerary) => itinerary.author._id === id)
+)
+
 // This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analise if it is worth doing it
 export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
   (itineraries, title) =>
     itineraries.filter((itinerary) => itinerary.title === title)[0]
-)
-
-// This selector is working fine => DO I NEED IT?
-export const selectItinerariesByUserId = createSelector(
-  [selectAllItineraries, (state, id) => id],
-  (itineraries, id) =>
-    itineraries.filter((itinerary) => itinerary.author._id === id)
 )
 
 // Extract and export each action creator by name

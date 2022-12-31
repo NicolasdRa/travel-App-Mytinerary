@@ -8,7 +8,7 @@ import { Header } from '../../sections/Header/Header'
 import { ImageHeader } from '../../sections/Headers/ImageHeader'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
-import { CreateItineraryForm } from '../../forms/CreateItineraryForm/CreateItineraryForm'
+import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
 import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
 import { PageGalleryCard } from '../../ui/PageGalleryCard/PageGalleryCard'
 import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
 import { selectActivitiesForCity } from '../../../redux/activitiesSlice'
+import { selectItinerariesForCity } from '../../../redux/itinerariesSlice'
 
 export const CityPage: React.FC = () => {
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
@@ -33,12 +34,18 @@ export const CityPage: React.FC = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const city = useAppSelector(selectCurrentCity)
 
+  const itineraries = useAppSelector((state) =>
+    selectItinerariesForCity(state, city_name)
+  )
+
   const activities = useAppSelector((state) =>
     selectActivitiesForCity(state, city_name)
   )
 
   // fetches data from DB
   useEffect(() => {
+    console.log('City page rendered')
+
     dispatch(fetchCityByName(city_name))
   }, [])
 
@@ -52,7 +59,7 @@ export const CityPage: React.FC = () => {
     name,
     img,
     country,
-    itineraries,
+    // itineraries,
     // favourites,
     // ratingAvg,
     // comments,
@@ -88,7 +95,7 @@ export const CityPage: React.FC = () => {
         currentUser={currentUser}
         itemId={cityId}
       /> */}
-      {currentUser && <CreateItineraryForm currentUser={currentUser} />}
+      {currentUser && <CreateItemForm currentUser={currentUser} />}
       {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )

@@ -1,4 +1,4 @@
-export const CategoryOptions = [
+export const categoryOptions = [
   'Arts & Culture',
   'Popular Attractions',
   'Pubs & Bars',
@@ -9,9 +9,9 @@ export const CategoryOptions = [
   'Nature & Wildlife',
   'Unique Experiences',
 ]
-export const PriceOptions = ['€', '€€', '€€€']
-export const DurationOptions = [
-  '0,5',
+export const priceOptions = ['€', '€€', '€€€']
+export const durationOptions = [
+  '0.5',
   '1',
   '1.5',
   '2',

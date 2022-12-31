@@ -15,6 +15,7 @@ export const StyledDialog = styled(Dialog)`
     margin: 1.5rem 0 0 0;
     padding: 0;
     text-align: center;
+    text-transform: capitalize;
   }
 
   .content {
@@ -23,6 +24,7 @@ export const StyledDialog = styled(Dialog)`
 
   .subtitle {
     margin: 0.5rem 0 1rem 0;
+    text-align: center;
   }
 
   .input_field {

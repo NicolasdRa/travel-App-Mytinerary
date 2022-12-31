@@ -30,13 +30,28 @@ export const fetchActivityByTitle = createAsyncThunk(
   }
 )
 
+export const addActivity = createAsyncThunk(
+  'activities/addOne',
+  async (formData: FormData) => {
+    const res = await axios({
+      method: 'POST',
+      url: activitiesUrl,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    })
+    return res.data
+  }
+)
+
 // Define a type for the slice state
 interface ActivitiesSlice {
   loading: 'idle' | 'pending' | 'done' | 'failed'
   status: string | undefined
   results: string
   currentActivity: any
-  data: any[]
+  data: Activity[]
 }
 
 // Define the initial state using that type
@@ -55,10 +70,10 @@ const activitiesSlice = createSlice({
   reducers: {
     // standard reducer logic, with auto-generated action types
     // TODO: replace these two below with builder cases
-    addActivity(state, action) {
-      // "mutate" the array by calling push()
-      state.data.push(action.payload)
-    },
+    // addActivity(state, action) {
+    //   // "mutate" the array by calling push()
+    //   state.data.push(action.payload)
+    // },
     deleteActivity(state, action) {
       state.data.filter((activity, i) => i !== action.payload.index)
     },
@@ -92,11 +107,23 @@ const activitiesSlice = createSlice({
       state.loading = 'failed'
       state.status = action.error.message
     })
+    builder.addCase(addActivity.pending, (state, action) => {
+      state.loading = 'pending'
+    })
+    builder.addCase(addActivity.fulfilled, (state, action) => {
+      const newActivity = action.payload.data.data
+      state.loading = 'done'
+      state.data.unshift(newActivity)
+    })
+    builder.addCase(addActivity.rejected, (state, action) => {
+      state.loading = 'failed'
+      state.status = action.error.message
+    })
   },
 })
 
 // SELECTORS
-const selectActivities = (state: RootState) => state.activities.data
+export const selectActivities = (state: RootState) => state.activities.data
 
 const selectActivity = (state: RootState) => state.activities.currentActivity
 
@@ -119,9 +146,15 @@ export const selectActivitiesForCity = createSelector(
     activities.filter((activity) => activity.cityName === cityName)
 )
 
+export const selectActivitiesByUserId = createSelector(
+  [selectAllActivities, (state, id) => id],
+  (activities: Activity[], id) =>
+    activities.filter((item) => item.author.id === id)
+)
+
 export const selectActivitiesSortedByLikes = createSelector(
   [selectActivities],
-  (activities) => activities.sort((a, b) => b.likes - a.likes)
+  (activities: Activity[]) => activities.sort((a, b) => b.likes - a.likes)
 )
 
 export const selectActivityByTitle = createSelector(
@@ -146,7 +179,7 @@ export const selectRandomActivity = createSelector(
 // ACTION EXPORTS
 
 // Extract and export each action creator by name
-export const { addActivity, deleteActivity } = activitiesSlice.actions
+export const { deleteActivity } = activitiesSlice.actions
 
 // REDUCER EXPORT
 

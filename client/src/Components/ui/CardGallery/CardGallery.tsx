@@ -1,22 +1,26 @@
 import { Typography } from '@mui/material'
 
 import { CustomCard } from '../CustomCard/CustomCard'
+import { Activity, City, Favourite, Itinerary } from '../../../@types/types'
+
 import { StyledContainer } from './styles'
 
 interface CardGalleryProps {
-  data: any
-  type: 'cities' | 'itineraries' | 'activities'
+  items: Activity[] | Itinerary[] | City[]
+  source: 'itineraries' | 'cities' | 'activities'
 }
 
-export const CardGallery: React.FC<CardGalleryProps> = ({ data, type }) => {
+export const CardGallery: React.FC<CardGalleryProps> = ({ items, source }) => {
   return (
     <StyledContainer>
-      {data.length > 0 ? (
-        data.map((item: any) => (
-          <CustomCard data={item} type={type} key={item._id} />
-        ))
+      {items.length > 0 ? (
+        items.map((item: Activity | Itinerary | City) => {
+          const { _id, ...rest } = item
+
+          return <CustomCard source={source} key={_id} {...rest} />
+        })
       ) : (
-        <Typography className="message">No {type} found.</Typography>
+        <Typography className="message">No {source} found.</Typography>
       )}
     </StyledContainer>
   )
