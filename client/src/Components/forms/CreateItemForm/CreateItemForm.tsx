@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 
 import {
   Backdrop,
@@ -29,9 +29,10 @@ import { City, Itinerary, User } from '../../../@types/types'
 import { StyledDialog, StyledMainContainer } from './styles'
 import { selectAllCities } from '../../../redux/citiesSlice'
 import { CustomDial } from '../../ui/CustomDial/CustomDial'
-import { toggleAddItemForm } from '../../../redux/uiSlice'
+import { toggleAddItemForm, toggleBackdrop } from '../../../redux/uiSlice'
 import { addActivity } from '../../../redux/activitiesSlice'
 import { theme } from '../../../theme/Theme'
+import { LiveSearch } from '../../ui/LiveSearch/LiveSearch'
 
 interface CreateItemFormProps {
   currentUser: User
@@ -52,7 +53,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   // Component level state
   const [file, setFile] = useState<string | Blob>('')
   const [previewFile, setPreviewFile] = useState(null)
-  const [cityOptions, setCityOptions] = useState<City[]>([])
+  // const [cityOptions, setCityOptions] = useState<City[]>([])
   const [itineraryOptions, setItineraryOptions] = useState<Itinerary[]>([])
 
   const cities = useAppSelector<City[]>(selectAllCities)
@@ -75,16 +76,17 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
     details: '',
   })
 
-  const { itinerary, city, title, category, price, duration, details } =
-    formValues
+  const { itinerary, title, category, price, duration, details } = formValues
+  const [city, setCity] = useState('')
+
   const { _id: userId } = currentUser
 
   // handles city options
-  useEffect(() => {
-    if (cities.length > 0) {
-      setCityOptions(cities)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (cities.length > 0) {
+  //     setCityOptions(cities)
+  //   }
+  // }, [])
 
   // handles itinerary options based on city selection
   useEffect(() => {
@@ -92,6 +94,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
       const filterUserItinerariesByCity = itineraries.filter(
         (item) => item.cityName === city
       )
+
       setItineraryOptions(filterUserItinerariesByCity)
     }
   }, [city, itineraries])
@@ -104,8 +107,14 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
     }
   }, [previewFile])
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
+  const handleAutcompleteValueChange = (value: any) => {
+    const name = value.name
+
+    setCity(name)
+  }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
     const formData = new FormData()
 
@@ -155,6 +164,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 
     reset()
     setPreviewFile(null)
+    dispatch(toggleBackdrop)
   }
 
   const loadPreviewFile = (croppedImage: any) => setPreviewFile(croppedImage)
@@ -188,7 +198,12 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
               Add details, a photo and submit.
             </Typography>
             <FormControl className="formControl">
-              <TextField
+              <LiveSearch
+                target="cities"
+                handleAutcompleteValueChange={handleAutcompleteValueChange}
+                name="city"
+              />
+              {/* <TextField
                 required
                 select
                 size="small"
@@ -203,7 +218,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
                     {option.name}
                   </MenuItem>
                 ))}
-              </TextField>
+              </TextField> */}
             </FormControl>
             {type === 'activity' && (
               <FormControl className="formControl">
@@ -348,7 +363,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="secondary">
+            <Button type="submit" color="secondary">
               Submit
             </Button>
           </DialogActions>
