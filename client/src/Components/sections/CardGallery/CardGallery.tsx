@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 
-import { CustomCard } from '../CustomCard/CustomCard'
-import { Activity, City, Favourite, Itinerary } from '../../../@types/types'
+import { CustomCard } from '../../ui/CustomCard/CustomCard'
+import { Activity, City, Itinerary } from '../../../@types/types'
 
 import { StyledContainer } from './styles'
 

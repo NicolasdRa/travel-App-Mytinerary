@@ -21,9 +21,6 @@ interface UiSlice {
     severity: string
     msg: string
   }
-  backdrop: {
-    open: boolean
-  }
 }
 
 // INITIAL STATE
@@ -41,9 +38,6 @@ const initialState: UiSlice = {
     open: false,
     severity: '',
     msg: '',
-  },
-  backdrop: {
-    open: false,
   },
 }
 
@@ -64,13 +58,6 @@ const uiSlice = createSlice({
 
       state.forms.signUpForm.open = !open
     },
-
-    toggleBackdrop(state) {
-      const open = state.backdrop.open
-
-      state.backdrop.open = !open
-    },
-
     toggleAddItemForm: {
       reducer(state, action: PayloadAction<{ type: string }>) {
         const open = state.forms.addItemForm.open
@@ -106,7 +93,6 @@ const uiSlice = createSlice({
 export const {
   toggleLogInForm,
   toggleSignUpForm,
-  toggleBackdrop,
   toggleSnackBar,
   toggleAddItemForm,
 } = uiSlice.actions

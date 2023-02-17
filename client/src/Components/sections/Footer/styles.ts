@@ -3,7 +3,34 @@ import { styled } from '@mui/material/styles'
 export const StyledFooter = styled('footer')`
   background-color: transparent;
   margin: 0 auto;
-  padding: 2rem 4rem;
+  padding: 5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+
+  ${(props) => props.theme.breakpoints.up('xl')} {
+    width: 70vw;
+  }
+
+  .divider {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: 80vw;
+
+    ${(props) => props.theme.breakpoints.up('xl')} {
+      width: 70vw;
+    }
+  }
 
   .link {
     color: ${(props) => props.theme.palette.primary.light};
@@ -16,7 +43,6 @@ export const StyledFooter = styled('footer')`
 
   .logo {
     height: 2.5rem;
-    margin: 0.5rem;
     color: ${(props) => props.theme.palette.primary.light};
     opacity: 0.5;
   }
@@ -27,8 +53,7 @@ export const StyledFooter = styled('footer')`
     font-family: 'Roboto';
     font-size: 0.75rem;
     line-height: 1.8;
-    margin: 0.5rem 0;
-    padding: 0 3rem;
     text-decoration: none;
+    margin: 0 2rem;
   }
 `

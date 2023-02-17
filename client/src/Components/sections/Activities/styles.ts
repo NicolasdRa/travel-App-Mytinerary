@@ -1,34 +1,32 @@
 import { styled } from '@mui/material/styles'
-import { Grid } from '@mui/material'
 
-export const StyledGrid = styled(Grid)`
-  padding-bottom: 3rem;
+export const StyledContainer = styled('div')`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0 3rem 0;
+  width: 100vw;
 
-  .searchbarContainer {
-    background-color: ${(props) => props.theme.palette.common.beigeLight};
+  ${(props) => props.theme.breakpoints.up('md')} {
+    padding: 1.5rem 0 3rem 0;
+    width: 70vw;
+  }
+
+  .page-subtitle {
+    margin: 1.5rem auto 0.5rem 0.5rem;
+    align-self: flex-start;
+  }
+
+  .gallery-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0 0 0 0;
-    padding: 1rem 1rem;
-  }
+    width: 100vw;
 
-  .searchBarTitle {
-    color: ${(props) => props.theme.palette.primary.main};
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: left;
-    margin: 0 0 0.5rem 0.5rem;
-  }
-
-  .searchBar {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
-  }
-
-  .subtitle {
-    margin: 1.5rem auto 0.5rem 1.5rem;
-    text-align: start;
+    ${(props) => props.theme.breakpoints.up('md')} {
+      width: 70vw;
+    }
   }
 `

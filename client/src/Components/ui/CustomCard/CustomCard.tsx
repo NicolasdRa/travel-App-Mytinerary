@@ -6,7 +6,6 @@ import {
   Button,
   CardMedia,
   CardContent,
-  CardActions,
   Typography,
   Grid,
   CircularProgress,
@@ -127,7 +126,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
             </Typography>
           </div>
         )}
-        {(source === 'itineraries' || source === 'activities') && (
+        <div className="bottom-content">
           <div className="additionalInfo">
             <div className="duration">
               <AccessTimeIcon className="icons" />
@@ -141,15 +140,29 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
               </Typography>
             </div>
             <div className="price">
-              <Typography variant="caption" color="textSecondary" component="p">
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                component="p"
+                className="infoText"
+              >
                 Cost: {price}
               </Typography>
             </div>
           </div>
-        )}
+          <Button
+            size="small"
+            color="secondary"
+            component={Link}
+            to={source === 'cities' ? `${link}${name}` : `${link}${title}`}
+            className="textBtn"
+          >
+            View more
+          </Button>
+        </div>
       </CardContent>
 
-      <CardActions className="cardActions">
+      {/* <CardActions className="cardActions">
         <Button
           size="small"
           color="secondary"
@@ -159,7 +172,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
         >
           View more
         </Button>
-      </CardActions>
+      </CardActions> */}
     </StyledCard>
   )
 }

@@ -1,29 +1,38 @@
 import { Box, Skeleton, Typography } from '@mui/material'
 import { StyledListingHeaderContainer } from './styles'
+import { SearchBar } from '../../ui/SearchBar/SearchBar'
 
 interface ListingHeaderProps {
-  name?: string
   title?: string
-  cityName?: string
+  subtitle?: string
   img?: string
+  handleChange?: (e: any) => void
 }
 
 // image header for listing tabs: cities, itineraries, activities
 export const ListingHeader: React.FC<ListingHeaderProps> = ({
-  name,
   title,
-  cityName,
+  subtitle,
   img,
+  handleChange,
 }) => {
   return (
     <StyledListingHeaderContainer sx={{ backgroundImage: img }}>
       {img ? (
-        <Box sx={{ backgroundImage: `url(${img})` }} className="img">
+        <div className="container">
+          <Box sx={{ backgroundImage: `url(${img})` }} className="img" />
           <div className="textArea">
-            <Typography variant="h6">{name ? name : title}</Typography>
-            <Typography variant="body2">{title ? cityName : name}</Typography>
+            <Typography color="white" variant="h6" className="title">
+              {title}
+            </Typography>
+            <Typography color="white" variant="body2" className="subtitle">
+              {subtitle}
+            </Typography>
           </div>
-        </Box>
+          <div className="searchbar-container">
+            <SearchBar handleChange={handleChange} />
+          </div>
+        </div>
       ) : (
         <Skeleton variant="rectangular" animation="wave" className="skeleton" />
       )}

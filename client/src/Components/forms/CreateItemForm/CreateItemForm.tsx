@@ -29,7 +29,7 @@ import { City, Itinerary, User } from '../../../@types/types'
 import { StyledDialog, StyledMainContainer } from './styles'
 import { selectAllCities } from '../../../redux/citiesSlice'
 import { CustomDial } from '../../ui/CustomDial/CustomDial'
-import { toggleAddItemForm, toggleBackdrop } from '../../../redux/uiSlice'
+import { toggleAddItemForm } from '../../../redux/uiSlice'
 import { addActivity } from '../../../redux/activitiesSlice'
 import { theme } from '../../../theme/Theme'
 import { LiveSearch } from '../../ui/LiveSearch/LiveSearch'
@@ -43,8 +43,6 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 }) => {
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const dispatch = useAppDispatch()
-
-  const backdropOpen = useAppSelector((state) => state.ui.backdrop.open)
 
   // handle form open & type state
   const open = useAppSelector((state) => state.ui.forms.addItemForm.open)
@@ -109,7 +107,6 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 
   const handleAutcompleteValueChange = (value: any) => {
     const name = value.name
-
     setCity(name)
   }
 
@@ -164,7 +161,6 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 
     reset()
     setPreviewFile(null)
-    dispatch(toggleBackdrop)
   }
 
   const loadPreviewFile = (croppedImage: any) => setPreviewFile(croppedImage)
@@ -180,11 +176,8 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 
   return (
     <StyledMainContainer>
-      {mdDown && <Backdrop open={backdropOpen} />}
       <CustomDial />
       <StyledDialog
-        //   TransitionComponent={Transition}
-        //   keepMounted
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
@@ -199,9 +192,9 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
             </Typography>
             <FormControl className="formControl">
               <LiveSearch
+                name="city"
                 target="cities"
                 handleAutcompleteValueChange={handleAutcompleteValueChange}
-                name="city"
               />
               {/* <TextField
                 required

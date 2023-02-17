@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
   margin-left: 1rem;

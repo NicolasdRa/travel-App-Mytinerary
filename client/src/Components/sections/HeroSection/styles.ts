@@ -2,41 +2,57 @@ import { styled } from '@mui/material/styles'
 import Image from '../../../assets/images/bg4.jpg'
 
 export const StyledContainer = styled('div')`
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  justify-content: center;
+  margin: auto 0;
+
+  ${(props) => props.theme.breakpoints.up('md')} {
+    border-radius: 20px;
+    height: 40vh;
+    width: 80vw;
+  }
+
+  ${(props) => props.theme.breakpoints.up('xl')} {
+    width: 70vw;
+  }
+`
+
+export const StyledHero = styled('div')`
   background-image: url(${Image});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
   flex-direction: column;
-  height: 100vh;
-  justify-content: space-around;
-  margin: auto 0;
-  width: 100vw;
+  height: calc(100vh - 100px);
+  justify-content: center;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    height: '53vh';
+    border-radius: 10px;
+    height: 53vh;
+    width: 80vw;
   }
 
-  ${(props) => props.theme.breakpoints.up('lg')} {
-    height: '60vh';
+  ${(props) => props.theme.breakpoints.up('xl')} {
+    width: 70vw;
   }
 
-  ${(props) => props.theme.breakpoints.up('lg')} {
-    width: 100vw;
-  }
-
-  .container {
-    padding: 2rem;
+  .text-container {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: 100%;
 
     ${(props) => props.theme.breakpoints.up('md')} {
-      padding: 0 5rem;
+      width: 50%;
     }
-
     ${(props) => props.theme.breakpoints.up('lg')} {
-      padding: 0 8rem;
+      width: 80%;
     }
-
     ${(props) => props.theme.breakpoints.up('xl')} {
-      align-items: 'center';
     }
   }
 
@@ -51,9 +67,9 @@ export const StyledContainer = styled('div')`
       font-size: 6rem;
       margin: 5rem 0 0.875rem;
     }
-    ${(props) => props.theme.breakpoints.up('lg')} {
+    ${(props) => props.theme.breakpoints.up('md')} {
       font-size: 3.5rem;
-      margin: 2rem 0 0.875rem;
+      margin: 2rem 0 0.2rem;
     }
     ${(props) => props.theme.breakpoints.up('xl')} {
       font-size: 4.2rem;
@@ -73,9 +89,9 @@ export const StyledContainer = styled('div')`
       line-height: 1.5;
     }
 
-    ${(props) => props.theme.breakpoints.up('lg')} {
-      font-size: 1.2rem;
-      font-weight: 400;
+    ${(props) => props.theme.breakpoints.up('md')} {
+      font-size: 1.5rem;
+      font-weight: 300;
     }
 
     ${(props) => props.theme.breakpoints.up('xl')} {
@@ -86,7 +102,7 @@ export const StyledContainer = styled('div')`
   }
 
   .btns-container {
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
   }
 
   .start-btn-container {

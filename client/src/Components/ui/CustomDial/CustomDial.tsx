@@ -10,7 +10,7 @@ import LocationCityIcon from '@mui/icons-material/LocationCity'
 import TourIcon from '@mui/icons-material/Tour'
 import LocalActivityIcon from '@mui/icons-material/LocalActivity'
 import { theme } from '../../../theme/Theme'
-import { toggleAddItemForm, toggleBackdrop } from '../../../redux/uiSlice'
+import { toggleAddItemForm } from '../../../redux/uiSlice'
 import { useAppDispatch } from '../../../redux/hooks'
 
 const actions = [
@@ -39,12 +39,10 @@ export const CustomDial = () => {
 
   const handleOpen = () => {
     setOpen(true)
-    dispatch(toggleBackdrop())
   }
 
   const handleClose = () => {
     setOpen(false)
-    dispatch(toggleBackdrop())
   }
 
   return (
