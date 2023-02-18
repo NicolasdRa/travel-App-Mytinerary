@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import { Grid, TextField, Typography, Paper } from '@mui/material'
-
-import { CardGallery } from '../CardGallery/CardGallery'
-import { ListingHeader } from '../Headers/ListingHeader'
-
 import { selectAllCities, selectRandomCity } from '../../../redux/citiesSlice'
 import { useAppSelector } from '../../../redux/hooks'
 import { City } from '../../../@types/types'
-import { StyledContainer } from './styles'
-import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+
+import { ListingTab } from '../../ui/ListingTab/ListingTab'
 
 export const Cities = () => {
   const cities = useAppSelector(selectAllCities)
@@ -37,27 +32,19 @@ export const Cities = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  if (!cities) {
-    return <CustomLoader loading={true} message="loading cities..." />
-  }
+  if (!cities) return <div>Loading...</div>
 
   return (
-    <StyledContainer>
-      <ListingHeader
-        img={headerCity?.img}
-        title={headerCity.name}
-        subtitle={headerCity.country}
-        handleChange={handleChange}
-      />
-      <Typography variant="subtitle2" className="page-subtitle">
-        {string === '' ? 'Most popular Cities' : 'Search results'}
-      </Typography>
-      <div className="gallery-container">
-        <CardGallery
-          items={filteredCities ? filteredCities : cities}
-          source="cities"
-        />
-      </div>
-    </StyledContainer>
+    <ListingTab
+      source="cities"
+      data={filteredCities ? filteredCities : cities}
+      img={headerCity.img}
+      headerTitle={headerCity.name}
+      headerSubtitle={headerCity.country}
+      searchBarTitle="Want to go somewhere?"
+      searchBarLabel="Search for a city"
+      galleryTitle={string === '' ? 'Most popular Cities' : 'Search results'}
+      handleChange={handleChange}
+    />
   )
 }

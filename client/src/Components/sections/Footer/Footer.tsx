@@ -18,6 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
       <Divider className="divider" />
       <div className="container">
         <Grid
+          item
           md={4}
           container
           direction="row"

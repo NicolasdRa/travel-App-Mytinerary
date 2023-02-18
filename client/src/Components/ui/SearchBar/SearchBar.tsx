@@ -3,17 +3,21 @@ import { StyledContainer } from './styles'
 
 interface SearchBarProps {
   handleChange?: (e: any) => void
+  title?: string
+  label?: string
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ handleChange }) => {
+export const SearchBar: React.FC<SearchBarProps> = ({
+  handleChange,
+  title = 'Want to have fun? Choose your destination',
+  label = 'Search City, Itineraries for City or Activities by City Name...',
+}) => {
   return (
     <StyledContainer>
-      <Typography className="searchbar-title">
-        Choose your destination.. Want to have fun?
-      </Typography>
+      <Typography className="searchbar-title">{title}</Typography>
       <TextField
         id="outlined-helperText"
-        label="Search City....Search Itineraries for City.. Search activities by City Name.."
+        label={label}
         defaultValue=""
         variant="outlined"
         onChange={handleChange}

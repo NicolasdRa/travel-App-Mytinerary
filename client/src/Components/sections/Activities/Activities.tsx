@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react'
 
-import { Typography } from '@mui/material'
-
-import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
-import { CardGallery } from '../CardGallery/CardGallery'
-import { ListingHeader } from '../Headers/ListingHeader'
-
 import {
   selectAllActivities,
   selectRandomActivity,
@@ -13,7 +7,7 @@ import {
 import { useAppSelector } from '../../../redux/hooks'
 import { Activity } from '../../../@types/types'
 
-import { StyledContainer } from './styles'
+import { ListingTab } from '../../ui/ListingTab/ListingTab'
 
 export const Activities = () => {
   const activities = useAppSelector(selectAllActivities)
@@ -44,28 +38,19 @@ export const Activities = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  if (!activities) {
-    return <CustomLoader loading={true} message="loading activities..." />
-  }
-
   return (
-    <StyledContainer>
-      <ListingHeader
-        title={headerActivity?.title}
-        subtitle={headerActivity?.cityName}
-        img={headerActivity?.img}
-      />
-
-      <Typography variant="subtitle2" className="page-subtitle">
-        {string === '' ? 'Most popular Activities' : 'Search results'}
-      </Typography>
-
-      <div className="gallery-container">
-        <CardGallery
-          items={filteredActivities ? filteredActivities : activities}
-          source="activities"
-        />
-      </div>
-    </StyledContainer>
+    <ListingTab
+      source="activities"
+      data={filteredActivities ? filteredActivities : activities}
+      img={headerActivity.img}
+      headerTitle={headerActivity.title}
+      headerSubtitle={headerActivity?.cityName}
+      searchBarTitle="Want to have fun?"
+      searchBarLabel="Search Activities for Itinerary..."
+      galleryTitle={
+        string === '' ? 'Most popular Activities' : 'Search results'
+      }
+      handleChange={handleChange}
+    />
   )
 }

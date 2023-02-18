@@ -7,6 +7,8 @@ interface ListingHeaderProps {
   subtitle?: string
   img?: string
   handleChange?: (e: any) => void
+  searchBarTitle: string
+  searchBarLabel: string
 }
 
 // image header for listing tabs: cities, itineraries, activities
@@ -15,6 +17,8 @@ export const ListingHeader: React.FC<ListingHeaderProps> = ({
   subtitle,
   img,
   handleChange,
+  searchBarTitle,
+  searchBarLabel,
 }) => {
   return (
     <StyledListingHeaderContainer sx={{ backgroundImage: img }}>
@@ -30,7 +34,11 @@ export const ListingHeader: React.FC<ListingHeaderProps> = ({
             </Typography>
           </div>
           <div className="searchbar-container">
-            <SearchBar handleChange={handleChange} />
+            <SearchBar
+              handleChange={handleChange}
+              title={searchBarTitle}
+              label={searchBarLabel}
+            />
           </div>
         </div>
       ) : (

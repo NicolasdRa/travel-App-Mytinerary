@@ -1,20 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Typography } from '@mui/material'
-
-import { CardGallery } from '../CardGallery/CardGallery'
-
 import {
   selectAllItineraries,
   selectRandomItinerary,
 } from '../../../redux/itinerariesSlice'
 
-import { StyledContainer } from './styles'
 import { Itinerary } from '../../../@types/types'
 import { useAppSelector } from '../../../redux/hooks'
-import { ListingHeader } from '../Headers/ListingHeader'
-import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+
+import { ListingTab } from '../../ui/ListingTab/ListingTab'
 
 export const Itineraries = () => {
   const itineraries = useSelector(selectAllItineraries)
@@ -45,29 +40,19 @@ export const Itineraries = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  if (!itineraries) {
-    return <CustomLoader loading={true} message="loading Itineraries..." />
-  }
-
   return (
-    <StyledContainer>
-      <ListingHeader
-        title={headerItinerary?.title}
-        subtitle={headerItinerary?.city.name}
-        img={headerItinerary?.img}
-        handleChange={handleChange}
-      />
-
-      <Typography variant="subtitle2" className="page-subtitle">
-        {string === '' ? 'Most popular Itineraries' : 'Search results'}
-      </Typography>
-
-      <div className="gallery-container">
-        <CardGallery
-          items={filteredItineraries ? filteredItineraries : itineraries}
-          source="itineraries"
-        />
-      </div>
-    </StyledContainer>
+    <ListingTab
+      source="itineraries"
+      data={filteredItineraries ? filteredItineraries : itineraries}
+      img={headerItinerary?.img}
+      headerTitle={headerItinerary?.title}
+      headerSubtitle={headerItinerary?.city.name}
+      searchBarTitle="Want to have fun?"
+      searchBarLabel="Search Itineraries for City..."
+      galleryTitle={
+        string === '' ? 'Most popular Itineraries' : 'Search results'
+      }
+      handleChange={handleChange}
+    />
   )
 }
