@@ -9,7 +9,7 @@ import { selectAuthenticated } from '../../../redux/authSlice'
 import { theme } from '../../../theme/Theme'
 import { StyledContainer, StyledHero } from './styles'
 
-export const HeroSection = () => {
+export const HeroLanding = () => {
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
 
   const isAuthenticated = useAppSelector(selectAuthenticated)

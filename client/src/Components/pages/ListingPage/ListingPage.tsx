@@ -12,13 +12,13 @@ import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
 import { useAppSelector } from '../../../redux/hooks'
 import { selectCurrentUser } from '../../../redux/usersSlice'
 
-import { StyledListingPageContainer } from './styles'
+import { StyledContainer } from './styles'
 
 export const ListingPage = () => {
   const currentUser = useAppSelector(selectCurrentUser)
 
   return (
-    <StyledListingPageContainer>
+    <StyledContainer>
       <Header />
       <CustomTabs
         firstTabTitle={'Cities'}
@@ -37,6 +37,6 @@ export const ListingPage = () => {
       )}
       <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
       <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
-    </StyledListingPageContainer>
+    </StyledContainer>
   )
 }

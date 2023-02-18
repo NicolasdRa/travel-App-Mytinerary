@@ -7,7 +7,6 @@ import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
 import { Header } from '../../sections/Header/Header'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
-import { ImageHeader } from '../../sections/Headers/ImageHeader'
 import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
 import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
 import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
@@ -21,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
+import { Hero } from '../../sections/Hero/Hero'
 
 export const ActivityPage: React.FC = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('md'))
@@ -61,7 +61,7 @@ export const ActivityPage: React.FC = () => {
   return (
     <StyledContainer>
       <Header />
-      <ImageHeader img={img} />
+      <Hero img={img} />
       <PageInfoCard
         user={currentUser}
         itemId={_id}

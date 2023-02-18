@@ -15,7 +15,7 @@ export const StyledContainer = styled('div')`
     width: 80vw;
   }
 
-  ${(props) => props.theme.breakpoints.up('xl')} {
+  ${(props) => props.theme.breakpoints.up('lg')} {
     width: 70vw;
   }
 `
@@ -36,7 +36,7 @@ export const StyledHero = styled('div')`
     width: 80vw;
   }
 
-  ${(props) => props.theme.breakpoints.up('xl')} {
+  ${(props) => props.theme.breakpoints.up('lg')} {
     width: 70vw;
   }
 

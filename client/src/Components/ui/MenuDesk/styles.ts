@@ -62,8 +62,9 @@ export const StyledList = styled(List)`
     }
   }
 
-  .menu-button {
+  .menuButton {
     margin-left: 0.3rem;
+    margin-bottom: 0.2rem;
   }
 
   .expandOpen {

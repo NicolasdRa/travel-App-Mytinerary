@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 
 import { Typography } from '@mui/material'
 
-import { HeroSection } from '../../sections/HeroSection/HeroSection'
+import { HeroLanding } from '../../sections/HeroLanding/HeroLanding'
 import { CardGallery } from '../../sections/CardGallery/CardGallery'
 
 import { Footer } from '../../sections/Footer/Footer'
@@ -18,7 +18,7 @@ export const LandingPage = () => {
   return (
     <StyledContainer>
       <Header />
-      <HeroSection />
+      <HeroLanding />
       <div className="galleryContainer">
         <Typography className="galleryTitle">
           Most Popular Mytineraries

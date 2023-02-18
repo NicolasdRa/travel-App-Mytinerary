@@ -35,13 +35,14 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   )
-  const user = useSelector((state: RootState) => state.auth.userId)
+  const userId = useSelector((state: RootState) => state.auth.userId)
+  const user = useSelector((state: RootState) => state.users.currentUser)
 
   // log out functionality
   const handleLogOut = (e: any) => {
     e.preventDefault()
     dispatch(logOutUser())
-    dispatch(unloadCurrentUser(user))
+    dispatch(unloadCurrentUser(userId))
     navigate('/')
   }
 
@@ -73,14 +74,6 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
       url: '/listing',
       label: 'Browse',
     },
-    {
-      url: '/profile',
-      label: 'Profile',
-    },
-    {
-      url: '/about',
-      label: 'About',
-    },
   ]
 
   return (
@@ -110,7 +103,6 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
             // variant="outlined"
             // component={Link}
             // to="/login"
-
             aria-label="menu"
             aria-controls="desk-menu"
             aria-haspopup="true"
@@ -146,7 +138,11 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
         disableScrollLock={true}
       >
         {isAuthenticated ? (
-          <MenuItem onClick={handleClose} component={Link} to="/profile">
+          <MenuItem
+            onClick={handleClose}
+            component={Link}
+            to={user ? `/user/${user.userName}` : '/'}
+          >
             Your Profile
           </MenuItem>
         ) : (

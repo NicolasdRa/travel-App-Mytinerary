@@ -1,18 +1,6 @@
 import { styled } from '@mui/material/styles'
 
-export const StyledListingHeaderContainer = styled('div')`
-  width: 100%;
-  height: 35vh;
-
-  ${(props) => props.theme.breakpoints.up('md')} {
-    height: 40vh;
-    width: 80vw;
-  }
-
-  ${(props) => props.theme.breakpoints.up('xl')} {
-    width: 70vw;
-  }
-
+export const StyledContainer = styled('div')`
   .container {
     height: 35vh;
     position: relative;
@@ -25,7 +13,23 @@ export const StyledListingHeaderContainer = styled('div')`
       width: 80vw;
     }
 
-    ${(props) => props.theme.breakpoints.up('xl')} {
+    ${(props) => props.theme.breakpoints.up('lg')} {
+      width: 70vw;
+    }
+  }
+
+  .mediumContainer {
+    height: 25vh;
+    position: relative;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+
+    ${(props) => props.theme.breakpoints.up('md')} {
+      width: 80vw;
+    }
+
+    ${(props) => props.theme.breakpoints.up('lg')} {
       width: 70vw;
     }
   }
@@ -92,38 +96,5 @@ export const StyledListingHeaderContainer = styled('div')`
       width: 25rem;
       bottom: 30px;
     }
-  }
-`
-
-export const StyledImageHeaderContainer = styled('div')`
-  width: 100%;
-  height: 9rem;
-
-  .img {
-    width: 100%;
-    height: 9rem;
-    background-size: cover;
-    background-position: center;
-  }
-
-  .skeleton {
-    width: 100%;
-    height: 9rem;
-  }
-
-  ${(props) => props.theme.breakpoints.up('sm')} {
-    height: 15rem;
-  }
-  ${(props) => props.theme.breakpoints.up('lg')} {
-    height: 30rem;
-  }
-
-  .textArea {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    color: ${(props) => props.theme.palette.primary.main};
-    padding: 1rem 1.5rem;
   }
 `

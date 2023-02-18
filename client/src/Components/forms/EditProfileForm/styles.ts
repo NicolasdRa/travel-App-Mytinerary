@@ -4,6 +4,11 @@ import { styled } from '@mui/material/styles'
 export const StyledContainer = styled('div')`
   .trigger-btn {
     text-transform: capitalize;
+    font-size: 1.1rem;
+
+    ${(props) => props.theme.breakpoints.down('sm')} {
+      font-size: 0.9rem;
+    }
   }
 
   .edit-icon {

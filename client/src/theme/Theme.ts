@@ -142,6 +142,26 @@ export const theme: Theme = createTheme({
       },
     },
 
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontSize: '1.4rem',
+          fontWeight: 400,
+          minWidth: 10,
+          marginLeft: '15px',
+
+          '@media (max-width: 500px)': {
+            fontSize: '1.2rem',
+          },
+        },
+
+        textColorInherit: {
+          opacity: 1,
+        },
+      },
+    },
+
     // '&.Mui-focused': {}
   },
 

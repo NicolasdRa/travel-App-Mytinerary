@@ -21,7 +21,7 @@ export const StyledContainer = styled('div')`
       display: none;
     }
 
-    ${(props) => props.theme.breakpoints.up('xl')} {
+    ${(props) => props.theme.breakpoints.up('lg')} {
       width: 70vw;
     }
   }

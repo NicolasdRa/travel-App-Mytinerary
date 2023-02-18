@@ -13,19 +13,10 @@ export const PageUserInfoCard: React.FC<PageUserInfoCardProps> = ({ user }) => {
   const { details, favourites, img, firstName, lastName, userName } = user
   return (
     <StyledContainer>
-      <Avatar alt={firstName + '' + lastName} src={img} className="user-img" />
+      <Avatar alt={firstName + '' + lastName} src={img} className="avatar" />
       <div className="info">
         <div className="edit_btn">
           <EditProfileForm currentUser={user} />
-        </div>
-        <div className="likes-btn">
-          <FavouriteComponent
-            readOnly={true}
-            sourceType={'city'}
-            sourceId={''}
-            userId={''}
-            amount={23}
-          />
         </div>
       </div>
       <div className="user_info">
@@ -41,10 +32,15 @@ export const PageUserInfoCard: React.FC<PageUserInfoCardProps> = ({ user }) => {
           {userName}
         </Typography>
       </div>
-      <Typography variant="body2" className="description">
-        {details}
-      </Typography>
-      <Divider className="divider" />
+      <div className="description-container">
+        <Typography variant="body2" className="description-title">
+          About me
+        </Typography>
+        <Typography variant="body2" className="description">
+          {details}
+        </Typography>
+        <Divider className="divider" />
+      </div>
     </StyledContainer>
   )
 }

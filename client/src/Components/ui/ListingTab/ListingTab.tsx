@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { Activity, City, Itinerary } from '../../../@types/types'
 import { StyledContainer } from './styles'
 import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
-import { ListingHeader } from '../../sections/Headers/ListingHeader'
+import { Hero } from '../../sections/Hero/Hero'
 import { CardGallery } from '../../sections/CardGallery/CardGallery'
 
 interface ListingTabProps {
@@ -35,11 +35,12 @@ export const ListingTab: React.FC<ListingTabProps> = ({
 
   return (
     <StyledContainer>
-      <ListingHeader
+      <Hero
         img={img}
         title={headerTitle}
         subtitle={headerSubtitle}
         handleChange={handleChange}
+        searchBar
         searchBarTitle={searchBarTitle}
         searchBarLabel={searchBarLabel}
       />

@@ -5,7 +5,6 @@ import { useMediaQuery } from '@mui/material'
 
 import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
 import { Header } from '../../sections/Header/Header'
-import { ImageHeader } from '../../sections/Headers/ImageHeader'
 import { PageInfoCard } from '../../ui/PageInfoCard/PageInfoCard'
 import { PageGalleryCard } from '../../ui/PageGalleryCard/PageGalleryCard'
 import { PageReviewsCard } from '../../ui/PageReviewsCard/PageReviewsCard'
@@ -22,6 +21,7 @@ import {
 
 import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
+import { Hero } from '../../sections/Hero/Hero'
 
 // TODO: itinerary Reducer action to keep track of likes
 
@@ -74,7 +74,7 @@ export const ItineraryPage: React.FC = () => {
   return (
     <StyledContainer>
       <Header />
-      <ImageHeader img={img} />
+      <Hero img={img} />
       <PageInfoCard
         user={currentUser}
         itemId={itineraryId}
