@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"nodemon server.js\" \"cd ../client && npm start\"",
-    "prod": "concurrently \"NODE_ENV=production nodemon server.js\" \"cd ../client && npm start\"",
-    "build": "npm install --omit=dev"
+    "prod": "concurrently \"NODE_ENV=production nodemon server.js\" \"cd ../client && npm start\""
   },
   "author": "Nicolás di Rago",
   "license": "ISC",
