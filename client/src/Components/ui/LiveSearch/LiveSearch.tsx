@@ -1,58 +1,13 @@
-import {
-  ChangeEvent,
-  SyntheticEvent,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
-import { v4 as uuidv4 } from 'uuid'
+
+import { Autocomplete, Stack, TextField } from '@mui/material'
 
 import { geoApiOptions } from './geoDbApiConfig'
-import axios from 'axios'
-import { FormControl, Stack } from '@mui/material'
 import { useDebounce } from '../../../hooks/useDebounce'
-
-// This key was created specifically for the demo in mui.com.
-// You need to create a new one for your application.
-// const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE'
-
-// function loadScript(src: string, position: HTMLElement | null, id: string) {
-//   if (!position) {
-//     return
-//   }
-
-//   const script = document.createElement('script')
-//   script.setAttribute('async', '')
-//   script.setAttribute('id', id)
-//   script.src = src
-//   position.appendChild(script)
-// }
-
-// const autocompleteService = { current: null }
-
-// interface MainTextMatchedSubstrings {
-//   offset: number
-//   length: number
-// }
-// interface StructuredFormatting {
-//   main_text: string
-//   secondary_text: string
-//   main_text_matched_substrings?: readonly MainTextMatchedSubstrings[]
-// }
-// interface PlaceType {
-//   description: string
-//   structured_formatting: StructuredFormatting
-// }
 
 interface CityOption {
   city: string
@@ -71,7 +26,7 @@ interface CityOption {
 
 interface LiveSearchProps {
   name: string
-  target: string
+  target: 'cities' | 'itineraries' | 'activities'
   handleAutcompleteValueChange: (e: any) => void
 }
 
@@ -90,12 +45,10 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
     const fetch = async (query: string) => {
       console.log('fetching...')
 
-      //TODO: add a check for the target and make the request to the correct endpoint or make it dynamic
-
       const options = {
-        url: `/cities`,
+        url: `/${target}`,
         ...geoApiOptions,
-        params: { namePrefix: query, types: 'CITY' },
+        params: { namePrefix: query, limit: '10' },
       }
       const res = await axios(options)
       return res.data.data
@@ -108,7 +61,7 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
     }
   }, [debouncedQuery])
 
-  // pushes the value up to the parent component when the user selects an option
+  //  Pushes the value up to the parent component to be handled by the form. The "name" attribute is NOT ACCESIBLE in the Autocomplete component
   useEffect(() => {
     if (value) {
       handleAutcompleteValueChange(value)
@@ -119,7 +72,7 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
     <Stack>
       <Autocomplete
         isOptionEqualToValue={(option, value) => option.id === value.id}
-        id={name}
+        id={`${name}-autocomplete`}
         getOptionLabel={(option) =>
           typeof option === 'string' ? option : option.name
         }
@@ -154,10 +107,12 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
           )
         }}
         renderOption={(props, option, { inputValue }) => {
-          const matches = match(option.name, inputValue, {
+          const optionString = `${option.name}, ${option.country}`
+
+          const matches = match(optionString, inputValue, {
             insideWords: true,
           })
-          const parts = parse(option.name, matches)
+          const parts = parse(optionString, matches)
 
           return (
             <li {...props} key={uuidv4()}>

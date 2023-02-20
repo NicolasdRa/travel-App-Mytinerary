@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux'
 
-import { Grid, Paper, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 
-import { HeroSection } from '../../sections/HeroSection/HeroSection'
-import { CardGallery } from '../../ui/CardGallery/CardGallery'
+import { HeroLanding } from '../../sections/HeroLanding/HeroLanding'
+import { CardGallery } from '../../sections/CardGallery/CardGallery'
 
 import { Footer } from '../../sections/Footer/Footer'
 
@@ -18,23 +18,13 @@ export const LandingPage = () => {
   return (
     <StyledContainer>
       <Header />
-      <HeroSection />
-      <Grid
-        sx={{ display: { xs: 'none', md: 'flex' } }} // Hide on mobile
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Grid item md={10}>
-          <Paper className="galleryContainer">
-            <Typography className="galleryTitle">
-              Most Popular Mytineraries
-            </Typography>
-            <CardGallery items={itineraries} source="itineraries" />
-          </Paper>
-        </Grid>
-      </Grid>
+      <HeroLanding />
+      <div className="galleryContainer">
+        <Typography className="galleryTitle">
+          Most Popular Mytineraries
+        </Typography>
+        <CardGallery items={itineraries} source="itineraries" />
+      </div>
       <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
       <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
     </StyledContainer>

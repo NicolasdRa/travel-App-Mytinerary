@@ -1,20 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Grid, TextField, Typography, Paper } from '@mui/material'
-
-import { CardGallery } from '../../ui/CardGallery/CardGallery'
-
 import {
   selectAllItineraries,
   selectRandomItinerary,
 } from '../../../redux/itinerariesSlice'
 
-import { StyledGrid } from './styles'
 import { Itinerary } from '../../../@types/types'
 import { useAppSelector } from '../../../redux/hooks'
-import { ListingHeader } from '../Headers/ListingHeader'
-import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
+
+import { ListingTab } from '../../ui/ListingTab/ListingTab'
 
 export const Itineraries = () => {
   const itineraries = useSelector(selectAllItineraries)
@@ -45,47 +40,19 @@ export const Itineraries = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  if (!itineraries) {
-    return <CustomLoader loading={true} message="loading Itineraries..." />
-  }
-
   return (
-    <StyledGrid
-      container
-      direction="column"
-      justifyContent="start"
-      alignItems="start"
-    >
-      <Grid item xs={12} container direction="column" justifyContent="center">
-        <ListingHeader
-          title={headerItinerary?.title}
-          cityName={headerItinerary?.city.name}
-          img={headerItinerary?.img}
-        />
-        <Paper elevation={2} className="searchbarContainer">
-          <Typography className="searchBarTitle">Choose your route</Typography>
-          <TextField
-            id="outlined-helperText"
-            label="Search Itineraries for City.."
-            defaultValue=""
-            variant="outlined"
-            onChange={handleChange}
-            color="primary"
-            className="searchBar"
-          />
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="subtitle2" className="subtitle">
-          {string === '' ? 'Most popular Itineraries' : 'Search results'}
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <CardGallery
-          items={filteredItineraries ? filteredItineraries : itineraries}
-          source="itineraries"
-        />
-      </Grid>
-    </StyledGrid>
+    <ListingTab
+      source="itineraries"
+      data={filteredItineraries ? filteredItineraries : itineraries}
+      img={headerItinerary?.img}
+      headerTitle={headerItinerary?.title}
+      headerSubtitle={headerItinerary?.city.name}
+      searchBarTitle="Want to have fun?"
+      searchBarLabel="Search Itineraries for City..."
+      galleryTitle={
+        string === '' ? 'Most popular Itineraries' : 'Search results'
+      }
+      handleChange={handleChange}
+    />
   )
 }

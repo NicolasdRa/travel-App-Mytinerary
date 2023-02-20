@@ -9,7 +9,6 @@ export const StyledContainer = styled('div')`
   width: auto;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    max-width: 60vw;
   }
 
   .message {

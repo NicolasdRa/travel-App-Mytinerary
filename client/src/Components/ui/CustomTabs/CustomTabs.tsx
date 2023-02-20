@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from 'react'
-import { Box, Tab, Tabs } from '@mui/material'
+import { Box, Tab, Tabs, Theme, useMediaQuery } from '@mui/material'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -59,6 +59,8 @@ export const CustomTabs: React.FC<CustomTabsProps> = ({
   secondComponent,
   thirdComponent,
 }) => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+
   const [value, setValue] = useState(0)
 
   const handleChange = (e: any, newValue: SetStateAction<number>) => {
@@ -68,7 +70,8 @@ export const CustomTabs: React.FC<CustomTabsProps> = ({
   return (
     <>
       <Tabs
-        variant="fullWidth"
+        variant={matches ? 'fullWidth' : 'standard'}
+        centered
         value={value}
         onChange={handleChange}
         aria-label="nav tabs"

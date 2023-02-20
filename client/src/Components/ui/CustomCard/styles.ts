@@ -4,18 +4,20 @@ import { styled } from '@mui/material/styles'
 export const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
-  margin: 0.3rem;
+  margin: 0.5rem;
   min-width: 14rem;
   overflow: visible;
+  border-radius: 10px;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    max-width: 16rem;
+    min-width: 380px;
+    /* max-width: 400px; */
   }
 
   .cardImg {
-    min-height: 160px;
+    min-height: 200px;
     height: 8rem;
-    /* border-radius: 2, */
+    border-radius: 10px 10px 0 0;
   }
 
   .cardContent {
@@ -34,6 +36,10 @@ export const StyledCard = styled(Card)`
     font-weight: 500;
     text-transform: capitalize;
     line-height: 1;
+  }
+
+  .likesBtn {
+    margin-top: 0.3rem;
   }
 
   .subheader {
@@ -60,6 +66,13 @@ export const StyledCard = styled(Card)`
     font-size: 0.8rem;
   }
 
+  .bottom-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .additionalInfo {
     display: flex;
     flex-direction: row;
@@ -79,9 +92,8 @@ export const StyledCard = styled(Card)`
   .price {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 0;
     font-size: 0.8rem;
   }
 

@@ -6,8 +6,9 @@ export const StyledList = styled(List)`
   font-size: 14px;
   margin: 0 2rem;
 
-  [${(props) => props.theme.breakpoints.up('xl')}]: {
+  ${(props) => props.theme.breakpoints.up('md')} {
     align-items: center;
+    margin: 0 0 0 2rem;
   }
 
   .listItem {
@@ -41,7 +42,7 @@ export const StyledList = styled(List)`
       background: rgba(200, 200, 200, 0.2);
     }
 
-    [${(props) => props.theme.breakpoints.up('sm')}]: {
+    ${(props) => props.theme.breakpoints.up('sm')} {
       width: calc(100% - 30px);
       margin-left: 15px;
       margin-bottom: 8px;
@@ -52,13 +53,18 @@ export const StyledList = styled(List)`
       }
     }
 
-    [${(props) => props.theme.breakpoints.up('xl')}]: {
+    ${(props) => props.theme.breakpoints.up('md')} {
+      color: ${(props) => props.theme.palette.primary.main};
+    }
+
+    ${(props) => props.theme.breakpoints.up('xl')} {
       font-size: 0.9rem;
     }
   }
 
-  .menu-button {
+  .menuButton {
     margin-left: 0.3rem;
+    margin-bottom: 0.2rem;
   }
 
   .expandOpen {

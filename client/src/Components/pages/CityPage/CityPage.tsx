@@ -5,7 +5,7 @@ import { useMediaQuery } from '@mui/material'
 
 import { CustomLoader } from '../../ui/CustomLoader/CustomLoader'
 import { Header } from '../../sections/Header/Header'
-import { ImageHeader } from '../../sections/Headers/ImageHeader'
+
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Footer } from '../../sections/Footer/Footer'
 import { CreateItemForm } from '../../forms/CreateItemForm/CreateItemForm'
@@ -23,6 +23,7 @@ import { theme } from '../../../theme/Theme'
 import { StyledContainer } from './styles'
 import { selectActivitiesForCity } from '../../../redux/activitiesSlice'
 import { selectItinerariesForCity } from '../../../redux/itinerariesSlice'
+import { Hero } from '../../sections/Hero/Hero'
 
 export const CityPage: React.FC = () => {
   const mdDown = useMediaQuery(theme.breakpoints.down('md'))
@@ -69,7 +70,7 @@ export const CityPage: React.FC = () => {
   return (
     <StyledContainer>
       <Header />
-      <ImageHeader img={img} />
+      <Hero img={img} size="medium" />
       <PageInfoCard
         user={currentUser}
         itemId={cityId}

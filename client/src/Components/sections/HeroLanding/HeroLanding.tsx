@@ -1,31 +1,31 @@
 import { Link } from 'react-router-dom'
 
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useAppSelector } from '../../../redux/hooks'
 import { selectAuthenticated } from '../../../redux/authSlice'
 
 import { theme } from '../../../theme/Theme'
-import { StyledContainer } from './styles'
+import { StyledContainer, StyledHero } from './styles'
 
-export const HeroSection = () => {
+export const HeroLanding = () => {
   const matches = useMediaQuery(theme.breakpoints.up('lg'))
 
   const isAuthenticated = useAppSelector(selectAuthenticated)
 
   return (
     <StyledContainer>
-      <Grid item container direction="column" spacing={0} className="container">
-        <Grid item xs={12}>
+      <StyledHero>
+        <div className="text-container">
           <Typography variant="h1" className="title">
             Find the perfect tour
           </Typography>
           <Typography variant="subtitle1" className="subtitle">
             designed by insiders who know and love their cities
           </Typography>
-        </Grid>
-        <Grid item xs={12} className="btns-container">
+        </div>
+        <div className="btns-container">
           <div className="start-btn-container">
             <Button
               className="start-btn"
@@ -67,8 +67,8 @@ export const HeroSection = () => {
               </Button>
             </Box>
           )}
-        </Grid>
-      </Grid>
+        </div>
+      </StyledHero>
     </StyledContainer>
   )
 }

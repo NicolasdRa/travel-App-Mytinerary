@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 
-import { Button, Grid, SxProps, Theme } from '@mui/material'
+import { Button, Divider, Grid, SxProps, Theme } from '@mui/material'
 
 import logo from '../../../assets/images/Logo.svg'
 import { StyledFooter } from './styles'
@@ -15,11 +15,11 @@ export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
 
   return (
     <StyledFooter sx={[...(Array.isArray(sx) ? sx : [sx])]}>
-      <Grid container direction="row" justifyContent="center">
+      <Divider className="divider" />
+      <div className="container">
         <Grid
           item
           md={4}
-          xl={3}
           container
           direction="row"
           justifyContent="center"
@@ -43,7 +43,6 @@ export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
           item
           container
           md={4}
-          xl={3}
           direction="column"
           justifyContent="center"
           alignItems="center"
@@ -61,18 +60,16 @@ export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
           item
           container
           md={4}
-          xl={3}
           direction="row"
           justifyContent="center"
           alignItems="center"
-          className="link"
         >
           <p className="text">
             * Mytinerary is not a travel agency, charges no fees and holds no
             responsibility for the content created by users.
           </p>
         </Grid>
-      </Grid>
+      </div>
     </StyledFooter>
   )
 }

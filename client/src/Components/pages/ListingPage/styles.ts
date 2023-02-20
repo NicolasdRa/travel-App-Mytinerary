@@ -1,9 +1,10 @@
 import { styled } from '@mui/material/styles'
 
-export const StyledListingPageContainer = styled('div')`
-  background-color: ${(props) => props.theme.palette.background.paper};
+export const StyledContainer = styled('div')`
+  margin: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  flex: 0 0 auto;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
 `

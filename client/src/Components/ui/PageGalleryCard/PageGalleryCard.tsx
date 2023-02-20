@@ -15,7 +15,6 @@ export const PageGalleryCard: React.FC<PageGalleryCardProps> = ({
   items,
   source,
 }) => {
-  console.log({ items })
   return (
     <StyledContainer>
       <Typography variant="body2" className="subtitle">
