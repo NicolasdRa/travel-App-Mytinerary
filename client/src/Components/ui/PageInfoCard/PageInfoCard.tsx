@@ -39,79 +39,107 @@ export const PageInfoCard: React.FC<PageInfoCardProps> = ({
 }) => {
   return (
     <StyledContainer>
-      <Typography className="overline" variant="overline">
-        {overline}
-      </Typography>
-      <div className="info">
-        <div className="title">
-          <Typography variant="h5">{title}</Typography>
+      <div className="top-container">
+        <Typography className="overline" variant="overline">
+          {overline}
+        </Typography>
+        <div className="topRight">
+          <div className="likes">
+            {user && favourites && (
+              <FavouriteComponent
+                readOnly={!user._id && true}
+                amount={favourites ? favourites.length : 0}
+                sourceType={source}
+                sourceId={itemId}
+                userId={user._id}
+              />
+            )}
+          </div>
         </div>
-        <div className="likes">
-          {user && favourites && (
-            <FavouriteComponent
-              readOnly={!user._id && true}
-              amount={favourites ? favourites.length : 0}
-              sourceType={source}
-              sourceId={itemId}
-              userId={user._id}
+      </div>
+
+      <div className="info">
+        <div className="infoLeft">
+          <div className="title">
+            <Typography variant="h5">{title}</Typography>
+          </div>
+          <Box
+            component="fieldset"
+            borderColor="transparent"
+            className="rating-container"
+          >
+            <Rating
+              name="read-only"
+              size="small"
+              precision={0.5}
+              value={ratingAvg}
+              readOnly
             />
+            <Typography
+              className="rating-number"
+              color="primary"
+              variant="body2"
+            >
+              ({ratingAvg})
+            </Typography>
+          </Box>
+          <div className="extra-info">
+            <div className="user-info">
+              <Avatar
+                // aria-label='recipe'
+                // variant='rounded'
+                alt={authorName}
+                src={authorImg}
+                className="avatar"
+              />
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="p"
+                className="author_name"
+              >
+                {authorName ? `by ${authorName}` : 'by anonymous'}
+              </Typography>
+            </div>
+            <div className="price-time">
+              <div className="duration">
+                <AccessTimeIcon className="icons" />
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {duration}
+                </Typography>
+              </div>
+              <div className="price">
+                <EuroIcon className="icons" />
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {price}
+                </Typography>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="infoRight">
+          {description && (
+            <div className="description-desktop">
+              <Typography variant="body1" className="description-title">
+                Description
+              </Typography>
+              <Typography variant="body2" className="description-text">
+                {description}
+              </Typography>
+            </div>
           )}
         </div>
       </div>
-      <Box
-        component="fieldset"
-        borderColor="transparent"
-        className="rating-container"
-      >
-        <Rating
-          name="read-only"
-          size="small"
-          precision={0.5}
-          value={ratingAvg}
-          readOnly
-        />
-        <Typography className="rating-number" color="primary" variant="body2">
-          ({ratingAvg})
-        </Typography>
-      </Box>
-      <div className="extra-info">
-        <div className="user-info">
-          <Avatar
-            // aria-label='recipe'
-            // variant='rounded'
-            alt={authorName}
-            src={authorImg}
-            className="avatar"
-          />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            className="author_name"
-          >
-            {authorName ? `by ${authorName}` : 'by anonymous'}
+      <Divider className="divider" />
+      {description && (
+        <div className="description-mobile">
+          <Typography variant="body1" className="description-title">
+            Description
           </Typography>
+          <Typography variant="body2">{description}</Typography>
+          <Divider className="divider" />
         </div>
-        <div className="price-time">
-          <div className="duration">
-            <AccessTimeIcon className="icons" />
-            <Typography variant="body2" color="textSecondary" component="p">
-              {duration}
-            </Typography>
-          </div>
-          <div className="price">
-            <EuroIcon className="icons" />
-            <Typography variant="body2" color="textSecondary" component="p">
-              {price}
-            </Typography>
-          </div>
-        </div>
-      </div>
-      <Divider className="divider" />
-      <Typography variant="body2" className="decription">
-        {description}
-      </Typography>
-      <Divider className="divider" />
+      )}
     </StyledContainer>
   )
 }

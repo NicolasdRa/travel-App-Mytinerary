@@ -74,7 +74,7 @@ export const ItineraryPage: React.FC = () => {
   return (
     <StyledContainer>
       <Header />
-      <Hero img={img} />
+      <Hero img={img} size="medium" />
       <PageInfoCard
         user={currentUser}
         itemId={itineraryId}

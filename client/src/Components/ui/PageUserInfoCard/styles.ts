@@ -6,7 +6,7 @@ export const StyledContainer = styled('div')`
   flex-direction: column;
   justify-content: space-between;
   margin: 0;
-  padding: 0;
+  padding: 0 0.8rem;
   width: 100vw;
 
   ${(props) => props.theme.breakpoints.up('md')} {
@@ -40,11 +40,9 @@ export const StyledContainer = styled('div')`
     flex-direction: row;
     justify-content: flex-end;
     margin-top: -4rem;
-    padding: 0 1rem 0 0;
 
     ${(props) => props.theme.breakpoints.down('sm')} {
       margin-top: -3rem;
-      padding: 0 1rem 0 0;
     }
   }
 
@@ -79,7 +77,6 @@ export const StyledContainer = styled('div')`
   }
 
   .description-container {
-    margin: 0 1rem;
   }
 
   .description-title {

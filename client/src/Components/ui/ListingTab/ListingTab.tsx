@@ -43,6 +43,7 @@ export const ListingTab: React.FC<ListingTabProps> = ({
         searchBar
         searchBarTitle={searchBarTitle}
         searchBarLabel={searchBarLabel}
+        size="large"
       />
       <Typography variant="subtitle2" className="page-subtitle">
         {galleryTitle}

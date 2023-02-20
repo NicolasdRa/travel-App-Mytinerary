@@ -1,12 +1,13 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
-  .container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .largeContainer {
     height: 35vh;
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
 
     ${(props) => props.theme.breakpoints.up('md')} {
       height: 40vh;
@@ -20,10 +21,18 @@ export const StyledContainer = styled('div')`
 
   .mediumContainer {
     height: 25vh;
-    position: relative;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
+
+    ${(props) => props.theme.breakpoints.up('md')} {
+      width: 80vw;
+    }
+
+    ${(props) => props.theme.breakpoints.up('lg')} {
+      width: 70vw;
+    }
+  }
+
+  .smallContainer {
+    height: 20vh;
 
     ${(props) => props.theme.breakpoints.up('md')} {
       width: 80vw;

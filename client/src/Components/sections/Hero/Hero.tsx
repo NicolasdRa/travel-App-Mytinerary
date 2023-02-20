@@ -10,7 +10,7 @@ interface HeroProps {
   searchBar?: boolean
   searchBarTitle?: string
   searchBarLabel?: string
-  size?: 'small' | 'medium' | 'large'
+  size: 'small' | 'medium' | 'large'
 }
 
 // image header for listing tabs: cities, itineraries, activities
@@ -24,12 +24,18 @@ export const Hero: React.FC<HeroProps> = ({
   searchBar = false,
   size = 'large',
 }) => {
-  console.log(img)
-
   return (
     <StyledContainer sx={{ backgroundImage: img }}>
       {img ? (
-        <div className={size === 'medium' ? 'mediumContainer' : 'container'}>
+        <div
+          className={
+            size === 'large'
+              ? 'largeContainer'
+              : size === 'medium'
+              ? 'mediumContainer'
+              : 'smallContainer'
+          }
+        >
           <Box sx={{ backgroundImage: `url(${img})` }} className="img" />
           <div className="textArea">
             <Typography color="white" variant="h6" className="title">

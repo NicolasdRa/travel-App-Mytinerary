@@ -8,18 +8,10 @@ export const StyledContainer = styled('div')`
   flex-direction: column;
   justify-content: space-between;
   margin: 0;
-  padding: 0 0 3rem 0;
-  width: 94vw;
-
-  /* margin: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
+  padding: 0 0.8rem;
+  width: 100vw;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    padding: 0 0 3rem 0;
     width: 80vw;
   }
 
