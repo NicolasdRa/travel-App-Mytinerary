@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles'
 import Image from '../../../assets/images/bg4.jpg'
 
 export const StyledContainer = styled('div')`
-  align-content: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 100px);

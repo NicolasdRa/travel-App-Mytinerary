@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-import { Typography } from '@mui/material'
+import { Typography, useMediaQuery } from '@mui/material'
 
 import { HeroLanding } from '../../sections/HeroLanding/HeroLanding'
 import { CardGallery } from '../../sections/CardGallery/CardGallery'
@@ -11,8 +11,10 @@ import { selectAllItineraries } from '../../../redux/itinerariesSlice'
 import { StyledContainer } from './styles'
 import { BottomNav } from '../../sections/BottomNav/BottomNav'
 import { Header } from '../../sections/Header/Header'
+import { theme } from '../../../theme/Theme'
 
 export const LandingPage = () => {
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const itineraries = useSelector(selectAllItineraries)
 
   return (
@@ -25,8 +27,7 @@ export const LandingPage = () => {
         </Typography>
         <CardGallery items={itineraries} source="itineraries" />
       </div>
-      <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
-      <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
+      {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )
 }

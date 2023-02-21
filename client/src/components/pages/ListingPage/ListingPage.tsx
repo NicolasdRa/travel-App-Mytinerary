@@ -1,4 +1,4 @@
-import { Alert } from '@mui/material'
+import { Alert, useMediaQuery } from '@mui/material'
 
 import { Header } from '../../sections/Header/Header'
 import { Footer } from '../../sections/Footer/Footer'
@@ -13,8 +13,10 @@ import { useAppSelector } from '../../../redux/hooks'
 import { selectCurrentUser } from '../../../redux/usersSlice'
 
 import { StyledContainer } from './styles'
+import { theme } from '../../../theme/Theme'
 
 export const ListingPage = () => {
+  const mdDown = useMediaQuery(theme.breakpoints.down('md'))
   const currentUser = useAppSelector(selectCurrentUser)
 
   return (
@@ -35,8 +37,7 @@ export const ListingPage = () => {
           You must log in in order to create an itinerary
         </Alert>
       )}
-      <BottomNav sx={{ display: { xs: 'flex', lg: 'none' } }} />
-      <Footer sx={{ display: { xs: 'none', md: 'flex' } }} />
+      {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )
 }

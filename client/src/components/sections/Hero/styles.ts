@@ -1,57 +1,25 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
-  position: relative;
-  width: 100%;
+  align-items: center;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
 
-  .largeContainer {
-    height: 35vh;
-
-    ${(props) => props.theme.breakpoints.up('md')} {
-      height: 40vh;
-      width: 80vw;
-    }
-
-    ${(props) => props.theme.breakpoints.up('lg')} {
-      width: 70vw;
-    }
-  }
-
-  .mediumContainer {
-    height: 25vh;
-
-    ${(props) => props.theme.breakpoints.up('md')} {
-      width: 80vw;
-    }
-
-    ${(props) => props.theme.breakpoints.up('lg')} {
-      width: 70vw;
-    }
-  }
-
-  .smallContainer {
-    height: 20vh;
-
-    ${(props) => props.theme.breakpoints.up('md')} {
-      width: 80vw;
-    }
-
-    ${(props) => props.theme.breakpoints.up('lg')} {
-      width: 70vw;
-    }
-  }
-
-  .img {
+  .container {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.758) contrast(130%) saturate(40%);
 
     ${(props) => props.theme.breakpoints.up('md')} {
       border-radius: 10px;
+      width: 80vw;
+    }
+
+    ${(props) => props.theme.breakpoints.up('lg')} {
+      width: 70vw;
     }
   }
 
@@ -105,5 +73,35 @@ export const StyledContainer = styled('div')`
       width: 25rem;
       bottom: 30px;
     }
+  }
+
+  .large {
+    height: 30vh;
+  }
+
+  .medium {
+    height: 25vh;
+  }
+
+  .small {
+    height: 20vh;
+  }
+`
+
+export const StyledImage = styled('div')`
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(0.758) contrast(130%) saturate(40%);
+  width: 100vw;
+
+  ${(props) => props.theme.breakpoints.up('md')} {
+    border-radius: 10px;
+    width: 80vw;
+  }
+
+  ${(props) => props.theme.breakpoints.up('lg')} {
+    height: 40vh;
+    width: 70vw;
   }
 `

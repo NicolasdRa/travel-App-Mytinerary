@@ -2,11 +2,14 @@ import { Dialog } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const StyledMainContainer = styled('div')`
-  .add_btn {
-    position: fixed;
-    bottom: 4rem;
-    right: 1.5rem;
-    z-index: 1000;
+  position: fixed;
+  bottom: 0rem;
+  right: 8rem;
+  z-index: 1000;
+
+  ${(props) => props.theme.breakpoints.down('md')} {
+    bottom: 2rem;
+    right: 0rem;
   }
 `
 

@@ -1,5 +1,5 @@
-import { Box, Skeleton, Typography } from '@mui/material'
-import { StyledContainer } from './styles'
+import { Skeleton, Typography } from '@mui/material'
+import { StyledContainer, StyledImage } from './styles'
 import { SearchBar } from '../../ui/SearchBar/SearchBar'
 
 interface HeroProps {
@@ -22,21 +22,26 @@ export const Hero: React.FC<HeroProps> = ({
   searchBarTitle,
   searchBarLabel,
   searchBar = false,
-  size = 'large',
+  size = 'medium',
 }) => {
   return (
-    <StyledContainer sx={{ backgroundImage: img }}>
+    <StyledContainer>
       {img ? (
         <div
-          className={
-            size === 'large'
-              ? 'largeContainer'
-              : size === 'medium'
-              ? 'mediumContainer'
-              : 'smallContainer'
-          }
+          className={`${
+            size === 'large' ? 'large' : size === 'medium' ? 'medium' : 'small'
+          } container`}
         >
-          <Box sx={{ backgroundImage: `url(${img})` }} className="img" />
+          <StyledImage
+            sx={{ backgroundImage: `url(${img})` }}
+            className={
+              size === 'large'
+                ? 'large'
+                : size === 'medium'
+                ? 'medium'
+                : 'small'
+            }
+          />
           <div className="textArea">
             <Typography color="white" variant="h6" className="title">
               {title}

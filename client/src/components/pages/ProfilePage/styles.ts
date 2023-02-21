@@ -1,10 +1,10 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
-  margin: 0;
-  width: 100%;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  margin: 0;
+  width: 100%;
 `
