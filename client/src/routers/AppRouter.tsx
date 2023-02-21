@@ -10,7 +10,7 @@ import { AlertProps, Snackbar } from '@mui/material'
 
 import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
-import { CustomLoader } from '../components/ui/CustomLoader/CustomLoader'
+
 import { LandingPage } from '../components/pages/LandingPage/LandingPage'
 import { LoginPage } from '../components/pages/LoginPage/LoginPage'
 import { SignupPage } from '../components/pages/SignupPage/SignupPage'
@@ -20,6 +20,7 @@ import { ItineraryPage } from '../components/pages/ItineraryPage/ItineraryPage'
 import { ActivityPage } from '../components/pages/ActivityPage/ActivityPage'
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage'
 import { PasswordResetPage } from '../components/pages/PasswordResetPage/PasswordResetPage'
+import { CustomLoader } from '../components/ui/CustomLoader/CustomLoader'
 
 import { fetchCities } from '../redux/citiesSlice'
 import { fetchItineraries } from '../redux/itinerariesSlice'

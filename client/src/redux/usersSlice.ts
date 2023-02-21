@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { usersUrl } from '../constants'
-import { User, Itinerary, Activity } from '../@types/types'
+import { User, Itinerary } from '../@types/types'
 import { RootState } from './store'
 
 // THUNKS
