@@ -11,7 +11,7 @@ process.on('uncaughtException', (error) => {
 dotenv.config({ path: './.env' })
 
 const app = require('./app')
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 5000
 
 const db = process.env.DB_CONNECT
 mongoose

@@ -34,13 +34,29 @@ app.enable('trust proxy')
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 
-// Global MIDDLEWARE
+// Global MIDDLEWARES
+
+// Implement CORS - Cross Origin Resource Sharing
+var whitelist = [
+  'http://localhost:3000',
+  'http://localhost:5000',
+  process.env.FRONTEND_URL,
+]
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+}
 
 // Cors - simple requests (get, post) - Access-Control-Allow-Origin *
-app.use(cors())
+app.use(cors(corsOptions))
 
 // Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
-app.options('*', cors())
+app.options('*', cors(corsOptions))
 
 // serves statics files (uploaded imgs)
 const staticDir = path.join(__dirname, 'public')
@@ -51,12 +67,12 @@ app.use(helmet())
 
 // ENABLE FOR PRODUCTION AND SET APPROPRIATE LIMIT
 // Limit requests from same API - against Brute force attack
-// const limiter = rateLimit({
-//   max: 500,
-//   windowMs: 60 * 60 * 1000,
-//   message: 'Too many requests from the IP, please try again in an hour!'
-// })
-// app.use('/api', limiter)
+const limiter = rateLimit({
+  max: 500,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from the IP, please try again in an hour!',
+})
+app.use('/api', limiter)
 
 // Body parsers
 app.use(express.json({ limit: '500kb' }))
