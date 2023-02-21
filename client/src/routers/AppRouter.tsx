@@ -13,6 +13,7 @@ import { PrivateRoute } from './PrivateRoute'
 
 import { LandingPage } from '../components/pages/LandingPage/LandingPage'
 import { LoginPage } from '../components/pages/LoginPage/LoginPage'
+
 import { SignupPage } from '../components/pages/SignupPage/SignupPage'
 import { ListingPage } from '../components/pages/ListingPage/ListingPage'
 import { CityPage } from '../components/pages/CityPage/CityPage'
