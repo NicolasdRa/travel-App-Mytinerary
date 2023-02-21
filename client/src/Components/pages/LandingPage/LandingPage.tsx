@@ -15,6 +15,8 @@ import { Header } from '../../sections/Header/Header'
 export const LandingPage = () => {
   const itineraries = useSelector(selectAllItineraries)
 
+  console.log('test')
+
   return (
     <StyledContainer>
       <Header />
