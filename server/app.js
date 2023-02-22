@@ -37,26 +37,26 @@ app.set('views', path.join(__dirname, 'views'))
 // Global MIDDLEWARES
 
 // Implement CORS - Cross Origin Resource Sharing
-var whitelist = [
-  'http://localhost:3000',
-  'http://localhost:5000',
-  process.env.FRONTEND_URL,
-]
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-}
+// var whitelist = [
+//   'http://localhost:3000',
+//   'http://localhost:5000',
+//   process.env.FRONTEND_URL,
+// ]
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   },
+// }
 
 // Cors - simple requests (get, post) - Access-Control-Allow-Origin *
-app.use(cors(corsOptions))
+app.use(cors())
 
 // Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
-app.options('*', cors(corsOptions))
+app.options('*', cors())
 
 // serves statics files (uploaded imgs)
 const staticDir = path.join(__dirname, 'public')
