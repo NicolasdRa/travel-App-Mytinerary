@@ -67,12 +67,12 @@ app.use(helmet())
 
 // ENABLE FOR PRODUCTION AND SET APPROPRIATE LIMIT
 // Limit requests from same API - against Brute force attack
-const limiter = rateLimit({
-  max: 500,
-  windowMs: 60 * 60 * 1000,
-  message: 'Too many requests from the IP, please try again in an hour!',
-})
-app.use('/api', limiter)
+// const limiter = rateLimit({
+//   max: 500,
+//   windowMs: 60 * 60 * 1000,
+//   message: 'Too many requests from the IP, please try again in an hour!',
+// })
+// app.use('/api', limiter)
 
 // Body parsers
 app.use(express.json({ limit: '500kb' }))
