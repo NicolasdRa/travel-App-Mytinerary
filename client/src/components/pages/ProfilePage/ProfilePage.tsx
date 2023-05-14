@@ -28,7 +28,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   return (
     <StyledContainer>
       <Header />
-      <Hero img={coverImg} size="medium" />
+      <Hero img={coverImg} size="small" />
       <PageUserInfoCard user={user} />
       <PageUserTabsCard />
       <CreateItemForm currentUser={user} />

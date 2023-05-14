@@ -14,7 +14,7 @@ export const Header = () => {
 
   return (
     <StyledContainer>
-      <AppBar position="fixed" className="appBar">
+      <AppBar className="appBar">
         <Toolbar className="toolbar">
           <Button component={Link} to="/">
             <Box className="logo">

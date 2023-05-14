@@ -53,10 +53,10 @@ var corsOptions = {
 }
 
 // Cors - simple requests (get, post) - Access-Control-Allow-Origin *
-app.use(cors(corsOptions))
+app.use(cors())
 
 // Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
-app.options('*', cors(corsOptions))
+app.options('*', cors())
 
 // serves statics files (uploaded imgs)
 const staticDir = path.join(__dirname, 'public')

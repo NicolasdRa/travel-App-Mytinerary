@@ -2,6 +2,8 @@ export const baseUrl = process.env.REACT_APP_API_URL
 
 export const apiUrl = `${baseUrl}/api/v1/`
 
+console.log(apiUrl)
+
 export const authUrl = `${apiUrl}auth/`
 export const usersUrl = `${apiUrl}users/`
 export const citiesUrl = `${apiUrl}cities/`

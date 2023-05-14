@@ -84,7 +84,11 @@ export const StyledContainer = styled('div')`
   }
 
   .small {
-    height: 20vh;
+    height: 20h;
+
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 15vh;
+    }
   }
 `
 

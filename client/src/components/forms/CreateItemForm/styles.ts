@@ -8,7 +8,7 @@ export const StyledMainContainer = styled('div')`
   z-index: 1000;
 
   ${(props) => props.theme.breakpoints.down('md')} {
-    bottom: 2rem;
+    bottom: 0rem;
     right: 0rem;
   }
 `

@@ -8,10 +8,18 @@ export const StyledCard = styled(Card)`
   min-width: 14rem;
   overflow: visible;
   border-radius: 10px;
+  min-width: 320px;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    min-width: 380px;
-    /* max-width: 400px; */
+    width: 370px;
+
+    :hover {
+      box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 2px rgb(0 0 0 / 5%),
+        0 4px 4px rgb(0 0 0 / 5%), 0 6px 8px rgb(0 0 0 / 5%),
+        0 8px 16px rgb(0 0 0 / 5%);
+      transform: translateY(-0.8%);
+      transition: transform 0.13s ease-in-out;
+    }
   }
 
   .cardImg {
@@ -111,7 +119,8 @@ export const StyledCard = styled(Card)`
   .cardActions {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
+    margin: 0;
     padding: 0 0 0.5rem 0.2rem;
   }
 

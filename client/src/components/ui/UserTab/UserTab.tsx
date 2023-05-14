@@ -1,11 +1,11 @@
 import { Alert, Typography } from '@mui/material'
-import { CardGallerySmall } from '../CardGallerySmall/CardGallerySmall'
 import { useAppSelector } from '../../../redux/hooks'
 import { selectCurrentUser } from '../../../redux/usersSlice'
 import { Activity, Itinerary, User } from '../../../@types/types'
 import { StyledContainer } from './styles'
 import { selectItinerariesByUserId } from '../../../redux/itinerariesSlice'
 import { selectActivitiesByUserId } from '../../../redux/activitiesSlice'
+import { CardGallery } from 'components/sections/CardGallery/CardGallery'
 
 interface UserTabProps {
   parent: 'itineraries' | 'activities' | 'cities'
@@ -44,7 +44,7 @@ export const UserTab: React.FC<UserTabProps> = ({ parent }) => {
       </Typography>
       {getDataType(parent).length > 0 ? (
         <div className="gallery">
-          <CardGallerySmall items={getDataType(parent)} source={parent} />
+          <CardGallery items={getDataType(parent)} source={parent} />
         </div>
       ) : (
         <Alert severity="info">
@@ -57,7 +57,7 @@ export const UserTab: React.FC<UserTabProps> = ({ parent }) => {
       </Typography>
       {favourites.length > 0 ? (
         <div className="gallery">
-          <CardGallerySmall items={favourites} source={parent} />
+          <CardGallery items={favourites} source={parent} />
         </div>
       ) : (
         <Alert severity="info">

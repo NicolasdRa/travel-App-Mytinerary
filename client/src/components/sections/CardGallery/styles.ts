@@ -8,8 +8,11 @@ export const StyledContainer = styled('div')`
   position: relative;
   width: auto;
 
-  ${(props) => props.theme.breakpoints.up('md')} {
-  }
+  /* ${(props) => props.theme.breakpoints.up('md')} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80vw;
+  } */
 
   .message {
     margin-top: 1rem;

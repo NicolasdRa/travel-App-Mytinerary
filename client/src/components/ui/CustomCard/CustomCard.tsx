@@ -9,6 +9,7 @@ import {
   Typography,
   Grid,
   CircularProgress,
+  CardActions,
 } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
@@ -111,7 +112,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
           {source === 'cities' ? name : title}
         </Typography>
 
-        {(source === 'itineraries' || source === 'activities') && (
+        {(source === 'itineraries' || source === 'activities') && author && (
           <div className="authorInfo">
             <Avatar className="avatar" src={author ? author.img : 'anonymous'}>
               {author ? author.userName : 'anonymous'}
@@ -128,41 +129,36 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
         )}
         <div className="bottom-content">
           <div className="additionalInfo">
-            <div className="duration">
-              <AccessTimeIcon className="icons" />
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                component="p"
-                className="infoText"
-              >
-                {duration}
-              </Typography>
-            </div>
-            <div className="price">
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                component="p"
-                className="infoText"
-              >
-                Cost: {price}
-              </Typography>
-            </div>
+            {duration && (
+              <div className="duration">
+                <AccessTimeIcon className="icons" />
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  component="p"
+                  className="infoText"
+                >
+                  {duration}
+                </Typography>
+              </div>
+            )}
+            {price && (
+              <div className="price">
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  component="p"
+                  className="infoText"
+                >
+                  Cost: {price}
+                </Typography>
+              </div>
+            )}
           </div>
-          <Button
-            size="small"
-            color="secondary"
-            component={Link}
-            to={source === 'cities' ? `${link}${name}` : `${link}${title}`}
-            className="textBtn"
-          >
-            View more
-          </Button>
         </div>
       </CardContent>
 
-      {/* <CardActions className="cardActions">
+      <CardActions className="cardActions">
         <Button
           size="small"
           color="secondary"
@@ -172,7 +168,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
         >
           View more
         </Button>
-      </CardActions> */}
+      </CardActions>
     </StyledCard>
   )
 }

@@ -152,7 +152,7 @@ export const theme: Theme = createTheme({
           marginLeft: '15px',
 
           '@media (max-width: 500px)': {
-            fontSize: '1.2rem',
+            fontSize: '1.1rem',
           },
         },
 

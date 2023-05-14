@@ -54,6 +54,8 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   // const [cityOptions, setCityOptions] = useState<City[]>([])
   const [itineraryOptions, setItineraryOptions] = useState<Itinerary[]>([])
 
+  console.log(itineraryOptions)
+
   const cities = useAppSelector<City[]>(selectAllCities)
   const itineraries = useAppSelector<Itinerary[]>((state) =>
     selectItinerariesByUserId(state, currentUser._id)
@@ -213,7 +215,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
                 ))}
               </TextField> */}
             </FormControl>
-            {type === 'activity' && (
+            {type === 'activity' && itineraryOptions.length > 0 && (
               <FormControl className="formControl">
                 <TextField
                   required
@@ -233,98 +235,105 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
                 </TextField>
               </FormControl>
             )}
-            <TextField
-              size="small"
-              required
-              autoFocus
-              fullWidth
-              margin="dense"
-              name="title"
-              label="Title"
-              autoComplete="current-title"
-              value={title}
-              onChange={handleInputChange}
-              className="input_field"
-            />
-            <Grid item container className="price_duration">
-              <Grid item xs={12} sm={4} container>
-                <FormControl className="formControl">
-                  <TextField
-                    required
-                    select
-                    size="small"
-                    className="select"
-                    label="Category"
-                    name="category"
-                    value={category}
-                    onChange={handleInputChange}
-                  >
-                    {categoryOptions.map((option, index) => (
-                      <MenuItem key={index} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </FormControl>
+            {(type === 'itinerary' ||
+              (type === 'activity' && itineraryOptions.length)) && (
+              <TextField
+                size="small"
+                required
+                autoFocus
+                fullWidth
+                margin="dense"
+                name="title"
+                label="Title"
+                autoComplete="current-title"
+                value={title}
+                onChange={handleInputChange}
+                className="input_field"
+              />
+            )}
+            {(type === 'itinerary' || type === 'activity') && (
+              <Grid item container className="price_duration">
+                <Grid item xs={12} sm={4} container>
+                  <FormControl className="formControl">
+                    <TextField
+                      required
+                      select
+                      size="small"
+                      className="select"
+                      label="Category"
+                      name="category"
+                      value={category}
+                      onChange={handleInputChange}
+                    >
+                      {categoryOptions.map((option, index) => (
+                        <MenuItem key={index} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6} sm={4} container>
+                  <FormControl className="formControl">
+                    <TextField
+                      required
+                      select
+                      size="small"
+                      className="select"
+                      label="Price"
+                      name="price"
+                      value={price}
+                      onChange={handleInputChange}
+                    >
+                      {priceOptions.map((option, index) => (
+                        <MenuItem key={index} id="price" value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6} sm={4} container>
+                  <FormControl className="formControl">
+                    <TextField
+                      required
+                      select
+                      size="small"
+                      className="select"
+                      label="Duration"
+                      name="duration"
+                      value={duration}
+                      onChange={handleInputChange}
+                    >
+                      {durationOptions.map((option, index) => (
+                        <MenuItem
+                          key={index}
+                          id="duration"
+                          value={option}
+                        >{`${option} hs`}</MenuItem>
+                      ))}
+                    </TextField>
+                  </FormControl>
+                </Grid>
               </Grid>
-              <Grid item xs={6} sm={4} container>
-                <FormControl className="formControl">
-                  <TextField
-                    required
-                    select
-                    size="small"
-                    className="select"
-                    label="Price"
-                    name="price"
-                    value={price}
-                    onChange={handleInputChange}
-                  >
-                    {priceOptions.map((option, index) => (
-                      <MenuItem key={index} id="price" value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={4} container>
-                <FormControl className="formControl">
-                  <TextField
-                    required
-                    select
-                    size="small"
-                    className="select"
-                    label="Duration"
-                    name="duration"
-                    value={duration}
-                    onChange={handleInputChange}
-                  >
-                    {durationOptions.map((option, index) => (
-                      <MenuItem
-                        key={index}
-                        id="duration"
-                        value={option}
-                      >{`${option} hs`}</MenuItem>
-                    ))}
-                  </TextField>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <TextField
-              required
-              autoFocus
-              fullWidth
-              multiline
-              rows={3}
-              margin="dense"
-              name="details"
-              label="Description"
-              type="details"
-              autoComplete="current-details"
-              value={details}
-              onChange={handleInputChange}
-              className="input_field"
-            />
+            )}
+            {(type === 'itinerary' || type === 'activity') && (
+              <TextField
+                required
+                autoFocus
+                fullWidth
+                multiline
+                rows={3}
+                margin="dense"
+                name="details"
+                label="Description"
+                type="details"
+                autoComplete="current-details"
+                value={details}
+                onChange={handleInputChange}
+                className="input_field"
+              />
+            )}
             <div>
               {!previewFile ? (
                 <UploadCoverImgForm
