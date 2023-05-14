@@ -215,8 +215,7 @@ export const selectItinerariesForCity = createSelector(
 
 export const selectItinerariesByUserId = createSelector(
   [selectAllItineraries, (state, id) => id],
-  (itineraries, id) =>
-    itineraries.filter((itinerary) => itinerary.author._id === id)
+  (itineraries, id) => itineraries.filter((item) => item.author._id === id)
 )
 
 // This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analise if it is worth doing it

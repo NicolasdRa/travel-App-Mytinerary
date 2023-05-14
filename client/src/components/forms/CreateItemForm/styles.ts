@@ -98,4 +98,9 @@ export const StyledDialog = styled(Dialog)`
   .clearButton {
     align-self: flex-end;
   }
+
+  .warning {
+    padding-top: 10px;
+    color: red;
+  }
 `

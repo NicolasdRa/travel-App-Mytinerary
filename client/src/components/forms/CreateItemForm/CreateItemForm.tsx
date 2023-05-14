@@ -1,7 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react'
 
 import {
-  Backdrop,
   Button,
   DialogActions,
   DialogContent,
@@ -53,8 +52,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   const [previewFile, setPreviewFile] = useState(null)
   // const [cityOptions, setCityOptions] = useState<City[]>([])
   const [itineraryOptions, setItineraryOptions] = useState<Itinerary[]>([])
-
-  console.log(itineraryOptions)
+  const [city, setCity] = useState('')
 
   const cities = useAppSelector<City[]>(selectAllCities)
   const itineraries = useAppSelector<Itinerary[]>((state) =>
@@ -77,16 +75,8 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   })
 
   const { itinerary, title, category, price, duration, details } = formValues
-  const [city, setCity] = useState('')
 
   const { _id: userId } = currentUser
-
-  // handles city options
-  // useEffect(() => {
-  //   if (cities.length > 0) {
-  //     setCityOptions(cities)
-  //   }
-  // }, [])
 
   // handles itinerary options based on city selection
   useEffect(() => {
@@ -176,6 +166,14 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
     reset()
   }
 
+  const formIntroMessage = {
+    generic: 'Add details, a photo and submit',
+    city: 'Type city name and choose, add a photo and submit',
+    itinerary: 'Type city name, choose city, add details, a photo and submit',
+    activity:
+      'Start by choosing the desired city and itinerary, complete details, add photo and submit. You can only add activities to already created itineraries. If your activity is not linked with an existent itinerary create a new itinerary first.',
+  }
+
   return (
     <StyledMainContainer>
       <CustomDial />
@@ -190,7 +188,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
           </Typography>
           <DialogContent className="content">
             <Typography variant="body2" className="subtitle">
-              Add details, a photo and submit.
+              {formIntroMessage[type]}
             </Typography>
             <FormControl className="formControl">
               <LiveSearch
@@ -198,22 +196,6 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
                 target="cities"
                 handleAutcompleteValueChange={handleAutcompleteValueChange}
               />
-              {/* <TextField
-                required
-                select
-                size="small"
-                className="select"
-                label="Choose a city"
-                name="city"
-                value={city}
-                onChange={handleInputChange}
-              >
-                {cityOptions.map((option, index) => (
-                  <MenuItem key={index} value={option.name}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </TextField> */}
             </FormControl>
             {type === 'activity' && itineraryOptions.length > 0 && (
               <FormControl className="formControl">
@@ -234,9 +216,15 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
                   ))}
                 </TextField>
               </FormControl>
+            )}{' '}
+            {type === 'activity' && itineraryOptions.length <= 0 && city && (
+              <Typography className="warning">
+                No Itineraries have been created for {city}. You must create an
+                itinerary first and then add you desired activity.
+              </Typography>
             )}
             {(type === 'itinerary' ||
-              (type === 'activity' && itineraryOptions.length)) && (
+              (type === 'activity' && itineraryOptions.length > 0)) && (
               <TextField
                 size="small"
                 required

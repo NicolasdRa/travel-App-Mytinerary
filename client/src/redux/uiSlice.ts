@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 // THUNKS
 
 // INTERFACE
+
 interface UiSlice {
   forms: {
     logInForm: {
@@ -13,7 +14,7 @@ interface UiSlice {
     }
     addItemForm: {
       open: boolean
-      type: string | undefined
+      type: 'generic' | 'city' | 'itinerary' | 'activity'
     }
   }
   snackBar: {
@@ -30,7 +31,7 @@ const initialState: UiSlice = {
     signUpForm: { open: false },
     addItemForm: {
       open: false,
-      type: undefined,
+      type: 'generic',
     },
   },
 
@@ -59,7 +60,12 @@ const uiSlice = createSlice({
       state.forms.signUpForm.open = !open
     },
     toggleAddItemForm: {
-      reducer(state, action: PayloadAction<{ type: string }>) {
+      reducer(
+        state,
+        action: PayloadAction<{
+          type: 'generic' | 'city' | 'itinerary' | 'activity'
+        }>
+      ) {
         const open = state.forms.addItemForm.open
 
         state.forms.addItemForm.open = !open
