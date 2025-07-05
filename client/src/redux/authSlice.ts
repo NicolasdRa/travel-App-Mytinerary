@@ -22,6 +22,7 @@ export const signupUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         data: formData,
+        withCredentials: true, // Important for JWT cookies
       })
       return res.data
     } catch (error: any) {
@@ -46,13 +47,14 @@ export const logInUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         data: formData,
+        withCredentials: true, // Important for JWT cookies
       })
       return res.data
     } catch (error: any) {
       if (!error.response) {
         throw error
       }
-      error && dispatch(logOutUser())
+      // Don't logout on login errors - only return the error
       return rejectWithValue(error.response.data)
     }
   }
@@ -69,6 +71,7 @@ export const setUser = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true, // Important for JWT cookies
       })
 
       return res.data
@@ -93,6 +96,7 @@ export const logOutUser = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true, // Important for JWT cookies
       })
       return res.data
     } catch (error: any) {

@@ -37,15 +37,23 @@ export const Login = () => {
     password: '',
   })
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    // TODO: improve error handlig here showing a snackbar if error
-    // TODO: check if loader reads pending state dispatched in thunk
-    dispatch(logInUser(formValues)).catch((error) => console.log(error))
-
-    navigate(`'${redirectPath}'`, { replace: true })
-    reset()
+    try {
+      // Wait for login to complete before navigating
+      const result = await dispatch(logInUser(formValues))
+      if (logInUser.fulfilled.match(result)) {
+        // Login successful - navigate and reset
+        navigate(redirectPath || '/', { replace: true })
+        reset()
+      } else {
+        // Login failed - show error (TODO: implement proper error display)
+        console.log('Login failed:', result.payload)
+      }
+    } catch (error) {
+      console.log('Login error:', error)
+    }
   }
 
   return (
