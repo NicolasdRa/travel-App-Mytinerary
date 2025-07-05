@@ -13,20 +13,19 @@ dotenv.config({ path: './.env' })
 const app = require('./app')
 const port = process.env.PORT || 5000
 
-const db = process.env.DB_CONNECT
+const db = process.env.DB_CONNECT || 'mongodb://localhost:27017/mytinerary'
 mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
+  .connect(db)
   .then(() => {
     console.log('Connection to Mongo DB established')
   })
+  .catch((err) => {
+    console.log('Failed to connect to MongoDB:', err.message)
+    console.log('Server will continue without database connection')
+  })
 
 // listens for requests
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App set up and server is running on port: ${port}`)
 })
 
