@@ -38,9 +38,10 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
     return urlPart[sourceType]
   }
 
-  const url = `${apiUrl}${getUrlPart(sourceType)}/${sourceId}/favourites`
+  // Don't make API calls if sourceId is undefined
+  const url = sourceId ? `${apiUrl}${getUrlPart(sourceType)}/${sourceId}/favourites` : null
 
-  // fetches data
+  // fetches data only if URL is valid
   const { data: favourites, isLoading, isError } = useFetchData(url, {})
 
   // fills count with DB data
@@ -74,6 +75,7 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
             [sourceType]: sourceId,
             user: userId,
           },
+          withCredentials: true,
         })
         setIconColour('secondary')
         setCount(count + 1)

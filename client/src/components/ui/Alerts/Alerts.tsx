@@ -1,9 +1,9 @@
 import { Alert } from '@mui/material'
-import uuid from 'react-uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function Alerts(errors: any) {
   return errors.map((error: any) => (
-    <div key={uuid()}>
+    <div key={uuidv4()}>
       <Alert color="error" style={{ color: 'red', margin: '1.5rem' }}>
         {error.msg}
       </Alert>

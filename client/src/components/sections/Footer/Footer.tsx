@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 
 import { Button, Divider, Grid, SxProps, Theme } from '@mui/material'
@@ -11,7 +11,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ sx = [] }) => {
-  const date = moment(new Date()).format('YYYY')
+  const date = dayjs().format('YYYY')
 
   return (
     <StyledFooter sx={[...(Array.isArray(sx) ? sx : [sx])]}>

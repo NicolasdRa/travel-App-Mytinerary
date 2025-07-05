@@ -1,4 +1,5 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { Avatar, Typography, Rating } from '@mui/material'
 import { StyledCard, StyledCardContent, StyledCardMessage } from './styles'
 import { Comment } from '../../../@types/types'
@@ -19,7 +20,8 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
     createdAt,
   } = comment
 
-  const date = moment(createdAt).startOf('day').fromNow()
+  dayjs.extend(relativeTime)
+  const date = dayjs(createdAt).startOf('day').fromNow()
 
   return (
     <StyledCard raised={false}>
