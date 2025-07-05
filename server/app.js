@@ -44,19 +44,23 @@ var whitelist = [
 ]
 var corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true)
+    
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
     }
   },
+  credentials: true, // Allow cookies to be sent with requests
 }
 
-// Cors - simple requests (get, post) - Access-Control-Allow-Origin *
-app.use(cors())
+// Cors - use whitelist for origin validation
+app.use(cors(corsOptions))
 
-// Cors - complex requests (update, patch, delete) - Access-Control-Allow-Origin *
-app.options('*', cors())
+// Cors - complex requests (update, patch, delete) - use whitelist
+app.options('*', cors(corsOptions))
 
 // serves statics files (uploaded imgs)
 const staticDir = path.join(__dirname, 'public')
@@ -65,14 +69,19 @@ app.use(express.static(staticDir))
 // Set security HTTP headers
 app.use(helmet())
 
-// ENABLE FOR PRODUCTION AND SET APPROPRIATE LIMIT
-// Limit requests from same API - against Brute force attack
-// const limiter = rateLimit({
-//   max: 500,
-//   windowMs: 60 * 60 * 1000,
-//   message: 'Too many requests from the IP, please try again in an hour!',
-// })
-// app.use('/api', limiter)
+// Rate limiting - enabled in production
+if (process.env.NODE_ENV === 'production') {
+  const limiter = rateLimit({
+    max: 100, // Limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    message: {
+      error: 'Too many requests from this IP, please try again in 15 minutes!'
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  })
+  app.use('/api', limiter)
+}
 
 // Body parsers
 app.use(express.json({ limit: '500kb' }))

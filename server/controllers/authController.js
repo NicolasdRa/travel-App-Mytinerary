@@ -22,8 +22,7 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    // set httpOnly to "true" for production
-    httpOnly: false,
+    httpOnly: process.env.NODE_ENV === 'production',
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
 
@@ -102,8 +101,7 @@ exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    // set httpOnly to "true" for production
-    httpOnly: false,
+    httpOnly: process.env.NODE_ENV === 'production',
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
   // res.json(user)
