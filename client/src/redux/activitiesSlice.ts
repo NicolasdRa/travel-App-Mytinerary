@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { ActivitiesService } from '../services'
 import { activitiesUrl } from '../constants'
 import { RootState } from './store'
 import { Activity } from '../@types/types'
@@ -8,12 +9,8 @@ import { Activity } from '../@types/types'
 export const fetchActivities = createAsyncThunk(
   'activities/fetchAll',
   async () => {
-    const res = await axios({
-      method: 'GET',
-      url: activitiesUrl,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await ActivitiesService.getAllActivities()
+    return data
   }
 )
 
@@ -159,13 +156,13 @@ export const selectActivitiesSortedByLikes = createSelector(
 
 export const selectActivityByTitle = createSelector(
   [selectAllActivities, (state, title) => title],
-  (activities, title) => activities.find((activity) => activity.title === title)
+  (activities: Activity[], title) => activities.find((activity: Activity) => activity.title === title)
 )
 
 export const selectActivitiesForItinerary = createSelector(
   [selectAllActivities, (state, title) => title],
   (activities, title) =>
-    activities.filter((activity) => activity.itinerary.title === title)
+    activities.filter((activity: Activity) => activity.itinerary.title === title)
 )
 
 export const selectRandomActivity = createSelector(

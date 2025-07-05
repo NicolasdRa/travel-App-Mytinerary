@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { favouritesUrl } from '../constants'
+import { FavouritesService } from '../services'
 import { RootState } from './store'
 import { Favourite } from '../@types/types'
 
@@ -8,12 +7,8 @@ import { Favourite } from '../@types/types'
 export const fetchFavourites = createAsyncThunk(
   'favourites/fetchAll',
   async (thunkAPI) => {
-    const res = await axios({
-      method: 'GET',
-      url: favouritesUrl,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await FavouritesService.getAllFavourites()
+    return data
   }
 )
 
@@ -67,35 +62,35 @@ export const selectAllFavourites = createSelector(
 
 export const selectUserFavourites = createSelector(
   [selectFavourites, (state, userId) => userId],
-  (favourites, userId) =>
+  (favourites: Favourite[], userId) =>
     favourites && userId
-      ? favourites.filter((favourite) => favourite.author._id === userId)
+      ? favourites.filter((favourite: Favourite) => favourite.author._id === userId)
       : []
 )
 
 export const selectCityFavourites = createSelector(
   [selectFavourites, (state, cityId) => cityId],
-  (favourites, cityId) =>
+  (favourites: Favourite[], cityId) =>
     favourites && cityId
-      ? favourites.filter((favourite) => favourite.city === cityId)
+      ? favourites.filter((favourite: Favourite) => favourite.city === cityId)
       : []
 )
 
 export const selectItineraryFavourites = createSelector(
   [selectFavourites, (state, itineraryId) => itineraryId],
-  (favourites, itineraryId) =>
+  (favourites: Favourite[], itineraryId) =>
     favourites && itineraryId
       ? favourites.filter(
-          (favourite) => favourite.itinerary._id === itineraryId
+          (favourite: Favourite) => favourite.itinerary._id === itineraryId
         )
       : []
 )
 
 export const selectActivityFavourites = createSelector(
   [selectFavourites, (state, activityId) => activityId],
-  (favourites, activityId) =>
+  (favourites: Favourite[], activityId) =>
     favourites && activityId
-      ? favourites.filter((favourite) => favourite.activity._id === activityId)
+      ? favourites.filter((favourite: Favourite) => favourite.activity._id === activityId)
       : []
 )
 

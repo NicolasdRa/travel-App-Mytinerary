@@ -182,29 +182,29 @@ export const selectAllComments = createSelector(
 
 export const selectCommentsForCity = createSelector(
   [selectAllComments, (state, city) => city],
-  (comments, city) =>
-    comments && city ? comments.filter((comment) => comment.city === city) : []
+  (comments: Comment[], city) =>
+    comments && city ? comments.filter((comment: Comment) => comment.city === city) : []
 )
 
 export const selectCommentsForItinerary = createSelector(
   [selectAllComments, (state, itinerary) => itinerary],
-  (comments, itinerary) =>
+  (comments: Comment[], itinerary) =>
     comments && itinerary
-      ? comments.filter((comment) => comment.itinerary === itinerary)
+      ? comments.filter((comment: Comment) => comment.itinerary === itinerary)
       : []
 )
 
 export const selectCommentById = createSelector(
   [selectAllComments, (state, id) => id],
-  (comments, id) =>
-    comments && id ? comments.filter((comment) => comment._id === id) : []
+  (comments: Comment[], id) =>
+    comments && id ? comments.filter((comment: Comment) => comment._id === id) : []
 )
 
 export const selectCommentsByUserId = createSelector(
   [selectAllComments, (state, userId) => userId],
-  (comments, userId) =>
+  (comments: Comment[], userId) =>
     comments && userId
-      ? comments.filter((comment) => comment.author === userId)
+      ? comments.filter((comment: Comment) => comment.author === userId)
       : []
 )
 

@@ -1,8 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit'
-import rootReducer from './rootReducer'
+import citiesSlice from './citiesSlice'
+import itinerariesSlice from './itinerariesSlice'
+import activitiesSlice from './activitiesSlice'
+import favouritesSlice from './favouritesSlice'
+import commentsSlice from './commentsSlice'
+import { authReducer } from '../features/auth'
+import usersSlice from './usersSlice'
+import uiSlice from './uiSlice'
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    cities: citiesSlice,
+    itineraries: itinerariesSlice,
+    activities: activitiesSlice,
+    favourites: favouritesSlice,
+    comments: commentsSlice,
+    auth: authReducer,
+    users: usersSlice,
+    ui: uiSlice,
+  },
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -5,19 +5,15 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { CitiesService } from '../services'
 import { citiesUrl } from '../constants'
 import { RootState } from './store'
 import { City, Favourite } from '../@types/types'
 
 // THUNKS
 export const fetchCities = createAsyncThunk('cities/fetchAll', async () => {
-  const res = await axios({
-    method: 'GET',
-    url: citiesUrl,
-    responseType: 'json',
-  })
-
-  return res.data
+  const data = await CitiesService.getAllCities()
+  return data
 })
 
 export const fetchCityByName = createAsyncThunk(

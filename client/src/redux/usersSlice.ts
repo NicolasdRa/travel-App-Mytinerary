@@ -5,6 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { UsersService } from '../services'
 import { usersUrl } from '../constants'
 import { User, Itinerary } from '../@types/types'
 import { RootState } from './store'
@@ -15,20 +16,14 @@ import { RootState } from './store'
 export const fetchCurrentUser = createAsyncThunk(
   'users/fetchCurrentUser',
   async () => {
-    const res = await axios({
-      method: 'GET',
-      url: `${usersUrl}me`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    const data = await UsersService.getCurrentUser()
 
     // autheticates state when user is already logged in (google or cookie still valid) and his data is available
-    // if (res.data) {
-    //   store.dispatch(isLoggedIn(res.data))
+    // if (data) {
+    //   store.dispatch(isLoggedIn(data))
     // }
 
-    return res.data
+    return data
   }
 )
 

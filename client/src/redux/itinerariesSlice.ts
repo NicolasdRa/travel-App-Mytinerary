@@ -5,6 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { ItinerariesService } from '../services'
 import { itinerariesUrl } from '../constants'
 import { Itinerary, Comment, Activity } from '../@types/types'
 import { RootState } from './store'
@@ -215,14 +216,14 @@ export const selectItinerariesForCity = createSelector(
 
 export const selectItinerariesByUserId = createSelector(
   [selectAllItineraries, (state, id) => id],
-  (itineraries, id) => itineraries.filter((item) => item.author._id === id)
+  (itineraries: Itinerary[], id) => itineraries.filter((item: Itinerary) => item.author._id === id)
 )
 
 // This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analise if it is worth doing it
 export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
-  (itineraries, title) =>
-    itineraries.filter((itinerary) => itinerary.title === title)[0]
+  (itineraries: Itinerary[], title) =>
+    itineraries.filter((itinerary: Itinerary) => itinerary.title === title)[0]
 )
 
 // Extract and export each action creator by name
