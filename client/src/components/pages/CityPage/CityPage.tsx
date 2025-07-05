@@ -45,10 +45,8 @@ export const CityPage: React.FC = () => {
 
   // fetches data from DB
   useEffect(() => {
-    console.log('City page rendered')
-
     dispatch(fetchCityByName(city_name))
-  }, [])
+  }, [dispatch, city_name])
 
   if (!city) {
     return <CustomLoader loading={true} message="City Page" />

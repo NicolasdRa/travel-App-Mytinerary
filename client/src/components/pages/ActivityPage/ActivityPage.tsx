@@ -35,7 +35,7 @@ export const ActivityPage: React.FC = () => {
   // fetches data from DB
   useEffect(() => {
     dispatch(fetchActivityByTitle(title))
-  }, [])
+  }, [dispatch, title])
 
   if (!activity) {
     return <CustomLoader loading={true} message="Activity Page" />

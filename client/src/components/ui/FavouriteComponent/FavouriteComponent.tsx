@@ -26,6 +26,7 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
   const [count, setCount] = useState(0)
   const [favourite, setFavourite] = useState(null)
   const [iconColour, setIconColour] = useState('default')
+  const [isProcessing, setIsProcessing] = useState(false)
 
   // TODO: replace switch with object
   const getUrlPart = (sourceType: 'city' | 'itinerary' | 'activity') => {
@@ -63,7 +64,8 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
   }, [favourite])
 
   const addFavourite = async () => {
-    if (!favourite) {
+    if (!favourite && !isProcessing) {
+      setIsProcessing(true)
       try {
         const res = await axios({
           method: 'POST',
@@ -81,35 +83,52 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
         setCount(count + 1)
         setFavourite(res.data.data.data)
       } catch (error) {
-        error instanceof Error && console.log(error.message)
+        // Revert optimistic update on error
+        console.error('Failed to add favourite:', error)
+        // Could show a toast notification here
+      } finally {
+        setIsProcessing(false)
       }
     }
   }
 
   const removeFavourite = async () => {
-    if (favourite) {
-      console.log(favourite['._id'])
+    if (favourite && !isProcessing) {
+      setIsProcessing(true)
+      const originalFavourite = favourite
+      const originalCount = count
+      
+      // Optimistic update
+      setFavourite(null)
+      setIconColour('default')
+      setCount(count - 1)
 
       try {
         const res = await axios({
           method: 'DELETE',
-          url: `${favouritesUrl}${favourite['_id']}`,
+          url: `${favouritesUrl}${originalFavourite['_id']}`,
           headers: {
             'Content-Type': 'application/json',
           },
         })
-        setFavourite(null)
-        setIconColour('default')
-        setCount(count - 1)
         return res
       } catch (error) {
-        error instanceof Error && console.log(error.message)
+        // Revert optimistic update on error
+        setFavourite(originalFavourite)
+        setIconColour('secondary')
+        setCount(originalCount)
+        console.error('Failed to remove favourite:', error)
+        // Could show a toast notification here
+      } finally {
+        setIsProcessing(false)
       }
     }
   }
 
   // toggles favourite btn action
   const handleClick = () => {
+    if (isProcessing) return // Prevent multiple clicks while processing
+    
     if (favourite === null) {
       addFavourite()
     } else {

@@ -47,14 +47,14 @@ export const AppRouter: React.FC = () => {
     if (jwt !== null || jwt !== 'loggedOut') {
       dispatch(setUser())
     }
-  }, [isAuthenticated])
+  }, [dispatch, isAuthenticated])
 
   useEffect(() => {
     // console.log('2st useEffect FETCH USER DATA', user)
     if (isAuthenticated) {
       dispatch(fetchCurrentUser())
     }
-  }, [isAuthenticated])
+  }, [dispatch, isAuthenticated])
 
   // fetches data from DB
   useEffect(() => {
@@ -64,7 +64,7 @@ export const AppRouter: React.FC = () => {
     dispatch(fetchActivities())
     dispatch(fetchFavourites())
     setisLoading(false)
-  }, [])
+  }, [dispatch])
 
   // manages alerts
   const [alert, setAlert] = useState(false)

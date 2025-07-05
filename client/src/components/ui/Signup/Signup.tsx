@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
@@ -20,7 +21,7 @@ export const Signup = () => {
   const navigate = useNavigate()
 
   const loading = useAppSelector(selectLoginLoading)
-  // const loading = 'pending'
+  const [error, setError] = useState<string | null>(null)
 
   // must be outside handleSubmit
   const redirectPath = localStorage.getItem('lastPath')
@@ -33,13 +34,24 @@ export const Signup = () => {
     passwordConfirm: '',
   })
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
+    setError(null) // Clear previous errors
 
-    // TODO: improve error handlig here showing a snackbar if error
-    // TODO: check if loader reads pending state dispatched in thunk
-    dispatch(signupUser(formValues)).catch((error) => console.log(error))
-    navigate(`'${redirectPath}'`, { replace: true })
+    try {
+      const result = await dispatch(signupUser(formValues))
+      if (signupUser.fulfilled.match(result)) {
+        // Signup successful - navigate
+        navigate(redirectPath || '/', { replace: true })
+      } else {
+        // Signup failed - show error message
+        const errorMessage = (result.payload as any)?.message || 'Signup failed. Please try again.'
+        setError(errorMessage)
+      }
+    } catch (error) {
+      // Handle unexpected errors
+      setError('An unexpected error occurred. Please try again.')
+    }
   }
 
   return (
@@ -69,6 +81,11 @@ export const Signup = () => {
         </Box>
 
         <form className="form">
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
           <TextField
             required
             autoFocus

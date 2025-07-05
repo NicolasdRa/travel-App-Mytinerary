@@ -1,4 +1,11 @@
-const createImage = (url) =>
+interface PixelCrop {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image()
     image.addEventListener('load', () => resolve(image))
@@ -7,34 +14,31 @@ const createImage = (url) =>
     image.src = url
   })
 
-function getRadianAngle(degreeValue) {
+function getRadianAngle(degreeValue: number): number {
   return (degreeValue * Math.PI) / 180
 }
 
-export const readFile = (file) => {
+export const readFile = (file: File): Promise<string | ArrayBuffer | null> => {
   return new Promise((resolve) => {
     const reader = new FileReader()
-    reader.addEventListener(
-      'load',
-      () => resolve(reader.result),
-      reader.readAsDataURL(file)
-    )
+    reader.addEventListener('load', () => resolve(reader.result))
+    reader.readAsDataURL(file)
   })
 }
 
-export const extractImageFileExtensionFromBase64 = (base64Data) => {
+export const extractImageFileExtensionFromBase64 = (base64Data: string): string => {
   return base64Data.substring(
     'data:image/'.length,
     base64Data.indexOf(';base64')
   )
 }
 
-export const base64StringtoFile = (base64String, filename) => {
-  var arr = base64String.split(','),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n)
+export const base64StringtoFile = (base64String: string, filename: string): File => {
+  const arr = base64String.split(',')
+  const mime = arr[0].match(/:(.*?);/)![1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
   while (n--) {
     u8arr[n] = bstr.charCodeAt(n)
   }
@@ -43,14 +47,18 @@ export const base64StringtoFile = (base64String, filename) => {
 
 /**
  * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
- * @param {File} image - Image File url
- * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
- * @param {number} rotation - optional rotation parameter
+ * @param imageSrc - Image File url
+ * @param pixelCrop - pixelCrop Object provided by react-easy-crop
+ * @param rotation - optional rotation parameter
  */
-export async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
+export async function getCroppedImg(
+  imageSrc: string,
+  pixelCrop: PixelCrop,
+  rotation: number = 0
+): Promise<string> {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+  const ctx = canvas.getContext('2d')!
 
   const maxSize = Math.max(image.width, image.height)
   const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
@@ -85,26 +93,15 @@ export async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
 
   // As Base64 string
   return canvas.toDataURL('image/jpeg')
-
-  // // As a blob
-  // return new Promise((resolve) => {
-  //   canvas.toBlob((file) => {
-  //     resolve(URL.createObjectURL(file))
-  //   }, 'image/jpeg')
-  // })
-
-  // As file
-  // const croppedBase64 = canvas.toDataURL('image/jpeg')
-  // const fileExtension = extractImageFileExtensionFromBase64(croppedBase64)
-  // const fileName = `croppedFile.${fileExtension}`
-  // const file = base64StringtoFile(croppedBase64, fileName)
-  // return file
 }
 
-export async function getRotatedImage(imageSrc, rotation = 0) {
+export async function getRotatedImage(
+  imageSrc: string,
+  rotation: number = 0
+): Promise<string> {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+  const ctx = canvas.getContext('2d')!
 
   const orientationChanged =
     rotation === 90 || rotation === -90 || rotation === 270 || rotation === -270
@@ -122,7 +119,9 @@ export async function getRotatedImage(imageSrc, rotation = 0) {
 
   return new Promise((resolve) => {
     canvas.toBlob((file) => {
-      resolve(URL.createObjectURL(file))
+      if (file) {
+        resolve(URL.createObjectURL(file))
+      }
     }, 'image/jpeg')
   })
 }

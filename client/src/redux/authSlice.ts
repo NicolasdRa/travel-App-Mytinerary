@@ -7,13 +7,14 @@ import {
 import axios from 'axios'
 import { authUrl, usersUrl } from '../constants'
 import { RootState } from './store'
+import { LoginCredentials, SignupData } from '../@types/types'
 
 // THUNKS
 
 // sign up
 export const signupUser = createAsyncThunk(
   'auth/SignUpUser',
-  async (formData: {}, { dispatch, rejectWithValue }) => {
+  async (formData: SignupData, { rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'POST',
@@ -37,8 +38,7 @@ export const signupUser = createAsyncThunk(
 // log in
 export const logInUser = createAsyncThunk(
   'auth/logInUser',
-
-  async (formData: {}, { dispatch, rejectWithValue }) => {
+  async (formData: LoginCredentials, { rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'POST',
@@ -63,7 +63,7 @@ export const logInUser = createAsyncThunk(
 // set user
 export const setUser = createAsyncThunk(
   'auth/setUser',
-  async (user, { dispatch, rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'GET',
@@ -88,7 +88,7 @@ export const setUser = createAsyncThunk(
 // log out
 export const logOutUser = createAsyncThunk(
   'auth/logOutUser',
-  async (user, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await axios({
         method: 'POST',
@@ -190,7 +190,6 @@ const authSlice = createSlice({
         state.loading = 'done'
         state.isAuthenticated = true
         state.userId = action.payload._id
-        console.log(action.payload)
       }
     )
     builder.addCase(

@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Divider from '@mui/material/Divider'
@@ -9,22 +8,30 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: '36ch',
-    backgroundColor: theme.palette.background.paper,
-  },
-  inline: {
-    display: 'inline',
-  },
+const StyledList = styled(List)(({ theme }) => ({
+  width: '100%',
+  maxWidth: '36ch',
+  backgroundColor: theme.palette.background.paper,
 }))
 
-const ItemList = ({ activities }) => {
-  const classes = useStyles()
+const InlineTypography = styled(Typography)({
+  display: 'inline',
+})
 
+interface Activity {
+  _id: string
+  title: string
+  category: string
+  img: string
+}
+
+interface ItemListProps {
+  activities: Activity[]
+}
+
+const ItemList: React.FC<ItemListProps> = ({ activities }) => {
   const items = activities.map((activity) => (
-    <div>
+    <div key={activity._id}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt="activity image" src={activity.img} />
@@ -33,14 +40,12 @@ const ItemList = ({ activities }) => {
           primary={activity.title}
           secondary={
             <React.Fragment>
-              <Typography
-                component="span"
+              <InlineTypography
                 variant="body2"
-                className={classes.inline}
                 color="textPrimary"
               >
                 {activity.category}
-              </Typography>
+              </InlineTypography>
             </React.Fragment>
           }
         />
@@ -49,11 +54,7 @@ const ItemList = ({ activities }) => {
     </div>
   ))
 
-  return <List className={classes.root}>{items}</List>
-}
-
-ItemList.propTypes = {
-  activities: PropTypes.array.isRequired,
+  return <StyledList>{items}</StyledList>
 }
 
 export default ItemList

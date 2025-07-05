@@ -38,7 +38,7 @@ export const ItineraryPage: React.FC = () => {
   // fetches data from DB
   useEffect(() => {
     dispatch(fetchItineraryByTitle(title))
-  }, [])
+  }, [dispatch, title])
 
   // TODO: fetch favourites from DB
   // useEffect(() => {

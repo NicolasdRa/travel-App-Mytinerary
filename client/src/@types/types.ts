@@ -105,11 +105,59 @@ export interface Comment {
 }
 
 // ERRORS
-export type MyError = {
+export interface MyError {
   message: string
-  resolution: string | undefined
+  resolution?: string
 }
+
 export const enum ErrorMessages {
   'default' = 'Something went wrong',
   'DBerror' = 'Database error',
+}
+
+// API Response Types
+export interface ApiResponse<T> {
+  status: string
+  results?: number
+  data: T
+}
+
+export interface PaginatedResponse<T> extends ApiResponse<T> {
+  page: number
+  totalPages: number
+  totalResults: number
+}
+
+// Authentication Types
+export interface LoginCredentials {
+  email: string
+  password: string
+}
+
+export interface SignupData extends LoginCredentials {
+  userName: string
+  passwordConfirm: string
+  firstName?: string
+  lastName?: string
+}
+
+export interface AuthState {
+  user: User | null
+  isAuthenticated: boolean
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string | null
+}
+
+// Form Types
+export interface FormState {
+  [key: string]: string | number | boolean
+}
+
+// Component Props Types
+export interface ChildrenProps {
+  children: React.ReactNode
+}
+
+export interface ClassNameProps {
+  className?: string
 }

@@ -43,8 +43,6 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
 
   useEffect(() => {
     const fetch = async (query: string) => {
-      console.log('fetching...')
-
       const options = {
         url: `/${target}`,
         ...geoApiOptions,
@@ -59,14 +57,14 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
         setOptions(data)
       })
     }
-  }, [debouncedQuery])
+  }, [debouncedQuery, inputValue.length, target])
 
   //  Pushes the value up to the parent component to be handled by the form. The "name" attribute is NOT ACCESIBLE in the Autocomplete component
   useEffect(() => {
     if (value) {
       handleAutcompleteValueChange(value)
     }
-  }, [value])
+  }, [value, handleAutcompleteValueChange])
 
   return (
     <Stack>

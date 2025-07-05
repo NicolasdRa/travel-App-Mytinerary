@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
 import PuffLoader from 'react-spinners/PuffLoader'
+import { useState } from 'react'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, TextField, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 
@@ -22,7 +23,7 @@ export const Login = () => {
   const navigate = useNavigate()
 
   const loading = useAppSelector(selectLoginLoading)
-  // const loading = 'pending'
+  const [error, setError] = useState<string | null>(null)
 
   // must be outside handleSubmit
   const redirectPath = localStorage.getItem('lastPath')
@@ -39,6 +40,7 @@ export const Login = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+    setError(null) // Clear previous errors
 
     try {
       // Wait for login to complete before navigating
@@ -48,11 +50,13 @@ export const Login = () => {
         navigate(redirectPath || '/', { replace: true })
         reset()
       } else {
-        // Login failed - show error (TODO: implement proper error display)
-        console.log('Login failed:', result.payload)
+        // Login failed - show error message
+        const errorMessage = (result.payload as any)?.message || 'Login failed. Please check your credentials.'
+        setError(errorMessage)
       }
     } catch (error) {
-      console.log('Login error:', error)
+      // Handle unexpected errors
+      setError('An unexpected error occurred. Please try again.')
     }
   }
 
@@ -83,6 +87,11 @@ export const Login = () => {
         </Box>
 
         <form className="form">
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
           <TextField
             required
             autoFocus
