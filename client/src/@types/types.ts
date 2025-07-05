@@ -29,6 +29,12 @@ export interface City {
     type: string
     coordinates: number[]
   }
+  coord?: {
+    lat: number
+    lon: number
+  }
+  population?: number
+  countryCode?: string
 }
 
 export interface Itinerary {

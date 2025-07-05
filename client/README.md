@@ -44,7 +44,7 @@ A modern, responsive travel planning application that allows users to discover, 
 - **React Spinners** - Loading indicators
 
 ### Development Tools
-- **Create React App** - Zero-configuration React build setup
+- **Vite** - Lightning-fast build tool with hot module replacement
 - **ESLint** - Code linting and quality assurance
 - **Prettier** - Code formatting
 - **TypeScript Compiler** - Type checking and compilation
@@ -102,13 +102,13 @@ src/
 3. **Environment Configuration**
    Create a `.env` file in the root directory:
    ```env
-   REACT_APP_API_URL=http://localhost:5000
-   REACT_APP_CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+   VITE_API_URL=http://localhost:5000
+   VITE_RAPID_API_KEY=your_rapid_api_key
    ```
 
 4. **Start development server**
    ```bash
-   npm start
+   npm run dev
    ```
 
    The application will open at `http://localhost:3000`
@@ -117,10 +117,10 @@ src/
 
 ### Development
 ```bash
-npm start          # Start development server
+npm run dev        # Start Vite development server
 npm run build      # Build for production
+npm run preview    # Preview production build locally
 npm run test       # Run test suite
-npm run lint       # Run ESLint
 ```
 
 ### Production
@@ -151,6 +151,7 @@ serve -s build     # Serve production build locally
 - **Memoization strategies** - React.memo, useMemo, useCallback
 - **Code splitting** - Route-based and component-based splitting
 - **Bundle optimization** - Tree shaking and dynamic imports
+- **Vite optimizations** - ESBuild for faster builds, optimized dependency pre-bundling
 
 ## 🔧 Configuration
 
