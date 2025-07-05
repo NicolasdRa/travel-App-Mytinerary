@@ -146,8 +146,8 @@ export const withTimeout = (timeout: number) =>
     timeout
   })
 
-export const withRetry = (retries: number = 3) => 
-  async <T>(requestFn: () => Promise<T>): Promise<T> => {
+export const withRetry = (retries: number = 3) => {
+  return async function <T>(requestFn: () => Promise<T>): Promise<T> {
     let lastError: any
     
     for (let i = 0; i <= retries; i++) {
@@ -164,6 +164,7 @@ export const withRetry = (retries: number = 3) =>
     
     throw lastError
   }
+}
 
 // Response transformation utilities
 export const extractData = <T>(response: { data: T }): T => response.data

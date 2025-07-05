@@ -57,7 +57,7 @@ export const resetPassword: ApiWithData<FormData, ResetPasswordResponse> = async
 
 // OAuth functions
 export const getGoogleAuthUrl = (): string => {
-  const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000'
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
   return `${baseUrl}/api/v1${API_ENDPOINTS.auth.google}`
 }
 
