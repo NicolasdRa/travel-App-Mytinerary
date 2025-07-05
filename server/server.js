@@ -40,7 +40,7 @@ process.on('unhandledRejection', (error) => {
   })
 })
 
-// event listener to close process gracefully upon heroku sigterm signal
+// event listener to close process gracefully upon sigterm signal
 process.on('SIGTERM', () => {
   console.log('Sigterm received. Shutting down gracefully')
   server.close(() => {
