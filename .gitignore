@@ -51,3 +51,5 @@ temp/
 
 # misc
 CLAUDE.md
+.claude/
+.scannerwork/
