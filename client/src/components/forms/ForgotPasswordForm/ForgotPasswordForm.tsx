@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { forgotPassword } from '../../../redux/authSlice'
+import { forgotPassword } from '../../../features/auth'
 
 import { useForm } from '../../../hooks/useForm'
 import { StyledContainer } from './styles'

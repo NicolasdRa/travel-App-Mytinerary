@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import { logOutUser } from '../../../redux/authSlice'
+import { logOutUser } from '../../../features/auth'
 
 import { unloadCurrentUser } from '../../../redux/usersSlice'
 import { RootState } from '../../../redux/store'

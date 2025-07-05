@@ -1,0 +1,10 @@
+// Barrel exports for sections
+export { Activities } from './Activities/Activities'
+export { BottomNav } from './BottomNav/BottomNav'
+export { CardGallery } from './CardGallery/CardGallery'
+export { Cities } from './Cities/Cities'
+export { Footer } from './Footer/Footer'
+export { Header } from './Header/Header'
+export { Hero } from './Hero/Hero'
+export { HeroLanding } from './HeroLanding/HeroLanding'
+export { Itineraries } from './Itineraries/Itineraries'

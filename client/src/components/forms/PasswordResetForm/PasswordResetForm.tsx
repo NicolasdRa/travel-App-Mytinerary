@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 
-import { resetPassword } from '../../../redux/authSlice'
+import { resetPassword } from '../../../features/auth'
 import { useForm } from '../../../hooks/useForm'
 import { StyledPaper } from './styles'
 import { useNavigate } from 'react-router-dom'

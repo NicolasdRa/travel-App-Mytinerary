@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useAppSelector } from '../../../redux/hooks'
-import { selectAuthenticated } from '../../../redux/authSlice'
+import { selectAuthenticated } from '../../../features/auth'
 
 import { theme } from '../../../theme/Theme'
 import { StyledContainer, StyledHero } from './styles'

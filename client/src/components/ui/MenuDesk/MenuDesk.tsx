@@ -17,7 +17,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
-import { logOutUser } from '../../../redux/authSlice'
+import { logOutUser } from '../../../features/auth'
 import { unloadCurrentUser } from '../../../redux/usersSlice'
 import { RootState } from '../../../redux/store'
 

@@ -1,5 +1,5 @@
 import { Header } from '../../sections/Header/Header'
-import { Login } from '../../ui/Login/Login'
+import { Login } from '../../../features/auth'
 import { StyledContainer } from './styles'
 
 export const LoginPage = () => {
