@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import axios from 'axios'
 
 import { IconButton, Typography } from '@mui/material'
@@ -16,7 +16,7 @@ interface FavouriteComponentProps {
   amount?: number
 }
 
-export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
+const FavouriteComponentComponent: React.FC<FavouriteComponentProps> = ({
   readOnly,
   sourceType,
   sourceId,
@@ -157,3 +157,5 @@ export const FavouriteComponent: React.FC<FavouriteComponentProps> = ({
     </StyledContainer>
   )
 }
+
+export const FavouriteComponent = memo(FavouriteComponentComponent)

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import parse from 'autosuggest-highlight/parse'
@@ -8,6 +8,8 @@ import { Autocomplete, Stack, TextField } from '@mui/material'
 
 import { geoApiOptions } from './geoDbApiConfig'
 import { useDebounce } from '../../../hooks/useDebounce'
+import { useAppSelector } from '../../../redux/hooks'
+import { selectAllCities } from '../../../redux/citiesSlice'
 
 interface CityOption {
   city: string

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { memo } from 'react'
 import { Avatar, Typography, Rating } from '@mui/material'
 import { StyledCard, StyledCardContent, StyledCardMessage } from './styles'
 import { Comment } from '../../../@types/types'
@@ -8,7 +9,7 @@ interface CommentCardProps {
   comment: Comment
 }
 
-export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
+const CommentCardComponent: React.FC<CommentCardProps> = ({ comment }) => {
   const {
     rating,
     summary,
@@ -65,3 +66,5 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
     </StyledCard>
   )
 }
+
+export const CommentCard = memo(CommentCardComponent)

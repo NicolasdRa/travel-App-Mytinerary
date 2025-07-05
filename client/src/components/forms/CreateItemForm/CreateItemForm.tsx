@@ -188,7 +188,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
           </Typography>
           <DialogContent className="content">
             <Typography variant="body2" className="subtitle">
-              {formIntroMessage[type]}
+              {formIntroMessage[type as keyof typeof formIntroMessage]}
             </Typography>
             <FormControl className="formControl">
               <LiveSearch

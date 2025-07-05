@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 import { selectAllCities, selectRandomCity } from '../../../redux/citiesSlice'
 import { useAppSelector } from '../../../redux/hooks'
@@ -11,20 +11,13 @@ export const Cities = () => {
   const headerCity = useAppSelector(selectRandomCity)
 
   const [string, setString] = useState('')
-  const [filteredCities, setFilteredCities] = useState<City[] | null>(null)
 
-  useEffect(() => {
-    // city filter
-    if (string !== '') {
-      const filtered = cities.filter((city) =>
-        city.name.toLowerCase().startsWith(string)
-      )
-      setFilteredCities(filtered)
-    }
-    // clean up: when string is empty
-    return () => {
-      setFilteredCities(null)
-    }
+  // Memoize filtered cities to avoid re-filtering on every render
+  const filteredCities = useMemo(() => {
+    if (string === '') return null
+    return cities.filter((city: City) =>
+      city.name.toLowerCase().startsWith(string)
+    )
   }, [cities, string])
 
   const handleChange = (e: any) => {

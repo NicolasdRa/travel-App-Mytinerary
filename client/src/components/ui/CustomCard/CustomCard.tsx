@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { memo } from 'react'
 
 import {
   Avatar,
@@ -57,7 +58,7 @@ interface CustomCardProps {
   [x: string]: any
 }
 
-export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
+const CustomCardComponent: React.FC<CustomCardProps> = ({ source, ...rest }) => {
   const user = useSelector(selectCurrentUser)
 
   const { _id, name, country, title, cityName, img, duration, author, price } =
@@ -87,6 +88,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
         alt={`${sourceType} image`}
         image={img}
         className="cardImg"
+        loading="lazy"
       />
       <CardContent className="cardContent">
         <div className="firstLine">
@@ -172,3 +174,5 @@ export const CustomCard: React.FC<CustomCardProps> = ({ source, ...rest }) => {
     </StyledCard>
   )
 }
+
+export const CustomCard = memo(CustomCardComponent)

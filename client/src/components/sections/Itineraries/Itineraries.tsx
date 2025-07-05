@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
@@ -17,22 +17,12 @@ export const Itineraries = () => {
 
   const [string, setString] = useState('')
 
-  const [filteredItineraries, setFilteredItineraries] = useState<
-    Itinerary[] | null
-  >(null)
-
-  useEffect(() => {
-    // itinerary filter
-    if (string !== '') {
-      const filtered = itineraries.filter((itinerary) =>
-        itinerary.city.name.toLowerCase().startsWith(string)
-      )
-      setFilteredItineraries(filtered)
-    }
-    // clean up: when string is empty
-    return () => {
-      setFilteredItineraries(null)
-    }
+  // Memoize filtered itineraries to avoid re-filtering on every render
+  const filteredItineraries = useMemo(() => {
+    if (string === '') return null
+    return itineraries.filter((itinerary: Itinerary) =>
+      itinerary.city.name.toLowerCase().startsWith(string)
+    )
   }, [itineraries, string])
 
   const handleChange = (e: any) => {

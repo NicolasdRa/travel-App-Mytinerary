@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 
 import {
   selectAllActivities,
@@ -15,22 +15,12 @@ export const Activities = () => {
 
   const [string, setString] = useState('')
 
-  const [filteredActivities, setFilteredActivities] = useState<
-    Activity[] | null
-  >(null)
-
-  useEffect(() => {
-    // itinerary filter
-    if (string !== '') {
-      const filtered: Activity[] = activities.filter((activity) =>
-        activity.cityName.toLowerCase().startsWith(string)
-      )
-      setFilteredActivities(filtered)
-    }
-    // clean up: when string is empty
-    return () => {
-      setFilteredActivities(null)
-    }
+  // Memoize filtered activities to avoid re-filtering on every render
+  const filteredActivities = useMemo(() => {
+    if (string === '') return null
+    return activities.filter((activity: Activity) =>
+      activity.cityName.toLowerCase().startsWith(string)
+    )
   }, [activities, string])
 
   // updates string in state

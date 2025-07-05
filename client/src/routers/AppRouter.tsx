@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense, lazy } from 'react'
 import {
   BrowserRouter as Router,
   Navigate,
@@ -11,15 +11,6 @@ import { AlertProps, Snackbar } from '@mui/material'
 import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
 
-import { LandingPage } from '../components/pages/LandingPage/LandingPage'
-import { LoginPage } from '../components/pages/LoginPage/LoginPage'
-import { SignupPage } from '../components/pages/SignupPage/SignupPage'
-import { ListingPage } from '../components/pages/ListingPage/ListingPage'
-import { CityPage } from '../components/pages/CityPage/CityPage'
-import { ItineraryPage } from '../components/pages/ItineraryPage/ItineraryPage'
-import { ActivityPage } from '../components/pages/ActivityPage/ActivityPage'
-import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage'
-import { PasswordResetPage } from '../components/pages/PasswordResetPage/PasswordResetPage'
 import { CustomLoader } from '../components/ui/CustomLoader/CustomLoader'
 
 import { fetchCities } from '../redux/citiesSlice'
@@ -27,11 +18,22 @@ import { fetchItineraries } from '../redux/itinerariesSlice'
 import { fetchActivities } from '../redux/activitiesSlice'
 import { fetchFavourites } from '../redux/favouritesSlice'
 import { fetchCurrentUser, selectCurrentUser } from '../redux/usersSlice'
-import { setUser } from '../redux/authSlice'
+import { setUser } from '../features/auth'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 
 import { StyledGrid } from './styles'
 import { getCookieValue } from '../utils/utils'
+
+// Lazy load page components for better performance
+const LandingPage = lazy(() => import('../components/pages/LandingPage/LandingPage').then(module => ({ default: module.LandingPage })))
+const LoginPage = lazy(() => import('../components/pages/LoginPage/LoginPage').then(module => ({ default: module.LoginPage })))
+const SignupPage = lazy(() => import('../components/pages/SignupPage/SignupPage').then(module => ({ default: module.SignupPage })))
+const ListingPage = lazy(() => import('../components/pages/ListingPage/ListingPage').then(module => ({ default: module.ListingPage })))
+const CityPage = lazy(() => import('../components/pages/CityPage/CityPage').then(module => ({ default: module.CityPage })))
+const ItineraryPage = lazy(() => import('../components/pages/ItineraryPage/ItineraryPage').then(module => ({ default: module.ItineraryPage })))
+const ActivityPage = lazy(() => import('../components/pages/ActivityPage/ActivityPage').then(module => ({ default: module.ActivityPage })))
+const ProfilePage = lazy(() => import('../components/pages/ProfilePage/ProfilePage').then(module => ({ default: module.ProfilePage })))
+const PasswordResetPage = lazy(() => import('../components/pages/PasswordResetPage/PasswordResetPage').then(module => ({ default: module.PasswordResetPage })))
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -44,17 +46,17 @@ export const AppRouter: React.FC = () => {
   useEffect(() => {
     const jwt = getCookieValue('jwt')
 
-    if (jwt !== null || jwt !== 'loggedOut') {
+    if (jwt !== null && jwt !== 'loggedOut') {
       dispatch(setUser())
     }
-  }, [dispatch, isAuthenticated])
+  }, [dispatch])
 
   useEffect(() => {
-    // console.log('2st useEffect FETCH USER DATA', user)
-    if (isAuthenticated) {
+    // Only fetch user data when authenticated and we don't have user data yet
+    if (isAuthenticated && !user) {
       dispatch(fetchCurrentUser())
     }
-  }, [dispatch, isAuthenticated])
+  }, [dispatch, isAuthenticated, user])
 
   // fetches data from DB
   useEffect(() => {
@@ -101,7 +103,8 @@ export const AppRouter: React.FC = () => {
   return (
     <Router>
       <StyledGrid className="main">
-        <Routes>
+        <Suspense fallback={<CustomLoader loading={true} message="Loading page..." />}>
+          <Routes>
           <Route
             path="/"
             element={
@@ -175,7 +178,8 @@ export const AppRouter: React.FC = () => {
             }
           />
           <Route path="/*" element={<Navigate to="/" />} />
-        </Routes>
+          </Routes>
+        </Suspense>
 
         {authError && (
           <Snackbar
