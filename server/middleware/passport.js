@@ -6,13 +6,15 @@ mongoose.model('User')
 // Google Login Auth Strategy
 var GoogleStrategy = require('passport-google-oauth20').Strategy
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/v1/auth/google/redirect',
-    },
+// Only configure Google OAuth if credentials are provided
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/v1/auth/google/redirect',
+      },
     (accessToken, refreshToken, profile, done) => {
       // passport callback function
 
@@ -40,6 +42,9 @@ passport.use(
     }
   )
 )
+} else {
+  console.log('Google OAuth not configured - GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET not provided')
+}
 
 module.exports = passport
 
