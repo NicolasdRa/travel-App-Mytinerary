@@ -11,7 +11,8 @@ export const StyledContainer = styled('div')`
 
   .image {
     position: relative;
-    height: 300;
+    height: 300px;
+    aspect-ratio: 16/9;
     ${(props) => props.theme.breakpoints.down('xs')} {
       width: 100% !important;
       height: 10rem;
@@ -76,8 +77,8 @@ export const StyledContainer = styled('div')`
   }
 
   .imageMarked {
-    height: 3;
-    width: 18;
+    height: 3px;
+    width: 18px;
     background-color: ${(props) => props.theme.palette.common.white};
     position: absolute;
     bottom: -2px;

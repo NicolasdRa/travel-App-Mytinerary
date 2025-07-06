@@ -11,7 +11,7 @@ export const StyledFooter = styled('footer')`
   width: 80vw;
 
   ${(props) => props.theme.breakpoints.up('xl')} {
-    width: 70vw;
+    width: 80vw;
   }
 
   .divider {
@@ -28,7 +28,7 @@ export const StyledFooter = styled('footer')`
     width: 80vw;
 
     ${(props) => props.theme.breakpoints.up('xl')} {
-      width: 70vw;
+      width: 80vw;
     }
   }
 

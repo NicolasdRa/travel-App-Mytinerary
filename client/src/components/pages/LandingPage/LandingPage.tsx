@@ -19,15 +19,24 @@ export const LandingPage = () => {
 
   return (
     <StyledContainer>
-      <Header />
-      <HeroLanding />
-      <div className="galleryContainer">
-        <Typography className="galleryTitle">
-          Most Popular Mytineraries
-        </Typography>
-        <CardGallery items={itineraries} source="itineraries" />
+      <div className="header-area">
+        <Header />
       </div>
-      {mdDown ? <BottomNav /> : <Footer />}
+      <div className="content-area">
+        <HeroLanding />
+        <div className="galleryContainer">
+          <Typography className="galleryTitle">
+            Most Popular Mytineraries
+          </Typography>
+          <CardGallery items={itineraries} source="itineraries" />
+        </div>
+        {!mdDown && <Footer />}
+      </div>
+      {mdDown && (
+        <div className="bottom-nav-area">
+          <BottomNav />
+        </div>
+      )}
     </StyledContainer>
   )
 }

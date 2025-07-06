@@ -4,28 +4,61 @@ export const StyledContainer = styled('div')`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  width: 100%;
+  max-width: 100%;
   justify-content: center;
   margin: 0 auto;
   position: relative;
+  overflow: hidden;
 
   .container {
     width: 100%;
-    height: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+
+    ${(props) => props.theme.breakpoints.down('md')} {
+      /* On mobile, account for scroll thumb by using calc */
+      width: calc(100vw - 8px);
+      max-width: calc(100vw - 8px);
+      margin-left: 4px;
+      border-radius: 0 10px 10px 0;
+    }
 
     ${(props) => props.theme.breakpoints.up('md')} {
-      border-radius: 10px;
       width: 80vw;
+      max-width: 80vw;
+      border-radius: 10px;
     }
 
     ${(props) => props.theme.breakpoints.up('lg')} {
-      width: 70vw;
+      width: 80vw;
+      max-width: 80vw;
     }
   }
 
   .skeleton {
     width: 100%;
     height: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(240, 240, 240, 0.2) 25%,
+      rgba(240, 240, 240, 0.5) 50%,
+      rgba(240, 240, 240, 0.2) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 10px;
+  }
+
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 
   .textArea {
@@ -75,19 +108,36 @@ export const StyledContainer = styled('div')`
     }
   }
 
-  .large {
+  &.large, .large {
     height: 30vh;
+    max-height: 30vh;
+    max-width: 100%;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 25vh;
+      max-height: 25vh;
+    }
   }
 
-  .medium {
+  &.medium, .medium {
     height: 25vh;
+    max-height: 25vh;
+    max-width: 100%;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 20vh;
+      max-height: 20vh;
+    }
   }
 
-  .small {
-    height: 20h;
+  &.small, .small {
+    height: 20vh;
+    max-height: 20vh;
+    max-width: 100%;
 
     ${(props) => props.theme.breakpoints.down('md')} {
       height: 15vh;
+      max-height: 15vh;
     }
   }
 `
@@ -97,15 +147,41 @@ export const StyledImage = styled('div')`
   background-repeat: no-repeat;
   background-size: cover;
   filter: brightness(0.758) contrast(130%) saturate(40%);
-  width: 100vw;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  contain: layout style;
+  border-radius: inherit;
+  overflow: hidden;
 
-  ${(props) => props.theme.breakpoints.up('md')} {
-    border-radius: 10px;
-    width: 80vw;
+  &.large {
+    height: 30vh;
+    max-height: 30vh;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 25vh;
+      max-height: 25vh;
+    }
   }
 
-  ${(props) => props.theme.breakpoints.up('lg')} {
-    height: 40vh;
-    width: 70vw;
+  &.medium {
+    height: 25vh;
+    max-height: 25vh;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 20vh;
+      max-height: 20vh;
+    }
+  }
+
+  &.small {
+    height: 20vh;
+    max-height: 20vh;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      height: 15vh;
+      max-height: 15vh;
+    }
   }
 `

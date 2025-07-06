@@ -25,7 +25,7 @@ export const Cities = () => {
     setString(e.target.value.toLowerCase())
   }
 
-  if (!cities) return <div>Loading...</div>
+  if (!cities || !headerCity) return <div>Loading...</div>
 
   return (
     <ListingTab

@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
+  width: 100%;
+
   .appBar {
     align-items: center;
     background-color: ${(props) => props.theme.palette.primary.main};
@@ -15,21 +17,33 @@ export const StyledContainer = styled('div')`
     padding: 0.2rem 0;
     position: relative;
     transition: all 150ms ease 0s;
-    width: 100vw;
+    width: 100%;
+    left: 0;
+    right: 0;
 
     ${(props) => props.theme.breakpoints.up('md')} {
       background-color: transparent;
       color: ${(props) => props.theme.palette.primary.main};
       box-shadow: none;
+      transition: background-color 300ms ease, box-shadow 300ms ease;
     }
   }
 
   .toolbar {
     justify-content: space-between;
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+
+    ${(props) => props.theme.breakpoints.down('md')} {
+      padding: 0 0.5rem;
+      min-height: 56px;
+    }
 
     ${(props) => props.theme.breakpoints.up('md')} {
-      width: 70vw;
+      width: 80vw;
+      max-width: 80vw;
+      margin: 0 auto;
     }
   }
 

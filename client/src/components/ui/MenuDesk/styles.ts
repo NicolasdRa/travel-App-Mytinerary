@@ -31,7 +31,7 @@ export const StyledList = styled(List)`
     text-transform: uppercase;
     border-radius: 4px;
     border-color: ${(props) => props.theme.palette.common.chalk};
-    lineheight: 20px;
+    line-height: 20px;
     text-decoration: none;
     margin: 0px;
     display: inline-flex;

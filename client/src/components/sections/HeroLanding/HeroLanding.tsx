@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom'
 
 import { Box, Button, Typography } from '@mui/material'
-import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useAppSelector } from '../../../redux/hooks'
 import { selectIsAuthenticated } from '../../../features/auth'
 
-import { theme } from '../../../theme/Theme'
 import { StyledContainer, StyledHero } from './styles'
+import { useHeroBreakpoints } from '../../../utils/breakpoints'
 
 export const HeroLanding = () => {
-  const matches = useMediaQuery(theme.breakpoints.up('lg'))
-
+  const { useOutlinedButton, showLoginButtons } = useHeroBreakpoints()
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   return (
@@ -29,7 +27,7 @@ export const HeroLanding = () => {
           <div className="start-btn-container">
             <Button
               className="start-btn"
-              variant={matches ? 'outlined' : 'contained'}
+              variant={useOutlinedButton ? 'outlined' : 'contained'}
               color="primary"
               component={Link}
               to="/listing"
@@ -38,9 +36,8 @@ export const HeroLanding = () => {
             </Button>
           </div>
 
-          {!isAuthenticated && (
+          {!isAuthenticated && showLoginButtons && (
             <Box
-              sx={{ display: { xs: 'block', md: 'none' } }}
               className="login-btns-container"
             >
               <Typography variant="subtitle1" className="question">

@@ -12,6 +12,7 @@ import { PublicRoute } from './PublicRoute'
 import { PrivateRoute } from './PrivateRoute'
 
 import { CustomLoader } from '../components/ui/CustomLoader/CustomLoader'
+import { PageSkeleton } from '../components/ui/PageSkeleton/PageSkeleton'
 
 import { fetchCities } from '../redux/citiesSlice'
 import { fetchItineraries } from '../redux/itinerariesSlice'
@@ -103,7 +104,7 @@ export const AppRouter: React.FC = () => {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <StyledGrid className="main">
-        <Suspense fallback={<CustomLoader loading={true} message="Loading page..." />}>
+        <Suspense fallback={<PageSkeleton variant="listing" />}>
           <Routes>
           <Route
             path="/"

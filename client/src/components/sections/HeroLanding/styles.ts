@@ -5,18 +5,30 @@ export const StyledContainer = styled('div')`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px);
   justify-content: center;
-  margin: auto 0;
+  width: 100%;
+
+  ${(props) => props.theme.breakpoints.down('md')} {
+    /* Fullscreen on mobile */
+    flex: 1;
+    height: 100vh;
+    margin: 0;
+  }
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    border-radius: 20px;
+    /* Prominent on desktop but not fullscreen */
+    flex: none;
     height: 40vh;
+    min-height: 400px;
+    max-height: 600px;
     width: 80vw;
+    margin: 2rem auto;
+    border-radius: 20px;
+    overflow: hidden;
   }
 
   ${(props) => props.theme.breakpoints.up('lg')} {
-    width: 70vw;
+
   }
 `
 
@@ -27,17 +39,29 @@ export const StyledHero = styled('div')`
   background-size: cover;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px);
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  ${(props) => props.theme.breakpoints.down('md')} {
+    /* Fullscreen hero on mobile */
+    height: 100vh;
+    min-height: 100vh;
+  }
 
   ${(props) => props.theme.breakpoints.up('md')} {
+    /* Fixed height on desktop */
     border-radius: 10px;
-    height: 53vh;
-    width: 80vw;
+    height: 60vh;
+    min-height: 500px;
+    max-height: 600px;
   }
 
   ${(props) => props.theme.breakpoints.up('lg')} {
-    width: 70vw;
+    height: 70vh;
+    min-height: 600px;
+    max-height: 700px;
   }
 
   .text-container {
@@ -59,38 +83,39 @@ export const StyledHero = styled('div')`
   .title {
     color: ${(props) => props.theme.palette.common.chalk};
     font-family: 'Roboto Slab', 'Times New Roman', serif;
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 700;
     margin: 0 0 1rem 0;
+    line-height: 1.1;
 
     ${(props) => props.theme.breakpoints.up('sm')} {
-      font-size: 6rem;
-      margin: 5rem 0 0.875rem;
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin: 2rem 0 0.875rem;
     }
     ${(props) => props.theme.breakpoints.up('md')} {
-      font-size: 3.5rem;
+      font-size: clamp(3.5rem, 6vw, 4.2rem);
       margin: 2rem 0 0.2rem;
     }
     ${(props) => props.theme.breakpoints.up('xl')} {
       font-size: 4.2rem;
-      margin: 5rem 0 0.875rem;
+      margin: 2rem 0 0.875rem;
     }
   }
 
   .subtitle {
     color: ${(props) => props.theme.palette.common.chalk};
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.2rem);
     font-weight: 400;
     line-height: 1.5;
 
     ${(props) => props.theme.breakpoints.up('sm')} {
-      font-size: 2rem;
+      font-size: clamp(1.2rem, 4vw, 1.6rem);
       font-weight: 400;
       line-height: 1.5;
     }
 
     ${(props) => props.theme.breakpoints.up('md')} {
-      font-size: 1.5rem;
+      font-size: clamp(1.3rem, 3vw, 1.5rem);
       font-weight: 300;
     }
 
@@ -147,11 +172,10 @@ export const StyledHero = styled('div')`
       font-size: 1rem;
       height: 2.5rem;
       width: 10rem;
-      '&:hover': {
+      &:hover {
         color: white;
-        border: 2px;
-        border-color: white;
-        background-color: rgba(186; 186; 186; 0.5);
+        border: 2px solid white;
+        background-color: rgba(186, 186, 186, 0.5);
       }
     }
 
@@ -179,7 +203,7 @@ export const StyledHero = styled('div')`
     color: ${(props) => props.theme.palette.common.chalk};
 
     ${(props) => props.theme.breakpoints.up('sm')} {
-      font-aize: 1.5rem;
+      font-size: 1.5rem;
       margin: 1.2rem 0;
     }
 

@@ -38,35 +38,40 @@ export const theme: Theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          // scrollbar
-          scrollbarColor: 'transparent',
-          // scrollbarWidth: 'thin',
+          // scrollbar - mobile-friendly styling
+          scrollbarColor: 'rgba(191, 166, 162, 0.3) transparent',
+          scrollbarWidth: 'thin',
           '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            height: '8px',
-            width: '8px',
+            height: '4px',
+            width: '4px',
+            
+            '@media (max-width: 959px)': {
+              width: '2px',
+              height: '2px',
+            }
           },
-          // scrollbar thumb
+          // scrollbar thumb - less intrusive on mobile
           '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
             borderRadius: 10,
-            backgroundColor: '#fbe9e7',
-            // minHeight: 3,
-            // maxHeight: 3,
-            // minWidth: 3,
-            // maxWidth: 3,
-            // border: '1px solid #BFA6A2',
+            backgroundColor: 'rgba(191, 166, 162, 0.3)',
+            transition: 'background-color 0.2s ease',
+            
+            '@media (max-width: 959px)': {
+              backgroundColor: 'rgba(191, 166, 162, 0.2)',
+            }
           },
           '&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus':
             {
-              backgroundColor: '#BFA6A2',
+              backgroundColor: 'rgba(191, 166, 162, 0.6)',
             },
           '&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active':
             {
-              backgroundColor: '#BFA6A2',
+              backgroundColor: 'rgba(191, 166, 162, 0.8)',
             },
           '&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover':
             {
-              backgroundColor: '#BFA6A2',
+              backgroundColor: 'rgba(191, 166, 162, 0.5)',
             },
 
           // scrollbar buttons
@@ -151,8 +156,13 @@ export const theme: Theme = createTheme({
           minWidth: 10,
           marginLeft: '15px',
 
-          '@media (max-width: 500px)': {
+          '@media (max-width: 599px)': {
             fontSize: '1.1rem',
+          },
+          
+          '@media (min-width: 960px)': {
+            fontSize: '1rem',
+            fontWeight: 500,
           },
         },
 

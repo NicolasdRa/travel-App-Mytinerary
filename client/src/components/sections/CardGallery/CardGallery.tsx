@@ -37,8 +37,17 @@ export const CardGallery: React.FC<CardGalleryProps> = ({ items, source }) => {
             const { _id, ...rest } = item
             return <CustomCard source={source} key={_id} {...rest} />
           })}
-          {hasMoreItems && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, width: '100%' }}>
+          {/* Always reserve space for the Load More button to prevent layout shift */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            mt: 3, 
+            width: '100%',
+            minHeight: '48px', // Reserve space for button
+            alignItems: 'center',
+            gridColumn: '1 / -1' // Span all grid columns
+          }}>
+            {hasMoreItems && (
               <Button 
                 variant="outlined" 
                 onClick={handleLoadMore}
@@ -46,8 +55,8 @@ export const CardGallery: React.FC<CardGalleryProps> = ({ items, source }) => {
               >
                 Load More {source}
               </Button>
-            </Box>
-          )}
+            )}
+          </Box>
         </>
       ) : (
         <Typography className="message">No {source} found.</Typography>

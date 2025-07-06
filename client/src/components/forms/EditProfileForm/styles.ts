@@ -21,6 +21,8 @@ export const StyledDialog = styled(Dialog)`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
   }
 
   .cover-image {
@@ -46,7 +48,8 @@ export const StyledDialog = styled(Dialog)`
   }
 
   .input_field {
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
+    width: 100%;
   }
 
   .text {

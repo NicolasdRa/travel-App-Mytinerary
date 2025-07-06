@@ -21,23 +21,48 @@ export const ListingPage = () => {
 
   return (
     <StyledContainer>
-      <Header />
-      <CustomTabs
-        firstTabTitle={'Cities'}
-        secondTabTitle={'Itineraries'}
-        thirdTabTitle={'Activities'}
-        firstComponent={<Cities />}
-        secondComponent={<Itineraries />}
-        thirdComponent={<Activities />}
-      />
-      {currentUser ? (
-        <CreateItemForm currentUser={currentUser} />
-      ) : (
-        <Alert color="error">
-          You must log in in order to create an itinerary
-        </Alert>
+      <div className="header-area">
+        <Header />
+      </div>
+      
+      <div className="content-area">
+        <CustomTabs
+          firstTabTitle={'Cities'}
+          secondTabTitle={'Itineraries'}
+          thirdTabTitle={'Activities'}
+          firstComponent={
+            <>
+              <Cities />
+              {!mdDown && <Footer />}
+            </>
+          }
+          secondComponent={
+            <>
+              <Itineraries />
+              {!mdDown && <Footer />}
+            </>
+          }
+          thirdComponent={
+            <>
+              <Activities />
+              {!mdDown && <Footer />}
+            </>
+          }
+        />
+        {currentUser ? (
+          <CreateItemForm currentUser={currentUser} />
+        ) : (
+          <Alert color="error">
+            You must log in in order to create an itinerary
+          </Alert>
+        )}
+      </div>
+      
+      {mdDown && (
+        <div className="bottom-nav-area">
+          <BottomNav />
+        </div>
       )}
-      {mdDown ? <BottomNav /> : <Footer />}
     </StyledContainer>
   )
 }

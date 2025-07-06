@@ -21,15 +21,15 @@ export const StyledContainer = styled('div')`
       height: 5rem;
     }
 
-    '&:hover, &.focusVisible' {
+    &:hover, &.focusVisible {
       z-index: 1;
-      '& .imageBackdrop' {
+      & .imageBackdrop {
         opacity: 0.15;
       }
-      '& .imageMarked' {
+      & .imageMarked {
         opacity: 0;
       }
-      '& .imageTitle' {
+      & .imageTitle {
         border: 3px solid currentColor;
       }
     }
@@ -82,11 +82,11 @@ export const StyledContainer = styled('div')`
   }
 
   .imageMarked {
-    height: 3;
-    width: 18;
+    height: 3px;
+    width: 18px;
     background-color: ${(props) => props.theme.palette.common.white};
     position: absolute;
-    bottom: -2;
+    bottom: -2px;
     left: calc(50% - 9px);
     transition: ${(props) => props.theme.transitions.create('opacity')};
     border-radius: 0.5rem;

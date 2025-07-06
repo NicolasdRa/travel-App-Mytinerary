@@ -27,12 +27,24 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   const { coverImg } = user
   return (
     <StyledContainer>
-      <Header />
-      <Hero img={coverImg} size="small" />
-      <PageUserInfoCard user={user} />
-      <PageUserTabsCard />
-      <CreateItemForm currentUser={user} />
-      {mdDown ? <BottomNav /> : <Footer />}
+      <div className="header-area">
+        <Header />
+      </div>
+      
+      <div className="content-area">
+        <Hero img={coverImg} size="small" />
+        <PageUserInfoCard user={user} />
+        <PageUserTabsCard />
+        <CreateItemForm currentUser={user} />
+      </div>
+      
+      {mdDown ? (
+        <div className="bottom-nav-area">
+          <BottomNav />
+        </div>
+      ) : (
+        <Footer />
+      )}
     </StyledContainer>
   )
 }

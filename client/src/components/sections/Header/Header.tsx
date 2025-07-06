@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { AppBar, Box, Button, Toolbar, useMediaQuery } from '@mui/material'
+import { AppBar, Box, Button, Toolbar } from '@mui/material'
 
 import { MenuMobile } from '../../ui/MenuMobile/MenuMobile'
 import { MenuDesk } from '../../ui/MenuDesk/MenuDesk'
@@ -8,9 +8,10 @@ import { Logo } from '../../ui/Logo/Logo'
 
 import { StyledContainer } from './styles'
 import { theme } from '../../../theme/Theme'
+import { useNavigationBreakpoints } from '../../../utils/breakpoints'
 
 export const Header = () => {
-  const matches = useMediaQuery(theme.breakpoints.up('md'))
+  const { showMobileMenu, showDesktopMenu } = useNavigationBreakpoints()
 
   return (
     <StyledContainer>
@@ -20,7 +21,7 @@ export const Header = () => {
             <Box className="logo">
               <Logo
                 color={
-                  matches
+                  showDesktopMenu
                     ? theme.palette.primary.main
                     : theme.palette.common.chalk
                 }

@@ -18,13 +18,21 @@ export const StyledContainer = styled('div')`
     align-self: flex-start;
     justify-self: flex-start;
     margin-top: 0.2rem;
+    width: 100%;
+    max-width: 400px;
     color: ${(props) => props.theme.palette.common.chalk};
     background-color: ${(props) => props.theme.palette.common.chalk};
     box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
     border-radius: 10px;
 
+    ${(props) => props.theme.breakpoints.up('sm')} {
+      width: 25rem;
+      max-width: 25rem;
+    }
+
     ${(props) => props.theme.breakpoints.up('md')} {
       width: 30rem;
+      max-width: 30rem;
     }
   }
 `

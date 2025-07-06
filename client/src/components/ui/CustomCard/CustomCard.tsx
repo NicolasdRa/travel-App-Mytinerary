@@ -5,16 +5,15 @@ import { memo } from 'react'
 import {
   Avatar,
   Button,
-  CardMedia,
   CardContent,
   Typography,
-  Grid,
   CircularProgress,
   CardActions,
 } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 import { FavouriteComponent } from '../FavouriteComponent/FavouriteComponent'
+import { FallbackImage } from '../FallbackImage/FallbackImage'
 
 import { selectCurrentUser } from '../../../redux/usersSlice'
 import { StyledCard } from './styles'
@@ -64,31 +63,20 @@ const CustomCardComponent: React.FC<CustomCardProps> = ({ source, ...rest }) => 
   const { _id, name, country, title, cityName, img, duration, author, price } =
     rest
 
+
   const link = getValue(source).link
   const sourceType = getValue(source).sourceType
 
-  if (!img) {
-    return (
-      <Grid
-        container
-        className="loader"
-        direction="column"
-        justifyContent="center"
-      >
-        <Typography>Loading...</Typography>
-        <CircularProgress color="secondary" />
-      </Grid>
-    )
-  }
 
   return (
     <StyledCard>
-      <CardMedia
-        component="img"
-        alt={`${sourceType} image`}
-        image={img}
+      <FallbackImage
+        src={img}
+        alt={name || title || `${sourceType} image`}
+        fallbackType={sourceType === 'city' ? 'city' : sourceType === 'activity' ? 'activity' : 'travel'}
+        width="100%"
+        height="160px"
         className="cardImg"
-        loading="lazy"
       />
       <CardContent className="cardContent">
         <div className="firstLine">
@@ -114,22 +102,22 @@ const CustomCardComponent: React.FC<CustomCardProps> = ({ source, ...rest }) => 
           {source === 'cities' ? name : title}
         </Typography>
 
-        {(source === 'itineraries' || source === 'activities') && author && (
-          <div className="authorInfo">
-            <Avatar className="avatar" src={author ? author.img : 'anonymous'}>
-              {author ? author.userName : 'anonymous'}
-            </Avatar>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="p"
-              className="authorName"
-            >
-              by {author ? author.userName : 'anonymous'}
-            </Typography>
-          </div>
-        )}
         <div className="bottom-content">
+          {(source === 'itineraries' || source === 'activities') && author && (
+            <div className="authorInfo">
+              <Avatar className="avatar" src={author ? author.img : 'anonymous'}>
+                {author ? author.userName : 'anonymous'}
+              </Avatar>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="p"
+                className="authorName"
+              >
+                by {author ? author.userName : 'anonymous'}
+              </Typography>
+            </div>
+          )}
           <div className="additionalInfo">
             {duration && (
               <div className="duration">
