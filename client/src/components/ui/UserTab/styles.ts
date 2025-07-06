@@ -1,6 +1,10 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
+  ${(props) => props.theme.breakpoints.down('md')} {
+    padding-bottom: 0.5rem;
+  }
+
   .subtitles {
     align-self: flex-start;
     justify-self: flex-start;
@@ -12,7 +16,14 @@ export const StyledContainer = styled('div')`
 
     ${(props) => props.theme.breakpoints.down('sm')} {
       font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    &:first-of-type {
+      ${(props) => props.theme.breakpoints.down('md')} {
+        margin-top: 0.75rem;
+      }
     }
   }
 

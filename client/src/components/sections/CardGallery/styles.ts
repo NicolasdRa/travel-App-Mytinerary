@@ -3,8 +3,8 @@ import { styled } from '@mui/material/styles'
 export const StyledContainer = styled('div')`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
   width: 100%;
   flex: 1;
   justify-items: start;

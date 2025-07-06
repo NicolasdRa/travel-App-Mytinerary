@@ -1,21 +1,15 @@
 import { styled } from '@mui/material/styles'
 
 export const StyledContainer = styled('div')`
-  margin-left: 1rem;
-  margin-right: 1rem;
-  align-items: space-between;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0 0.8rem;
-  width: 100vw;
+  width: 100%;
+  background: ${(props) => props.theme.palette.background.paper};
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin: 0 auto;
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    width: 80vw;
-  }
-
-  ${(props) => props.theme.breakpoints.up('lg')} {
-    width: 70vw;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
 `

@@ -37,7 +37,7 @@ export const StyledContainer = styled('div')`
   }
 
   ${(props) => props.theme.breakpoints.up('md')} {
-    /* Desktop layout: similar to mobile but with wider content */
+    /* Desktop layout: consistent with landing/listing pages */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -57,6 +57,33 @@ export const StyledContainer = styled('div')`
       max-width: 80vw;
       display: flex;
       flex-direction: column;
+      /* Add padding to prevent scroll thumb overlap on desktop */
+      padding-right: 8px;
+      margin-right: -8px;
     }
   }
+
+  /* Profile-specific content sections */
+  .profile-hero-section {
+    position: relative;
+    margin-bottom: 0.5rem;
+    
+    ${(props) => props.theme.breakpoints.down('md')} {
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .profile-content-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+    flex: 1;
+    
+    ${(props) => props.theme.breakpoints.up('md')} {
+      padding: 0 2rem;
+      gap: 1.5rem;
+    }
+  }
+
 `

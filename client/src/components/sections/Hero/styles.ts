@@ -131,13 +131,13 @@ export const StyledContainer = styled('div')`
   }
 
   &.small, .small {
-    height: 20vh;
-    max-height: 20vh;
+    height: 35vh;
+    max-height: 35vh;
     max-width: 100%;
 
     ${(props) => props.theme.breakpoints.down('md')} {
-      height: 15vh;
-      max-height: 15vh;
+      height: 24vh;
+      max-height: 24vh;
     }
   }
 `
@@ -176,12 +176,12 @@ export const StyledImage = styled('div')`
   }
 
   &.small {
-    height: 20vh;
-    max-height: 20vh;
+    height: 35vh;
+    max-height: 35vh;
     
     ${(props) => props.theme.breakpoints.down('md')} {
-      height: 15vh;
-      max-height: 15vh;
+      height: 24vh;
+      max-height: 24vh;
     }
   }
 `

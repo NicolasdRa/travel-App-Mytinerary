@@ -23,8 +23,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   if (!user) {
     return <CustomLoader loading={true} message="Profile Page" />
   }
-  // TODO load favourites
+  
   const { coverImg } = user
+  
   return (
     <StyledContainer>
       <div className="header-area">
@@ -32,18 +33,32 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
       </div>
       
       <div className="content-area">
-        <Hero img={coverImg} size="small" />
-        <PageUserInfoCard user={user} />
-        <PageUserTabsCard />
+        {/* Hero Section with User Avatar Overlay */}
+        <div className="profile-hero-section">
+          <Hero img={coverImg} size="small" />
+          <PageUserInfoCard user={user} />
+        </div>
+        
+        {/* Main Content Section */}
+        <div className="profile-content-section">
+          <PageUserTabsCard />
+          
+          {/* Footer positioned at bottom on desktop */}
+          {!mdDown && (
+            <div style={{ marginTop: 'auto', paddingTop: '2rem' }}>
+              <Footer />
+            </div>
+          )}
+        </div>
+        
+        {/* Create Item Form Section */}
         <CreateItemForm currentUser={user} />
       </div>
       
-      {mdDown ? (
+      {mdDown && (
         <div className="bottom-nav-area">
           <BottomNav />
         </div>
-      ) : (
-        <Footer />
       )}
     </StyledContainer>
   )
