@@ -27,8 +27,14 @@ const globalErrorHandler = require('./controllers/errorController')
 // Start express app
 const app = express()
 
-// enables proxy when deployed to heroku
-app.enable('trust proxy')
+// Configure trust proxy for production deployment
+if (process.env.NODE_ENV === 'production') {
+  // Trust first proxy (common for cloud deployments like Heroku, Railway, etc.)
+  app.set('trust proxy', process.env.TRUST_PROXY || 1)
+} else {
+  // Development - no proxy trust needed
+  app.set('trust proxy', false)
+}
 
 // view engine set up (for sending html emails auth process)
 app.set('view engine', 'pug')
@@ -79,6 +85,13 @@ if (process.env.NODE_ENV === 'production') {
     },
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    // Configure trust proxy settings for production deployment
+    trustProxy: process.env.TRUST_PROXY || 1, // Trust first proxy (common for most cloud deployments)
+    keyGenerator: (req) => {
+      // Use X-Forwarded-For header if available, otherwise fallback to connection IP
+      return req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 
+             (req.connection.socket ? req.connection.socket.remoteAddress : null)
+    }
   })
   app.use('/api', limiter)
 }

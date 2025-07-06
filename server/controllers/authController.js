@@ -21,8 +21,9 @@ const generateTokenCookieAndSendResponse = (user, statusCode, req, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: process.env.NODE_ENV === 'production',
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    httpOnly: true, // Always use httpOnly for security
+    secure: process.env.NODE_ENV === 'production', // Only secure in production
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Allow cross-site cookies in production
   }
 
   res.cookie('jwt', token, cookieOptions)
@@ -100,8 +101,9 @@ exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: process.env.NODE_ENV === 'production',
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    httpOnly: true, // Always use httpOnly for security
+    secure: process.env.NODE_ENV === 'production', // Only secure in production
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Allow cross-site cookies in production
   }
   // res.json(user)
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
