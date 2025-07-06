@@ -16,8 +16,10 @@ export {
   setUser,
   forgotPassword,
   resetPassword,
-  selectAuthenticated,
-  selectLoginLoading,
+  selectIsAuthenticated,
+  selectAuthUserId,
+  selectAuthLoading,
+  selectAuthError,
   isLoggedOut,
   default as authReducer
 } from './authSlice'

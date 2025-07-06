@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import axios from 'axios'
+import { FavouritesService } from '../services'
 import { favouritesUrl } from '../constants'
 
 interface UseFavoriteProps {
@@ -29,22 +29,14 @@ export const useFavorite = ({
     setError(null)
 
     try {
-      const res = await axios({
-        method: 'POST',
-        url: favouritesUrl,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          [sourceType]: sourceId,
-          user: userId,
-        },
-        withCredentials: true,
+      const response = await FavouritesService.addFavourite({
+        [sourceType]: sourceId,
+        user: userId,
       })
       
-      setFavourite(res.data.data.data)
+      setFavourite(response.data.data)
       setCount(prev => prev + 1)
-      return { success: true, data: res.data.data.data }
+      return { success: true, data: response.data.data }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Failed to add favourite'
       setError(errorMessage)
@@ -69,14 +61,7 @@ export const useFavorite = ({
     setCount(prev => prev - 1)
 
     try {
-      await axios({
-        method: 'DELETE',
-        url: `${favouritesUrl}${originalFavourite._id}`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
+      await FavouritesService.removeFavourite(originalFavourite._id)
       
       return { success: true }
     } catch (error: any) {

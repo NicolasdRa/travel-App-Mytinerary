@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { apiClient } from '../services'
 
 export const useFetchData = (initialUrl: string | null, initialData: any) => {
   const [data, setData] = useState(initialData)
@@ -19,7 +19,7 @@ export const useFetchData = (initialUrl: string | null, initialData: any) => {
       setIsLoading(true)
 
       try {
-        const result = await axios(url)
+        const result = await apiClient.get(url)
         setData(result.data)
       } catch (error) {
         setIsError(true)

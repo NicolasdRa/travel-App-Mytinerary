@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from 'react'
-import axios from 'axios'
+import { FavouritesService } from '../../../services'
 
 import { IconButton, Typography } from '@mui/material'
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded'
@@ -67,21 +67,13 @@ const FavouriteComponentComponent: React.FC<FavouriteComponentProps> = ({
     if (!favourite && !isProcessing) {
       setIsProcessing(true)
       try {
-        const res = await axios({
-          method: 'POST',
-          url: favouritesUrl,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: {
-            [sourceType]: sourceId,
-            user: userId,
-          },
-          withCredentials: true,
+        const response = await FavouritesService.addFavourite({
+          [sourceType]: sourceId,
+          user: userId,
         })
         setIconColour('secondary')
         setCount(count + 1)
-        setFavourite(res.data.data.data)
+        setFavourite(response.data.data)
       } catch (error) {
         // Revert optimistic update on error
         console.error('Failed to add favourite:', error)
@@ -104,14 +96,8 @@ const FavouriteComponentComponent: React.FC<FavouriteComponentProps> = ({
       setCount(count - 1)
 
       try {
-        const res = await axios({
-          method: 'DELETE',
-          url: `${favouritesUrl}${originalFavourite['_id']}`,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        return res
+        const response = await FavouritesService.removeFavourite(originalFavourite['_id'])
+        return response
       } catch (error) {
         // Revert optimistic update on error
         setFavourite(originalFavourite)

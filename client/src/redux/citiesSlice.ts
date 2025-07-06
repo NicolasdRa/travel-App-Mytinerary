@@ -4,8 +4,7 @@ import {
   createSelector,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { CitiesService } from '../services'
+import { CitiesService, GeoDBService } from '../services'
 import { citiesUrl } from '../constants'
 import { RootState } from './store'
 import { City, Favourite } from '../@types/types'
@@ -19,33 +18,18 @@ export const fetchCities = createAsyncThunk('cities/fetchAll', async () => {
 export const fetchCityByName = createAsyncThunk(
   'itineraries/fetchItineraryByName',
   async (cityName: string | undefined) => {
-    const res = await axios({
-      method: 'GET',
-      url: `${citiesUrl}name/${cityName}`,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await CitiesService.getCityByName(cityName!)
+    return data
   }
 )
 
-// export const getCitiesGeoDB = createAsyncThunk('cities/geoDB', async (name) => {
-//   const res = await axios({
-//     method: 'GET',
-//     url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities',
-//     params: {
-//       limit: '10',
-//       minPopulation: '20000',
-//       namePrefix: `${name}`,
-//       sort: 'population',
-//     },
-//     headers: {
-//       'x-rapidapi-key': '312e885d70msh49b3d4dcfdebf37p1945cdjsn1b9050b9edb7',
-//       'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
-//     },
-//     responseType: 'json',
-//   })
-//   return res.data
-// })
+export const getCitiesGeoDB = createAsyncThunk(
+  'cities/geoDB', 
+  async (name: string) => {
+    const data = await GeoDBService.getCitiesGeoDB(name, 'cities')
+    return data
+  }
+)
 
 // Define a type for the slice state
 interface CitiesSlice {
@@ -53,7 +37,7 @@ interface CitiesSlice {
   status: string | undefined
   results: string
   currentCity: City | null
-  // geoDB: null,
+  geoDB: any[] | null
   data: City[]
 }
 
@@ -62,7 +46,7 @@ const initialState: CitiesSlice = {
   loading: 'idle',
   status: '',
   results: '',
-  // geoDB: null,
+  geoDB: null,
   currentCity: null,
   data: [],
 }
@@ -129,52 +113,33 @@ const citiesSlice = createSlice({
       state.loading = 'failed'
       state.status = action.error.message
     })
-    // [getCitiesGeoDB.fulfilled]: (state, action) => {
-    //   state.loading = 'done'
-    //   state.geoDB = action.payload
-    // },
-    // [getCitiesGeoDB.rejected]: (state, action) => {
-    //   state.loading = 'fail'
-    //   state.error = action.error
-    // },
+    builder.addCase(getCitiesGeoDB.pending, (state) => {
+      state.loading = 'pending'
+    })
+    builder.addCase(getCitiesGeoDB.fulfilled, (state, action) => {
+      state.loading = 'done'
+      state.geoDB = action.payload
+    })
+    builder.addCase(getCitiesGeoDB.rejected, (state, action) => {
+      state.loading = 'failed'
+      state.status = action.error.message
+    })
   },
 })
 
 // SELECTORS
-const selectCities = (state: RootState) => state.cities.data
+export const selectAllCities = (state: RootState) => state.cities.data
 
-const selectCity = (state: RootState) => state.cities.currentCity
+export const selectCurrentCity = (state: RootState) => state.cities.currentCity
 
 export const selectCitiesLoading = (state: RootState) => state.cities.loading
-
-export const selectAllCities = createSelector(
-  [selectCities],
-  (cities) => cities
-)
-
-export const selectCurrentCity = createSelector(
-  [selectCity],
-  (currentCity) => currentCity
-)
-
-// FIXME: this selector is not working
-// export const selectFilteredCities = createSelector(
-//   [selectAllCities, (state, string) => string],
-//   (cities, string) =>
-//     cities.filter((city) => city.name.toLowerCase().startsWith(string))
-// )
-
-// FIXME: this selector is not working
-// export const selectCityByName = createSelector(
-//   [selectAllCities, (state, name) => name],
-//   (cities, name) =>
-//     cities && name ? cities.filter((city) => city.name === name) : []
-// )
 
 export const selectRandomCity = createSelector([selectAllCities], (items) => {
   const randomItem = items[Math.floor(Math.random() * items.length)]
   return randomItem
 })
+
+export const selectGeoDBCities = (state: RootState) => state.cities.geoDB
 
 // Extract and export each action creator by name
 export const { addCity, deleteCity } = citiesSlice.actions

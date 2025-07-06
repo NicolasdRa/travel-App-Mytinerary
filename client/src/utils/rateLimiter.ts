@@ -2,6 +2,7 @@ interface RateLimiterOptions {
   maxRequests: number
   windowMs: number
   retryAfterMs?: number
+  minTimeBetweenRequests?: number
 }
 
 interface RateLimiterState {
@@ -12,10 +13,12 @@ interface RateLimiterState {
 export class RateLimiter {
   private state: RateLimiterState
   private options: RateLimiterOptions
+  private lastRequestTime: number = 0
 
   constructor(options: RateLimiterOptions) {
     this.options = {
       retryAfterMs: 60000, // Default retry after 1 minute
+      minTimeBetweenRequests: 0, // Default no minimum time
       ...options
     }
     this.state = {
@@ -26,6 +29,14 @@ export class RateLimiter {
 
   canMakeRequest(): boolean {
     const now = Date.now()
+    
+    // Check minimum time between requests
+    if (this.options.minTimeBetweenRequests && this.lastRequestTime > 0) {
+      const timeSinceLastRequest = now - this.lastRequestTime
+      if (timeSinceLastRequest < this.options.minTimeBetweenRequests) {
+        return false
+      }
+    }
     
     // Remove requests older than the window
     this.state.requests = this.state.requests.filter(
@@ -39,16 +50,27 @@ export class RateLimiter {
   recordRequest(): void {
     const now = Date.now()
     this.state.requests.push(now)
+    this.lastRequestTime = now
   }
 
   getRetryAfter(): number {
+    const now = Date.now()
+    
     if (this.canMakeRequest()) {
       return 0
     }
 
+    // Check if we're blocked by minimum time between requests
+    if (this.options.minTimeBetweenRequests && this.lastRequestTime > 0) {
+      const timeSinceLastRequest = now - this.lastRequestTime
+      if (timeSinceLastRequest < this.options.minTimeBetweenRequests) {
+        return this.options.minTimeBetweenRequests - timeSinceLastRequest
+      }
+    }
+
     // Find the oldest request in the window
     const oldestRequest = Math.min(...this.state.requests)
-    const retryAfter = oldestRequest + this.options.windowMs - Date.now()
+    const retryAfter = oldestRequest + this.options.windowMs - now
     
     return Math.max(retryAfter, this.options.retryAfterMs!)
   }
@@ -60,10 +82,12 @@ export class RateLimiter {
 }
 
 // Create a singleton instance for GeoDB API
+// GeoDB has a strict 1 request per second limit on the free tier
 export const geoDbRateLimiter = new RateLimiter({
-  maxRequests: 5, // 5 requests
-  windowMs: 60000, // per minute
-  retryAfterMs: 60000 // retry after 1 minute if rate limited
+  maxRequests: 1, // 1 request
+  windowMs: 1000, // per second (1000ms)
+  retryAfterMs: 1000, // retry after 1 second if rate limited
+  minTimeBetweenRequests: 1000 // Enforce minimum 1 second between requests
 })
 
 // Simple in-memory cache for recent searches
@@ -118,4 +142,5 @@ export class SimpleCache<T> {
 }
 
 // Create a cache instance for city searches
-export const citySearchCache = new SimpleCache<any[]>(5 * 60 * 1000) // 5 minutes TTL
+// Longer cache time reduces API calls and helps avoid rate limits
+export const citySearchCache = new SimpleCache<any[]>(30 * 60 * 1000) // 30 minutes TTL

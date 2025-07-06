@@ -6,16 +6,17 @@ import {
   logInUser, 
   logOutUser, 
   signupUser, 
-  selectAuthenticated
+  selectIsAuthenticated,
+  selectAuthLoading
 } from '../authSlice'
 import { LoginCredentials, SignupData } from '../types'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const isAuthenticated = useAppSelector(selectAuthenticated)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const currentUser = useAppSelector(selectCurrentUser)
-  const loading = useAppSelector((state) => state.auth.loading)
+  const loading = useAppSelector(selectAuthLoading)
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     try {

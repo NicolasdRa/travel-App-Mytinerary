@@ -4,17 +4,20 @@ export * from './crud.factory'
 export * from './api.types'
 export * from './auth.api'
 
-// Legacy class-based services (deprecated - for backward compatibility)
+// Consolidated API services with full server consistency
 export { 
-  // AuthService, 
+  AuthService,
   UsersService, 
   CitiesService, 
   ItinerariesService, 
   ActivitiesService, 
   FavouritesService, 
   CommentsService,
-  buildLegacyUrl
+  GeoDBService,
+  buildLegacyUrl,
+  apiClient,
+  API
 } from './api.service'
 
-// Export legacy apiClient with different name to avoid conflicts
-export { apiClient as legacyApiClient } from './api.service'
+// Re-export API object as default
+export { default as APIService } from './api.service'

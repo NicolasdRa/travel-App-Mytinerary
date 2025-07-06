@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material/styles'
 import GoogleSVGIcon from '../../../../components/ui/Icons/GoogleSVGIcon'
 import { ForgotPasswordForm } from '../../../../components/forms/ForgotPasswordForm/ForgotPasswordForm'
 
-import { logInUser, selectLoginLoading } from '../../authSlice'
+import { logInUser, selectAuthLoading } from '../../authSlice'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 
 import { useForm } from '../../../../hooks/useForm'
@@ -22,7 +22,7 @@ export const Login = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const loading = useAppSelector(selectLoginLoading)
+  const loading = useAppSelector(selectAuthLoading)
   const [error, setError] = useState<string | null>(null)
 
   // must be outside handleSubmit

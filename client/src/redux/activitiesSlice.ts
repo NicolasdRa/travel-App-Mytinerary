@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { ActivitiesService } from '../services'
 import { activitiesUrl } from '../constants'
 import { RootState } from './store'
@@ -17,28 +16,16 @@ export const fetchActivities = createAsyncThunk(
 export const fetchActivityByTitle = createAsyncThunk(
   'itineraries/fetchActivityByTitle',
   async (title: string | undefined) => {
-    const res = await axios({
-      method: 'GET',
-      url: `${activitiesUrl}title/${title}`,
-      responseType: 'json',
-    })
-
-    return res.data
+    const data = await ActivitiesService.getActivityByTitle(title!)
+    return data
   }
 )
 
 export const addActivity = createAsyncThunk(
   'activities/addOne',
   async (formData: FormData) => {
-    const res = await axios({
-      method: 'POST',
-      url: activitiesUrl,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-    return res.data
+    const data = await ActivitiesService.createActivity(formData)
+    return data
   }
 )
 
@@ -120,22 +107,12 @@ const activitiesSlice = createSlice({
 })
 
 // SELECTORS
-export const selectActivities = (state: RootState) => state.activities.data
+export const selectAllActivities = (state: RootState) => state.activities.data
 
-const selectActivity = (state: RootState) => state.activities.currentActivity
+export const selectCurrentActivity = (state: RootState) => state.activities.currentActivity
 
 export const selectActivitiesLoading = (state: RootState) =>
   state.activities.loading
-
-export const selectAllActivities = createSelector(
-  [selectActivities],
-  (activities) => activities
-)
-
-export const selectCurrentActivity = createSelector(
-  [selectActivity],
-  (currentActivity) => currentActivity
-)
 
 export const selectActivitiesForCity = createSelector(
   [selectAllActivities, (state, cityName) => cityName],
@@ -150,7 +127,7 @@ export const selectActivitiesByUserId = createSelector(
 )
 
 export const selectActivitiesSortedByLikes = createSelector(
-  [selectActivities],
+  [selectAllActivities],
   (activities: Activity[]) => activities.sort((a, b) => b.likes - a.likes)
 )
 

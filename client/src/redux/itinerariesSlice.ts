@@ -4,7 +4,6 @@ import {
   createSelector,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { ItinerariesService } from '../services'
 import { itinerariesUrl } from '../constants'
 import { Itinerary, Comment, Activity } from '../@types/types'
@@ -14,63 +13,40 @@ import { RootState } from './store'
 export const fetchItineraries = createAsyncThunk(
   'itineraries/fetchAll',
   async () => {
-    const res = await axios({
-      method: 'get',
-      url: itinerariesUrl,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await ItinerariesService.getAllItineraries()
+    return data
   }
 )
 
 export const fetchItineraryById = createAsyncThunk(
   'itineraries/fetchItineraryById',
   async (id: any) => {
-    const res = await axios({
-      method: 'get',
-      url: `${itinerariesUrl}${id}`,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await ItinerariesService.getItineraryById(id)
+    return data
   }
 )
 
 export const fetchItineraryByTitle = createAsyncThunk(
   'itineraries/fetchItineraryByTitle',
   async (title: string | undefined) => {
-    const res = await axios({
-      method: 'get',
-      url: `${itinerariesUrl}/title/${title}`,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await ItinerariesService.getItineraryByTitle(title!)
+    return data
   }
 )
 
 export const deleteItinerary = createAsyncThunk(
   'itineraries/deleteOne',
   async (id: any) => {
-    const res = await axios({
-      method: 'delete',
-      url: `${itinerariesUrl}${id}`,
-      responseType: 'json',
-    })
-    return res.data
+    const data = await ItinerariesService.deleteItinerary(id)
+    return data
   }
 )
 
 export const addItinerary = createAsyncThunk(
   'itineraries/addOne',
   async (formData: FormData) => {
-    const res = await axios({
-      method: 'POST',
-      url: itinerariesUrl,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-    return res.data
+    const data = await ItinerariesService.createItinerary(formData)
+    return data
   }
 )
 
@@ -186,22 +162,12 @@ const itinerariesSlice = createSlice({
 })
 
 // SELECTORS
-const selectItineraries = (state: RootState) => state.itineraries.data
+export const selectAllItineraries = (state: RootState) => state.itineraries.data
 
-const selectItinerary = (state: RootState) => state.itineraries.currentItinerary
+export const selectCurrentItinerary = (state: RootState) => state.itineraries.currentItinerary
 
 export const selectItinerariesLoading = (state: RootState) =>
   state.itineraries.loading
-
-export const selectAllItineraries = createSelector(
-  [selectItineraries],
-  (itineraries) => itineraries
-)
-
-export const selectCurrentItinerary = createSelector(
-  [selectItinerary],
-  (currentItinerary) => currentItinerary
-)
 
 export const selectRandomItinerary = createSelector(
   [selectAllItineraries],
@@ -219,7 +185,7 @@ export const selectItinerariesByUserId = createSelector(
   (itineraries: Itinerary[], id) => itineraries.filter((item: Itinerary) => item.author._id === id)
 )
 
-// This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analise if it is worth doing it
+// This selector is working fine => DO I NEED IT? => check the correct way to call it in ItineraryPage => need to populate itineraries (get all) with comments, favourites and activities to be able to use it in full => analyse if it is worth doing it
 export const selectItineraryByTitle = createSelector(
   [selectAllItineraries, (state, title) => title],
   (itineraries: Itinerary[], title) =>

@@ -4,7 +4,6 @@ import {
   createSelector,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { UsersService } from '../services'
 import { usersUrl } from '../constants'
 import { User, Itinerary } from '../@types/types'
@@ -31,28 +30,15 @@ export const fetchCurrentUser = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   'users/updateUserProfile',
   async (formData: FormData) => {
-    const res = await axios({
-      method: 'PATCH',
-      url: `${usersUrl}updateMe`,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    })
-    return res.data
+    const data = await UsersService.updateUserProfile(formData)
+    return data
   }
 )
 
 // get user By Id
-export const getUserById = createAsyncThunk('users/getUserById', async () => {
-  const res = await axios({
-    method: 'GET',
-    url: `${usersUrl}:id`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  return res.data
+export const getUserById = createAsyncThunk('users/getUserById', async (id: string) => {
+  const data = await UsersService.getUserById(id)
+  return data
 })
 
 // Define a type for the slice state
@@ -124,14 +110,9 @@ const usersSlice = createSlice({
 
 // SELECTORS
 
-const selectUser = (state: RootState) => state.users.currentUser
+export const selectCurrentUser = (state: RootState) => state.users.currentUser
 
 export const selectUserLoading = (state: RootState) => state.users.loading
-
-export const selectCurrentUser = createSelector(
-  [selectUser],
-  (currentUser) => currentUser
-)
 // Extract and export each action creator by name
 export const { unloadCurrentUser, updateUserItineraries } = usersSlice.actions
 

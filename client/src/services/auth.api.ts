@@ -55,6 +55,18 @@ export const resetPassword: ApiWithData<FormData, ResetPasswordResponse> = async
   return uploadFile<ResetPasswordResponse>(API_ENDPOINTS.auth.resetPassword, formData)
 }
 
+export const logoutAll: ApiFunction<void, LogoutResponse> = async () => {
+  return httpPost<LogoutResponse>(API_ENDPOINTS.auth.logoutAll)
+}
+
+export const updatePassword: ApiWithData<{
+  currentPassword: string
+  password: string
+  passwordConfirm: string
+}, ResetPasswordResponse> = async (data) => {
+  return httpPost<ResetPasswordResponse>(API_ENDPOINTS.auth.updatePassword, data)
+}
+
 // OAuth functions
 export const getGoogleAuthUrl = (): string => {
   const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -235,6 +247,8 @@ export const authApi = {
   login: safeLogin,
   signup: safeSignup,
   logout: safeLogout,
+  logoutAll,
+  updatePassword,
   getCurrentUser: refreshCurrentUser,
   forgotPassword,
   resetPassword,

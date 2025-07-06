@@ -12,10 +12,9 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import { logOutUser } from '../../../features/auth'
+import { logOutUser, selectIsAuthenticated, selectAuthUserId } from '../../../features/auth'
 
 import { unloadCurrentUser } from '../../../redux/usersSlice'
-import { RootState } from '../../../redux/store'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 interface MenuMobileProps {
@@ -25,10 +24,8 @@ interface MenuMobileProps {
 export const MenuMobile: React.FC<MenuMobileProps> = ({ sx = [] }) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const isAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  )
-  const user = useAppSelector((state: RootState) => state.auth.userId)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const user = useAppSelector(selectAuthUserId)
 
   // log out functionality
   const handleLogOut = (e: any) => {

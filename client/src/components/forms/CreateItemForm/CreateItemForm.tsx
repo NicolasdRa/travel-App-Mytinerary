@@ -53,6 +53,7 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   // const [cityOptions, setCityOptions] = useState<City[]>([])
   const [itineraryOptions, setItineraryOptions] = useState<Itinerary[]>([])
   const [city, setCity] = useState('')
+  const [selectedCity, setSelectedCity] = useState<any>(null)
 
   const cities = useAppSelector<City[]>(selectAllCities)
   const itineraries = useAppSelector<Itinerary[]>((state) =>
@@ -98,8 +99,11 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   }, [previewFile])
 
   const handleAutcompleteValueChange = (value: any) => {
-    const name = value.name
-    setCity(name)
+    if (value) {
+      const name = value.name
+      setCity(name)
+      setSelectedCity(value)
+    }
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -108,12 +112,20 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
     const formData = new FormData()
 
     if (type === 'itinerary') {
+      // Find city in local Redux store first
+      const localCity = cities.find((item) => item.name === city)
+      
+      // If city exists in Redux store, use its ID, otherwise use the selected city data
+      const cityId = localCity?._id || selectedCity?.id || ''
+      
+      if (!cityId) {
+        alert('Please select a valid city')
+        return
+      }
+      
       formData.append('img', file)
       formData.append('upload_preset', 'travel-app')
-      formData.append(
-        'city',
-        cities.filter((item) => item.name === city)[0]._id
-      )
+      formData.append('city', cityId)
       formData.append('cityName', city)
       formData.append('title', title)
       formData.append('category', category)
@@ -153,6 +165,8 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
 
     reset()
     setPreviewFile(null)
+    setCity('')
+    setSelectedCity(null)
   }
 
   const loadPreviewFile = (croppedImage: any) => setPreviewFile(croppedImage)
@@ -164,6 +178,8 @@ export const CreateItemForm: React.FC<CreateItemFormProps> = ({
   const handleClose = () => {
     dispatch(toggleAddItemForm(type))
     reset()
+    setCity('')
+    setSelectedCity(null)
   }
 
   const formIntroMessage = {

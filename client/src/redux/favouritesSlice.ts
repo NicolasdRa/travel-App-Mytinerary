@@ -50,18 +50,13 @@ const favouritesSlice = createSlice({
   },
 })
 
-const selectFavourites = (state: RootState) => state.favourites.data
+export const selectAllFavourites = (state: RootState) => state.favourites.data
 
 export const selectFavouritesLoading = (state: RootState) =>
   state.favourites.loading
 
-export const selectAllFavourites = createSelector(
-  [selectFavourites],
-  (favourites) => favourites
-)
-
 export const selectUserFavourites = createSelector(
-  [selectFavourites, (state, userId) => userId],
+  [selectAllFavourites, (state, userId) => userId],
   (favourites: Favourite[], userId) =>
     favourites && userId
       ? favourites.filter((favourite: Favourite) => favourite.author._id === userId)
@@ -69,7 +64,7 @@ export const selectUserFavourites = createSelector(
 )
 
 export const selectCityFavourites = createSelector(
-  [selectFavourites, (state, cityId) => cityId],
+  [selectAllFavourites, (state, cityId) => cityId],
   (favourites: Favourite[], cityId) =>
     favourites && cityId
       ? favourites.filter((favourite: Favourite) => favourite.city === cityId)
@@ -77,7 +72,7 @@ export const selectCityFavourites = createSelector(
 )
 
 export const selectItineraryFavourites = createSelector(
-  [selectFavourites, (state, itineraryId) => itineraryId],
+  [selectAllFavourites, (state, itineraryId) => itineraryId],
   (favourites: Favourite[], itineraryId) =>
     favourites && itineraryId
       ? favourites.filter(
@@ -87,7 +82,7 @@ export const selectItineraryFavourites = createSelector(
 )
 
 export const selectActivityFavourites = createSelector(
-  [selectFavourites, (state, activityId) => activityId],
+  [selectAllFavourites, (state, activityId) => activityId],
   (favourites: Favourite[], activityId) =>
     favourites && activityId
       ? favourites.filter((favourite: Favourite) => favourite.activity._id === activityId)

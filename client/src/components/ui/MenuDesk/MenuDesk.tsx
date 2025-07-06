@@ -17,9 +17,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
-import { logOutUser } from '../../../features/auth'
-import { unloadCurrentUser } from '../../../redux/usersSlice'
-import { RootState } from '../../../redux/store'
+import { logOutUser, selectIsAuthenticated, selectAuthUserId } from '../../../features/auth'
+import { unloadCurrentUser, selectCurrentUser } from '../../../redux/usersSlice'
 
 import { StyledList } from './styles'
 import { useAppDispatch } from '../../../redux/hooks'
@@ -32,11 +31,9 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  )
-  const userId = useSelector((state: RootState) => state.auth.userId)
-  const user = useSelector((state: RootState) => state.users.currentUser)
+  const isAuthenticated = useSelector(selectIsAuthenticated)
+  const userId = useSelector(selectAuthUserId)
+  const user = useSelector(selectCurrentUser)
 
   // log out functionality
   const handleLogOut = (e: any) => {

@@ -5,7 +5,7 @@ import { Alert, Box, Button, TextField, Typography } from '@mui/material'
 import GoogleSVGIcon from '../../../../components/ui/Icons/GoogleSVGIcon'
 import PuffLoader from 'react-spinners/PuffLoader'
 
-import { selectLoginLoading, signupUser } from '../../authSlice'
+import { selectAuthLoading, signupUser } from '../../authSlice'
 
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -20,7 +20,7 @@ export const Signup = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const loading = useAppSelector(selectLoginLoading)
+  const loading = useAppSelector(selectAuthLoading)
   const [error, setError] = useState<string | null>(null)
 
   // must be outside handleSubmit

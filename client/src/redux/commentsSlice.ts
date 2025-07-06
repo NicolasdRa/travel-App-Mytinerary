@@ -5,55 +5,39 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import { Comment } from '../@types/types'
-import axios from 'axios'
+import { CommentsService } from '../services'
 import { RootState } from './store'
 
 // THUNKS
 export const fetchComments = createAsyncThunk(
   'comments/fetchAll',
-  async (thunkAPI) => {
-    const res = await axios({
-      method: 'get',
-      url: '/api/v1/comments',
-      responseType: 'json',
-    })
-    return res.data
+  async () => {
+    const data = await CommentsService.getAllComments()
+    return data
   }
 )
 
 export const fetchCommentsForItinerary = createAsyncThunk(
   'comments/fetchForItinerary',
-  async (thunkAPI) => {
-    const res = await axios({
-      method: 'get',
-      url: '/api/v1/comments/itinerary/:title',
-      responseType: 'json',
-    })
-    return res.data
+  async (title: string) => {
+    const data = await CommentsService.getCommentsBySource('itinerary', title)
+    return data
   }
 )
 
 export const fetchCommentById = createAsyncThunk(
   'comments/fetchById',
-  async (thunkAPI) => {
-    const res = await axios({
-      method: 'get',
-      url: '/api/v1/comments/:id',
-      responseType: 'json',
-    })
-    return res.data
+  async (id: string) => {
+    const data = await CommentsService.getCommentById(id)
+    return data
   }
 )
 
 export const fetchCommentByTitle = createAsyncThunk(
   'comments/fetchByTitle',
-  async (thunkAPI) => {
-    const res = await axios({
-      method: 'get',
-      url: '/api/v1/comments/:title',
-      responseType: 'json',
-    })
-    return res.data
+  async (title: string) => {
+    const data = await CommentsService.getCommentsBySource('title', title)
+    return data
   }
 )
 
@@ -63,21 +47,14 @@ export const addComment = createAsyncThunk(
     const { author, sourceType, sourceId, rating, summary, description } =
       formData
 
-    const res = await axios({
-      method: 'POST',
-      url: '/api/v1/comments',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        [sourceType]: sourceId,
-        author,
-        rating,
-        summary,
-        description,
-      },
+    const data = await CommentsService.addComment({
+      [sourceType]: sourceId,
+      author,
+      rating,
+      summary,
+      description,
     })
-    return res.data
+    return data
   }
 )
 
@@ -170,15 +147,10 @@ const commentsSlice = createSlice({
 })
 
 // SELECTORS
-const selectComments = (state: RootState) => state.comments.data
+export const selectAllComments = (state: RootState) => state.comments.data
 
 export const selectCommentsLoading = (state: RootState) =>
   state.comments.loading
-
-export const selectAllComments = createSelector(
-  [selectComments],
-  (comments) => comments
-)
 
 export const selectCommentsForCity = createSelector(
   [selectAllComments, (state, city) => city],

@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
-import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
 
 import { Autocomplete, Stack, TextField, Alert } from '@mui/material'
 
-import { geoApiOptions } from './geoDbApiConfig'
+import { GEODB_MAX_RESULTS } from './geoDbApiConfig'
+import { GeoDBService } from '../../../services'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { useAppSelector } from '../../../redux/hooks'
 import { selectAllCities } from '../../../redux/citiesSlice'
@@ -49,7 +49,7 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
   // Use local Redux store cities as fallback
   const localCities = useAppSelector(selectAllCities)
 
-  const debouncedQuery = useDebounce(inputValue, 1000) // Increased debounce to 1 second
+  const debouncedQuery = useDebounce(inputValue, 1500) // Increased debounce to 1.5 seconds to respect API rate limit
 
   // Fallback to local search when rate limited
   const searchLocal = useCallback((query: string) => {
@@ -59,7 +59,7 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
         city.name.toLowerCase().includes(lowerQuery) ||
         city.country?.toLowerCase().includes(lowerQuery)
       )
-      .slice(0, 10)
+      .slice(0, GEODB_MAX_RESULTS)
       .map((city: City): GeoDBCityOption => ({
         id: city._id || '',
         city: city.name,
@@ -100,13 +100,7 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
         setIsLoading(true)
         geoDbRateLimiter.recordRequest()
         
-        const options = {
-          url: `/${target}`,
-          ...geoApiOptions,
-          params: { namePrefix: query, limit: '10' },
-        }
-        const res = await axios(options)
-        const data = res.data.data
+        const data = await GeoDBService.getCitiesGeoDB(query, target)
         
         // Cache the result
         citySearchCache.set(cacheKey, data)
@@ -162,9 +156,17 @@ export const LiveSearch: React.FC<LiveSearchProps> = ({
           Rate limit reached. Using local data. Retry in {retryAfter}s
         </Alert>
       )}
+      {!isRateLimited && inputValue.length > 2 && inputValue !== debouncedQuery && (
+        <Alert severity="info" sx={{ fontSize: '0.75rem', py: 0.5 }}>
+          Waiting to search... (API has 1 request/second limit)
+        </Alert>
+      )}
       <Autocomplete
         loading={isLoading}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
+        isOptionEqualToValue={(option, value) => {
+          if (!option || !value) return false
+          return String(option.id) === String(value.id) || option.name === value.name
+        }}
         id={`${name}-autocomplete`}
         getOptionLabel={(option) =>
           typeof option === 'string' ? option : option.name

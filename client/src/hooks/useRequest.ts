@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios, { AxiosError } from 'axios'
+import { apiClient } from '../services'
+import { AxiosError } from 'axios'
 
 interface UseRequestReturn {
   data: any
@@ -18,7 +19,7 @@ const useRequest = (url: string): UseRequestReturn => {
       setLoading(true)
       try {
         setError(null)
-        const response = await axios(url)
+        const response = await apiClient.get(url)
         if (!ignore) setData(response.data)
       } catch (err) {
         if (!ignore) setError(err as AxiosError)

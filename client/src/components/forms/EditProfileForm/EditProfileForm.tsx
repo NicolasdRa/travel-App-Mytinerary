@@ -136,9 +136,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
           {coverPreviewFile ? (
             <ImageButton
               coverImg={coverPreviewFile}
-              handleClick={function (): void {
-                throw new Error('Function not implemented.')
-              }}
+              handleClick={() => setCoverPreviewFile(null)}
             />
           ) : (
             <UploadCoverImgForm
@@ -150,9 +148,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
           {userPreviewFile ? (
             <ImageButtonRounded
               img={userPreviewFile}
-              handleClick={function (): void {
-                throw new Error('Function not implemented.')
-              }}
+              handleClick={() => setUserPreviewFile(null)}
             />
           ) : (
             <UploadProfileImgForm

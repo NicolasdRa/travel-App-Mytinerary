@@ -196,14 +196,10 @@ const authSlice = createSlice({
 })
 
 // SELECTORS
-export const selectLoginLoading = (state: RootState) => state.auth.loading
-
-const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated
-
-export const selectAuthenticated = createSelector(
-  [selectIsAuthenticated],
-  (isAuthenticated) => isAuthenticated
-)
+export const selectAuthLoading = (state: RootState) => state.auth.loading
+export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated
+export const selectAuthUserId = (state: RootState) => state.auth.userId
+export const selectAuthError = (state: RootState) => state.auth.error
 
 // Extract and export each action creator by name
 export const { isLoggedOut } = authSlice.actions
