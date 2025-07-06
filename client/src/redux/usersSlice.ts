@@ -8,6 +8,7 @@ import { UsersService } from '../services'
 import { usersUrl } from '../constants'
 import { User, Itinerary } from '../@types/types'
 import { RootState } from './store'
+import { logOutUser } from '../features/auth/authSlice'
 
 // THUNKS
 
@@ -104,6 +105,18 @@ const usersSlice = createSlice({
     builder.addCase(updateUserProfile.rejected, (state, action) => {
       state.loading = 'failed'
       state.error = action.error.message
+    })
+    // Clear user data when logging out
+    builder.addCase(logOutUser.fulfilled, (state) => {
+      state.loading = 'idle'
+      state.currentUser = null
+      state.error = undefined
+    })
+    // Also clear user data if logout fails (client-side cleanup)
+    builder.addCase(logOutUser.rejected, (state) => {
+      state.loading = 'idle'
+      state.currentUser = null
+      state.error = undefined
     })
   },
 })

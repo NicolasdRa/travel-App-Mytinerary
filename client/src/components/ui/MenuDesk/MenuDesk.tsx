@@ -18,7 +18,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { CustomAvatar } from '../CustomAvatar/CustomAvatar'
 
 import { logOutUser, selectIsAuthenticated, selectAuthUserId } from '../../../features/auth'
-import { unloadCurrentUser, selectCurrentUser } from '../../../redux/usersSlice'
+import { selectCurrentUser } from '../../../redux/usersSlice'
 
 import { StyledList } from './styles'
 import { useAppDispatch } from '../../../redux/hooks'
@@ -36,15 +36,19 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
   const user = useSelector(selectCurrentUser)
 
   // log out functionality
-  const handleLogOut = (e: any) => {
+  const handleLogOut = (e: React.MouseEvent) => {
     e.preventDefault()
+    // Clear focus and close menu before logout
+    if (document.activeElement && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+    setAnchorEl(null)
     dispatch(logOutUser())
-    dispatch(unloadCurrentUser(userId))
     navigate('/')
   }
 
   // menu functionality
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   // login button rotate
@@ -53,12 +57,16 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
     setExpanded(!expanded)
   }
 
-  const handleMenu = (e: any): void => {
-    setAnchorEl(e.currentTarget)
+  const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
+    setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
     handleExpandClick()
+    // Clear focus from any menu items before closing
+    if (document.activeElement && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
     setAnchorEl(null)
   }
 
@@ -103,9 +111,7 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
             aria-label="menu"
             aria-controls="desk-menu"
             aria-haspopup="true"
-            onClick={(e) => {
-              handleMenu(e)
-            }}
+            onClick={handleMenu}
             className="navLink"
           >
             Login
@@ -123,7 +129,7 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
       </ListItem>
       <Menu
         id="desk-menu"
-        open={open}
+        open={open && anchorEl !== null}
         onClose={handleClose}
         keepMounted
         anchorEl={anchorEl}
@@ -136,23 +142,44 @@ export const MenuDesk: React.FC<MenuDeskProps> = ({ sx = [] }) => {
       >
         {isAuthenticated ? (
           <MenuItem
-            onClick={handleClose}
+            onClick={(e) => {
+              e.currentTarget.blur()
+              handleClose()
+            }}
             component={Link}
             to={user ? `/user/${user.userName}` : '/'}
           >
             Your Profile
           </MenuItem>
         ) : (
-          <MenuItem onClick={handleClose} component={Link} to="/login">
+          <MenuItem 
+            onClick={(e) => {
+              e.currentTarget.blur()
+              handleClose()
+            }} 
+            component={Link} 
+            to="/login"
+          >
             Login
           </MenuItem>
         )}
         {isAuthenticated ? (
-          <MenuItem onClick={handleLogOut} component={Link} to="/">
+          <MenuItem 
+            onClick={handleLogOut} 
+            component={Link} 
+            to="/"
+          >
             Log out
           </MenuItem>
         ) : (
-          <MenuItem onClick={handleClose} component={Link} to="/signup">
+          <MenuItem 
+            onClick={(e) => {
+              e.currentTarget.blur()
+              handleClose()
+            }} 
+            component={Link} 
+            to="/signup"
+          >
             Signup
           </MenuItem>
         )}
