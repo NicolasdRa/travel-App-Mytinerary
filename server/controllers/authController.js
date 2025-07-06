@@ -104,7 +104,8 @@ exports.googleLoginRedirect = asyncErrorCatcher(async (req, res, next) => {
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   }
   // res.json(user)
-  res.cookie('jwt', token, cookieOptions).redirect(`//localhost:3000/`)
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
+  res.cookie('jwt', token, cookieOptions).redirect(frontendUrl)
 })
 
 // PROTECT ROUTE handler
