@@ -16,6 +16,7 @@ import { FavouriteComponent } from '../FavouriteComponent/FavouriteComponent'
 import { FallbackImage } from '../FallbackImage/FallbackImage'
 
 import { selectCurrentUser } from '../../../redux/usersSlice'
+import { selectAuthUserId } from '../../../features/auth/authSlice'
 import { StyledCard } from './styles'
 
 interface Values {
@@ -59,13 +60,16 @@ interface CustomCardProps {
 
 const CustomCardComponent: React.FC<CustomCardProps> = ({ source, ...rest }) => {
   const user = useSelector(selectCurrentUser)
+  const authUserId = useSelector(selectAuthUserId)
 
-  const { _id, name, country, title, cityName, img, duration, author, price } =
+  const { _id, id, name, country, title, cityName, img, duration, author, price } =
     rest
-
 
   const link = getValue(source).link
   const sourceType = getValue(source).sourceType
+  
+  // Use either _id or id, whichever is available
+  const sourceId = _id || id
 
 
   return (
@@ -92,8 +96,8 @@ const CustomCardComponent: React.FC<CustomCardProps> = ({ source, ...rest }) => 
           <div className="likesBtn">
             <FavouriteComponent
               sourceType={sourceType}
-              sourceId={_id}
-              userId={user ? user._id : undefined}
+              sourceId={sourceId}
+              userId={authUserId}
             />
           </div>
         </div>

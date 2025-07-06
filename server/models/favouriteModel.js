@@ -54,6 +54,23 @@ const favouriteSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
 
+// Compound indexes to prevent duplicate favorites per user
+favouriteSchema.index({ user: 1, city: 1 }, { 
+  unique: true, 
+  sparse: true,
+  partialFilterExpression: { city: { $exists: true } }
+})
+favouriteSchema.index({ user: 1, itinerary: 1 }, { 
+  unique: true, 
+  sparse: true,
+  partialFilterExpression: { itinerary: { $exists: true } }
+})
+favouriteSchema.index({ user: 1, activity: 1 }, { 
+  unique: true, 
+  sparse: true,
+  partialFilterExpression: { activity: { $exists: true } }
+})
+
 // query middleware to populate referenced fields
 favouriteSchema.pre(/^find/, function (next) {
   this.populate({

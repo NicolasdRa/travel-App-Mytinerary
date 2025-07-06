@@ -23,7 +23,6 @@ import { setUser } from '../features/auth'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 
 import { StyledGrid } from './styles'
-import { getCookieValue } from '../utils/utils'
 
 // Lazy load page components for better performance
 const LandingPage = lazy(() => import('../components/pages/LandingPage/LandingPage').then(module => ({ default: module.LandingPage })))
@@ -45,11 +44,10 @@ export const AppRouter: React.FC = () => {
   const user = useAppSelector(selectCurrentUser)
 
   useEffect(() => {
-    const jwt = getCookieValue('jwt')
-
-    if (jwt !== null && jwt !== 'loggedOut') {
-      dispatch(setUser())
-    }
+    // Try to authenticate with the server using httpOnly cookies
+    // If cookies exist and are valid, setUser will succeed
+    // If not, setUser will fail and user remains unauthenticated
+    dispatch(setUser())
   }, [dispatch])
 
   useEffect(() => {

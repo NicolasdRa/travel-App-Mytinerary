@@ -43,7 +43,7 @@ export const FallbackImage: React.FC<FallbackImageProps> = ({
   const [hasError, setHasError] = useState(false)
 
   const handleLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
-    console.log("🚀 ~ Image loaded successfully")
+    // console.log("🚀 ~ Image loaded successfully")
     setIsLoading(false)
     setHasError(false)
     onLoad?.(event)
@@ -51,11 +51,10 @@ export const FallbackImage: React.FC<FallbackImageProps> = ({
 
   const handleError = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
     const imgSrc = (event.target as HTMLImageElement).src
-    console.log("🚀 ~ Image error for src:", imgSrc)
+    // console.log("🚀 ~ Image error for src:", imgSrc)
     
     // If the failed image is not the fallback, switch to fallback
     if (imgSrc !== fallbackSrc) {
-      console.log("🚀 ~ Switching to fallback:", fallbackSrc)
       setCurrentSrc(fallbackSrc)
       setIsLoading(false)
       setHasError(false)

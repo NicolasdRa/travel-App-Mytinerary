@@ -6,6 +6,10 @@ export const StyledContainer = styled('div')`
 
   .likes_btn {
     padding: 0 0.2rem 0 0;
+    
+    &.MuiIconButton-colorSecondary {
+      color: ${(props) => props.theme.palette.secondary.main};
+    }
   }
 
   .likes_icon {

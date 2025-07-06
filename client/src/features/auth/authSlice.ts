@@ -40,12 +40,12 @@ export const logInUser = createAsyncThunk(
 // set user
 export const setUser = createAsyncThunk(
   'auth/setUser',
-  async (_, { dispatch, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const data = await authApi.getCurrentUser()
       return data
     } catch (error: any) {
-      error && dispatch(logOutUser())
+      // Don't dispatch logout here - just let the rejection handle the state
       return rejectWithValue(error)
     }
   }
@@ -160,7 +160,18 @@ const authSlice = createSlice({
     builder.addCase(setUser.fulfilled, (state, action) => {
       state.loading = 'done'
       state.isAuthenticated = true
-      state.userId = action.payload._id
+      
+      // The API returns the user object directly
+      // action.payload = userObject
+      // So we need action.payload._id
+      if (action.payload && action.payload._id) {
+        state.userId = action.payload._id
+      } else {
+        console.error('❌ setUser.fulfilled - Could not extract userId from payload:', action.payload)
+        // Fall back to unauthenticated state
+        state.isAuthenticated = false
+        state.userId = null
+      }
     })
 
     builder.addCase(setUser.rejected, (state, action) => {
