@@ -15,6 +15,11 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { useForm } from '../../../../hooks/useForm'
 
 import { StyledPaper } from './styles'
+import { buildApiUrl, API_ENDPOINTS } from 'config'
+
+const getGoogleAuthUrl = () => {
+  return buildApiUrl(API_ENDPOINTS.auth.google)
+}
 
 export const Login = () => {
   const theme = useTheme()
@@ -61,6 +66,8 @@ export const Login = () => {
     }
   }
 
+
+
   return (
     <StyledPaper className="main">
       <Box className="container">
@@ -75,7 +82,7 @@ export const Login = () => {
         <Button
           className="google_button"
           variant="outlined"
-          href="http://localhost:5000/api/v1/auth/google"
+          href={getGoogleAuthUrl()}
           startIcon={<GoogleSVGIcon />}
         >
           Log in with Google
