@@ -14,6 +14,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: '/api/v1/auth/google/redirect',
+        proxy: true, // Trust the proxy to preserve the original host
       },
     (accessToken, refreshToken, profile, done) => {
       // passport callback function
